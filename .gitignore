@@ -49,7 +49,6 @@ _ReSharper*/
 *.lai
 *.la
 *.a
-*.lib
 
 # Executables
 *.exe
