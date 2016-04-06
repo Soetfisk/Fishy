@@ -17,7 +17,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//Project Setup:
 	// C/C++ -> General -> Additional Include Directories = .\include
 	// Linker -> General -> Additional Library Directories = .\lib
-	// Linker -> Input -> Additional Dependencies = glew32.lib;glew32s.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;OpenGL32.lib; 
+	// Linker -> Input -> Additional Dependencies = glew32.lib;glew32s.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;OpenGL32.lib;
+	// Project is set to x64 by default, change it to x86 to make it work
 
 	const unsigned int SCREEN_WIDTH = 1024, SCREEN_HEIGHT = 768;
 
