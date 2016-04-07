@@ -1,5 +1,6 @@
 #pragma once
 #include "GLUtil.h"
+#include "GLTransform.h"
 class GLCamera
 {
 public:
@@ -10,8 +11,8 @@ public:
 
 	glm::vec3& Position();
 	glm::mat4 GetViewProjectionMatrix() const;
-	void ProcessInput(float x, float y, float deltaTime);
-
+	void ProcessInput(float x, float y);
+	void calculatePosition(GLTransform transform);
 	
 private:
 	

@@ -32,7 +32,7 @@ glm::mat4 GLCamera::GetViewProjectionMatrix() const
 	return m_perspective * glm::lookAt(m_position, m_position + m_forward, m_up);
 }
 
-void GLCamera::ProcessInput(float x, float y, float deltaTime)
+void GLCamera::ProcessInput(float x, float y)
 {
 	float xOffset = x;
 	float yOffset = y;
@@ -40,7 +40,7 @@ void GLCamera::ProcessInput(float x, float y, float deltaTime)
 	xOffset *= sensitivity;
 	yOffset *= sensitivity;
 
-	yaw += xOffset;
+	angleAroundPlayer += xOffset;
 	pitch += yOffset;
 
 	if (pitch > 89.0f)
@@ -48,6 +48,21 @@ void GLCamera::ProcessInput(float x, float y, float deltaTime)
 	if (pitch < -89.0f)
 		pitch = -89.0f;
 
-	this->m_position.z = distanceToPlayer * cosf(pitch);
-	this->m_position.y = distanceToPlayer * sinf(pitch);
+	glm::vec3 front;
+	front.x = -cos(glm::radians(pitch)) * cos(glm::radians(yaw));
+	front.y = -sin(glm::radians(pitch));
+	front.z = -cos(glm::radians(pitch)) * sin(glm::radians(yaw));
+	m_forward = glm::normalize(front);
+}
+
+void GLCamera::calculatePosition(GLTransform transform)
+{
+	float theta = transform.GetRot().y + angleAroundPlayer;
+	float offsetX = (float)((distanceToPlayer * cosf(glm::radians(pitch))) * sinf(glm::radians(theta)));
+	float offsetZ = (float)((distanceToPlayer * cosf(glm::radians(pitch))) * cosf(glm::radians(theta)));
+
+	this->m_position.x = transform.GetPos().x - offsetX;
+	this->m_position.z = transform.GetPos().z - offsetZ;
+	this->m_position.y = transform.GetPos().y + distanceToPlayer * sinf(pitch);
+	this->yaw = 180 - (transform.GetRot().y + angleAroundPlayer);
 }

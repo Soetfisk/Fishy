@@ -5,6 +5,7 @@
 #include "GLUtil.h"
 #include "GLWindow.h"
 #include "GLCamera.h"
+#include "GLPlayer.h"
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nShowCmd)
 {
@@ -26,6 +27,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	GLCamera* camera = new GLCamera(glm::vec3(0, 1, 1), 70.0f, window->GetAspect(), 0.01f, 1000.0f);
 	window->BindCamera(camera);
 
+	GLPlayer player;
+
 	while (!window->IsClosed())
 	{
 		currentTime = SDL_GetTicks();
@@ -35,6 +38,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		window->Clear(0.2, 0.2, 0.8);
 
 		//Draw shit here!
+		player.tempEvent();
 
 		window->Update(deltaTime);
 	}
