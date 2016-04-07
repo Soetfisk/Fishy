@@ -3,25 +3,14 @@
 class GLCamera
 {
 public:
-	enum Keys
-	{
-		FORWARD,
-		LEFT,
-		RIGHT,
-		BACK,
-		UP,
-		DOWN
-	};
 
 	GLCamera(const glm::vec3& pos, float fov, float aspect, float zNear, float zFar);
 	GLCamera();
 	~GLCamera();
 
-	glm::vec3 GetPos() const;
+	glm::vec3& Position();
 	glm::mat4 GetViewProjectionMatrix() const;
-	void ProcessKeyboard(GLCamera::Keys key,float deltaTime);
 	void ProcessMouse(float x, float y, float deltaTime);
-	void ProcessScrollWheel(float y, float deltaTime);
 
 	
 private:
