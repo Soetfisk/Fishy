@@ -14,7 +14,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// Linker -> General -> Additional Library Directories = .\lib
 	// Linker -> Input -> Additional Dependencies = glew32.lib;glew32s.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;OpenGL32.lib;
 	// Project is set to x64 by default, change it to x86 to make it work
-
+	// comment
 	GameMain* game = new GameMain();
 
 	game->GameLoop();
