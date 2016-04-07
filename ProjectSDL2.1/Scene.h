@@ -7,12 +7,18 @@ class Scene
 {
 private:
 
+
+
+
 public:
 	Scene();
 	~Scene();
 
-	void pollEvent(SDL_Event* e);
+	void HandleEvenet(SDL_Event* e);
 
+	void Update(float& deltaTime);
+	void LoadScene();
+	void DrawScene();
 };
 
 #endif
