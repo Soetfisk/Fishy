@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="GLCamera.cpp" />
     <ClCompile Include="GLMesh.cpp" />
+    <ClCompile Include="GLPlayer.cpp" />
     <ClCompile Include="GLShader.cpp" />
     <ClCompile Include="GLWindow.cpp" />
     <ClCompile Include="main.cpp" />
@@ -28,6 +29,7 @@
   <ItemGroup>
     <ClInclude Include="GLCamera.h" />
     <ClInclude Include="GLMesh.h" />
+    <ClInclude Include="GLPlayer.h" />
     <ClInclude Include="GLShader.h" />
     <ClInclude Include="GLtexture.h" />
     <ClInclude Include="GLTransform.h" />
