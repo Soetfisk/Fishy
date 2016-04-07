@@ -27,7 +27,7 @@ private:
 		NUM_UNIFORMS
 	};
 	GLuint m_program;
-	GLuint m_shaders[NUM_SHADERS];
+	GLuint m_shaders[NUM_SHADERS]; 
 	GLuint m_uniforms[NUM_UNIFORMS];
 
 	GLuint CreateShader(const std::string& text, GLenum shaderType);

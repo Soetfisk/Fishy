@@ -39,4 +39,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		window->Update(deltaTime);
 	}
 
+	delete window;
+	delete camera;
+
 }
