@@ -10,7 +10,10 @@ Scene::~Scene(){
 }
 
 void Scene::Update(float& deltaTime) {
-
+	//for (int i = 0; i < this->player.count(); i++) {
+		//this->player.at(i).update(deltTime);
+	//}
+	std::cout << deltaTime << std::endl;
 }
 
 //Loads the scene, models, matrices

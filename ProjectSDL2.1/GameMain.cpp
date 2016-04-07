@@ -25,6 +25,7 @@ void GameMain::GameLoop()
 		this->SetDeltaTime();
 		this->window->Clear(0.2, 0.2, 0.8);
 		this->window->Update();
+		this->scene->Update(this->deltaTime);
 
 		while (SDL_PollEvent(&e)) // getting events
 		{
