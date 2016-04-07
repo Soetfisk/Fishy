@@ -38,18 +38,7 @@ void GLWindow::Update(float deltaTime)
 {
 
 	SDL_GL_SwapWindow(m_Window);
-	SDL_PumpEvents();
-	SDL_Event e;
-
-	const Uint8* keyState = SDL_GetKeyboardState(NULL);
-	//check if we close the window
-	while (SDL_PollEvent(&e))
-	{
-		if (e.type == SDL_QUIT)
-		{
-			m_IsClosed = true;
-		}
-	}
+	
 }
 
 bool GLWindow::IsClosed()
