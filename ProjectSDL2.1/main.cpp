@@ -4,12 +4,15 @@
 
 #include "GLUtil.h"
 #include "GameMain.h"
+#include <FishBox.h>
 
 void InitDosConsole() {
 	AllocConsole();
 	freopen("CONIN$", "rb", stdin);
 	freopen("CONOUT$", "wb", stdout);
 	freopen("CONOUT$", "wb", stderr);
+
+	printf("%d",MathFuncs::Test());
 }
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nShowCmd)
