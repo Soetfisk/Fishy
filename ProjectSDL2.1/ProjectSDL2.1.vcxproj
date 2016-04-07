@@ -24,6 +24,7 @@
     <ClCompile Include="GLShader.cpp" />
     <ClCompile Include="GLWindow.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLCamera.h" />
@@ -33,6 +34,7 @@
     <ClInclude Include="GLTransform.h" />
     <ClInclude Include="GLUtil.h" />
     <ClInclude Include="GLWindow.h" />
+    <ClInclude Include="Scene.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{238DD780-B6E5-4F60-8CCF-FFD915BD6E8B}</ProjectGuid>
