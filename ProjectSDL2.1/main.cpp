@@ -24,7 +24,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	GLWindow* window = new GLWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "OpenGL Window");
 	GLCamera* camera = new GLCamera(glm::vec3(0, 1, 1), 70.0f, window->GetAspect(), 0.01f, 1000.0f);
-	window->BindCamera(camera);
 
 	while (!window->IsClosed())
 	{
