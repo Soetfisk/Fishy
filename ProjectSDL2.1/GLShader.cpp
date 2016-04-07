@@ -1,14 +1,27 @@
 #include "GLShader.h"
-GLShader::GLShader(const std::string& fileName)
+
+GLShader::GLShader(const std::string& fileName, const bool& geometry)
 {
 	//create program
 	m_program = glCreateProgram();
 
-	m_shaders[0] = CreateShader(LoadShader(fileName + ".vert.glsl"), GL_VERTEX_SHADER);
-	m_shaders[1] = CreateShader(LoadShader(fileName + ".frag.glsl"), GL_FRAGMENT_SHADER);
-	m_shaders[2] = CreateShader(LoadShader(fileName + ".geom.glsl"), GL_GEOMETRY_SHADER);
+	if (geometry)
+	{
+		nrOfShaders = 3;
+		m_shaders = new GLuint[nrOfShaders];
+		m_shaders[0] = CreateShader(LoadShader(fileName + ".vert"), GL_VERTEX_SHADER);
+		m_shaders[1] = CreateShader(LoadShader(fileName + ".frag"), GL_FRAGMENT_SHADER); 
+		m_shaders[2] = CreateShader(LoadShader(fileName + ".geom"), GL_GEOMETRY_SHADER);
+	}
+	else
+	{
+		nrOfShaders = 2;
+		m_shaders = new GLuint[nrOfShaders];
+		m_shaders[0] = CreateShader(LoadShader(fileName + ".vert"), GL_VERTEX_SHADER);
+		m_shaders[1] = CreateShader(LoadShader(fileName + ".frag"), GL_FRAGMENT_SHADER);
+	}		
 
-	for (unsigned int i = 0; i < NUM_SHADERS; i++)
+	for (unsigned int i = 0; i < nrOfShaders; i++)
 	{
 		glAttachShader(m_program, m_shaders[i]);
 	}
@@ -21,11 +34,17 @@ GLShader::GLShader(const std::string& fileName)
 	m_uniforms[VIEWPOS_U] =		glGetUniformLocation(m_program, "ViewPos");
 }
 
+/*
+	Use the shaders program
+*/
 void GLShader::Bind()
 {
 	glUseProgram(m_program);
 }
 
+/*
+	
+*/
 void GLShader::Update(GLMesh& mesh, const GLCamera& camera)
 {
 	glm::mat4 model = mesh.GetTransform().GetModel();
@@ -49,7 +68,10 @@ void GLShader::Update(GLMesh& mesh, const GLCamera& camera)
 	glUniform1i(this->GetUnifromLocation("diffuseTexture"), 0);
 }
 
-void GLShader::Update(GLTransform & tranform, const GLCamera & camera)
+/*
+	
+*/
+void GLShader::Update(GLTransform& tranform, const GLCamera& camera)
 {
 	glm::mat4 model = tranform.GetModel();
 	glm::mat4 projView = camera.GetViewProjectionMatrix();
@@ -69,6 +91,9 @@ void GLShader::Update(GLTransform & tranform, const GLCamera & camera)
 	glUniform1f(matShineLoc, 0.0f);
 }
 
+/*
+	
+*/
 GLuint& GLShader::GetUnifromLocation(std::string name)
 {
 	GLuint unifrom = glGetUniformLocation(m_program, name.c_str());
@@ -77,13 +102,15 @@ GLuint& GLShader::GetUnifromLocation(std::string name)
 
 GLShader::~GLShader()
 {
-	for (unsigned int i = 0; i < NUM_SHADERS; i++)
+	for (unsigned int i = 0; i < nrOfShaders; i++)
 	{
 		glDetachShader(m_program, m_shaders[i]);
 		glDeleteShader(m_shaders[i]);
 	}
 
 	glDeleteProgram(m_program);
+
+	delete[]m_shaders;
 }
 
 GLuint GLShader::CreateShader(const std::string & text, GLenum shaderType)
@@ -101,12 +128,12 @@ GLuint GLShader::CreateShader(const std::string & text, GLenum shaderType)
 	glCompileShader(shader);
 	CheckShaderError(shader, GL_COMPILE_STATUS, false);
 
-
-
-
 	return shader;
 }
 
+/*
+	
+*/
 void GLShader::CheckShaderError(GLuint shader, GLuint flag, bool isProgram)
 {
 	GLint success = 0;
@@ -142,6 +169,9 @@ void GLShader::CheckShaderError(GLuint shader, GLuint flag, bool isProgram)
 	}
 }
 
+/*
+	Read and load shaderfile into a string and return it
+*/
 std::string GLShader::LoadShader(const std::string & fileName)
 {
 	std::ifstream shaderFile;

@@ -6,7 +6,7 @@
 class GLShader
 {
 public:
-	GLShader(const std::string& fileName);
+	GLShader(const std::string& fileName, const bool& geometry);
 	GLShader() {};
 
 	void Bind();
@@ -16,7 +16,7 @@ public:
 
 	virtual ~GLShader();
 private:
-	static const unsigned int NUM_SHADERS = 3;
+	int nrOfShaders;
 
 	enum
 	{
@@ -27,7 +27,7 @@ private:
 		NUM_UNIFORMS
 	};
 	GLuint m_program;
-	GLuint m_shaders[NUM_SHADERS]; 
+	GLuint* m_shaders; 
 	GLuint m_uniforms[NUM_UNIFORMS];
 
 	GLuint CreateShader(const std::string& text, GLenum shaderType);
