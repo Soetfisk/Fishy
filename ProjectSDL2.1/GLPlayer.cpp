@@ -54,10 +54,15 @@ void GLPlayer::tempEvent()
 			AddController(e.cdevice.which);
 		}
 	}
-	int x, y;
+	float x, y;
 	x = SDL_GameControllerGetAxis(pad, SDL_CONTROLLER_AXIS_RIGHTX);
 	y = SDL_GameControllerGetAxis(pad, SDL_CONTROLLER_AXIS_RIGHTY);
 
+	x = x / (glm::pow(2, 15));
+	y = y / (glm::pow(2, 15));
+
+	std::cout << "X:" << x << std::endl;
+	std::cout << "Y:" << y << std::endl;
 	this->Update(CAMERA_MOVE, glm::vec3(x, y, 0));
 }
 

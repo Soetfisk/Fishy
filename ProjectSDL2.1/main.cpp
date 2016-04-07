@@ -7,6 +7,14 @@
 #include "GLCamera.h"
 #include "GLPlayer.h"
 
+void InitDosConsole() {
+	AllocConsole();
+	freopen("CONIN$", "rb", stdin);
+	freopen("CONOUT$", "wb", stdout);
+	freopen("CONOUT$", "wb", stderr);
+}
+
+
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nShowCmd)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -14,6 +22,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	int currentTime = 0;
 	float deltaTime = 0.0f;
 	float counter = 0;
+
+	InitDosConsole();
 
 	//Project Setup:
 	// C/C++ -> General -> Additional Include Directories = .\include
