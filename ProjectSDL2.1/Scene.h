@@ -6,8 +6,10 @@
 class Scene
 {
 private:
-
-
+	//todo implement
+	//std::vector<Model> models;
+	//std::vector<Player> players;
+	//std::vector<Npc> npc;
 
 
 public:
