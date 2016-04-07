@@ -33,6 +33,11 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GameMain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLUtil.h">
@@ -56,7 +61,10 @@
     <ClInclude Include="GLWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
+	<ClInclude Include="Scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+        <ClInclude Include="GameMain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
