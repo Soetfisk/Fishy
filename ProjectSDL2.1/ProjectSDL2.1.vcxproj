@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="GLCamera.cpp" />
     <ClCompile Include="GLMesh.cpp" />
     <ClCompile Include="GLShader.cpp" />
@@ -27,6 +28,7 @@
     <ClCompile Include="Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameMain.h" />
     <ClInclude Include="GLCamera.h" />
     <ClInclude Include="GLMesh.h" />
     <ClInclude Include="GLShader.h" />
