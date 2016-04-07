@@ -56,3 +56,5 @@ _ReSharper*/
 *.app
 ProjectSDL2.1.sdf
 ProjectSDL2.1.VC.opendb
+ProjectSDL2.1.VC.db
+ProjectSDL2.1.VC.VC.opendb
