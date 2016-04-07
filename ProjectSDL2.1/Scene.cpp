@@ -23,6 +23,7 @@ void Scene::DrawScene() {
 	/*
 	for(int i = 0; i< this->player.count();i++){
 		for(int j = 0; j<this->models.count();j++){
+			shaders[MODELS].update(models.at(j),player.at(i).getCamera()); 
 			models.at(j).draw(player.at(i).getCamera());
 		}
 	}
