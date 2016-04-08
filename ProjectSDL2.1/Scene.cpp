@@ -40,5 +40,5 @@ void Scene::DrawScene() {
 }
 
 void Scene::HandleEvenet(SDL_Event* e) {
-
+	
 }
