@@ -2,6 +2,7 @@
 #define SCENE_H
 
 #include "GLUtil.h"
+#include "GLPlayer.h"
 
 class Scene {
 private:
@@ -14,7 +15,7 @@ private:
 
 	//todo implement
 	//std::vector<Model> models;
-	//std::vector<Player> players;
+	std::vector<GLPlayer> players;
 	//std::vector<Npc> npc;
 	//GLShader shaders[NUM_SHADERS];
 

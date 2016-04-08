@@ -3,6 +3,11 @@
 
 
 Scene::Scene(){
+	for (int i = 0; i < 2; i++) {
+		this->players.push_back(GLPlayer());
+	}
+
+
 }
 
 
@@ -13,7 +18,7 @@ void Scene::Update(float& deltaTime) {
 	//for (int i = 0; i < this->player.count(); i++) {
 		//this->player.at(i).update(deltTime);
 	//}
-	std::cout << deltaTime << std::endl;
+	//std::cout << deltaTime << std::endl;
 }
 
 //Loads the scene, models, matrices
