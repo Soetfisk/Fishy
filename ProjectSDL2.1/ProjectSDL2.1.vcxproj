@@ -22,7 +22,7 @@
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="GLCamera.cpp" />
     <ClCompile Include="GLMesh.cpp" />
-    <ClCompile Include="GLShader.cpp" />
+    <ClCompile Include="GLPlayer.cpp" />
     <ClCompile Include="GLWindow.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -31,7 +31,7 @@
     <ClInclude Include="GameMain.h" />
     <ClInclude Include="GLCamera.h" />
     <ClInclude Include="GLMesh.h" />
-    <ClInclude Include="GLShader.h" />
+    <ClInclude Include="GLPlayer.h" />
     <ClInclude Include="GLtexture.h" />
     <ClInclude Include="GLTransform.h" />
     <ClInclude Include="GLUtil.h" />

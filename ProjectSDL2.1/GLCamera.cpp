@@ -13,7 +13,7 @@ GLCamera::GLCamera(const glm::vec3 & pos, float fov, float aspect, float zNear, 
 GLCamera::GLCamera()
 {
 	m_perspective = glm::perspective(70.0f, (float)(1024/768), 0.01f, 1000.0f);
-	m_position = glm::vec3(0,0,0);
+	m_position = glm::vec3(0, 0, 0);
 	m_forward = glm::vec3(0, 0, 1);
 	m_up = glm::vec3(0, 1, 0);
 }
@@ -22,9 +22,9 @@ GLCamera::~GLCamera()
 {
 }
 
-glm::vec3 GLCamera::GetPos() const
+glm::vec3 & GLCamera::Position()
 {
-	return this->m_position;
+	return m_position;
 }
 
 glm::mat4 GLCamera::GetViewProjectionMatrix() const
@@ -32,42 +32,15 @@ glm::mat4 GLCamera::GetViewProjectionMatrix() const
 	return m_perspective * glm::lookAt(m_position, m_position + m_forward, m_up);
 }
 
-void GLCamera::ProcessKeyboard(GLCamera::Keys key, float deltaTime)
+void GLCamera::ProcessInput(float x, float y)
 {
-	switch (key)
-	{
-	case GLCamera::FORWARD:
-		this->m_position += m_forward * movementSpeed * deltaTime;
-		break;
-	case GLCamera::LEFT:
-		this->m_position -= glm::normalize(glm::cross(m_forward, m_up)) * movementSpeed * deltaTime;
-		break;
-	case GLCamera::RIGHT:
-		this->m_position += glm::normalize(glm::cross(m_forward, m_up)) * movementSpeed * deltaTime;
-		break;
-	case GLCamera::BACK:
-		this->m_position -= m_forward * movementSpeed * deltaTime;
-		break;
-	case GLCamera::UP:
-		this->m_position += m_up * movementSpeed * deltaTime;
-		break;
-	case GLCamera::DOWN:
-		this->m_position -= m_up * movementSpeed * deltaTime;
-		break;
-	default:
-		break;
-	}
-}
-
-void GLCamera::ProcessMouse(float x, float y, float deltaTime)
-{
-	float xOffset = x;
-	float yOffset = y;
+	float xOffset = x / (glm::pow(2, 15));
+	float yOffset = y / (glm::pow(2, 15));
 
 	xOffset *= sensitivity;
 	yOffset *= sensitivity;
 
-	yaw += xOffset;
+	angleAroundPlayer += xOffset;
 	pitch += yOffset;
 
 	if (pitch > 89.0f)
@@ -82,7 +55,41 @@ void GLCamera::ProcessMouse(float x, float y, float deltaTime)
 	m_forward = glm::normalize(front);
 }
 
-void GLCamera::ProcessScrollWheel(float y, float deltaTime)
+void GLCamera::Update(GLTransform transform)
 {
-	movementSpeed += y;
+	if (lastX < -DEADZONE || lastX > DEADZONE || lastY < -DEADZONE || lastY > DEADZONE)
+	{
+		ProcessInput(lastX, lastY);
+	}
+
+
+	float theta = transform.GetRot().y + angleAroundPlayer;
+	float offsetX = (float)((distanceToPlayer * cosf(glm::radians(pitch))) * sinf(glm::radians(theta)));
+	float offsetZ = (float)((distanceToPlayer * cosf(glm::radians(pitch))) * cosf(glm::radians(theta)));
+
+	this->m_position.x = transform.GetPos().x - offsetX;
+	this->m_position.z = transform.GetPos().z - offsetZ;
+	this->m_position.y = transform.GetPos().y + distanceToPlayer * sinf(pitch);
+	this->yaw = 180 - (transform.GetRot().y + angleAroundPlayer);
+}
+
+void GLCamera::SetInput(float x, float y)
+{
+	if (x < -DEADZONE || x > DEADZONE)
+	{
+		lastX = x;
+	}
+	else
+	{
+		lastX = 0;
+
+	}
+	if (y < -DEADZONE || y > DEADZONE)
+	{
+		lastY = y;
+	}
+	else
+	{
+		lastY = 0;
+	}
 }

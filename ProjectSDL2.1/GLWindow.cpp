@@ -36,7 +36,6 @@ void GLWindow::Clear(float r, float g, float b)
 
 void GLWindow::Update()
 {
-
 	SDL_GL_SwapWindow(m_Window);
 	
 }
