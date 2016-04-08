@@ -24,16 +24,18 @@
     <ClCompile Include="GLMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GLWindow.cpp">
+    <ClCompile Include="GLShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GLPlayer.cpp">
+    <ClCompile Include="GLWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameMain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -47,6 +49,9 @@
     <ClInclude Include="GLMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GLShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="GLtexture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -56,13 +61,10 @@
     <ClInclude Include="GLWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GLPlayer.h">
+	<ClInclude Include="Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameMain.h">
+        <ClInclude Include="GameMain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

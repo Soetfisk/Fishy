@@ -7,9 +7,6 @@ GLWindow::GLWindow()
 	InitWindow(1024, 768, "ProjectSDL2");
 	this->m_LastX = 1024 / 2;
 	this->m_LastY = 768 / 2;
-	this->m_Camera = nullptr;
-	this->m_LockCamera = false;
-	this->m_LockMouse = false;
 	this->m_IsClosed = false;
 }
 
@@ -18,8 +15,7 @@ GLWindow::GLWindow(int width, int height, const std::string & title)
 	InitWindow(width, height, title);
 	this->m_LastX = width / 2;
 	this->m_LastY = height / 2;
-	this->m_Camera = nullptr;
-	this->m_LockMouse = false;
+
 	this->m_IsClosed = false;
 }
 
@@ -38,19 +34,10 @@ void GLWindow::Clear(float r, float g, float b)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void GLWindow::Update(float deltaTime)
+void GLWindow::Update()
 {
 	SDL_GL_SwapWindow(m_Window);
-}
-
-void GLWindow::BindCamera(GLCamera* camera)
-{
-	this->m_Camera = camera;
-}
-
-void GLWindow::UnbindCamera()
-{
-	this->m_Camera = nullptr;
+	
 }
 
 bool GLWindow::IsClosed()
@@ -77,6 +64,7 @@ SDL_Window * GLWindow::GetWindow()
 {
 	return this->m_Window;
 }
+
 
 void GLWindow::InitWindow(int width, int height, const std::string & title)
 {
