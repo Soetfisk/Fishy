@@ -1,23 +1,22 @@
-#version 450
+#version 430
 
-layout(location = 0) in position;
-layout(location = 1) in texCoord;
-layout(location = 2) in normal
+layout(location = 0) in vec3 position;
+layout(location = 1) in vec2 texCoord;
+layout(location = 2) in vec3 normal;
 
-out VS
-{
-	//vec3 pos
-	vec2 texCoord;
-	vec3 normal;
-} vertex
+out vec2 vsTexCoord;
+out vec3 vsNormal;
+out vec3 vsPos;
 
 uniform mat4 TransformMatrix;
 uniform mat4 ProjectionViewMatrix;
-uniform mat4 ViewPos
+uniform mat4 ViewPos;
 
-int main()
+void main()
 {
-	gl_Position = ProjectionVeiwMatrix * TransformMatrix * vec4(position, 1);
-	vertex.texCoord = texCoord;
-	vertex.normal = normal;
+ 
+	gl_Position = ProjectionViewMatrix * TransformMatrix * vec4(position, 1);
+	vsTexCoord = texCoord;
+	vsNormal = normal;
+	vsPos = vec3(TransformMatrix * vec4(position, 1));
 }

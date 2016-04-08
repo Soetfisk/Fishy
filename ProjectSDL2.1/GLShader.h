@@ -6,7 +6,7 @@
 class GLShader
 {
 public:
-	GLShader(const std::string& fileName, const bool& geometry);
+	GLShader(const std::string& fileName, const bool& geometry = false);
 	GLShader() {};
 
 	void Bind();
@@ -27,7 +27,7 @@ private:
 		NUM_UNIFORMS
 	};
 	GLuint m_program;
-	GLuint* m_shaders; 
+	GLuint m_shaders[3]; 
 	GLuint m_uniforms[NUM_UNIFORMS];
 
 	GLuint CreateShader(const std::string& text, GLenum shaderType);

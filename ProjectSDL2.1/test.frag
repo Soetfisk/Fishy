@@ -1,19 +1,19 @@
-#version 450
+#version 430
 
-in VS
-{
-	//vec3 pos
-	vec2 texCoord;
-	vec3 normal;
-} vertex;
+in vec2 vsTexCoord;
+in vec3 vsNormal;
+in vec3 vsPos;
+
+//out vec4 color;
 
 uniform sampler2D diffuseTexture;
-uniform vec3 material.ambient;
-uniform vec3 material.diffuse;
-uniform vec3 material.specular;
-uniform float material.shininess;
 
-int main()
+void main()
 {
-	gl_Color = vec4(255, 0, 0, 1);
+	
+	vec3 lightPos = vec3(3,3,3);
+
+	float angle = max(dot(normalize(lightPos-vsPos), vsNormal), 0.0);
+
+	gl_FragColor  = angle * vec4(1, 0, 0, 1);
 }

@@ -3,13 +3,14 @@
 
 #include "GLUtil.h"
 #include "GLPlayer.h"
+#include "GLShader.h"
 
 class Scene {
 private:
 	enum ShaderType {
 		MODELS,
-		PARTICLES,
-		BLUR,
+		//PARTICLES,
+		//BLUR,
 		NUM_SHADERS
 	};
 
@@ -17,8 +18,8 @@ private:
 	//std::vector<Model> models;
 	std::vector<GLPlayer> players;
 	//std::vector<Npc> npc;
-	//GLShader shaders[NUM_SHADERS];
-
+	GLShader* shaders[NUM_SHADERS];
+	GLMesh tempMesh;
 	
 
 
