@@ -45,11 +45,11 @@ void GLShader::Bind()
 /*
 	
 */
-void GLShader::Update(GLMesh& mesh, const GLCamera& camera)
+void GLShader::Update(GLMesh& mesh, GLCamera& camera)
 {
 	glm::mat4 model = mesh.GetTransform().GetModel();
 	glm::mat4 projView = camera.GetViewProjectionMatrix();
-	glm::vec3 viewPos = camera.GetPos();
+	glm::vec3 viewPos = camera.Position();
 	glUniformMatrix4fv(m_uniforms[TRANSFROM_U], 1, GL_FALSE, glm::value_ptr(model));
 	glUniformMatrix4fv(m_uniforms[PROJVIEW_U], 1, GL_FALSE, glm::value_ptr(projView));
 	glUniform3fv(m_uniforms[VIEWPOS_U], 1, glm::value_ptr(viewPos));
@@ -71,11 +71,11 @@ void GLShader::Update(GLMesh& mesh, const GLCamera& camera)
 /*
 	
 */
-void GLShader::Update(GLTransform& tranform, const GLCamera& camera)
+void GLShader::Update(GLTransform& tranform, GLCamera& camera)
 {
 	glm::mat4 model = tranform.GetModel();
 	glm::mat4 projView = camera.GetViewProjectionMatrix();
-	glm::vec3 viewPos = camera.GetPos();
+	glm::vec3 viewPos = camera.Position();
 	glUniformMatrix4fv(m_uniforms[TRANSFROM_U], 1, GL_FALSE, glm::value_ptr(model));
 	glUniformMatrix4fv(m_uniforms[PROJVIEW_U], 1, GL_FALSE, glm::value_ptr(projView));
 	glUniform3fv(m_uniforms[VIEWPOS_U], 1, glm::value_ptr(viewPos));

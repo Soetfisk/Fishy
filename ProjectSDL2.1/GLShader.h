@@ -10,8 +10,8 @@ public:
 	GLShader() {};
 
 	void Bind();
-	void Update(GLMesh& mesh, const GLCamera& camera);
-	void Update(GLTransform& tranform, const GLCamera& camera);
+	void Update(GLMesh& mesh, GLCamera& camera);
+	void Update(GLTransform& tranform, GLCamera& camera);
 	GLuint& GetUnifromLocation(std::string name);
 
 	virtual ~GLShader();
