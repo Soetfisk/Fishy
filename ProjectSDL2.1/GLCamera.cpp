@@ -34,8 +34,8 @@ glm::mat4 GLCamera::GetViewProjectionMatrix() const
 
 void GLCamera::ProcessInput(float x, float y)
 {
-	float xOffset = x;
-	float yOffset = y;
+	float xOffset = x / (glm::pow(2, 15));
+	float yOffset = y / (glm::pow(2, 15));
 
 	xOffset *= sensitivity;
 	yOffset *= sensitivity;
@@ -55,8 +55,14 @@ void GLCamera::ProcessInput(float x, float y)
 	m_forward = glm::normalize(front);
 }
 
-void GLCamera::calculatePosition(GLTransform transform)
+void GLCamera::Update(GLTransform transform)
 {
+	if (lastX < -DEADZONE || lastX > DEADZONE || lastY < -DEADZONE || lastY > DEADZONE)
+	{
+		ProcessInput(lastX, lastY);
+	}
+
+
 	float theta = transform.GetRot().y + angleAroundPlayer;
 	float offsetX = (float)((distanceToPlayer * cosf(glm::radians(pitch))) * sinf(glm::radians(theta)));
 	float offsetZ = (float)((distanceToPlayer * cosf(glm::radians(pitch))) * cosf(glm::radians(theta)));
@@ -65,4 +71,25 @@ void GLCamera::calculatePosition(GLTransform transform)
 	this->m_position.z = transform.GetPos().z - offsetZ;
 	this->m_position.y = transform.GetPos().y + distanceToPlayer * sinf(pitch);
 	this->yaw = 180 - (transform.GetRot().y + angleAroundPlayer);
+}
+
+void GLCamera::SetInput(float x, float y)
+{
+	if (x < -DEADZONE || x > DEADZONE)
+	{
+		lastX = x;
+	}
+	else
+	{
+		lastX = 0;
+
+	}
+	if (y < -DEADZONE || y > DEADZONE)
+	{
+		lastY = y;
+	}
+	else
+	{
+		lastY = 0;
+	}
 }

@@ -4,7 +4,7 @@
 
 GLPlayer::GLPlayer()
 {
-	this->m_camera = GLCamera();
+	this->m_camera;
 }
 
 
@@ -21,7 +21,7 @@ void GLPlayer::Update(Events state, glm::vec3 movementVec)
 	switch (state)
 	{
 	case CAMERA_MOVE:
-		this->m_camera.ProcessInput(movementVec.x, movementVec.y);
+		m_camera.SetInput(movementVec.x, movementVec.y);
 		break;
 	case PLAYER_MOVE:
 
@@ -51,29 +51,23 @@ void GLPlayer::tempEvent()
 
 		if (e.type == SDL_CONTROLLERDEVICEADDED)
 		{
-			AddController(e.cdevice.which);
+			Update(JOY_ADDED, glm::vec3(e.cdevice.which));
+		}
+		else if (e.type == SDL_CONTROLLERDEVICEREMOVED)
+		{
+			Update(JOY_REMOVED, glm::vec3(e.cdevice.which));
 		}
 	}
-	float x, y;
-	x = SDL_GameControllerGetAxis(pad, SDL_CONTROLLER_AXIS_RIGHTX);
-	y = SDL_GameControllerGetAxis(pad, SDL_CONTROLLER_AXIS_RIGHTY);
-
-	x = x / (glm::pow(2, 15));
-	y = y / (glm::pow(2, 15));
-
-	std::cout << "X:" << x << std::endl;
-	std::cout << "Y:" << y << std::endl;
-	this->Update(CAMERA_MOVE, glm::vec3(x, y, 0));
 }
 
 void GLPlayer::AddController(int id)
 {
 	if (SDL_IsGameController(id)) {
-		this->pad = SDL_GameControllerOpen(id);
+		pad = SDL_GameControllerOpen(id);
 		if (pad)
 		{
 			_SDL_Joystick *joy = SDL_GameControllerGetJoystick(pad);
-			this->instanceID = SDL_JoystickInstanceID(joy);
+			instanceID = SDL_JoystickInstanceID(joy);
 		}
 	}
 }
