@@ -4,9 +4,9 @@
 
 GLWindow::GLWindow()
 {
-	InitWindow(1024, 768, "ProjectSDL2");
-	this->m_LastX = 1024 / 2;
-	this->m_LastY = 768 / 2;
+	InitWindow(window::WIDTH, window::HEIGHT, "ProjectSDL2");
+	this->m_LastX = window::WIDTH / 2;
+	this->m_LastY = window::HEIGHT / 2;
 	this->m_IsClosed = false;
 }
 

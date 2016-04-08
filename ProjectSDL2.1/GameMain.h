@@ -13,7 +13,6 @@ private:
 	bool gameOn = true;
 	GLWindow* window;
 	Scene* scene;
-	const unsigned int SCREEN_WIDTH = 1024, SCREEN_HEIGHT = 768;
 
 	//Private functions below
 	void SetDeltaTime();

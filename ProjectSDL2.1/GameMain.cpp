@@ -6,7 +6,8 @@ GameMain::GameMain()
 	this->prevTime = 0;
 	this->deltaTime = 0.0f;
 	this->currentTime = 0;
-	this->window = new GLWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Survival of the fishest");
+	//window is a namespace in util that keeps the value of the width/height, in file GLUtil.h
+	this->window = new GLWindow(window::WIDTH, window::HEIGHT, "Survival of the fishest");
 }
 
 

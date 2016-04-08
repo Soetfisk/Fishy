@@ -23,14 +23,17 @@ void Scene::LoadScene() {
 
 //Calls the models.draw
 void Scene::DrawScene() {
+	
 	/*
 	for(int i = 0; i< this->player.count();i++){
+		//Set viewport
+		glViewport(0, window::HEIGHT / (i + 1), window::WIDTH, window::HEIGHT / 2);
 		for(int j = 0; j<this->models.count();j++){
-			shaders[MODELS].update(models.at(j),player.at(i).getCamera()); 
+			shaders[MODELS].Bind();
+			shaders[MODELS].update(models.at(j), player.at(i).getCamera()); 
 			models.at(j).draw(player.at(i).getCamera());
 		}
 	}
-	
 	
 	
 	*/

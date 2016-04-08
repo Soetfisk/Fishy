@@ -21,3 +21,10 @@
 #include <SDL2\SDL.h>
 
 //Structs
+
+//WINDOW
+
+namespace window {
+	const int WIDTH = 1024;
+	const int HEIGHT = 768;
+}
