@@ -3,13 +3,22 @@
 
 #include "GLUtil.h"
 
-class Scene
-{
+class Scene {
 private:
+	enum ShaderType {
+		MODELS,
+		PARTICLES,
+		BLUR,
+		NUM_SHADERS
+	};
+
 	//todo implement
 	//std::vector<Model> models;
 	//std::vector<Player> players;
 	//std::vector<Npc> npc;
+	//GLShader shaders[NUM_SHADERS];
+
+	
 
 
 public:
