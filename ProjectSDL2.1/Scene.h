@@ -19,7 +19,7 @@ private:
 	std::vector<GLPlayer> players;
 	//std::vector<Npc> npc;
 	GLShader* shaders[NUM_SHADERS];
-	GLMesh tempMesh;
+	GLMesh* tempMesh;
 	
 
 
