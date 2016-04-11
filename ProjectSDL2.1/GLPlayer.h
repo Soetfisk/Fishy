@@ -6,6 +6,7 @@ class GLPlayer
 public:
 	enum Events
 	{
+		NOTHING,
 		CAMERA_MOVE,
 		PLAYER_MOVE,
 		JOY_ADDED,

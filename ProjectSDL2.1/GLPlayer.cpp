@@ -35,6 +35,8 @@ void GLPlayer::Update(Events state, glm::vec3 movementVec)
 	default:
 		break;
 	}
+
+	this->m_camera.Update(GLTransform());
 }
 
 GLCamera GLPlayer::GetCamera()

@@ -23,9 +23,9 @@ private:
 	glm::vec3 m_forward;
 	glm::vec3 m_up;
 
-	float distanceToPlayer = 50.0f;
+	float distanceToPlayer = 5.0f;
 	float angleAroundPlayer = 0;
-	float pitch = 0.0f;
+	float pitch = 20.0f;
 	float yaw = 0.0f;
 	float sensitivity = 0.05f;
 

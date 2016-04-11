@@ -40,8 +40,8 @@ void GLCamera::ProcessInput(float x, float y)
 	xOffset *= sensitivity;
 	yOffset *= sensitivity;
 
-	angleAroundPlayer += xOffset;
-	pitch += yOffset;
+	angleAroundPlayer -= xOffset;
+	pitch -= yOffset;
 
 	if (pitch > 89.0f)
 		pitch = 89.0f;

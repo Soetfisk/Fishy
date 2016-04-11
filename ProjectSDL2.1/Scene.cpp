@@ -59,5 +59,24 @@ void Scene::DrawScene() {
 }
 
 void Scene::HandleEvenet(SDL_Event* e) {
-	
+
+		if (e->type == SDL_CONTROLLERDEVICEADDED)
+		{
+			players.at(0).Update(GLPlayer::JOY_ADDED, glm::vec3(e->cdevice.which));
+		}
+		else if (e->type == SDL_CONTROLLERDEVICEREMOVED)
+		{
+			players.at(0).Update(GLPlayer::JOY_REMOVED, glm::vec3(e->cdevice.which));
+		}
+		else if (e->type == SDL_CONTROLLERAXISMOTION)
+		{
+			if (e->caxis.axis == SDL_CONTROLLER_AXIS_RIGHTX)
+			{
+				players.at(0).Update(GLPlayer::CAMERA_MOVE, glm::vec3(e->caxis.value, 0, 0));
+			}
+			else if (e->caxis.axis == SDL_CONTROLLER_AXIS_RIGHTY)
+			{
+				players.at(0).Update(GLPlayer::CAMERA_MOVE, glm::vec3(0, e->caxis.value, 0));
+			}
+		}
 }

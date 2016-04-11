@@ -39,6 +39,7 @@ void GameMain::GameLoop()
 			{
 				this->gameOn = false;
 			}
+			this->scene->HandleEvenet(&e);
 		}
 		this->window->Update();
 	}
