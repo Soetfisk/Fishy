@@ -21,6 +21,9 @@ Scene::Scene(){
 	//
 	//tempMesh = GLMesh(vertices, vertices.size(), indices, indices.size(), GLMesh::Material());
 	tempMesh = objLoadFromFile("./res/OBJ/box2.obj");
+	this->frameBuffer = new FrameBuffer();
+	this->frameBuffer->CreateFrameBuffer();
+	this->frameBuffer->UnbindFrameBuffer();
 }
 
 
@@ -29,6 +32,7 @@ Scene::~Scene(){
 		delete shaders[i];
 	}
 	delete tempMesh;
+	delete this->frameBuffer;
 }
 
 void Scene::Update(float& deltaTime) {
@@ -52,11 +56,39 @@ void Scene::DrawScene() {
 		shaders[MODELS]->Bind();
 		shaders[MODELS]->Update(*tempMesh, players.at(i).GetCamera());
 		tempMesh->Draw();
+		this->RenderQuad();
 		//shaders[MODELS].update(models.at(j), player.at(i).getCamera()); 
 		//	models.at(j).draw(player.at(i).getCamera());
 		//}
 	}
 	
+}
+
+void Scene::RenderQuad()
+{
+	if (quadVAO == 0) //init
+	{
+		GLfloat quadVertices[] = {
+			// Positions        // Texture Coords
+			-1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+			-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+			1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+			1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+		};
+		// Setup plane VAO
+		glGenVertexArrays(1, &quadVAO);
+		glGenBuffers(1, &quadVBO);
+		glBindVertexArray(quadVAO);
+		glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	}
+	glBindVertexArray(quadVAO);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	glBindVertexArray(0);
 }
 
 void Scene::HandleEvenet(SDL_Event* e) {

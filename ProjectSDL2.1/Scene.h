@@ -4,6 +4,7 @@
 #include "GLUtil.h"
 #include "GLPlayer.h"
 #include "GLShader.h"
+#include "FrameBuffer.h"
 
 class Scene {
 private:
@@ -20,6 +21,9 @@ private:
 	//std::vector<Npc> npc;
 	GLShader* shaders[NUM_SHADERS];
 	GLMesh* tempMesh;
+	GLuint quadVAO = 0;
+	GLuint quadVBO;
+	FrameBuffer* frameBuffer;
 	
 
 
@@ -32,6 +36,7 @@ public:
 	void Update(float& deltaTime);
 	void LoadScene();
 	void DrawScene();
+	void RenderQuad();
 };
 
 #endif
