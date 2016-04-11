@@ -1,14 +1,20 @@
 #include "Scene.h"
 #include "obj_loader.h"
+#include "LoadMesh.h"
 
 
-
-Scene::Scene(){
+Scene::Scene() {
 	for (int i = 0; i < 1; i++) {
 		this->players.push_back(GLPlayer());
 	}
 	shaders[MODELS] = new GLShader("test");
 
+	FishBox FishBoxController;
+	std::vector<FSHVertexData> FSHVertexes = FishBoxController.GetModelList()[0].GetMeshList()[0].GetVertices();
+	std::vector<Vertex> Vertices = ModelDataConvert::convertFSHVertex(FSHVertexes);
+
+	FSHMaterial Material = FishBoxController.GetModelList()[0].GetMaterialList()[0];
+	//printf("%f,%f,%f",Material.getDiffuse());
 
 	//std::vector<Vertex> vertices;
 
@@ -21,6 +27,9 @@ Scene::Scene(){
 	//
 	//tempMesh = GLMesh(vertices, vertices.size(), indices, indices.size(), GLMesh::Material());
 	tempMesh = objLoadFromFile("./res/OBJ/box2.obj");
+	//Make new mesh here
+	//first make vertex for all vertexes
+
 }
 
 
