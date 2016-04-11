@@ -14,7 +14,10 @@ Scene::Scene() {
 	std::vector<Vertex> Vertices = ModelDataConvert::convertFSHVertex(FSHVertexes);
 
 	FSHMaterial Material = FishBoxController.GetModelList()[0].GetMaterialList()[0];
-	ModelDataConvert::convertFSHMaterial(Material);
+	//GL::Mesh GLMaterial = ModelDataConvert::convertFSHMaterial(Material);
+
+	//new GLMesh(Vertices, Vertices.size(), /*indices*/, FishBoxController.GetModelList()[0].GetMeshList()[0].getIndexCount(), GLMaterial)
+
 	//float hello = Material.getAmbient()[0];
 	//printf("%f", hello);
 	//std::vector<Vertex> vertices;
