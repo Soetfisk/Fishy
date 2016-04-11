@@ -31,8 +31,10 @@ private:
 	float sensitivity = 0.05f;
 
 	void ProcessInput(float x, float y, float deltaTime);
-	float calcHorizontalDist();
-	float calcVerticalDist();
-	void calcCameraPos(float horizDist, float verticDist, GLTransform transform);
+
+	float CalcHorizontalDist();
+	float CalcVerticalDist();
+
+	void CalcCameraPos(float horizDist, float verticDist, GLTransform transform);
 };
 

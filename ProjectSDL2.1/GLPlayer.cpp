@@ -15,7 +15,7 @@ GLPlayer::~GLPlayer()
 void GLPlayer::tempDraw()
 {
 }
-
+//handles events sent too the player
 void GLPlayer::Update(Events state, glm::vec3 movementVec)
 {
 	switch (state)
@@ -63,7 +63,7 @@ void GLPlayer::tempEvent()
 		}
 	}
 }
-
+//adds a controller too the player
 void GLPlayer::AddController(int id)
 {
 	if (SDL_IsGameController(id)) {
@@ -75,7 +75,7 @@ void GLPlayer::AddController(int id)
 		}
 	}
 }
-
+//removes the controller
 void GLPlayer::RemoveController(int id)
 {
 	SDL_GameControllerFromInstanceID(id);
