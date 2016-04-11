@@ -87,5 +87,7 @@
   <ItemGroup>
     <None Include="test.frag" />
     <None Include="test.vert" />
+    <None Include="pass.frag" />
+    <None Include="pass.vert" />
   </ItemGroup>
 </Project>

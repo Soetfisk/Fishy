@@ -12,6 +12,7 @@ private:
 		MODELS,
 		//PARTICLES,
 		//BLUR,
+		PASS,
 		NUM_SHADERS
 	};
 

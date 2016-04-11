@@ -45,6 +45,8 @@
     <ClInclude Include="Scene.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="pass.frag" />
+    <None Include="pass.vert" />
     <None Include="test.frag" />
     <None Include="test.vert" />
   </ItemGroup>

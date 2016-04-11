@@ -8,6 +8,7 @@ Scene::Scene(){
 		this->players.push_back(GLPlayer());
 	}
 	shaders[MODELS] = new GLShader("test");
+	shaders[PASS] = new GLShader("pass");
 
 
 	//std::vector<Vertex> vertices;
@@ -55,7 +56,11 @@ void Scene::DrawScene() {
 		//for(int j = 0; j<this->models.count();j++){
 		shaders[MODELS]->Bind();
 		shaders[MODELS]->Update(*tempMesh, players.at(i).GetCamera());
+		this->frameBuffer->BindFrameBuffer();
 		tempMesh->Draw();
+		this->frameBuffer->UnbindFrameBuffer();
+		shaders[PASS]->Bind();
+		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"));
 		this->RenderQuad();
 		//shaders[MODELS].update(models.at(j), player.at(i).getCamera()); 
 		//	models.at(j).draw(player.at(i).getCamera());

@@ -13,7 +13,7 @@ public:
 	void CreateFrameBuffer();
 	void BindFrameBuffer();
 	void UnbindFrameBuffer();
-	void BindTExtures();
+	void BindTexturesToProgram(GLuint uniform);
 };
 #endif
 

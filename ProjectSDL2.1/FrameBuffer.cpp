@@ -60,7 +60,6 @@ void FrameBuffer::CreateFrameBuffer()
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << "ERROR CREATING FRAMEBUFFER" << std::endl;
-	std::cout << "Swag";
 }
 
 void FrameBuffer::BindFrameBuffer()
@@ -74,6 +73,10 @@ void FrameBuffer::UnbindFrameBuffer()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void FrameBuffer::BindTExtures()
+void FrameBuffer::BindTexturesToProgram(GLuint uniform)
 {
+	glActiveTexture(GL_TEXTURE0);
+	//this->texUniformID = glGetUniformLocation(program, "renderedTexture");
+	glUniform1i(uniform, 0);
+	glBindTexture(GL_TEXTURE_2D, renderedTexture);
 }
