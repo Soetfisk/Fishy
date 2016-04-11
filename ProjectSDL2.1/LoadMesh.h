@@ -7,7 +7,6 @@
 namespace ModelDataConvert
 {
 	std::vector<Vertex> convertFSHVertex(std::vector<FSHVertexData> FSHVector);
-	//Material convertFSHMaterial();
-
+	GLMesh::Material convertFSHMaterial(FSHMaterial);
 }
 

@@ -14,8 +14,9 @@ Scene::Scene() {
 	std::vector<Vertex> Vertices = ModelDataConvert::convertFSHVertex(FSHVertexes);
 
 	FSHMaterial Material = FishBoxController.GetModelList()[0].GetMaterialList()[0];
-	//printf("%f,%f,%f",Material.getDiffuse());
-
+	ModelDataConvert::convertFSHMaterial(Material);
+	//float hello = Material.getAmbient()[0];
+	//printf("%f", hello);
 	//std::vector<Vertex> vertices;
 
 	//vertices.push_back(Vertex(glm::vec3(-.5, .5, 0), glm::vec2(0, 1), glm::vec3(0, 0, 1)));

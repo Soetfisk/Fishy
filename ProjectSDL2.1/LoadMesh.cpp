@@ -25,5 +25,33 @@ std::vector<Vertex> ModelDataConvert::convertFSHVertex(std::vector<FSHVertexData
 	return returnVector;
 }
 
+GLMesh::Material ModelDataConvert::convertFSHMaterial(FSHMaterial originalMaterial)
+{
+
+	GLMesh::Material temp;
+	
+	temp.ambient = glm::vec3(
+		originalMaterial.getAmbient()[0],
+		originalMaterial.getAmbient()[1], 
+		originalMaterial.getAmbient()[2]);
+
+
+	temp.diffuse= glm::vec3(
+		originalMaterial.getDiffuse()[0],
+		originalMaterial.getDiffuse()[1],
+		originalMaterial.getDiffuse()[2]);
+	
+	temp.specular = glm::vec3(
+		originalMaterial.getSpecular()[0],
+		originalMaterial.getSpecular()[1],
+		originalMaterial.getSpecular()[2]);
+
+	temp.shininess = originalMaterial.getShinyness();
+
+	
+	
+	return temp;
+}
+
 
 
