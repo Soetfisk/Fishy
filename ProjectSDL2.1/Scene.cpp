@@ -53,7 +53,7 @@ void Scene::DrawScene() {
 		//for(int j = 0; j<this->models.count();j++){
 		shaders[MODELS]->Bind();
 		shaders[MODELS]->Update(players.at(i).GetCamera());
-		//glUniformMatrix4fv(shaders[MODELS]->GetUnifromLocation("TransformMatrix"), 1, GL_FALSE, glm::value_ptr(tempModel->GetTransform().GetModel()));
+		//glUniformMatrix4fv(shaders[MODELS]->GetUnifromLocation("TransformMatrix"), 1, GL_FALSE, glm::value_ptr(tempModel->GetTransform().GetModel());
 		tempModel->Draw(*shaders[MODELS]);
 
 		//shaders[MODELS].update(models.at(j), player.at(i).getCamera()); 

@@ -65,7 +65,7 @@ GLMesh::~GLMesh()
 
 bool GLMesh::Draw(GLShader& shader, GLTransform& modelTrans)
 {
-	glm::mat4 trans = m_transfrom.GetModel() * modelTrans.GetModel();
+	glm::mat4 trans =  modelTrans.GetModel() * m_transfrom.GetModel();
 	glUniformMatrix4fv(shader.GetUnifromLocation("TransformMatrix"), 1, GL_FALSE, glm::value_ptr(trans));
 
 	glBindVertexArray(m_vertexArrayObject);
