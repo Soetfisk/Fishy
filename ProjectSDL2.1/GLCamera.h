@@ -11,13 +11,14 @@ public:
 
 	glm::vec3& Position();
 	glm::mat4 GetViewProjectionMatrix() const;
-	void Update(GLTransform transform);
+	void Update(GLTransform transform, float deltaTime);
 	void SetInput(float x, float y);
 	
 private:
 	
 	const int DEADZONE = 8000;
-	float lastX, lastY;
+	float lastX = 0;
+	float lastY = 0;
 	glm::mat4 m_perspective;
 	glm::vec3 m_position;
 	glm::vec3 m_forward;
@@ -25,10 +26,13 @@ private:
 
 	float distanceToPlayer = 5.0f;
 	float angleAroundPlayer = 0;
-	float pitch = 20.0f;
+	float pitch = 1.0f;
 	float yaw = 0.0f;
 	float sensitivity = 0.05f;
 
-	void ProcessInput(float x, float y);
+	void ProcessInput(float x, float y, float deltaTime);
+	float calcHorizontalDist();
+	float calcVerticalDist();
+	void calcCameraPos(float horizDist, float verticDist, GLTransform transform);
 };
 
