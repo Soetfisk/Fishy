@@ -1,6 +1,6 @@
 #include "obj_loader.h"
 
-GLMesh* objLoadFromFile(const std::string& fileName) {
+GLMesh *objLoadFromFile(const std::string& fileName) {
 	FILE * file = fopen(fileName.c_str(), "r");
 
 	if (file == NULL)
@@ -45,7 +45,7 @@ GLMesh* objLoadFromFile(const std::string& fileName) {
 			int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
 			if (matches != 9) {
 				printf("File can't be read by our simple parser : ( Try exporting with other options\n");
-				return false;
+				return nullptr;
 
 			}
 			vertexIndices.push_back(vertexIndex[0]);
@@ -62,6 +62,8 @@ GLMesh* objLoadFromFile(const std::string& fileName) {
 		}
 
 	}
+	fclose(file);
+	//fcloseall();
 	std::vector<Vertex> final_vertices;
 	std::vector<unsigned int> indices;
 	int final_Index = 0;
@@ -97,6 +99,6 @@ GLMesh* objLoadFromFile(const std::string& fileName) {
 			indices.push_back(final_Index++);
 		}
 	}
-	delete file;
+	
 	return new GLMesh(final_vertices, final_vertices.size(), indices, indices.size(), temp_material);
 }

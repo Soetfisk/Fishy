@@ -26,6 +26,7 @@ GLWindow::~GLWindow()
 	SDL_GL_DeleteContext(m_Context);
 	SDL_DestroyWindow(m_Window);
 	SDL_Quit();
+	
 }
 
 void GLWindow::Clear(float r, float g, float b)
