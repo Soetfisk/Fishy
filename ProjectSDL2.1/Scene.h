@@ -4,6 +4,7 @@
 #include "GLUtil.h"
 #include "GLPlayer.h"
 #include "GLShader.h"
+#include "GLModel.h"
 
 class Scene {
 private:
@@ -20,7 +21,7 @@ private:
 	//std::vector<Npc> npc;
 	GLShader* shaders[NUM_SHADERS];
 	GLMesh tempMesh;
-	
+	GLModel* tempModel;
 
 
 public:

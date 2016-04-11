@@ -97,6 +97,6 @@ GLMesh* objLoadFromFile(const std::string& fileName) {
 			indices.push_back(final_Index++);
 		}
 	}
-	delete file;
+	//delete file;
 	return new GLMesh(final_vertices, final_vertices.size(), indices, indices.size(), temp_material);
 }

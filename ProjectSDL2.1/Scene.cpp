@@ -21,6 +21,7 @@ Scene::Scene(){
 	//
 	//tempMesh = GLMesh(vertices, vertices.size(), indices, indices.size(), GLMesh::Material());
 	tempMesh = *objLoadFromFile("./res/OBJ/box2.obj");
+	tempModel = new GLModel();
 }
 
 
@@ -28,6 +29,8 @@ Scene::~Scene(){
 	for (int i = 0; i < NUM_SHADERS; i++) {
 		delete shaders[i];
 	}
+
+	delete tempModel;
 }
 
 void Scene::Update(float& deltaTime) {
@@ -44,13 +47,15 @@ void Scene::LoadScene() {
 
 //Calls the models.draw
 void Scene::DrawScene() {
-	for(int i = 0; i< this->players.size();i++){
+	for (int i = 0; i < this->players.size(); i++) {
 		//Set viewport
 		//glViewport(0, window::HEIGHT / (i + 1), window::WIDTH, window::HEIGHT / 2);
 		//for(int j = 0; j<this->models.count();j++){
 		shaders[MODELS]->Bind();
-		shaders[MODELS]->Update(tempMesh, players.at(i).GetCamera());
-		tempMesh.Draw();
+		shaders[MODELS]->Update(players.at(i).GetCamera());
+		//glUniformMatrix4fv(shaders[MODELS]->GetUnifromLocation("TransformMatrix"), 1, GL_FALSE, glm::value_ptr(tempModel->GetTransform().GetModel()));
+		tempModel->Draw(*shaders[MODELS]);
+
 		//shaders[MODELS].update(models.at(j), player.at(i).getCamera()); 
 		//	models.at(j).draw(player.at(i).getCamera());
 		//}
