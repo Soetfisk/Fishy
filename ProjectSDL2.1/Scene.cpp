@@ -9,13 +9,13 @@ Scene::Scene() {
 	}
 	shaders[MODELS] = new GLShader("test");
 
-	FishBox FishBoxController;
-	std::vector<FSHVertexData> FSHVertexes = FishBoxController.GetModelList()[0].GetMeshList()[0].GetVertices();
-	std::vector<Vertex> Vertices = ModelDataConvert::convertFSHVertex(FSHVertexes);
+	//FishBox FishBoxController;
+	//std::vector<FSHVertexData> FSHVertexes = FishBoxController.GetModelList()[0].GetMeshList()[0].GetVertices();
+	//std::vector<Vertex> Vertices = ModelDataConvert::convertFSHVertex(FSHVertexes);
 
-	FSHMaterial Material = FishBoxController.GetModelList()[0].GetMaterialList()[0];
+	//FSHMaterial Material = FishBoxController.GetModelList()[0].GetMaterialList()[0];
 	//GL::Mesh GLMaterial = ModelDataConvert::convertFSHMaterial(Material);
-
+	
 	//new GLMesh(Vertices, Vertices.size(), /*indices*/, FishBoxController.GetModelList()[0].GetMeshList()[0].getIndexCount(), GLMaterial)
 
 	//float hello = Material.getAmbient()[0];
