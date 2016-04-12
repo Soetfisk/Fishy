@@ -34,7 +34,7 @@ Scene::Scene() {
 	tempModel = new GLModel();
 	testProj = new GLProjectile();
 	//first make vertex for all vertexes
-
+	test = 0;
 }
 
 
@@ -53,7 +53,14 @@ void Scene::Update(float& deltaTime) {
 		//this->player.at(i).update(deltTime);
 	//}
 	//std::cout << deltaTime << std::endl;
-	testProj->TestUpdate(deltaTime);
+	test += deltaTime;
+	if (test < 10)
+		testProj->TestUpdate(deltaTime);
+	else
+	{
+		testProj->ResetTo(glm::vec3());
+		test = 0;
+	}
 }
 
 //Loads the scene, models, matrices

@@ -3,7 +3,7 @@
 GLProjectile::GLProjectile()
 	:GLModel()
 {
-	maxDistance = 10;
+	maxDistance = 9;
 	distanceTraveled = 0.0;
 	speed = 1;
 	forward = glm::vec3(0, 0, 1) * speed;
@@ -11,10 +11,15 @@ GLProjectile::GLProjectile()
 	currentState = ProjectileStates::ACTIVE;
 }
 
-GLProjectile::GLProjectile(glm::vec3& forward)
+GLProjectile::GLProjectile(glm::vec3& forward, int& maxDist, float& speed)
 	: GLModel()
 {
-	this->forward = forward;
+	maxDistance = maxDist;
+	distanceTraveled = 0.0;
+	this->speed = speed;
+	this->forward = forward * this->speed;
+
+	currentState = ProjectileStates::INACTIVE;
 }
 
 GLProjectile::GLProjectile(std::string & filePath, glm::vec3& forward)
@@ -64,9 +69,20 @@ void GLProjectile::ResetTo(glm::vec3& pos)
 {
 	transform->SetPos(pos);
 	distanceTraveled = 0.0;
+	currentState = ProjectileStates::ACTIVE;
 }
 
 void GLProjectile::SetForward(glm::vec3 & forward)
 {
-	this->forward = forward;
+	this->forward = forward * speed;
+}
+
+void GLProjectile::Activate()
+{
+	currentState = ProjectileStates::ACTIVE;
+}
+
+void GLProjectile::Inactivate()
+{
+	currentState = ProjectileStates::INACTIVE;
 }

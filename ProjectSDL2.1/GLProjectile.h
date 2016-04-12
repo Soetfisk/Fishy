@@ -6,7 +6,7 @@ class GLProjectile : public GLModel
 {
 public:
 	GLProjectile();
-	GLProjectile(glm::vec3& forward);
+	GLProjectile(glm::vec3& forward, int& maxDist, float& speed);
 	GLProjectile(std::string& filePath, glm::vec3& forward);
 	virtual ~GLProjectile();
 	
@@ -14,6 +14,8 @@ public:
 	void TestUpdate(float& dt);
 	void ResetTo(glm::vec3& pos);
 	void SetForward(glm::vec3& forward);
+	void Activate();
+	void Inactivate();
 
 private:
 	enum ProjectileStates

@@ -24,6 +24,8 @@ private:
 	GLMesh* tempMesh;
 	GLModel* tempModel;
 	GLProjectile* testProj;
+	float test;
+
 
 public:
 	Scene();
