@@ -1,7 +1,7 @@
 #pragma once
 #include "GLUtil.h"
 #include "GLCamera.h"
-#include "GLMesh.h"
+//#include "GLMesh.h"
 #include <glm\gtc\type_ptr.hpp>
 class GLShader
 {
@@ -9,9 +9,12 @@ public:
 	GLShader(const std::string& fileName, const bool& geometry = false);
 	GLShader() {};
 
+	GLuint m_program;
+
 	void Bind();
-	void Update(GLMesh& mesh, GLCamera& camera);
-	void Update(GLTransform& tranform, GLCamera& camera);
+	void Update(GLCamera& camera);
+	/*void Update(GLMesh& mesh, GLCamera& camera);
+	void Update(GLTransform& tranform, GLCamera& camera);*/
 	GLuint& GetUnifromLocation(std::string name);
 
 	virtual ~GLShader();
@@ -26,7 +29,7 @@ private:
 
 		NUM_UNIFORMS
 	};
-	GLuint m_program;
+	
 	GLuint m_shaders[3]; 
 	GLuint m_uniforms[NUM_UNIFORMS];
 
