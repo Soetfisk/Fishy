@@ -10,8 +10,6 @@ GLModel::GLModel()
 
 	meshes[0]->GetTransform().m_pos = glm::vec3(-0.5, 0, 0);
 	meshes[1]->GetTransform().m_pos = glm::vec3(0.5, 0, 0);
-
-	test = 0;
 }
 
 
