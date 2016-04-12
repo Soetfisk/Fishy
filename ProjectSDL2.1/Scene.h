@@ -5,6 +5,7 @@
 #include "GLPlayer.h"
 #include "GLShader.h"
 #include "GLModel.h"
+#include "GLProjectile.h"
 
 class Scene {
 private:
@@ -22,7 +23,7 @@ private:
 	GLShader* shaders[NUM_SHADERS];
 	GLMesh* tempMesh;
 	GLModel* tempModel;
-
+	GLProjectile* testProj;
 
 public:
 	Scene();

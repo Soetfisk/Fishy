@@ -32,6 +32,7 @@ Scene::Scene() {
 	//tempMesh = GLMesh(vertices, vertices.size(), indices, indices.size(), GLMesh::Material());
 	tempMesh = objLoadFromFile("./res/OBJ/box2.obj");
 	tempModel = new GLModel();
+	testProj = new GLProjectile();
 	//first make vertex for all vertexes
 
 }
@@ -42,7 +43,9 @@ Scene::~Scene(){
 		delete shaders[i];
 	}
 
+	delete tempMesh;
 	delete tempModel;
+	delete testProj;
 }
 
 void Scene::Update(float& deltaTime) {
@@ -50,6 +53,7 @@ void Scene::Update(float& deltaTime) {
 		//this->player.at(i).update(deltTime);
 	//}
 	//std::cout << deltaTime << std::endl;
+	testProj->TestUpdate(deltaTime);
 }
 
 //Loads the scene, models, matrices
@@ -66,7 +70,10 @@ void Scene::DrawScene() {
 		shaders[MODELS]->Bind();
 		shaders[MODELS]->Update(players.at(i).GetCamera());
 		//glUniformMatrix4fv(shaders[MODELS]->GetUnifromLocation("TransformMatrix"), 1, GL_FALSE, glm::value_ptr(tempModel->GetTransform().GetModel());
-		tempModel->Draw(*shaders[MODELS]);
+		//tempModel->Draw(*shaders[MODELS]);
+
+		
+		testProj->TestDraw(*shaders[MODELS]);
 
 		//shaders[MODELS].update(models.at(j), player.at(i).getCamera()); 
 		//	models.at(j).draw(player.at(i).getCamera());

@@ -7,13 +7,14 @@ class GLModel
 {
 public:
 	GLModel();
+	GLModel(std::string& filePath);
 	~GLModel();
 
-	void Draw(GLShader& shader);
-	void Update(float& dt);
+	virtual void Draw(GLShader& shader);
+	virtual void Update(float& dt);
 
 	GLTransform& GetTransform();
-private:
+protected:
 	std::vector<GLMesh*> meshes;
 	GLTransform* transform;
 

@@ -4,12 +4,18 @@
 
 GLModel::GLModel()
 {
+	//Test
 	transform = new GLTransform();
 	meshes.push_back(objLoadFromFile("./res/OBJ/box2.obj"));
 	meshes.push_back(objLoadFromFile("./res/OBJ/box2.obj"));
 
 	meshes[0]->GetTransform().m_pos = glm::vec3(-0.5, 0, 0);
 	meshes[1]->GetTransform().m_pos = glm::vec3(0.5, 0, 0);
+}
+
+GLModel::GLModel(std::string & filePath)
+{
+	// Load model from file
 }
 
 
@@ -35,8 +41,8 @@ void GLModel::Draw(GLShader& shader)
 	/*meshes[0]->GetTransform().m_rot += glm::vec3(0, 0.001, 0);
 	meshes[1]->GetTransform().m_rot -= glm::vec3(0, 0.001, 0);*/
 
-	meshes[0]->GetTransform().m_scale += 0.00001;
-	meshes[1]->GetTransform().m_scale += 0.00001;
+	/*meshes[0]->GetTransform().m_scale += 0.00001;
+	meshes[1]->GetTransform().m_scale += 0.00001;*/
 
 	for (int i = 0; i < meshes.size(); i++)
 	{
@@ -46,18 +52,18 @@ void GLModel::Draw(GLShader& shader)
 
 void GLModel::Update(float & dt)
 {
-	transform->m_pos += glm::vec3(0, 0.001 , 0);
-	transform->m_rot += glm::vec3(0.001, 0.001, 0);
-	//transform->m_scale += 0.00001f;
+	//transform->m_pos += glm::vec3(0, 0.001 , 0);
+	//transform->m_rot += glm::vec3(0.001, 0.001, 0);
+	////transform->m_scale += 0.00001f;
 
-	meshes[0]->GetTransform().m_pos += glm::vec3(0.0001, 0, 0);
-	meshes[1]->GetTransform().m_pos -= glm::vec3(0.0001, 0, 0);
+	//meshes[0]->GetTransform().m_pos += glm::vec3(0.0001, 0, 0);
+	//meshes[1]->GetTransform().m_pos -= glm::vec3(0.0001, 0, 0);
 
-	/*meshes[0]->GetTransform().m_rot += glm::vec3(0, 0.001, 0);
-	meshes[1]->GetTransform().m_rot -= glm::vec3(0, 0.001, 0);*/
+	///*meshes[0]->GetTransform().m_rot += glm::vec3(0, 0.001, 0);
+	//meshes[1]->GetTransform().m_rot -= glm::vec3(0, 0.001, 0);*/
 
-	meshes[0]->GetTransform().m_scale += 0.00001;
-	meshes[1]->GetTransform().m_scale -= 0.00001;
+	//meshes[0]->GetTransform().m_scale += 0.00001;
+	//meshes[1]->GetTransform().m_scale -= 0.00001;
 }
 
 GLTransform& GLModel::GetTransform()

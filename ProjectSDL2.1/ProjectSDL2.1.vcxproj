@@ -24,6 +24,7 @@
     <ClCompile Include="GLMesh.cpp" />
     <ClCompile Include="GLModel.cpp" />
     <ClCompile Include="GLPlayer.cpp" />
+    <ClCompile Include="GLProjectile.cpp" />
     <ClCompile Include="GLShader.cpp" />
     <ClCompile Include="GLWindow.cpp" />
     <ClCompile Include="LoadMesh.cpp" />
@@ -32,6 +33,7 @@
     <ClCompile Include="Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GLProjectile.h" />
     <ClInclude Include="LoadMesh.h" />
     <ClInclude Include="GameMain.h" />
     <ClInclude Include="GLCamera.h" />
