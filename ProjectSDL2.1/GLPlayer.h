@@ -33,5 +33,6 @@ private:
 
 	void AddController(int id);
 	void RemoveController(int id);
+	void PlayerMove(float x, float y, float deltaTime);
 };
 
