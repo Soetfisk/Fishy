@@ -3,6 +3,7 @@
 #include "GLUtil.h"
 #include "GLTransform.h"
 #include "GLtexture.h"
+#include "GLShader.h"
 
 class Vertex
 {
@@ -43,7 +44,7 @@ public:
 	GLMesh() {};
 	~GLMesh();
 
-	bool Draw();
+	bool Draw(GLShader& shader, GLTransform& modelTrans);
 	GLTransform& GetTransform();
 	Material& GetMaterial() {
 		return m_material;

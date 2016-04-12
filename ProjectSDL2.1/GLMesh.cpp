@@ -63,18 +63,18 @@ GLMesh::~GLMesh()
 	//delete m_material.texture;
 }
 
-bool GLMesh::Draw()
+bool GLMesh::Draw(GLShader& shader, GLTransform& modelTrans)
 {
+	glm::mat4 trans =  modelTrans.GetModel() * m_transfrom.GetModel();
+	glUniformMatrix4fv(shader.GetUnifromLocation("TransformMatrix"), 1, GL_FALSE, glm::value_ptr(trans));
 
 	glBindVertexArray(m_vertexArrayObject);
-
 	glDrawElements(GL_TRIANGLES, m_drawCount, GL_UNSIGNED_INT, 0);
-
 	glBindVertexArray(0);
 	return true;
 }
 
-GLTransform & GLMesh::GetTransform()
+GLTransform& GLMesh::GetTransform()
 {
 	return this->m_transfrom;
 }

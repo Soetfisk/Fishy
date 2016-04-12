@@ -22,7 +22,7 @@ GLCamera::~GLCamera()
 {
 }
 
-glm::vec3 & GLCamera::Position()
+glm::vec3& GLCamera::Position()
 {
 	return m_position;
 }

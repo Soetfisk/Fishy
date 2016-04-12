@@ -20,8 +20,13 @@ private:
 	std::vector<GLPlayer> players;
 	//std::vector<Npc> npc;
 	GLShader* shaders[NUM_SHADERS];
+<<<<<<< HEAD
 	GLMesh* tempMesh;
+	
+=======
+	GLMesh tempMesh;
 	GLModel* tempModel;
+>>>>>>> ModelClassPeter
 
 
 public:
