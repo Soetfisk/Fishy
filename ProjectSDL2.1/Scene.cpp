@@ -71,12 +71,14 @@ void Scene::DrawScene() {
 		shaders[MODELS]->Update(players.at(i).GetCamera());
 		this->frameBuffer->BindFrameBuffer();
 		tempModel->Draw(*shaders[MODELS]);
-		tempModel->Draw(*shaders[MODELS]);
+		//tempModel->Draw(*shaders[MODELS]);
 		shaders[PASS]->Bind();
 		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
 		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture2"), 1);
 		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture3"), 2);
+		this->frameBuffer->UnbindFrameBuffer();
 		this->RenderQuad();
+		
 		//shaders[MODELS].update(models.at(j), player.at(i).getCamera()); 
 		//	models.at(j).draw(player.at(i).getCamera());
 		//}
