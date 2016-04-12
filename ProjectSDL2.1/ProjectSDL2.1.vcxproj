@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\LoadMesh.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="GLCamera.cpp" />
     <ClCompile Include="GLMesh.cpp" />
