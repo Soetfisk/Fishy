@@ -23,7 +23,7 @@ Scene::Scene(){
 	//tempMesh = GLMesh(vertices, vertices.size(), indices, indices.size(), GLMesh::Material());
 	tempMesh = objLoadFromFile("./res/OBJ/box2.obj");
 	this->frameBuffer = new FrameBuffer();
-	this->frameBuffer->CreateFrameBuffer();
+	this->frameBuffer->CreateFrameBuffer(3);
 	this->frameBuffer->UnbindFrameBuffer();
 }
 
@@ -60,7 +60,9 @@ void Scene::DrawScene() {
 		tempMesh->Draw();
 		this->frameBuffer->UnbindFrameBuffer();
 		shaders[PASS]->Bind();
-		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"));
+		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
+		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture2"), 1);
+		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture3"), 2);
 		this->RenderQuad();
 		//shaders[MODELS].update(models.at(j), player.at(i).getCamera()); 
 		//	models.at(j).draw(player.at(i).getCamera());
