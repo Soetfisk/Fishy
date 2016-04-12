@@ -17,6 +17,5 @@ private:
 	std::vector<GLMesh*> meshes;
 	GLTransform* transform;
 
-	float test;
 };
 

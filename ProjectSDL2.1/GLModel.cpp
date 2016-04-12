@@ -48,7 +48,6 @@ void GLModel::Draw(GLShader& shader)
 
 void GLModel::Update(float & dt)
 {
-	//test++;
 	transform->m_pos += glm::vec3(0, 0.001 , 0);
 	transform->m_rot += glm::vec3(0.001, 0.001, 0);
 	//transform->m_scale += 0.00001f;
