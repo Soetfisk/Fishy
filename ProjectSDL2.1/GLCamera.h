@@ -26,7 +26,7 @@ private:
 
 	float distanceToPlayer = 5.0f;
 	float angleAroundPlayer = 0;
-	float pitch = 20.0f;
+	float pitch = 45.0f;
 	float yaw = 0.0f;
 	float cameraSpeed = 100;
 

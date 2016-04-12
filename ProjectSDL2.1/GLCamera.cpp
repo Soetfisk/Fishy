@@ -62,7 +62,7 @@ float GLCamera::CalcVerticalDist()
 //Calculates the x,y,z position of the camera and sets forward vector
 void GLCamera::CalcCameraPos(float horizDist, float verticDist, GLTransform transform)
 {
-	float theta = transform.GetRot().y + angleAroundPlayer;
+	float theta = glm::degrees(transform.GetRot().y) + angleAroundPlayer;
 	float offsetX = horizDist * sinf(glm::radians(theta));
 	float offsetZ = horizDist * cosf(glm::radians(theta));
 	this->m_position.x = transform.GetPos().x - offsetX;

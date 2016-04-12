@@ -1,8 +1,8 @@
 #pragma once
 #include "GLUtil.h"
 #include "GLCamera.h"
-#include "GLMesh.h"
-class GLPlayer
+#include "GLModel.h"
+class GLPlayer : public GLModel
 {
 public:
 	enum Events
@@ -24,7 +24,6 @@ public:
 	void tempDraw();
 	void Update(Events state, glm::vec3 movementVec);
 	GLCamera GetCamera();
-	GLMesh* tempGetMesh();
 
 	void tempEvent();
 private:
@@ -35,8 +34,8 @@ private:
 	SDL_GameController *pad;
 	int instanceID;
 	glm::vec3 m_velocity;
+	glm::vec3 m_forward;
 	GLCamera m_camera;
-	GLMesh *tempMesh;
 
 	void AddController(int id);
 	void RemoveController(int id);

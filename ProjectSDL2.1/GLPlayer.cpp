@@ -1,11 +1,9 @@
 #include "GLPlayer.h"
-#include "obj_loader.h"
 
 
-GLPlayer::GLPlayer()
+GLPlayer::GLPlayer() : GLModel()
 {
 	this->m_camera;
-	this->tempMesh = objLoadFromFile("./res/OBJ/box2.obj");
 }
 
 
@@ -45,11 +43,6 @@ void GLPlayer::Update(Events state, glm::vec3 movementVec)
 GLCamera GLPlayer::GetCamera()
 {
 	return this->m_camera;
-}
-
-GLMesh * GLPlayer::tempGetMesh()
-{
-	return this->tempMesh;
 }
 
 void GLPlayer::tempEvent()
@@ -110,7 +103,8 @@ void GLPlayer::PlayerMove(float x, float y)
 void GLPlayer::PlayerUpdate(float deltaTime)
 {
 	//player update
-	this->tempMesh->GetTransform().m_pos -= (this->m_velocity * deltaTime);
+	this->GetTransform().m_pos += m_forward * (this->m_velocity.x * deltaTime);
+	this->GetTransform().m_rot.y -= (this->m_velocity.z * deltaTime);
 
 	if ((lastX < -DEADZONE || lastX > DEADZONE))
 	{
@@ -118,14 +112,14 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	}
 	if ((lastY < -DEADZONE || lastY > DEADZONE))
 	{
-		this->m_velocity.x -= lastY / (glm::pow(2, 15));
+		this->m_velocity.x += lastY / (glm::pow(2, 15));
 	}
 
 	if (m_velocity.x > 0) m_velocity.x = glm::max(m_velocity.x - FRICTION * deltaTime, 0.0f);
-	if (m_velocity.y > 0) m_velocity.y = glm::max(m_velocity.y - FRICTION * deltaTime, 0.0f);
+	//if (m_velocity.y > 0) m_velocity.y = glm::max(m_velocity.y - FRICTION * deltaTime, 0.0f);
 	if (m_velocity.z > 0) m_velocity.z = glm::max(m_velocity.z - FRICTION * deltaTime, 0.0f);
 	if (m_velocity.x < 0) m_velocity.x = glm::min(m_velocity.x + FRICTION * deltaTime, 0.0f);
-	if (m_velocity.y < 0) m_velocity.y = glm::min(m_velocity.y + FRICTION * deltaTime, 0.0f);
+	//if (m_velocity.y < 0) m_velocity.y = glm::min(m_velocity.y + FRICTION * deltaTime, 0.0f);
 	if (m_velocity.z < 0) m_velocity.z = glm::min(m_velocity.z + FRICTION * deltaTime, 0.0f);
 
 	system("cls");
@@ -133,6 +127,16 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	std::cout << "Y: " << m_velocity.y << std::endl;
 	std::cout << "Z: " << m_velocity.z << std::endl;
 
+	glm::vec3 front;
+	front.x = cos(this->transform->m_rot.x) * sin(this->transform->m_rot.y);
+	front.y = sin(this->transform->m_rot.x);
+	front.z = cos(this->transform->m_rot.x) * cos(this->transform->m_rot.y);
+	m_forward = glm::normalize(front);
+
+	std::cout << "ROT_X: " << this->transform->m_rot.x << " X: " << m_forward.x << std::endl;
+	std::cout << "ROT_Y: " << this->transform->m_rot.y << " Y: " << m_forward.y << std::endl;
+	std::cout << "ROT_Z: " << this->transform->m_rot.z << " Z: " << m_forward.z << std::endl;
+
 	//camera update
-	this->m_camera.Update(this->tempMesh->GetTransform(), deltaTime);
+	this->m_camera.Update(this->GetTransform(), deltaTime);
 }

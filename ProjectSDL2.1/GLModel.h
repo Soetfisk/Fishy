@@ -13,7 +13,7 @@ public:
 	void Update(float& dt);
 
 	GLTransform& GetTransform();
-private:
+protected:
 	std::vector<GLMesh*> meshes;
 	GLTransform* transform;
 

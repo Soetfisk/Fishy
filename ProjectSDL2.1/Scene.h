@@ -17,7 +17,7 @@ private:
 
 	//todo implement
 	//std::vector<Model> models;
-	std::vector<GLPlayer> players;
+	std::vector<GLPlayer*> players;
 	//std::vector<Npc> npc;
 	GLShader* shaders[NUM_SHADERS];
 	GLMesh* tempMesh;

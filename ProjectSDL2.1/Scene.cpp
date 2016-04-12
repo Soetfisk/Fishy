@@ -5,7 +5,7 @@
 
 Scene::Scene() {
 	for (int i = 0; i < 1; i++) {
-		this->players.push_back(GLPlayer());
+		this->players.push_back(new GLPlayer());
 	}
 	shaders[MODELS] = new GLShader("test");
 
@@ -32,6 +32,7 @@ Scene::Scene() {
 	//tempMesh = GLMesh(vertices, vertices.size(), indices, indices.size(), GLMesh::Material());
 	tempMesh = objLoadFromFile("./res/OBJ/box2.obj");
 	tempModel = new GLModel();
+	tempMesh->GetTransform().SetPos(glm::vec3(3, 0, 3));
 	//first make vertex for all vertexes
 
 }
@@ -43,11 +44,16 @@ Scene::~Scene(){
 	}
 
 	delete tempModel;
+	for (int i = 0; i < players.size(); i++)
+	{
+		delete players.at(i);
+	}
+	delete tempMesh;
 }
 
 void Scene::Update(float& deltaTime) {
 	for (int i = 0; i < this->players.size(); i++) {
-		this->players.at(i).Update(GLPlayer::NOTHING ,glm::vec3(deltaTime));
+		this->players.at(i)->Update(GLPlayer::NOTHING ,glm::vec3(deltaTime));
 	}
 	//std::cout << deltaTime << std::endl;
 }
@@ -64,9 +70,11 @@ void Scene::DrawScene() {
 		//glViewport(0, window::HEIGHT / (i + 1), window::WIDTH, window::HEIGHT / 2);
 		//for(int j = 0; j<this->models.count();j++){
 		shaders[MODELS]->Bind();
-		shaders[MODELS]->Update(players.at(i).GetCamera());
+		shaders[MODELS]->Update(players.at(i)->GetCamera());
 		//glUniformMatrix4fv(shaders[MODELS]->GetUnifromLocation("TransformMatrix"), 1, GL_FALSE, glm::value_ptr(tempModel->GetTransform().GetModel());
-		tempModel->Draw(*shaders[MODELS]);
+		//tempModel->Draw(*shaders[MODELS]);
+		players.at(0)->Draw(*shaders[MODELS]);
+		tempMesh->Draw(*shaders[MODELS], GLTransform());
 
 		//shaders[MODELS].update(models.at(j), player.at(i).getCamera()); 
 		//	models.at(j).draw(player.at(i).getCamera());
@@ -79,29 +87,33 @@ void Scene::HandleEvenet(SDL_Event* e) {
 
 		if (e->type == SDL_CONTROLLERDEVICEADDED)
 		{
-			players.at(e->cdevice.which).Update(GLPlayer::JOY_ADDED, glm::vec3(e->cdevice.which));
+			players.at(e->cdevice.which)->Update(GLPlayer::JOY_ADDED, glm::vec3(e->cdevice.which));
 		}
 		else if (e->type == SDL_CONTROLLERDEVICEREMOVED)
 		{
-			players.at(e->cdevice.which).Update(GLPlayer::JOY_REMOVED, glm::vec3(e->cdevice.which));
+			players.at(e->cdevice.which)->Update(GLPlayer::JOY_REMOVED, glm::vec3(e->cdevice.which));
 		}
 		else if (e->type == SDL_CONTROLLERAXISMOTION)
 		{
 			if (e->caxis.axis == SDL_CONTROLLER_AXIS_RIGHTX)
 			{
-				players.at(e->caxis.which).Update(GLPlayer::CAMERA_MOVE, glm::vec3(e->caxis.value, 0, 0));
+				players.at(e->caxis.which)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(e->caxis.value, 0, 0));
 			}
 			if (e->caxis.axis == SDL_CONTROLLER_AXIS_RIGHTY)
 			{
-				players.at(e->caxis.which).Update(GLPlayer::CAMERA_MOVE, glm::vec3(0, e->caxis.value, 0));
+				players.at(e->caxis.which)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(0, e->caxis.value, 0));
 			}
 			if (e->caxis.axis == SDL_CONTROLLER_AXIS_LEFTX)
 			{
-				players.at(e->caxis.which).Update(GLPlayer::PLAYER_MOVE, glm::vec3(e->caxis.value, 0, 0));
+				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(e->caxis.value, 0, 0));
 			}
 			if (e->caxis.axis == SDL_CONTROLLER_AXIS_LEFTY)
 			{
-				players.at(e->caxis.which).Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, e->caxis.value, 0));
+				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, e->caxis.value, 0));
+			}
+			if (e->caxis.axis == SDL_CONTROLLER_AXIS_TRIGGERRIGHT)
+			{
+				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, e->caxis.value, 0));
 			}
 		}
 }
