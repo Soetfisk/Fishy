@@ -5,6 +5,7 @@
 #include "GLPlayer.h"
 #include "GLShader.h"
 #include "FrameBuffer.h"
+#include "GLModel.h"
 
 class Scene {
 private:
@@ -23,9 +24,9 @@ private:
 	GLShader* shaders[NUM_SHADERS];
 	GLMesh* tempMesh;
 	GLuint quadVAO = 0;
+	GLModel* tempModel;
 	GLuint quadVBO;
 	FrameBuffer* frameBuffer;
-	
 
 
 public:
