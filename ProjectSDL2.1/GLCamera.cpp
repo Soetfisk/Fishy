@@ -37,8 +37,8 @@ void GLCamera::ProcessInput(float x, float y, float deltaTime)
 	float xOffset = x / (glm::pow(2, 15));
 	float yOffset = y / (glm::pow(2, 15));
 
-	xOffset *= 20 * deltaTime;
-	yOffset *= 20 * deltaTime;
+	xOffset *= cameraSpeed * deltaTime;
+	yOffset *= cameraSpeed * deltaTime;
 
 
 	angleAroundPlayer -= xOffset;

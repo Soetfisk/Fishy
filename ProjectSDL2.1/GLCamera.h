@@ -26,9 +26,9 @@ private:
 
 	float distanceToPlayer = 5.0f;
 	float angleAroundPlayer = 0;
-	float pitch = 1.0f;
+	float pitch = 20.0f;
 	float yaw = 0.0f;
-	float sensitivity = 0.05f;
+	float cameraSpeed = 100;
 
 	void ProcessInput(float x, float y, float deltaTime);
 

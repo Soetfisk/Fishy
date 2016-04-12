@@ -21,6 +21,7 @@ Scene::Scene(){
 	//
 	//tempMesh = GLMesh(vertices, vertices.size(), indices, indices.size(), GLMesh::Material());
 	tempMesh = objLoadFromFile("./res/OBJ/box2.obj");
+	tempMesh->GetTransform().m_pos.x = 4;
 }
 
 
@@ -52,6 +53,8 @@ void Scene::DrawScene() {
 		shaders[MODELS]->Bind();
 		shaders[MODELS]->Update(*tempMesh, players.at(i).GetCamera());
 		tempMesh->Draw();
+		shaders[MODELS]->Update(*players.at(i).tempGetMesh(), players.at(i).GetCamera());
+		players.at(i).tempGetMesh()->Draw();
 		//shaders[MODELS].update(models.at(j), player.at(i).getCamera()); 
 		//	models.at(j).draw(player.at(i).getCamera());
 		//}
@@ -78,6 +81,14 @@ void Scene::HandleEvenet(SDL_Event* e) {
 			if (e->caxis.axis == SDL_CONTROLLER_AXIS_RIGHTY)
 			{
 				players.at(e->caxis.which).Update(GLPlayer::CAMERA_MOVE, glm::vec3(0, e->caxis.value, 0));
+			}
+			if (e->caxis.axis == SDL_CONTROLLER_AXIS_LEFTX)
+			{
+				players.at(e->caxis.which).Update(GLPlayer::PLAYER_MOVE, glm::vec3(e->caxis.value, 0, 0));
+			}
+			if (e->caxis.axis == SDL_CONTROLLER_AXIS_LEFTY)
+			{
+				players.at(e->caxis.which).Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, e->caxis.value, 0));
 			}
 		}
 }

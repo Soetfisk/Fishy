@@ -1,10 +1,11 @@
 #include "GLPlayer.h"
-
+#include "obj_loader.h"
 
 
 GLPlayer::GLPlayer()
 {
 	this->m_camera;
+	this->tempMesh = objLoadFromFile("./res/OBJ/box2.obj");
 }
 
 
@@ -24,7 +25,7 @@ void GLPlayer::Update(Events state, glm::vec3 movementVec)
 		m_camera.SetInput((movementVec.x == 0) ? -1 : movementVec.x, (movementVec.y == 0)? -1: movementVec.y);
 		break;
 	case PLAYER_MOVE:
-
+		this->PlayerMove((movementVec.x == 0) ? -1 : movementVec.x, (movementVec.y == 0) ? -1 : movementVec.y);
 		break;
 	case JOY_ADDED:
 		this->AddController(movementVec.x);
@@ -33,7 +34,7 @@ void GLPlayer::Update(Events state, glm::vec3 movementVec)
 		this->RemoveController(movementVec.x);
 		break;
 	case NOTHING:
-		this->m_camera.Update(GLTransform(), movementVec.x);
+		this->PlayerUpdate(movementVec.x);
 		break;
 	default:
 		break;
@@ -44,6 +45,11 @@ void GLPlayer::Update(Events state, glm::vec3 movementVec)
 GLCamera GLPlayer::GetCamera()
 {
 	return this->m_camera;
+}
+
+GLMesh * GLPlayer::tempGetMesh()
+{
+	return this->tempMesh;
 }
 
 void GLPlayer::tempEvent()
@@ -79,4 +85,54 @@ void GLPlayer::AddController(int id)
 void GLPlayer::RemoveController(int id)
 {
 	SDL_GameControllerFromInstanceID(id);
+}
+
+void GLPlayer::PlayerMove(float x, float y)
+{
+	if ((x < -DEADZONE || x > DEADZONE))
+	{
+		lastX = x;
+	}
+	else if (x != -1)
+	{
+		lastX = 0;
+	}
+	if ((y < -DEADZONE || y > DEADZONE))
+	{
+		lastY = y;
+	}
+	else if (y != -1)
+	{
+		lastY = 0;
+	}
+}
+
+void GLPlayer::PlayerUpdate(float deltaTime)
+{
+	//player update
+	this->tempMesh->GetTransform().m_pos -= (this->m_velocity * deltaTime);
+
+	if ((lastX < -DEADZONE || lastX > DEADZONE))
+	{
+		this->m_velocity.z += lastX / (glm::pow(2, 15));
+	}
+	if ((lastY < -DEADZONE || lastY > DEADZONE))
+	{
+		this->m_velocity.x -= lastY / (glm::pow(2, 15));
+	}
+
+	if (m_velocity.x > 0) m_velocity.x = glm::max(m_velocity.x - FRICTION * deltaTime, 0.0f);
+	if (m_velocity.y > 0) m_velocity.y = glm::max(m_velocity.y - FRICTION * deltaTime, 0.0f);
+	if (m_velocity.z > 0) m_velocity.z = glm::max(m_velocity.z - FRICTION * deltaTime, 0.0f);
+	if (m_velocity.x < 0) m_velocity.x = glm::min(m_velocity.x + FRICTION * deltaTime, 0.0f);
+	if (m_velocity.y < 0) m_velocity.y = glm::min(m_velocity.y + FRICTION * deltaTime, 0.0f);
+	if (m_velocity.z < 0) m_velocity.z = glm::min(m_velocity.z + FRICTION * deltaTime, 0.0f);
+
+	system("cls");
+	std::cout << "X: " << m_velocity.x << std::endl;
+	std::cout << "Y: " << m_velocity.y << std::endl;
+	std::cout << "Z: " << m_velocity.z << std::endl;
+
+	//camera update
+	this->m_camera.Update(this->tempMesh->GetTransform(), deltaTime);
 }
