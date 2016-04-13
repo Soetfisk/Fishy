@@ -109,12 +109,12 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 		this->m_velocity.x += lastY / (glm::pow(2, 15));
 	}
 
-	if (m_velocity.x > 0) m_velocity.x = glm::max(m_velocity.x - FRICTION * deltaTime, 0.0f);
+	if (m_velocity.x > 0) m_velocity.x = glm::max(m_velocity.x - MOVEMENT_FRICTION * deltaTime, 0.0f);
 	//if (m_velocity.y > 0) m_velocity.y = glm::max(m_velocity.y - FRICTION * deltaTime, 0.0f);
-	if (m_velocity.z > 0) m_velocity.z = glm::max(m_velocity.z - FRICTION * deltaTime, 0.0f);
-	if (m_velocity.x < 0) m_velocity.x = glm::min(m_velocity.x + FRICTION * deltaTime, 0.0f);
+	if (m_velocity.z > 0) m_velocity.z = glm::max(m_velocity.z - MOVEMENT_FRICTION * deltaTime, 0.0f);
+	if (m_velocity.x < 0) m_velocity.x = glm::min(m_velocity.x + MOVEMENT_FRICTION * deltaTime, 0.0f);
 	//if (m_velocity.y < 0) m_velocity.y = glm::min(m_velocity.y + FRICTION * deltaTime, 0.0f);
-	if (m_velocity.z < 0) m_velocity.z = glm::min(m_velocity.z + FRICTION * deltaTime, 0.0f);
+	if (m_velocity.z < 0) m_velocity.z = glm::min(m_velocity.z + MOVEMENT_FRICTION * deltaTime, 0.0f);
 
 	glm::vec3 front;
 	front.x = cos(this->transform->m_rot.x) * sin(this->transform->m_rot.y);
