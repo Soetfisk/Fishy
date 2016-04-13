@@ -11,9 +11,6 @@ GLPlayer::~GLPlayer()
 {
 }
 
-void GLPlayer::tempDraw()
-{
-}
 //handles events sent too the player
 void GLPlayer::Update(Events state, glm::vec3 movementVec)
 {
@@ -45,23 +42,6 @@ GLCamera GLPlayer::GetCamera()
 	return this->m_camera;
 }
 
-void GLPlayer::tempEvent()
-{
-	SDL_PumpEvents();
-	SDL_Event e;
-	while (SDL_PollEvent(&e))
-	{
-
-		if (e.type == SDL_CONTROLLERDEVICEADDED)
-		{
-			Update(JOY_ADDED, glm::vec3(e.cdevice.which));
-		}
-		else if (e.type == SDL_CONTROLLERDEVICEREMOVED)
-		{
-			Update(JOY_REMOVED, glm::vec3(e.cdevice.which));
-		}
-	}
-}
 //adds a controller too the player
 void GLPlayer::AddController(int id)
 {
@@ -106,11 +86,11 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	this->GetTransform().m_pos += m_forward * (this->m_velocity.x * deltaTime);
 	this->GetTransform().m_rot.y -= (this->m_velocity.z * deltaTime);
 
-	if ((lastX < -DEADZONE || lastX > DEADZONE))
+	if ((lastX < -DEADZONE || lastX > DEADZONE) && (this->m_velocity.z >= -MAX_SPEED && this->m_velocity.z <= MAX_SPEED))
 	{
 		this->m_velocity.z += lastX / (glm::pow(2, 15));
 	}
-	if ((lastY < -DEADZONE || lastY > DEADZONE))
+	if ((lastY < -DEADZONE || lastY > DEADZONE) && (this->m_velocity.x >= -MAX_SPEED && this->m_velocity.x <= MAX_SPEED))
 	{
 		this->m_velocity.x += lastY / (glm::pow(2, 15));
 	}
@@ -122,20 +102,11 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	//if (m_velocity.y < 0) m_velocity.y = glm::min(m_velocity.y + FRICTION * deltaTime, 0.0f);
 	if (m_velocity.z < 0) m_velocity.z = glm::min(m_velocity.z + FRICTION * deltaTime, 0.0f);
 
-	system("cls");
-	std::cout << "X: " << m_velocity.x << std::endl;
-	std::cout << "Y: " << m_velocity.y << std::endl;
-	std::cout << "Z: " << m_velocity.z << std::endl;
-
 	glm::vec3 front;
 	front.x = cos(this->transform->m_rot.x) * sin(this->transform->m_rot.y);
 	front.y = sin(this->transform->m_rot.x);
 	front.z = cos(this->transform->m_rot.x) * cos(this->transform->m_rot.y);
 	m_forward = glm::normalize(front);
-
-	std::cout << "ROT_X: " << this->transform->m_rot.x << " X: " << m_forward.x << std::endl;
-	std::cout << "ROT_Y: " << this->transform->m_rot.y << " Y: " << m_forward.y << std::endl;
-	std::cout << "ROT_Z: " << this->transform->m_rot.z << " Z: " << m_forward.z << std::endl;
 
 	//camera update
 	this->m_camera.Update(this->GetTransform(), deltaTime);

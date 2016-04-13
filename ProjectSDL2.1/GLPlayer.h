@@ -21,14 +21,12 @@ public:
 
 	GLPlayer();
 	~GLPlayer();
-	void tempDraw();
 	void Update(Events state, glm::vec3 movementVec);
 	GLCamera GetCamera();
-
-	void tempEvent();
 private:
 	const int DEADZONE = 8000;
-	const int FRICTION = 50;
+	const int FRICTION = 500;
+	const int MAX_SPEED = 10;
 	float lastX = 0;
 	float lastY = 0;
 	SDL_GameController *pad;
