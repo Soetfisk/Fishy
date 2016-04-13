@@ -42,10 +42,8 @@ void GLProjectile::TestDraw(GLShader & shader)
 	{
 	case ProjectileStates::ACTIVE:
 		this->Draw(shader);
-		std::cout << "ACTIVE\n";
 		break;
 	case ProjectileStates::INACTIVE:
-		std::cout << "INACTIVE\n";
 		break;
 	}
 
