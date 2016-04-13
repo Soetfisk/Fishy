@@ -57,7 +57,7 @@ void GLProjectile::TestUpdate(float& dt)
 	switch (currentState)
 	{
 	case ProjectileStates::ACTIVE:
-		distanceTraveled += dt;
+		distanceTraveled += speed * dt;
 		if (distanceTraveled >= maxDistance)
 			currentState = ProjectileStates::INACTIVE;
 		else

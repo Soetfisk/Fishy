@@ -52,7 +52,6 @@ Scene::~Scene(){
 	{
 		delete players.at(i);
 	}
-	delete tempMesh;
 }
 
 void Scene::Update(float& deltaTime) {
@@ -60,7 +59,6 @@ void Scene::Update(float& deltaTime) {
 		this->players.at(i)->Update(GLPlayer::NOTHING ,glm::vec3(deltaTime));
 	}
 	//std::cout << deltaTime << std::endl;
-	testProj->TestUpdate(deltaTime);
 }
 
 //Loads the scene, models, matrices
@@ -80,6 +78,7 @@ void Scene::DrawScene() {
 		//tempModel->Draw(*shaders[MODELS]);
 		players.at(0)->Draw(*shaders[MODELS]);
 		tempMesh->Draw(*shaders[MODELS], GLTransform());
+		players.at(0)->tempGetProjectile()->TestDraw(*shaders[MODELS]);
 		//tempModel->Draw(*shaders[MODELS]);
 		shaders[PASS]->Bind();
 		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
@@ -153,6 +152,17 @@ void Scene::HandleEvenet(SDL_Event* e) {
 			if (e->caxis.axis == SDL_CONTROLLER_AXIS_TRIGGERRIGHT)
 			{
 				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, e->caxis.value, 0));
+			}
+		}
+		else if (e->type == SDL_CONTROLLERBUTTONDOWN)
+		{
+			switch (e->cbutton.button)
+			{
+			case SDL_CONTROLLER_BUTTON_A:
+				players.at(e->cbutton.which)->Update(GLPlayer::PLAYER_SHOOT, glm::vec3(0));
+				break;
+			default:
+				break;
 			}
 		}
 }

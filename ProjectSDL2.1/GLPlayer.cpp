@@ -3,12 +3,21 @@
 
 GLPlayer::GLPlayer() : GLModel()
 {
+	int a = 10;
+	float b = 20.0f;
 	this->m_camera;
+	this->m_projectile = new GLProjectile(glm::vec3(0), a, b);
 }
 
 
 GLPlayer::~GLPlayer()
 {
+	delete this->m_projectile;
+}
+
+GLProjectile * GLPlayer::tempGetProjectile()
+{
+	return this->m_projectile;
 }
 
 //handles events sent too the player
@@ -21,6 +30,9 @@ void GLPlayer::Update(Events state, glm::vec3 movementVec)
 		break;
 	case PLAYER_MOVE:
 		this->PlayerMove((movementVec.x == 0) ? -1 : movementVec.x, (movementVec.y == 0) ? -1 : movementVec.y);
+		break;
+	case PLAYER_SHOOT:
+		this->PlayerShoot();
 		break;
 	case JOY_ADDED:
 		this->AddController(movementVec.x);
@@ -86,6 +98,8 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	this->GetTransform().m_pos += m_forward * (this->m_velocity.x * deltaTime);
 	this->GetTransform().m_rot.y -= (this->m_velocity.z * deltaTime);
 
+	std::cout << lastX << std::endl;
+
 	if ((lastX < -DEADZONE || lastX > DEADZONE) && (this->m_velocity.z >= -MAX_SPEED && this->m_velocity.z <= MAX_SPEED))
 	{
 		this->m_velocity.z += lastX / (glm::pow(2, 15));
@@ -110,4 +124,17 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 
 	//camera update
 	this->m_camera.Update(this->GetTransform(), deltaTime);
+
+	this->m_projectile->TestUpdate(deltaTime);
+}
+
+void GLPlayer::PlayerShoot()
+{
+	if (this->m_projectile->getCurrentState() == ProjectileStates::INACTIVE)
+	{
+		this->m_projectile->SetForward(m_forward);
+		this->m_projectile->ResetTo(this->transform->m_pos);
+		this->m_projectile->GetTransform().m_rot = this->transform->m_rot;
+		this->m_projectile->Activate();
+	}
 }
