@@ -44,6 +44,8 @@ void GLProjectile::TestDraw(GLShader & shader)
 		break;
 	case ProjectileStates::INACTIVE:
 		break;
+	default:
+		break;
 	}
 }
 
@@ -53,13 +55,15 @@ void GLProjectile::TestUpdate(float& dt)
 	switch (currentState)
 	{
 	case ProjectileStates::ACTIVE:
-		distanceTraveled += speed * dt;
-		if (distanceTraveled >= maxDistance)
+		distanceTraveled += speed * dt;					// Add to distanceTraveled
+		if (distanceTraveled >= maxDistance)			// Check if maxDistance was reached
 			currentState = ProjectileStates::INACTIVE;
 		else
-			transform->m_pos += forwardSpeed * dt;
+			transform->m_pos += forwardSpeed * dt;		// Move Projectile forward
 		break;
 	case ProjectileStates::INACTIVE:
+		break;
+	default:
 		break;
 	}
 }
@@ -68,7 +72,6 @@ void GLProjectile::ResetTo(glm::vec3& pos)
 {
 	transform->SetPos(pos);
 	distanceTraveled = 0.0;
-	currentState = ProjectileStates::ACTIVE;
 }
 
 void GLProjectile::SetForward(glm::vec3& forward)
