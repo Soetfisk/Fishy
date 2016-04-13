@@ -15,7 +15,7 @@ Scene::Scene() {
 
 	fishbox.MeshData(0, 0, vertexies, indisesofBEST);
 
-	printf("\n%f");
+	printf("\n%f", vertexies[0].pos[0]);
 
 
 	//FishBox FishBoxController;
