@@ -38,6 +38,7 @@ GLProjectile::~GLProjectile()
 
 void GLProjectile::TestDraw(GLShader & shader)
 {
+	//Only draw the projectile if it is active
 	switch (currentState)
 	{
 	case ProjectileStates::ACTIVE:
@@ -49,8 +50,10 @@ void GLProjectile::TestDraw(GLShader & shader)
 
 }
 
+
 void GLProjectile::TestUpdate(float& dt)
 {
+	//Only update the projectile if it is active
 	switch (currentState)
 	{
 	case ProjectileStates::ACTIVE:
@@ -61,7 +64,6 @@ void GLProjectile::TestUpdate(float& dt)
 			transform->m_pos += forward * dt;
 		break;
 	case ProjectileStates::INACTIVE:
-
 		break;
 	}
 }
