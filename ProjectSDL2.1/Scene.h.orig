@@ -4,7 +4,9 @@
 #include "GLUtil.h"
 #include "GLPlayer.h"
 #include "GLShader.h"
+#include "FrameBuffer.h"
 #include "GLModel.h"
+#include "GLProjectile.h"
 
 class Scene {
 private:
@@ -12,6 +14,7 @@ private:
 		MODELS,
 		//PARTICLES,
 		//BLUR,
+		PASS,
 		NUM_SHADERS
 	};
 
@@ -20,13 +23,16 @@ private:
 	std::vector<GLPlayer> players;
 	//std::vector<Npc> npc;
 	GLShader* shaders[NUM_SHADERS];
-<<<<<<< HEAD
 	GLMesh* tempMesh;
-	
-=======
-	GLMesh tempMesh;
+	GLuint quadVAO = 0;
 	GLModel* tempModel;
->>>>>>> ModelClassPeter
+<<<<<<< HEAD
+	GLProjectile* testProj;
+	float test;
+=======
+	GLuint quadVBO;
+	FrameBuffer* frameBuffer;
+>>>>>>> 18b0d39ad53d7bad7d0c67fdb15ba00029ff63fb
 
 
 public:
@@ -38,6 +44,7 @@ public:
 	void Update(float& deltaTime);
 	void LoadScene();
 	void DrawScene();
+	void RenderQuad();
 };
 
 #endif

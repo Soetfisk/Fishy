@@ -32,6 +32,8 @@ GLShader::GLShader(const std::string& fileName, const bool& geometry)
 	m_uniforms[TRANSFROM_U] =	glGetUniformLocation(m_program, "TransformMatrix");
 	m_uniforms[PROJVIEW_U] =	glGetUniformLocation(m_program, "ProjectionViewMatrix");
 	m_uniforms[VIEWPOS_U] =		glGetUniformLocation(m_program, "ViewPos");
+	GLuint d = glGetUniformLocation(m_program, "diffuseTexture");
+
 }
 
 /*

@@ -8,6 +8,7 @@ Scene::Scene() {
 		this->players.push_back(GLPlayer());
 	}
 	shaders[MODELS] = new GLShader("test");
+	shaders[PASS] = new GLShader("pass");
 
 	//FishBox FishBoxController;
 	//std::vector<FSHVertexData> FSHVertexes = FishBoxController.GetModelList()[0].GetMeshList()[0].GetVertices();
@@ -30,15 +31,17 @@ Scene::Scene() {
 	//std::vector<unsigned int> indices = {0, 1, 2, 2, 3, 0};
 	//
 	//tempMesh = GLMesh(vertices, vertices.size(), indices, indices.size(), GLMesh::Material());
-<<<<<<< HEAD
 	tempMesh = objLoadFromFile("./res/OBJ/box2.obj");
-	//Make new mesh here
-	//first make vertex for all vertexes
-
-=======
-	tempMesh = *objLoadFromFile("./res/OBJ/box2.obj");
+	this->frameBuffer = new FrameBuffer();
+	this->frameBuffer->CreateFrameBuffer(3);
+	this->frameBuffer->UnbindFrameBuffer();
 	tempModel = new GLModel();
->>>>>>> ModelClassPeter
+	testProj = new GLProjectile();
+	//first make vertex for all vertexes
+<<<<<<< HEAD
+	test = 0;
+=======
+>>>>>>> 18b0d39ad53d7bad7d0c67fdb15ba00029ff63fb
 }
 
 
@@ -47,11 +50,14 @@ Scene::~Scene(){
 		delete shaders[i];
 	}
 <<<<<<< HEAD
+
 	delete tempMesh;
 =======
-
+	delete tempMesh;
+	delete this->frameBuffer;
+>>>>>>> 18b0d39ad53d7bad7d0c67fdb15ba00029ff63fb
 	delete tempModel;
->>>>>>> ModelClassPeter
+	delete testProj;
 }
 
 void Scene::Update(float& deltaTime) {
@@ -59,6 +65,14 @@ void Scene::Update(float& deltaTime) {
 		//this->player.at(i).update(deltTime);
 	//}
 	//std::cout << deltaTime << std::endl;
+	test += deltaTime;
+	if (test < 10)
+		testProj->TestUpdate(deltaTime);
+	else
+	{
+		testProj->ResetTo(glm::vec3());
+		test = 0;
+	}
 }
 
 //Loads the scene, models, matrices
@@ -73,20 +87,58 @@ void Scene::DrawScene() {
 		//glViewport(0, window::HEIGHT / (i + 1), window::WIDTH, window::HEIGHT / 2);
 		//for(int j = 0; j<this->models.count();j++){
 		shaders[MODELS]->Bind();
-<<<<<<< HEAD
-		shaders[MODELS]->Update(*tempMesh, players.at(i).GetCamera());
-		tempMesh->Draw();
-=======
 		shaders[MODELS]->Update(players.at(i).GetCamera());
+<<<<<<< HEAD
 		//glUniformMatrix4fv(shaders[MODELS]->GetUnifromLocation("TransformMatrix"), 1, GL_FALSE, glm::value_ptr(tempModel->GetTransform().GetModel());
-		tempModel->Draw(*shaders[MODELS]);
+		//tempModel->Draw(*shaders[MODELS]);
 
->>>>>>> ModelClassPeter
+		
+		testProj->TestDraw(*shaders[MODELS]);
+
+=======
+		this->frameBuffer->BindFrameBuffer();
+		tempModel->Draw(*shaders[MODELS]);
+		//tempModel->Draw(*shaders[MODELS]);
+		shaders[PASS]->Bind();
+		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
+		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture2"), 1);
+		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture3"), 2);
+		this->frameBuffer->UnbindFrameBuffer();
+		this->RenderQuad();
+		
+>>>>>>> 18b0d39ad53d7bad7d0c67fdb15ba00029ff63fb
 		//shaders[MODELS].update(models.at(j), player.at(i).getCamera()); 
 		//	models.at(j).draw(player.at(i).getCamera());
 		//}
 	}
 	
+}
+
+void Scene::RenderQuad()
+{
+	if (quadVAO == 0) //init
+	{
+		GLfloat quadVertices[] = {
+			// Positions        // Texture Coords
+			-1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+			-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+			1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+			1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+		};
+		// Setup plane VAO
+		glGenVertexArrays(1, &quadVAO);
+		glGenBuffers(1, &quadVBO);
+		glBindVertexArray(quadVAO);
+		glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	}
+	glBindVertexArray(quadVAO);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	glBindVertexArray(0);
 }
 
 void Scene::HandleEvenet(SDL_Event* e) {

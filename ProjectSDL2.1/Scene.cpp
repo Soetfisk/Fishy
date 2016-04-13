@@ -8,6 +8,7 @@ Scene::Scene() {
 		this->players.push_back(new GLPlayer());
 	}
 	shaders[MODELS] = new GLShader("test");
+	shaders[PASS] = new GLShader("pass");
 
 	//FishBox FishBoxController;
 	//std::vector<FSHVertexData> FSHVertexes = FishBoxController.GetModelList()[0].GetMeshList()[0].GetVertices();
@@ -31,10 +32,12 @@ Scene::Scene() {
 	//
 	//tempMesh = GLMesh(vertices, vertices.size(), indices, indices.size(), GLMesh::Material());
 	tempMesh = objLoadFromFile("./res/OBJ/box2.obj");
+	this->frameBuffer = new FrameBuffer();
+	this->frameBuffer->CreateFrameBuffer(3);
+	this->frameBuffer->UnbindFrameBuffer();
 	tempModel = new GLModel();
 	tempMesh->GetTransform().SetPos(glm::vec3(3, 0, 3));
 	//first make vertex for all vertexes
-
 }
 
 
@@ -42,7 +45,8 @@ Scene::~Scene(){
 	for (int i = 0; i < NUM_SHADERS; i++) {
 		delete shaders[i];
 	}
-
+	delete tempMesh;
+	delete this->frameBuffer;
 	delete tempModel;
 	for (int i = 0; i < players.size(); i++)
 	{
@@ -56,6 +60,7 @@ void Scene::Update(float& deltaTime) {
 		this->players.at(i)->Update(GLPlayer::NOTHING ,glm::vec3(deltaTime));
 	}
 	//std::cout << deltaTime << std::endl;
+	testProj->TestUpdate(deltaTime);
 }
 
 //Loads the scene, models, matrices
@@ -71,16 +76,50 @@ void Scene::DrawScene() {
 		//for(int j = 0; j<this->models.count();j++){
 		shaders[MODELS]->Bind();
 		shaders[MODELS]->Update(players.at(i)->GetCamera());
-		//glUniformMatrix4fv(shaders[MODELS]->GetUnifromLocation("TransformMatrix"), 1, GL_FALSE, glm::value_ptr(tempModel->GetTransform().GetModel());
+		this->frameBuffer->BindFrameBuffer();
 		//tempModel->Draw(*shaders[MODELS]);
 		players.at(0)->Draw(*shaders[MODELS]);
 		tempMesh->Draw(*shaders[MODELS], GLTransform());
-
+		//tempModel->Draw(*shaders[MODELS]);
+		shaders[PASS]->Bind();
+		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
+		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture2"), 1);
+		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture3"), 2);
+		this->frameBuffer->UnbindFrameBuffer();
+		this->RenderQuad();
+		
 		//shaders[MODELS].update(models.at(j), player.at(i).getCamera()); 
 		//	models.at(j).draw(player.at(i).getCamera());
 		//}
 	}
 	
+}
+
+void Scene::RenderQuad()
+{
+	if (quadVAO == 0) //init
+	{
+		GLfloat quadVertices[] = {
+			// Positions        // Texture Coords
+			-1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+			-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+			1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+			1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+		};
+		// Setup plane VAO
+		glGenVertexArrays(1, &quadVAO);
+		glGenBuffers(1, &quadVBO);
+		glBindVertexArray(quadVAO);
+		glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	}
+	glBindVertexArray(quadVAO);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	glBindVertexArray(0);
 }
 
 void Scene::HandleEvenet(SDL_Event* e) {
