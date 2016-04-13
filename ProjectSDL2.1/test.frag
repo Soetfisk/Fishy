@@ -4,7 +4,9 @@ in vec2 vsTexCoord;
 in vec3 vsNormal;
 in vec3 vsPos;
 
-//out vec4 color;
+out vec3 color;
+out vec3 color2;
+out vec3 color3;
 
 uniform sampler2D diffuseTexture;
 
@@ -15,5 +17,8 @@ void main()
 
 	float angle = max(dot(normalize(lightPos-vsPos), vsNormal), 0.0);
 
-	gl_FragColor  = angle * vec4(1, 0, 0, 1);
+	color  = angle * vec3(1, 0, 0);
+
+	color2 = vec3(0,0,0.5);
+	color3 = vec3(0,0.5,0);
 }

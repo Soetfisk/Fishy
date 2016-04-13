@@ -4,6 +4,7 @@
 #include "GLUtil.h"
 #include "GLPlayer.h"
 #include "GLShader.h"
+#include "FrameBuffer.h"
 #include "GLModel.h"
 #include "GLProjectile.h"
 
@@ -13,6 +14,7 @@ private:
 		MODELS,
 		//PARTICLES,
 		//BLUR,
+		PASS,
 		NUM_SHADERS
 	};
 
@@ -22,9 +24,10 @@ private:
 	//std::vector<Npc> npc;
 	GLShader* shaders[NUM_SHADERS];
 	GLMesh* tempMesh;
+	GLuint quadVAO = 0;
 	GLModel* tempModel;
-	GLProjectile* testProj;
-	float test;
+	GLuint quadVBO;
+	FrameBuffer* frameBuffer;
 
 
 public:
@@ -36,6 +39,7 @@ public:
 	void Update(float& deltaTime);
 	void LoadScene();
 	void DrawScene();
+	void RenderQuad();
 };
 
 #endif

@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FrameBuffer.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="GLCamera.cpp" />
     <ClCompile Include="GLMesh.cpp" />
@@ -33,7 +34,7 @@
     <ClCompile Include="Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GLProjectile.h" />
+    <ClInclude Include="FrameBuffer.h" />
     <ClInclude Include="LoadMesh.h" />
     <ClInclude Include="GameMain.h" />
     <ClInclude Include="GLCamera.h" />
@@ -49,6 +50,8 @@
     <ClInclude Include="Scene.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="pass.frag" />
+    <None Include="pass.vert" />
     <None Include="test.frag" />
     <None Include="test.vert" />
   </ItemGroup>
