@@ -98,8 +98,6 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	this->GetTransform().m_pos += m_forward * (this->m_velocity.x * deltaTime);
 	this->GetTransform().m_rot.y -= (this->m_velocity.z * deltaTime);
 
-	std::cout << lastX << std::endl;
-
 	if ((lastX < -DEADZONE || lastX > DEADZONE) && (this->m_velocity.z >= -MAX_SPEED && this->m_velocity.z <= MAX_SPEED))
 	{
 		this->m_velocity.z += lastX / (glm::pow(2, 15));
