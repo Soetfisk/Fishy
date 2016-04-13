@@ -26,9 +26,14 @@ private:
 	GLMesh* tempMesh;
 	GLuint quadVAO = 0;
 	GLModel* tempModel;
+<<<<<<< HEAD
+	GLProjectile* testProj;
+	float test;
+=======
 	GLuint quadVBO;
 	FrameBuffer* frameBuffer;
-	GLProjectile* testProj;
+>>>>>>> 18b0d39ad53d7bad7d0c67fdb15ba00029ff63fb
+
 
 public:
 	Scene();

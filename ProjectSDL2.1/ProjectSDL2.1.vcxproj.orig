@@ -34,8 +34,11 @@
     <ClCompile Include="Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FrameBuffer.h" />
+<<<<<<< HEAD
     <ClInclude Include="GLProjectile.h" />
+=======
+    <ClInclude Include="FrameBuffer.h" />
+>>>>>>> 18b0d39ad53d7bad7d0c67fdb15ba00029ff63fb
     <ClInclude Include="LoadMesh.h" />
     <ClInclude Include="GameMain.h" />
     <ClInclude Include="GLCamera.h" />

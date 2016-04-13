@@ -38,6 +38,10 @@ Scene::Scene() {
 	tempModel = new GLModel();
 	testProj = new GLProjectile();
 	//first make vertex for all vertexes
+<<<<<<< HEAD
+	test = 0;
+=======
+>>>>>>> 18b0d39ad53d7bad7d0c67fdb15ba00029ff63fb
 }
 
 
@@ -45,8 +49,13 @@ Scene::~Scene(){
 	for (int i = 0; i < NUM_SHADERS; i++) {
 		delete shaders[i];
 	}
+<<<<<<< HEAD
+
+	delete tempMesh;
+=======
 	delete tempMesh;
 	delete this->frameBuffer;
+>>>>>>> 18b0d39ad53d7bad7d0c67fdb15ba00029ff63fb
 	delete tempModel;
 	delete testProj;
 }
@@ -56,7 +65,14 @@ void Scene::Update(float& deltaTime) {
 		//this->player.at(i).update(deltTime);
 	//}
 	//std::cout << deltaTime << std::endl;
-	testProj->TestUpdate(deltaTime);
+	test += deltaTime;
+	if (test < 10)
+		testProj->TestUpdate(deltaTime);
+	else
+	{
+		testProj->ResetTo(glm::vec3());
+		test = 0;
+	}
 }
 
 //Loads the scene, models, matrices
@@ -72,10 +88,16 @@ void Scene::DrawScene() {
 		//for(int j = 0; j<this->models.count();j++){
 		shaders[MODELS]->Bind();
 		shaders[MODELS]->Update(players.at(i).GetCamera());
-		this->frameBuffer->BindFrameBuffer();
+<<<<<<< HEAD
+		//glUniformMatrix4fv(shaders[MODELS]->GetUnifromLocation("TransformMatrix"), 1, GL_FALSE, glm::value_ptr(tempModel->GetTransform().GetModel());
 		//tempModel->Draw(*shaders[MODELS]);
-		tempModel->Draw(*shaders[MODELS]);
+
+		
 		testProj->TestDraw(*shaders[MODELS]);
+
+=======
+		this->frameBuffer->BindFrameBuffer();
+		tempModel->Draw(*shaders[MODELS]);
 		//tempModel->Draw(*shaders[MODELS]);
 		shaders[PASS]->Bind();
 		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
@@ -84,6 +106,7 @@ void Scene::DrawScene() {
 		this->frameBuffer->UnbindFrameBuffer();
 		this->RenderQuad();
 		
+>>>>>>> 18b0d39ad53d7bad7d0c67fdb15ba00029ff63fb
 		//shaders[MODELS].update(models.at(j), player.at(i).getCamera()); 
 		//	models.at(j).draw(player.at(i).getCamera());
 		//}

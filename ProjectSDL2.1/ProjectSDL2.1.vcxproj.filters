@@ -95,10 +95,10 @@
     <ClInclude Include="LoadMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GLProjectile.h">
+    <ClInclude Include="FrameBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FrameBuffer.h">
+    <ClInclude Include="GLProjectile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
