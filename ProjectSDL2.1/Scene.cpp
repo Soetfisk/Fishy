@@ -1,6 +1,5 @@
 #include "Scene.h"
 #include "obj_loader.h"
-#include "LoadMesh.h"
 
 
 Scene::Scene() {
@@ -9,6 +8,15 @@ Scene::Scene() {
 	}
 	shaders[MODELS] = new GLShader("test");
 	shaders[PASS] = new GLShader("pass");
+
+	FishBox fishbox;
+
+	
+
+	fishbox.MeshData(0, 0, vertexies, indisesofBEST);
+
+	printf("\n%f");
+
 
 	//FishBox FishBoxController;
 	//std::vector<FSHVertexData> FSHVertexes = FishBoxController.GetModelList()[0].GetMeshList()[0].GetVertices();

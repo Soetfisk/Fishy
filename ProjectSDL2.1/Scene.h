@@ -29,7 +29,8 @@ private:
 	GLuint quadVBO;
 	FrameBuffer* frameBuffer;
 	GLProjectile* testProj;
-
+	FSHData::vertexData * vertexies;
+	unsigned int * indisesofBEST;
 public:
 	Scene();
 	~Scene();

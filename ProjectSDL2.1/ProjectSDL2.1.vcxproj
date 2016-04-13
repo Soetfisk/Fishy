@@ -28,7 +28,6 @@
     <ClCompile Include="GLProjectile.cpp" />
     <ClCompile Include="GLShader.cpp" />
     <ClCompile Include="GLWindow.cpp" />
-    <ClCompile Include="LoadMesh.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="obj_loader.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -36,7 +35,6 @@
   <ItemGroup>
     <ClInclude Include="FrameBuffer.h" />
     <ClInclude Include="GLProjectile.h" />
-    <ClInclude Include="LoadMesh.h" />
     <ClInclude Include="GameMain.h" />
     <ClInclude Include="GLCamera.h" />
     <ClInclude Include="GLMesh.h" />
