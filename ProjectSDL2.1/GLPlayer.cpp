@@ -3,10 +3,8 @@
 
 GLPlayer::GLPlayer() : GLModel()
 {
-	int a = 10;
-	float b = 20.0f;
 	this->m_camera;
-	this->m_projectile = new GLProjectile(glm::vec3(0), a, b);
+	this->m_projectile = new GLProjectile(10, 20.0f);
 }
 
 
@@ -109,12 +107,12 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 		this->m_velocity.x += lastY / (glm::pow(2, 15));
 	}
 
-	if (m_velocity.x > 0) m_velocity.x = glm::max(m_velocity.x - FRICTION * deltaTime, 0.0f);
+	if (m_velocity.x > 0) m_velocity.x = glm::max(m_velocity.x - MOVEMENT_FRICTION * deltaTime, 0.0f);
 	//if (m_velocity.y > 0) m_velocity.y = glm::max(m_velocity.y - FRICTION * deltaTime, 0.0f);
-	if (m_velocity.z > 0) m_velocity.z = glm::max(m_velocity.z - FRICTION * deltaTime, 0.0f);
-	if (m_velocity.x < 0) m_velocity.x = glm::min(m_velocity.x + FRICTION * deltaTime, 0.0f);
+	if (m_velocity.z > 0) m_velocity.z = glm::max(m_velocity.z - MOVEMENT_FRICTION * deltaTime, 0.0f);
+	if (m_velocity.x < 0) m_velocity.x = glm::min(m_velocity.x + MOVEMENT_FRICTION * deltaTime, 0.0f);
 	//if (m_velocity.y < 0) m_velocity.y = glm::min(m_velocity.y + FRICTION * deltaTime, 0.0f);
-	if (m_velocity.z < 0) m_velocity.z = glm::min(m_velocity.z + FRICTION * deltaTime, 0.0f);
+	if (m_velocity.z < 0) m_velocity.z = glm::min(m_velocity.z + MOVEMENT_FRICTION * deltaTime, 0.0f);
 
 	glm::vec3 front;
 	front.x = cos(this->transform->m_rot.x) * sin(this->transform->m_rot.y);
@@ -130,7 +128,7 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 
 void GLPlayer::PlayerShoot()
 {
-	if (this->m_projectile->getCurrentState() == ProjectileStates::INACTIVE)
+	if (!this->m_projectile->isActive())
 	{
 		this->m_projectile->SetForward(m_forward);
 		this->m_projectile->ResetTo(this->transform->m_pos);

@@ -1,36 +1,34 @@
 #include "GLProjectile.h"
 
-GLProjectile::GLProjectile()
-	:GLModel()
+GLProjectile::GLProjectile() : GLModel()
 {
-	maxDistance = 9;
+	maxDistance = 0;
 	distanceTraveled = 0.0;
-	speed = 1;
-	forward = glm::vec3(0, 0, 1) * speed;
-	
-	currentState = ProjectileStates::ACTIVE;
+	speed = 0;
+	forward = glm::vec3(0);
+	forwardSpeed = glm::vec3(0);
+	currentState = ProjectileStates::INACTIVE;
 }
 
-GLProjectile::GLProjectile(glm::vec3& forward, int& maxDist, float& speed)
-	: GLModel()
+GLProjectile::GLProjectile(int maxDist, float speed) : GLModel()
 {
 	maxDistance = maxDist;
 	distanceTraveled = 0.0;
 	this->speed = speed;
-	this->forward = forward * this->speed;
+	forward = glm::vec3(0);
+	forwardSpeed = glm::vec3(0);
 	currentState = ProjectileStates::INACTIVE;
 }
 
-GLProjectile::GLProjectile(std::string & filePath, glm::vec3& forward, int& maxDist, float& speed)
-	: GLModel(filePath)
+GLProjectile::GLProjectile(std::string& filePath, int maxDist, float speed) : GLModel(filePath)
 {
 	maxDistance = maxDist;
 	distanceTraveled = 0.0;
 	this->speed = speed;
-	this->forward = forward * this->speed;
+	forward = glm::vec3(0);
+	forwardSpeed = glm::vec3(0);
 	currentState = ProjectileStates::INACTIVE;
 }
-
 
 GLProjectile::~GLProjectile()
 {
@@ -47,9 +45,7 @@ void GLProjectile::TestDraw(GLShader & shader)
 	case ProjectileStates::INACTIVE:
 		break;
 	}
-
 }
-
 
 void GLProjectile::TestUpdate(float& dt)
 {
@@ -61,7 +57,7 @@ void GLProjectile::TestUpdate(float& dt)
 		if (distanceTraveled >= maxDistance)
 			currentState = ProjectileStates::INACTIVE;
 		else
-			transform->m_pos += forward * dt;
+			transform->m_pos += forwardSpeed * dt;
 		break;
 	case ProjectileStates::INACTIVE:
 		break;
@@ -77,12 +73,14 @@ void GLProjectile::ResetTo(glm::vec3& pos)
 
 void GLProjectile::SetForward(glm::vec3& forward)
 {
-	this->forward = forward * speed;
+	this->forward = forward;
+	forwardSpeed = forward * speed;
 }
 
-void GLProjectile::SetSpeed(float & speed)
+void GLProjectile::SetSpeed(float& speed)
 {
 	this->speed = speed;
+	forwardSpeed = forward * speed;
 }
 
 void GLProjectile::Activate()
@@ -95,7 +93,10 @@ void GLProjectile::Inactivate()
 	currentState = ProjectileStates::INACTIVE;
 }
 
-ProjectileStates& GLProjectile::getCurrentState()
+bool GLProjectile::isActive()
 {
-	return currentState;
+	bool check = false;
+	if (currentState == ProjectileStates::ACTIVE)
+		check = true;
+	return check;
 }
