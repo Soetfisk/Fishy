@@ -18,14 +18,17 @@ GLProjectile::GLProjectile(glm::vec3& forward, int& maxDist, float& speed)
 	distanceTraveled = 0.0;
 	this->speed = speed;
 	this->forward = forward * this->speed;
-
 	currentState = ProjectileStates::INACTIVE;
 }
 
-GLProjectile::GLProjectile(std::string & filePath, glm::vec3& forward)
+GLProjectile::GLProjectile(std::string & filePath, glm::vec3& forward, int& maxDist, float& speed)
 	: GLModel(filePath)
 {
-	// load from file
+	maxDistance = maxDist;
+	distanceTraveled = 0.0;
+	this->speed = speed;
+	this->forward = forward * this->speed;
+	currentState = ProjectileStates::INACTIVE;
 }
 
 
@@ -72,9 +75,14 @@ void GLProjectile::ResetTo(glm::vec3& pos)
 	currentState = ProjectileStates::ACTIVE;
 }
 
-void GLProjectile::SetForward(glm::vec3 & forward)
+void GLProjectile::SetForward(glm::vec3& forward)
 {
 	this->forward = forward * speed;
+}
+
+void GLProjectile::SetSpeed(float & speed)
+{
+	this->speed = speed;
 }
 
 void GLProjectile::Activate()
@@ -85,4 +93,9 @@ void GLProjectile::Activate()
 void GLProjectile::Inactivate()
 {
 	currentState = ProjectileStates::INACTIVE;
+}
+
+ProjectileStates& GLProjectile::getCurrentState()
+{
+	return currentState;
 }
