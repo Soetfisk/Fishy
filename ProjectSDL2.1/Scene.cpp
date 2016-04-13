@@ -133,25 +133,25 @@ void Scene::HandleEvenet(SDL_Event* e) {
 		}
 		else if (e->type == SDL_CONTROLLERAXISMOTION)
 		{
-			if (e->caxis.axis == SDL_CONTROLLER_AXIS_RIGHTX)
+			switch (e->caxis.axis)
 			{
+			case SDL_CONTROLLER_AXIS_RIGHTX:
 				players.at(e->caxis.which)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(e->caxis.value, 0, 0));
-			}
-			if (e->caxis.axis == SDL_CONTROLLER_AXIS_RIGHTY)
-			{
+				break;
+			case SDL_CONTROLLER_AXIS_RIGHTY:
 				players.at(e->caxis.which)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(0, e->caxis.value, 0));
-			}
-			if (e->caxis.axis == SDL_CONTROLLER_AXIS_LEFTX)
-			{
+				break;
+			case  SDL_CONTROLLER_AXIS_LEFTX:
 				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(e->caxis.value, 0, 0));
-			}
-			if (e->caxis.axis == SDL_CONTROLLER_AXIS_LEFTY)
-			{
+				break;
+			case SDL_CONTROLLER_AXIS_LEFTY:
 				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, e->caxis.value, 0));
-			}
-			if (e->caxis.axis == SDL_CONTROLLER_AXIS_TRIGGERRIGHT)
-			{
+				break;
+			case SDL_CONTROLLER_AXIS_TRIGGERRIGHT:
 				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, e->caxis.value, 0));
+				break;
+			default:
+				break;
 			}
 		}
 		else if (e->type == SDL_CONTROLLERBUTTONDOWN)
@@ -164,5 +164,59 @@ void Scene::HandleEvenet(SDL_Event* e) {
 			default:
 				break;
 			}
+		}
+		else if (e->type == SDL_KEYUP)
+		{
+			switch (e->key.keysym.scancode)
+			{
+			case SDL_SCANCODE_UP:
+				players.at(0)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(0, 1, 0));
+				break;
+				case SDL_SCANCODE_DOWN:
+				players.at(0)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(0, 1, 0));
+				break;
+			case SDL_SCANCODE_LEFT:
+				players.at(0)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(1, 0, 0));
+				break;
+			case SDL_SCANCODE_RIGHT:
+				players.at(0)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(1, 0, 0));
+				break;
+			default:
+				break;
+			}
+		}
+
+		const Uint8* keyState = SDL_GetKeyboardState(NULL);
+		if (keyState[SDL_SCANCODE_UP])
+		{
+			players.at(0)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(0, -(glm::pow(2, 15)), 0));
+		}
+		if (keyState[SDL_SCANCODE_DOWN])
+		{
+			players.at(0)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(0, (glm::pow(2, 15)), 0));
+		}
+		if (keyState[SDL_SCANCODE_LEFT])
+		{
+			players.at(0)->Update(GLPlayer::CAMERA_MOVE, glm::vec3((glm::pow(2, 15)), 0, 0));
+		}
+		if (keyState[SDL_SCANCODE_RIGHT])
+		{
+			players.at(0)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(-(glm::pow(2, 15)), 0, 0));
+		}
+		if (keyState[SDL_SCANCODE_W])
+		{
+			
+		}
+		if (keyState[SDL_SCANCODE_A])
+		{
+			
+		}
+		if (keyState[SDL_SCANCODE_S])
+		{
+			
+		}
+		if (keyState[SDL_SCANCODE_D])
+		{
+			
 		}
 }
