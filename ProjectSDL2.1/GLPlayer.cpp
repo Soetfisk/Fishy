@@ -3,10 +3,8 @@
 
 GLPlayer::GLPlayer() : GLModel()
 {
-	int a = 10;
-	float b = 20.0f;
 	this->m_camera;
-	this->m_projectile = new GLProjectile(glm::vec3(0), a, b);
+	this->m_projectile = new GLProjectile(10, 20.0f);
 }
 
 
@@ -128,7 +126,7 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 
 void GLPlayer::PlayerShoot()
 {
-	if (this->m_projectile->getCurrentState() == ProjectileStates::INACTIVE)
+	if (!this->m_projectile->isActive())
 	{
 		this->m_projectile->SetForward(m_forward);
 		this->m_projectile->ResetTo(this->transform->m_pos);
