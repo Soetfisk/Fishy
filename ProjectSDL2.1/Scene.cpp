@@ -172,7 +172,7 @@ void Scene::HandleEvenet(SDL_Event* e) {
 			case SDL_SCANCODE_UP:
 				players.at(0)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(0, 1, 0));
 				break;
-				case SDL_SCANCODE_DOWN:
+			case SDL_SCANCODE_DOWN:
 				players.at(0)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(0, 1, 0));
 				break;
 			case SDL_SCANCODE_LEFT:
@@ -194,6 +194,15 @@ void Scene::HandleEvenet(SDL_Event* e) {
 				players.at(0)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(1, 0, 0));
 				break;
 			default:
+				break;
+			}
+		}
+		else if (e->type == SDL_KEYDOWN)
+		{
+			switch (e->key.keysym.scancode)
+			{
+			case SDL_SCANCODE_SPACE:
+				players.at(0)->Update(GLPlayer::PLAYER_SHOOT, glm::vec3(0));
 				break;
 			}
 		}
