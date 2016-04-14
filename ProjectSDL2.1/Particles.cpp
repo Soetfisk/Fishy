@@ -16,15 +16,36 @@ Particles::Particles()
 
 	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT;
 
-	pos* points = (pos*)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, particle::NUM_PARTICLES * sizeof(pos), bufMask);
+	points = (struct pos*)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, particle::NUM_PARTICLES * sizeof(pos), bufMask);
 
 	//Temporary randoming numbers
 	for (int i = 0; i < particle::NUM_PARTICLES; i++) {
-		points[i].x = rand() % 20 + 10;
-		points[i].y = rand() % 20 + 10;
-		points[i].z = rand() % 20 + 10;
+		points[i].x = .2f + (i*.01);
+		points[i].y = 0 + i*.1;
+		points[i].z = 0;
 		points[i].w = 1;
 	}
+
+	points[0].x = -1;
+	points[0].y = 1;
+	points[0].z = -3;
+	points[0].w = 1;
+
+	points[1].x = -1;
+	points[1].y = -1;
+	points[1].z = -3;
+	points[1].w = 1;
+
+	points[2].x = 1;
+	points[2].y = 1;
+	points[2].z = -3;
+	points[2].w = 1;
+
+	points[3].x =1 ;
+	points[3].y = -1;
+	points[3].z = -3;
+	points[3].w = 1;
+	                                        
 
 	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 
@@ -33,7 +54,7 @@ Particles::Particles()
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, velSSbo);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, particle::NUM_PARTICLES * sizeof(vel), NULL, GL_STATIC_DRAW);
 
-	vel* vels = (vel*)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, particle::NUM_PARTICLES * sizeof(vel), bufMask);
+	vel* vels = (struct vel*)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, particle::NUM_PARTICLES * sizeof(vel), bufMask);
 
 	for (int i = 0; i < particle::NUM_PARTICLES; i++) {
 		vels[i].vx = rand() % 2 + 1;
@@ -49,7 +70,7 @@ Particles::Particles()
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, colSSbo);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, particle::NUM_PARTICLES * sizeof(color), NULL, GL_STATIC_DRAW);
 
-	color* Colors = (color*)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, particle::NUM_PARTICLES * sizeof(color), bufMask);
+	color* Colors = (struct color*)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, particle::NUM_PARTICLES * sizeof(color), bufMask);
 
 	for (int i = 0; i < particle::NUM_PARTICLES; i++) {
 		Colors[i].r = rand() % 255;
@@ -75,6 +96,34 @@ Particles::Particles()
 
 	CheckShaderError(compute_program, GL_LINK_STATUS, true);
 
+
+
+
+
+	glGenVertexArrays(1, &m_vertexArrayObject);
+	glBindVertexArray(m_vertexArrayObject);
+	
+	glBindBuffer(GL_ARRAY_BUFFER, posSSbo);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
+	glBindVertexArray(0);
+
+
+	//glGenVertexArrays(1, &m_vertexArrayObject);
+	//glBindVertexArray(m_vertexArrayObject);
+	//glBindBuffer(GL_ARRAY_BUFFER, posSSbo);
+	//glEnableVertexAttribArray(0);
+	//glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+	//glBindVertexArray(0);
+
+
+	//glGenBuffers(1, m_vertexArrayBuffers);
+	//glBindBuffer(GL_ARRAY_BUFFER, m_vertexArrayBuffers[POSITION_VB]);
+	//glBufferData(GL_ARRAY_BUFFER, particle::NUM_PARTICLES * sizeof(points[0]), &points[0], GL_STATIC_DRAW);
+
+
+	//glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
 	//glDispatchCompute(particle::NUM_PARTICLES / particle::WORK_GROUP_SIZE, 1, 1);
 	//Use program(Compute Program)
 	
@@ -87,15 +136,23 @@ void Particles::Update() {
 	glUseProgram(compute_program);
 	glDispatchCompute(particle::NUM_PARTICLES / particle::WORK_GROUP_SIZE, 1, 1);
 	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+
+	std::cout << points[0].x << std::endl;
 }
 
 void Particles::Draw() {
-	glBindBuffer(GL_ARRAY_BUFFER, posSSbo);
-	glVertexPointer(4, GL_FLOAT, 0, (void *)0);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glDrawArrays(GL_POINTS, 0, particle::NUM_PARTICLES);
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	//glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 4, posSSbo);
+
+	glBindVertexArray(m_vertexArrayObject);
+
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, particle::NUM_PARTICLES);
+	glBindVertexArray(0);
+	//glBindBuffer(GL_ARRAY_BUFFER, posSSbo);
+	//glVertexPointer(4, GL_FLOAT, 0, (void *)0);
+	//glEnableClientState(GL_VERTEX_ARRAY);
+	//glDrawArrays(GL_POINTS, 0, particle::NUM_PARTICLES);
+	//glDisableClientState(GL_VERTEX_ARRAY);
+	//glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 
@@ -104,6 +161,7 @@ Particles::~Particles()
 	glDetachShader(compute_program, compute_shader);
 	glDeleteShader(compute_shader);
 	glDeleteProgram(compute_program);
+	glDeleteVertexArrays(1, &m_vertexArrayObject);
 }
 
 GLuint Particles::CreateShader(const std::string & text, GLenum shaderType)

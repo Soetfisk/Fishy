@@ -88,6 +88,7 @@ void Scene::DrawScene() {
 		testParticle->Update();
 		shaders[PARTICLE]->Bind();
 		shaders[PARTICLE]->Update(players.at(i)->GetCamera());
+		//this->RenderQuad();
 		testParticle->Draw();
 
 

@@ -27,11 +27,23 @@ private:
 	//Shader storage buffer bjects of position, velocity, color
 	GLuint posSSbo, velSSbo, colSSbo;
 	GLuint compute_shader, compute_program;
-
+	pos* points;
 
 	GLuint CreateShader(const std::string& text, GLenum shaderType);
 	void CheckShaderError(GLuint shader, GLuint flag, bool isProgram);
 	std::string LoadShader(const std::string& fileName);
+
+
+	enum
+	{
+		POSITION_VB,
+
+		NUM_BUFFERS
+	};
+
+	GLuint m_vertexArrayObject;
+
+
 public:
 	void Draw();
 	void Update();
