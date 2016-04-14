@@ -3,6 +3,7 @@
 
 #include "GLUtil.h"
 #include "GLPlayer.h"
+#include "GLNPC.h"
 #include "GLShader.h"
 #include "FrameBuffer.h"
 #include "GLModel.h"
@@ -21,7 +22,7 @@ private:
 	//todo implement
 	//std::vector<Model> models;
 	std::vector<GLPlayer*> players;
-	//std::vector<Npc> npc;
+	std::vector<GLNPC*> NPCs;
 	GLShader* shaders[NUM_SHADERS];
 	GLMesh* tempMesh;
 	GLuint quadVAO = 0;

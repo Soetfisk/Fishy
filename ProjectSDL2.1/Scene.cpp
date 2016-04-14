@@ -1,11 +1,14 @@
 #include "Scene.h"
 #include "obj_loader.h"
-#include "LoadMesh.h"
+
 
 
 Scene::Scene() {
 	for (int i = 0; i < 1; i++) {
 		this->players.push_back(new GLPlayer());
+	}
+	for (int i = 0; i < 1; i++) {
+		this->NPCs.push_back(new GLNPC());
 	}
 	shaders[MODELS] = new GLShader("test");
 	shaders[PASS] = new GLShader("pass");
@@ -52,6 +55,11 @@ Scene::~Scene(){
 	{
 		delete players.at(i);
 	}
+
+	for (int i = 0; i < NPCs.size(); i++)
+	{
+		delete NPCs.at(i);
+	}
 }
 
 void Scene::Update(float& deltaTime) {
@@ -77,8 +85,13 @@ void Scene::DrawScene() {
 		this->frameBuffer->BindFrameBuffer();
 		//tempModel->Draw(*shaders[MODELS]);
 		players.at(0)->Draw(*shaders[MODELS]);
+		NPCs.at(0)->NPCDraw(*shaders[MODELS]);
+
 		tempMesh->Draw(*shaders[MODELS], GLTransform());
+
 		players.at(0)->tempGetProjectile()->TestDraw(*shaders[MODELS]);
+
+
 		//tempModel->Draw(*shaders[MODELS]);
 		shaders[PASS]->Bind();
 		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
