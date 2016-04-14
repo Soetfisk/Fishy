@@ -5,7 +5,7 @@ GLPlayer::GLPlayer() : GLModel()
 {
 	this->m_camera;
 	this->m_projectile = new GLProjectile(10, 20.0f);
-	this->m_projectileHandler = new GLProjectileHandler(5, 10, 10.0f);
+	this->m_projectileHandler = new GLProjectileHandler(1, 10, 1.0f);
 }
 
 

@@ -28,46 +28,41 @@ void GLProjectileHandler::Shoot(glm::vec3& forward, glm::vec3& pos, glm::vec3& r
 	GLProjectile* projectilePtr = GetInactiveProjectile();
 	if (projectilePtr != nullptr)
 	{
-		this->ActivateProjectile(projectilePtr, forward, pos, rot);
+		ActivateProjectile(projectilePtr, forward, pos, rot);
 	}
 	else
 	{
 		projectiles.push_back(new GLProjectile(projectileTravelDistance, projectileSpeed));
-		this->ActivateProjectile(projectiles.back(), forward, pos, rot);
+		ActivateProjectile(projectiles.back(), forward, pos, rot);
 	}
 }
 
 void GLProjectileHandler::Update(float& dt)
 {
 	GLProjectile* temp = nullptr;
-	for (int i = 0; i < activeProjectiles.size(); i++)
+	//std::cout << projectiles.size() << std::endl;
+	for (int i = 0; i < projectiles.size(); i++)
 	{
-		activeProjectiles.at(i)->TestUpdate(dt);
-		if (!activeProjectiles.at(i)->isActive())
-		{
-			//temp = activeProjectiles.at(i);
-			//inactiveProjectiles.push_back(temp);
-
-			//activeProjectiles.erase(activeProjectiles.begin() + i);
-			////activeProjectiles.at(i);
-			////activeProjectiles.pop_back();
-		}
+		projectiles.at(i)->TestUpdate(dt);
 	}
 }
 
 void GLProjectileHandler::Draw(GLShader& shader)
 {
-	for (int i = 0; i < activeProjectiles.size(); i++)
-		activeProjectiles.at(i)->TestDraw(shader);
+	for (int i = 0; i < projectiles.size(); i++)
+		projectiles.at(i)->TestDraw(shader);
 }
 
 GLProjectile* GLProjectileHandler::GetInactiveProjectile()
 {
 	GLProjectile* projectilePtr = nullptr;
-	if (!inactiveProjectiles.empty())
+	for (int i = 0; i < projectiles.size(); i++)
 	{
-		projectilePtr = inactiveProjectiles.back();
-		inactiveProjectiles.pop_back();
+		if (!projectiles.at(i)->isActive())
+		{
+			projectilePtr = projectiles.at(i);
+			i = projectiles.size();
+		}
 	}
 	return projectilePtr;
 }
@@ -78,5 +73,4 @@ void GLProjectileHandler::ActivateProjectile(GLProjectile* projectile, glm::vec3
 	projectile->ResetTo(pos);
 	projectile->GetTransform().m_rot = rot;
 	projectile->Activate();
-	activeProjectiles.push_back(projectiles.back());
 }

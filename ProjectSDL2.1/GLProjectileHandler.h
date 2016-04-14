@@ -14,12 +14,10 @@ public:
 	void Draw(GLShader& shader);									// Draw all active Projectiles
 
 private:
-	int projectileTravelDistance;						// For creating projectiles
-	float projectileSpeed;								// For creating projectiles
-	std::vector<GLProjectile*>	projectiles,			// All projectiles
-								activeProjectiles,		// Active Projectiles
-								inactiveProjectiles;	// Inactive Projectiles
-	GLProjectile* GetInactiveProjectile();				//
-	void ActivateProjectile(GLProjectile* projectile, glm::vec3& forward, glm::vec3& pos, glm::vec3& rot);
+	int projectileTravelDistance;																			// For creating projectiles
+	float projectileSpeed;																					// For creating projectiles
+	std::vector<GLProjectile*>	projectiles;																// 
+	GLProjectile* GetInactiveProjectile();																	//
+	void ActivateProjectile(GLProjectile* projectile, glm::vec3& forward, glm::vec3& pos, glm::vec3& rot);	//
 };
 
