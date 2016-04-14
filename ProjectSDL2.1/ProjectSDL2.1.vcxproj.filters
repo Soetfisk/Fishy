@@ -49,6 +49,8 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GLProjectile.cpp">
+	<Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="GLNPC.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
