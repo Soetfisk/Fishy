@@ -41,6 +41,7 @@ Scene::Scene() {
 	this->cs = this->genComputeProg();
 	fcs = new FilterComputeShader("derp");
 	fcs->LoadShader("blueFilter.glsl");
+	fcs->CreateShader(fcs->LoadShader("blueFilter.glsl"));
 }
 
 

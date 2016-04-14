@@ -4,13 +4,13 @@
 class FilterComputeShader
 {
 private:
-	GLuint program, shader;
+	GLuint program;
 
 public:
 	FilterComputeShader(std::string fileName);
 	~FilterComputeShader();
 	std::string LoadShader(const std::string& fileName);
-	void CreateShader(const std::string& text, GLenum shaderType);
+	void CreateShader(const std::string& text);
 	void BindShader();
 	void dispatchCompute(int width, int height, int depth);
 	GLint getUniformLocation(std::string name);
