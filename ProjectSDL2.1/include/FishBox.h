@@ -111,13 +111,15 @@ private: //functions
 
 public: //functiuons
 	FSHMesh(void);
-	FSHMesh(std::ifstream* infile);
+	FSHMesh(std::ifstream*& infile);
 	~FSHMesh(void);
 
+	mesh * GetMeshData();
 	unsigned int * GetIndices();
 	vertexData * GetVertices();
 	unsigned int getVertexCount();
 	unsigned int getIndexCount();
+
 	//getUVs();
 	//getMaterial();
 	//getTexture();
@@ -133,7 +135,7 @@ class FISHBOX_API FSHScene
 private:
 	fileHeader HEADER;
 	std::ifstream * infile;
-	FSHMesh * meshes;
+	std::vector<FSHMesh*> meshes;
 	char*SCENE_ID;
 
 
@@ -145,7 +147,7 @@ private:
 public:
 	FSHScene(char * filePath);
 	unsigned int GetMeshCount();
-	FSHMesh * GetMeshList();
+	std::vector<FSHMesh*> GetMeshList();
 
 
 	void Release();
@@ -163,16 +165,21 @@ private:
 
 
 private: //varaibles
-	
 	unsigned int SceneCount = 0;
 	FSHScene * Scenes;
 	std::vector<FSHScene> SceneList;
 public: //variables
+
+
+public: //functions 
 	FishBox(void);
 	void Test();
-	int GetSceneCount();
-	void LoadScene(char * filePath, unsigned int& meshCount);
-	void MeshData(unsigned int model, unsigned int mesh, vertexData * vertexData, unsigned int * indexData);
-public: //functions 
+	int GetModelCount();
+	void LoadScene(char * filePath);
 
+	void MeshData(unsigned int model, unsigned int mesh, vertexData *&vertexData, unsigned int *&indexData);
+	FSHData::mesh * MeshData(unsigned int model, unsigned int mesh);
+	FSHData::vertexData * VertexData(unsigned int model, unsigned int mesh);
+	unsigned int * IndexData(unsigned int model, unsigned int mesh);
+	unsigned int FishBox::ModelMeshCount(unsigned int model);
 };

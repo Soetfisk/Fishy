@@ -2,21 +2,21 @@
 #include "obj_loader.h"
 
 
+void Scene::LoadModels()
+{
+	models.push_back(new GLModel(FSH_Loader, "Models/TestBin.FSH"));
+}
+
+void Scene::LoadModels(char * folder)
+{
+}
+
 Scene::Scene() {
 	for (int i = 0; i < 1; i++) {
 		this->players.push_back(new GLPlayer());
 	}
 	shaders[MODELS] = new GLShader("test");
 	shaders[PASS] = new GLShader("pass");
-
-	FishBox fishbox;
-
-	
-
-	fishbox.MeshData(0, 0, vertexies, indisesofBEST);
-
-	printf("\n%f", vertexies[0].pos[0]);
-
 
 	//FishBox FishBoxController;
 	//std::vector<FSHVertexData> FSHVertexes = FishBoxController.GetModelList()[0].GetMeshList()[0].GetVertices();
@@ -43,7 +43,6 @@ Scene::Scene() {
 	this->frameBuffer = new FrameBuffer();
 	this->frameBuffer->CreateFrameBuffer(3);
 	this->frameBuffer->UnbindFrameBuffer();
-	tempModel = new GLModel();
 	tempMesh->GetTransform().SetPos(glm::vec3(3, 0, 3));
 	//first make vertex for all vertexes
 }
@@ -55,7 +54,12 @@ Scene::~Scene(){
 	}
 	delete tempMesh;
 	delete this->frameBuffer;
-	delete tempModel;
+
+	for (int i = 0; i < models.size(); i++)
+	{
+		delete models.at(i);
+	}
+
 	for (int i = 0; i < players.size(); i++)
 	{
 		delete players.at(i);

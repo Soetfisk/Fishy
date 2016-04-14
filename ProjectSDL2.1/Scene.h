@@ -20,17 +20,20 @@ private:
 
 	//todo implement
 	//std::vector<Model> models;
+	FishBox FSH_Loader;
 	std::vector<GLPlayer*> players;
 	//std::vector<Npc> npc;
 	GLShader* shaders[NUM_SHADERS];
 	GLMesh* tempMesh;
 	GLuint quadVAO = 0;
-	GLModel* tempModel;
+	std::vector<GLModel*> models;
 	GLuint quadVBO;
 	FrameBuffer* frameBuffer;
 	GLProjectile* testProj;
-	FSHData::vertexData * vertexies;
-	unsigned int * indisesofBEST;
+	
+private:
+	void LoadModels();
+	void LoadModels(char* folder);
 public:
 	Scene();
 	~Scene();

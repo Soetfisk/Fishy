@@ -57,6 +57,10 @@ GLMesh::GLMesh(std::vector<Vertex> vertices, unsigned int numVertices, std::vect
 	glBindVertexArray(0);
 }
 
+GLMesh::GLMesh(FSHData::mesh * meshData, FSHData::vertexData * vertices, unsigned int * incides)
+{
+}
+
 GLMesh::~GLMesh()
 {
 	glDeleteVertexArrays(1, &m_vertexArrayObject);
