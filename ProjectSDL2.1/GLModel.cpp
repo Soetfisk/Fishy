@@ -18,10 +18,10 @@ GLModel::GLModel()
 GLModel::GLModel(FishBox& FSH_Loader, char* filePath)
 {
 	transform = new GLTransform();
+	
+	FSH_Loader.LoadScene(filePath);
 	modelID = (FSH_Loader.GetModelCount() - 1);
 
-	FSH_Loader.LoadScene(filePath);
-	
 	for (unsigned int i = 0; i < FSH_Loader.ModelMeshCount(modelID); i++)
 	{
 		meshes.push_back(new GLMesh(FSH_Loader.MeshData(modelID, i), FSH_Loader.VertexData(modelID, i), FSH_Loader.IndexData(modelID, i)));

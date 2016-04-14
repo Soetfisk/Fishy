@@ -22,18 +22,8 @@ Scene::Scene() {
 	shaders[MODELS] = new GLShader("test");
 	shaders[PASS] = new GLShader("pass");
 
-	//FishBox FishBoxController;
-	//std::vector<FSHVertexData> FSHVertexes = FishBoxController.GetModelList()[0].GetMeshList()[0].GetVertices();
-	//std::vector<Vertex> Vertices = ModelDataConvert::convertFSHVertex(FSHVertexes);
+	LoadModels();
 
-	//FSHMaterial Material = FishBoxController.GetModelList()[0].GetMaterialList()[0];
-	//GL::Mesh GLMaterial = ModelDataConvert::convertFSHMaterial(Material);
-	
-	//new GLMesh(Vertices, Vertices.size(), /*indices*/, FishBoxController.GetModelList()[0].GetMeshList()[0].getIndexCount(), GLMaterial)
-
-	//float hello = Material.getAmbient()[0];
-	//printf("%f", hello);
-	//std::vector<Vertex> vertices;
 
 	//vertices.push_back(Vertex(glm::vec3(-.5, .5, 0), glm::vec2(0, 1), glm::vec3(0, 0, 1)));
 	//vertices.push_back(Vertex(glm::vec3(-.5, -.5, 0), glm::vec2(0, 0), glm::vec3(0, 0, 1)));
@@ -98,9 +88,10 @@ void Scene::DrawScene() {
 		this->frameBuffer->BindFrameBuffer();
 		//tempModel->Draw(*shaders[MODELS]);
 		players.at(0)->Draw(*shaders[MODELS]);
-		NPCs.at(0)->NPCDraw(*shaders[MODELS]);
+		//NPCs.at(0)->NPCDraw(*shaders[MODELS]);
 
-		tempMesh->Draw(*shaders[MODELS], GLTransform());
+		models[0]->Draw(*shaders[MODELS]);
+		//tempMesh->Draw(*shaders[MODELS], GLTransform());
 
 		players.at(0)->tempGetProjectile()->TestDraw(*shaders[MODELS]);
 
