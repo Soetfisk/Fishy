@@ -33,12 +33,11 @@ Scene::Scene() {
 	//tempMesh = GLMesh(vertices, vertices.size(), indices, indices.size(), GLMesh::Material());
 	tempMesh = objLoadFromFile("./res/OBJ/box2.obj");
 	this->frameBuffer = new FrameBuffer();
-	this->frameBuffer->CreateFrameBuffer(1);
+	this->frameBuffer->CreateFrameBuffer(3);
 	this->frameBuffer->UnbindFrameBuffer();
 	tempModel = new GLModel();
 	testProj = new GLProjectile();
 	//first make vertex for all vertexes
-	this->cs = this->genComputeProg();
 	fcs = new FilterComputeShader("derp");
 	fcs->LoadShader("blueFilter.glsl");
 	fcs->CreateShader(fcs->LoadShader("blueFilter.glsl"));
@@ -85,18 +84,18 @@ void Scene::DrawScene() {
 		//shaders[PASS]->Bind();
 		this->frameBuffer->UnbindFrameBuffer();
 		
-		
-		glUseProgram(this->cs);
+		this->fcs->BindShader();
 		this->count += 0.1f;
 		this->frameBuffer->BindImageTexturesToProgram(glGetUniformLocation(this->cs, "destTex"), 0);
-		glDispatchCompute(1024 / 16, 768 / 16, 1);
-		checkErrors("Dispatch compute shader");
-		//this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
+		this->fcs->dispatchCompute(1024 / 32, 768 / 32, 1);
+		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
 		//this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture2"), 1);
 		//this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture3"), 2);
 		
 		shaders[PASS]->Bind();
 		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
+		//this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture2"), 1);
+		//this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture3"), 2);
 		this->RenderQuad();
 		
 		//shaders[MODELS].update(models.at(j), player.at(i).getCamera()); 
@@ -135,63 +134,4 @@ void Scene::RenderQuad()
 
 void Scene::HandleEvenet(SDL_Event* e) {
 	
-}
-
-GLuint Scene::genComputeProg() {
-	// Creating the compute shader, and the program object containing the shader
-	GLuint progHandle = glCreateProgram();
-	GLuint cs = glCreateShader(GL_COMPUTE_SHADER);
-
-	// In order to write to a texture, we have to introduce it as image2D.
-	// local_size_x/y/z layout variables define the work group size.
-	// gl_GlobalInvocationID is a uvec3 variable giving the global ID of the thread,
-	// gl_LocalInvocationID is the local index within the work group, and
-	// gl_WorkGroupID is the work group's index
-	const char *csSrc[] = {
-		"#version 430\n",
-		"layout(rgba32f) uniform image2D destTex;\
-		 layout (local_size_x = 16, local_size_y = 16) in;\
-		 void main() {\
-			 ivec2 storePos = ivec2(gl_GlobalInvocationID.xy);\
-			 imageStore(destTex, storePos, imageLoad(destTex,storePos) + vec4(0.0, 0.0, 0.1, 0.0) );\
-			memoryBarrier();\
-		 }"
-	};
-
-	glShaderSource(cs, 2, csSrc, NULL);
-	glCompileShader(cs);
-	int rvalue;
-	glGetShaderiv(cs, GL_COMPILE_STATUS, &rvalue);
-	if (!rvalue) {
-		fprintf(stderr, "Error in compiling the compute shader\n");
-		GLchar log[10240];
-		GLsizei length;
-		glGetShaderInfoLog(cs, 10239, &length, log);
-		fprintf(stderr, "Compiler log:\n%s\n", log);
-		exit(40);
-	}
-	glAttachShader(progHandle, cs);
-
-	glLinkProgram(progHandle);
-	glGetProgramiv(progHandle, GL_LINK_STATUS, &rvalue);
-	if (!rvalue) {
-		fprintf(stderr, "Error in linking compute shader program\n");
-		GLchar log[10240];
-		GLsizei length;
-		glGetProgramInfoLog(progHandle, 10239, &length, log);
-		fprintf(stderr, "Linker log:\n%s\n", log);
-		exit(41);
-	}
-	glUseProgram(progHandle);
-
-	//glUniform1i(glGetUniformLocation(progHandle, "destTex"), 0);
-	return progHandle;
-}
-
-void Scene::checkErrors(std::string desc) {
-	GLenum e = glGetError();
-	if (e != GL_NO_ERROR) {
-		//fprintf(stderr, "OpenGL error in \"%s\": %s (%d)\n", desc.c_str(), gluErrorString(e), e);
-		exit(20);
-	}
 }

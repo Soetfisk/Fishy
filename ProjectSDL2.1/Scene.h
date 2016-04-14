@@ -32,8 +32,6 @@ private:
 	FrameBuffer* frameBuffer;
 	FrameBuffer* frameBuffer2;
 	GLProjectile* testProj;
-	GLuint genComputeProg();
-	void checkErrors(std::string desc);
 	float count = 0;
 	FilterComputeShader* fcs;
 
