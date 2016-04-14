@@ -31,6 +31,7 @@
     <ClCompile Include="LoadMesh.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="obj_loader.cpp" />
+    <ClCompile Include="Particles.cpp" />
     <ClCompile Include="Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -48,9 +49,13 @@
     <ClInclude Include="GLUtil.h" />
     <ClInclude Include="GLWindow.h" />
     <ClInclude Include="obj_loader.h" />
+    <ClInclude Include="Particles.h" />
     <ClInclude Include="Scene.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Particle.frag" />
+    <None Include="Particle.vert" />
+    <None Include="ParticleComputeShader.glsl" />
     <None Include="pass.frag" />
     <None Include="pass.vert" />
     <None Include="test.frag" />

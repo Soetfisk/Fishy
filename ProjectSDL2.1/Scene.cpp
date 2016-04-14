@@ -9,6 +9,7 @@ Scene::Scene() {
 	}
 	shaders[MODELS] = new GLShader("test");
 	shaders[PASS] = new GLShader("pass");
+	shaders[PARTICLE] = new GLShader("Particle");
 
 	//FishBox FishBoxController;
 	//std::vector<FSHVertexData> FSHVertexes = FishBoxController.GetModelList()[0].GetMeshList()[0].GetVertices();
@@ -37,6 +38,7 @@ Scene::Scene() {
 	this->frameBuffer->UnbindFrameBuffer();
 	tempModel = new GLModel();
 	tempMesh->GetTransform().SetPos(glm::vec3(3, 0, 3));
+	testParticle = new Particles();
 	//first make vertex for all vertexes
 }
 
@@ -52,6 +54,7 @@ Scene::~Scene(){
 	{
 		delete players.at(i);
 	}
+	delete testParticle;
 }
 
 void Scene::Update(float& deltaTime) {
@@ -80,6 +83,14 @@ void Scene::DrawScene() {
 		tempMesh->Draw(*shaders[MODELS], GLTransform());
 		players.at(0)->tempGetProjectile()->TestDraw(*shaders[MODELS]);
 		//tempModel->Draw(*shaders[MODELS]);
+
+
+		testParticle->Update();
+		shaders[PARTICLE]->Bind();
+		shaders[PARTICLE]->Update(players.at(i)->GetCamera());
+		testParticle->Draw();
+
+
 		shaders[PASS]->Bind();
 		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
 		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture2"), 1);

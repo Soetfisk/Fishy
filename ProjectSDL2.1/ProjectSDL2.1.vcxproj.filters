@@ -54,6 +54,9 @@
     <ClCompile Include="GLProjectile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Particles.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLUtil.h">
@@ -101,11 +104,17 @@
     <ClInclude Include="GLProjectile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Particles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="test.frag" />
     <None Include="test.vert" />
     <None Include="pass.frag" />
     <None Include="pass.vert" />
+    <None Include="Particle.frag" />
+    <None Include="Particle.vert" />
+    <None Include="ParticleComputeShader.glsl" />
   </ItemGroup>
 </Project>

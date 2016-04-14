@@ -7,6 +7,7 @@
 #include "FrameBuffer.h"
 #include "GLModel.h"
 #include "GLProjectile.h"
+#include "Particles.h"
 
 class Scene {
 private:
@@ -15,6 +16,7 @@ private:
 		//PARTICLES,
 		//BLUR,
 		PASS,
+		PARTICLE,
 		NUM_SHADERS
 	};
 
@@ -29,6 +31,7 @@ private:
 	GLuint quadVBO;
 	FrameBuffer* frameBuffer;
 	GLProjectile* testProj;
+	Particles* testParticle;
 
 public:
 	Scene();
