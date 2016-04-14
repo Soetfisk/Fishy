@@ -39,6 +39,7 @@ Scene::Scene() {
 	testProj = new GLProjectile();
 	//first make vertex for all vertexes
 	this->cs = this->genComputeProg();
+	fcs = new FilterComputeShader("derp");
 }
 
 

@@ -7,6 +7,7 @@
 #include "FrameBuffer.h"
 #include "GLModel.h"
 #include "GLProjectile.h"
+#include "FilterComputeShader.h"
 
 class Scene {
 private:
@@ -34,6 +35,7 @@ private:
 	GLuint genComputeProg();
 	void checkErrors(std::string desc);
 	float count = 0;
+	FilterComputeShader* fcs;
 
 public:
 	Scene();
