@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FilterComputeShader.cpp" />
     <ClCompile Include="FrameBuffer.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="GLCamera.cpp" />
@@ -34,6 +35,7 @@
     <ClCompile Include="Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="FilterComputeShader.h" />
     <ClInclude Include="FrameBuffer.h" />
     <ClInclude Include="GLProjectile.h" />
     <ClInclude Include="LoadMesh.h" />

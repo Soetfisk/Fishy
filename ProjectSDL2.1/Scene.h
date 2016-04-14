@@ -27,8 +27,13 @@ private:
 	GLuint quadVAO = 0;
 	GLModel* tempModel;
 	GLuint quadVBO;
+	GLuint cs;
 	FrameBuffer* frameBuffer;
+	FrameBuffer* frameBuffer2;
 	GLProjectile* testProj;
+	GLuint genComputeProg();
+	void checkErrors(std::string desc);
+	float count = 0;
 
 public:
 	Scene();
