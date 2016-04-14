@@ -40,6 +40,7 @@ Scene::Scene() {
 	//first make vertex for all vertexes
 	this->cs = this->genComputeProg();
 	fcs = new FilterComputeShader("derp");
+	fcs->LoadShader("blueFilter.glsl");
 }
 
 
@@ -51,6 +52,7 @@ Scene::~Scene(){
 	delete this->frameBuffer;
 	delete tempModel;
 	delete testProj;
+	delete this->fcs;
 }
 
 void Scene::Update(float& deltaTime) {

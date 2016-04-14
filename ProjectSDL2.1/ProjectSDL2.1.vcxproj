@@ -53,6 +53,7 @@
     <ClInclude Include="Scene.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="blueFilter.glsl" />
     <None Include="pass.frag" />
     <None Include="pass.vert" />
     <None Include="test.frag" />

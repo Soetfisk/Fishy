@@ -113,5 +113,8 @@
     <None Include="test.vert" />
     <None Include="pass.frag" />
     <None Include="pass.vert" />
+    <None Include="blueFilter.glsl">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
