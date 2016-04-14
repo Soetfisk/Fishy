@@ -5,12 +5,14 @@ GLPlayer::GLPlayer() : GLModel()
 {
 	this->m_camera;
 	this->m_projectile = new GLProjectile(10, 20.0f);
+	this->m_projectileHandler = new GLProjectileHandler(5, 10, 10.0f);
 }
 
 
 GLPlayer::~GLPlayer()
 {
 	delete this->m_projectile;
+	delete this->m_projectileHandler;
 }
 
 GLProjectile * GLPlayer::tempGetProjectile()
@@ -50,6 +52,12 @@ void GLPlayer::Update(Events state, glm::vec3 movementVec)
 GLCamera GLPlayer::GetCamera()
 {
 	return this->m_camera;
+}
+
+void GLPlayer::TestDraw(GLShader & shader)
+{
+	this->Draw(shader);
+	this->m_projectileHandler->Draw(shader);
 }
 
 //adds a controller too the player
@@ -94,7 +102,7 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 {
 	//player update
 	this->GetTransform().m_pos += m_forward * (this->m_velocity.x * deltaTime);
-	this->GetTransform().m_rot.y -= (this->m_velocity.z * deltaTime);
+ 	this->GetTransform().m_rot.y -= (this->m_velocity.z * deltaTime);
 
 	if ((lastX < -DEADZONE || lastX > DEADZONE) && (this->m_velocity.z >= -MAX_SPEED && this->m_velocity.z <= MAX_SPEED))
 	{
@@ -121,16 +129,18 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	//camera update
 	this->m_camera.Update(this->GetTransform(), deltaTime);
 
-	this->m_projectile->TestUpdate(deltaTime);
+	//this->m_projectile->TestUpdate(deltaTime);
+	this->m_projectileHandler->Update(deltaTime);
 }
 
 void GLPlayer::PlayerShoot()
 {
-	if (!this->m_projectile->isActive())
+	this->m_projectileHandler->Shoot(m_forward, transform->m_pos, transform->m_rot);
+	/*if (!this->m_projectile->isActive())
 	{
 		this->m_projectile->SetForward(m_forward);
 		this->m_projectile->ResetTo(this->transform->m_pos);
 		this->m_projectile->GetTransform().m_rot = this->transform->m_rot;
 		this->m_projectile->Activate();
-	}
+	}*/
 }

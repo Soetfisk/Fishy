@@ -30,7 +30,7 @@ void GameMain::GameLoop()
 		this->SetDeltaTime();
 		this->window->Clear(.2, .8, 0);
 		
-		
+		//std::cout << 1 / this->deltaTime << std::endl;
 		this->scene->Update(this->deltaTime);
 		this->scene->DrawScene();
 

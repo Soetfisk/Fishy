@@ -76,9 +76,9 @@ void Scene::DrawScene() {
 		shaders[MODELS]->Update(players.at(i)->GetCamera());
 		this->frameBuffer->BindFrameBuffer();
 		//tempModel->Draw(*shaders[MODELS]);
-		players.at(0)->Draw(*shaders[MODELS]);
+		players.at(0)->TestDraw(*shaders[MODELS]);
 		tempMesh->Draw(*shaders[MODELS], GLTransform());
-		players.at(0)->tempGetProjectile()->TestDraw(*shaders[MODELS]);
+		//players.at(0)->tempGetProjectile()->TestDraw(*shaders[MODELS]);
 		//tempModel->Draw(*shaders[MODELS]);
 		shaders[PASS]->Bind();
 		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
@@ -139,13 +139,16 @@ void Scene::HandleEvenet(SDL_Event* e) {
 				players.at(e->caxis.which)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(e->caxis.value, 0, 0));
 				break;
 			case SDL_CONTROLLER_AXIS_RIGHTY:
-				players.at(e->caxis.which)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(0, e->caxis.value, 0));
-				break;
+ 				players.at(e->caxis.which)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(0, e->caxis.value, 0));
+				break;    
 			case  SDL_CONTROLLER_AXIS_LEFTX:
 				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(e->caxis.value, 0, 0));
 				break;
 			case SDL_CONTROLLER_AXIS_LEFTY:
+				if(e->caxis.value > 20000)
+					std::cout << e->caxis.value << std::endl;
 				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, e->caxis.value, 0));
+				std::cout << e->caxis.value << std::endl;
 				break;
 			case SDL_CONTROLLER_AXIS_TRIGGERRIGHT:
 				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, e->caxis.value, 0));
