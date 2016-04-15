@@ -230,6 +230,9 @@ void Scene::HandleEvenet(SDL_Event* e) {
 			case SDL_SCANCODE_D:
 				players.at(0)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(1, 0, 0));
 				break;
+			case SDL_SCANCODE_LSHIFT:
+				players.at(0)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, 0, 1));
+				break;
 			default:
 				break;
 			}
@@ -277,5 +280,9 @@ void Scene::HandleEvenet(SDL_Event* e) {
 		{
 			players.at(0)->Update(GLPlayer::PLAYER_MOVE, glm::vec3((glm::pow(2, 15)), 0, 0));
 			
+		}
+		if (keyState[SDL_SCANCODE_LSHIFT])
+		{
+			players.at(0)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, 0, (glm::pow(2, 15))));
 		}
 }
