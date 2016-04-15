@@ -16,7 +16,7 @@ Scene::Scene() {
 	for (int i = 0; i < 1; i++) {
 		this->players.push_back(new GLPlayer());
 	}
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 50; i++) {
 		this->NPCs.push_back(new GLNPC());
 	}
 	shaders[MODELS] = new GLShader("test");
