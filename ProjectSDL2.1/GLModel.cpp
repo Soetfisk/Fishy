@@ -15,9 +15,17 @@ GLModel::GLModel()
 	meshes[0]->GetTransform().m_scale = glm::vec3(0.8);
 }
 
-GLModel::GLModel(std::string & filePath)
+GLModel::GLModel(FishBox& FSH_Loader, char* filePath)
 {
-	// Load model from file
+	transform = new GLTransform();
+	modelID = (FSH_Loader.GetModelCount() - 1);
+
+	FSH_Loader.LoadScene(filePath);
+	
+	for (unsigned int i = 0; i < FSH_Loader.ModelMeshCount(modelID); i++)
+	{
+		meshes.push_back(new GLMesh(FSH_Loader.MeshData(modelID, i), FSH_Loader.VertexData(modelID, i), FSH_Loader.IndexData(modelID, i)));
+	}
 }
 
 

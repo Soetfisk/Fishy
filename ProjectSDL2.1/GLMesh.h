@@ -40,7 +40,9 @@ public:
 		GLTexture* texture;
 	};
 
+
 	GLMesh(std::vector<Vertex> vertices, unsigned int numVertices, std::vector<unsigned int> indices, unsigned int numIndices, Material material);
+	GLMesh(FSHData::mesh * meshData, FSHData::vertexData * vertices, unsigned int * incides);
 	GLMesh() {};
 	~GLMesh();
 
@@ -66,6 +68,9 @@ private:
 
 	GLTransform m_transfrom;
 	unsigned int m_drawCount;
+	FSHData::mesh meshData;
+	FSHData::vertexData * vertices;
+	//FSHData::material * 
 	Material m_material;
 };
 

@@ -1,11 +1,23 @@
 #include "Scene.h"
 #include "obj_loader.h"
-#include "LoadMesh.h"
 
+
+
+void Scene::LoadModels()
+{
+	models.push_back(new GLModel(FSH_Loader, "Models/TestBin.FSH"));
+}
+
+void Scene::LoadModels(char * folder)
+{
+}
 
 Scene::Scene() {
 	for (int i = 0; i < 1; i++) {
 		this->players.push_back(new GLPlayer());
+	}
+	for (int i = 0; i < 1; i++) {
+		this->NPCs.push_back(new GLNPC());
 	}
 	shaders[MODELS] = new GLShader("test");
 	shaders[PASS] = new GLShader("pass");
@@ -35,7 +47,6 @@ Scene::Scene() {
 	this->frameBuffer = new FrameBuffer();
 	this->frameBuffer->CreateFrameBuffer(3);
 	this->frameBuffer->UnbindFrameBuffer();
-	tempModel = new GLModel();
 	tempMesh->GetTransform().SetPos(glm::vec3(3, 0, 3));
 	//first make vertex for all vertexes
 }
@@ -47,10 +58,20 @@ Scene::~Scene(){
 	}
 	delete tempMesh;
 	delete this->frameBuffer;
-	delete tempModel;
+
+	for (int i = 0; i < models.size(); i++)
+	{
+		delete models.at(i);
+	}
+
 	for (int i = 0; i < players.size(); i++)
 	{
 		delete players.at(i);
+	}
+
+	for (int i = 0; i < NPCs.size(); i++)
+	{
+		delete NPCs.at(i);
 	}
 }
 
@@ -77,8 +98,13 @@ void Scene::DrawScene() {
 		this->frameBuffer->BindFrameBuffer();
 		//tempModel->Draw(*shaders[MODELS]);
 		players.at(0)->Draw(*shaders[MODELS]);
+		NPCs.at(0)->NPCDraw(*shaders[MODELS]);
+
 		tempMesh->Draw(*shaders[MODELS], GLTransform());
+
 		players.at(0)->tempGetProjectile()->TestDraw(*shaders[MODELS]);
+
+
 		//tempModel->Draw(*shaders[MODELS]);
 		shaders[PASS]->Bind();
 		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);

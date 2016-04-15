@@ -7,7 +7,7 @@ class GLModel
 {
 public:
 	GLModel();
-	GLModel(std::string& filePath);
+	GLModel(FishBox& FSH_Loader, char* filePath);
 	~GLModel();
 
 	virtual void Draw(GLShader& shader);
@@ -18,6 +18,7 @@ public:
 protected:
 	std::vector<GLMesh*> meshes;
 	GLTransform* transform;
+	int modelID;
 
 };
 
