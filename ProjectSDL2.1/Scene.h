@@ -33,7 +33,7 @@ private:
 	FrameBuffer* frameBuffer2;
 	GLProjectile* testProj;
 	float count = 0;
-	FilterComputeShader* fcs;
+	FilterComputeShader* filterComputeShader;
 
 public:
 	Scene();

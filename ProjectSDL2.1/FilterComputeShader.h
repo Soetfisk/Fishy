@@ -12,7 +12,9 @@ public:
 	std::string LoadShader(const std::string& fileName);
 	void CreateShader(const std::string& text);
 	void BindShader();
-	void dispatchCompute(int width, int height, int depth);
-	GLint getUniformLocation(std::string name);
+	void DispatchCompute(int width, int height, int depth);
+	GLint GetUniformLocation(std::string name);
+	void Uniform1f(std::string name, float number);
+	void UniformVec3(std::string name, glm::vec3 vector);
 };
 #endif

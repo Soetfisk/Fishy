@@ -65,12 +65,22 @@ void FilterComputeShader::BindShader()
 	glUseProgram(this->program);
 }
 
-void FilterComputeShader::dispatchCompute(int width, int height, int depth)
+void FilterComputeShader::DispatchCompute(int width, int height, int depth)
 {
 	glDispatchCompute(width, height, depth);
 }
 
-GLint FilterComputeShader::getUniformLocation(std::string name)
+GLint FilterComputeShader::GetUniformLocation(std::string name)
 {
 	return glGetUniformLocation(this->program, name.c_str());
+}
+
+void FilterComputeShader::Uniform1f(std::string name, float number)
+{
+	glUniform1f(glGetUniformLocation(this->program, name.c_str()), number);
+}
+
+void FilterComputeShader::UniformVec3(std::string name, glm::vec3 vector)
+{
+	glUniform3fv(glGetUniformLocation(this->program,name.c_str()),1, &vector[0]);
 }

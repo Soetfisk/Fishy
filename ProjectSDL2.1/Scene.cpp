@@ -38,9 +38,9 @@ Scene::Scene() {
 	tempModel = new GLModel();
 	testProj = new GLProjectile();
 	//first make vertex for all vertexes
-	fcs = new FilterComputeShader("derp");
-	fcs->LoadShader("blueFilter.glsl");
-	fcs->CreateShader(fcs->LoadShader("blueFilter.glsl"));
+	filterComputeShader = new FilterComputeShader("derp");
+	filterComputeShader->LoadShader("blueFilter.glsl");
+	filterComputeShader->CreateShader(filterComputeShader->LoadShader("blueFilter.glsl"));
 }
 
 
@@ -52,7 +52,7 @@ Scene::~Scene(){
 	delete this->frameBuffer;
 	delete tempModel;
 	delete testProj;
-	delete this->fcs;
+	delete this->filterComputeShader;
 }
 
 void Scene::Update(float& deltaTime) {
@@ -84,13 +84,11 @@ void Scene::DrawScene() {
 		//shaders[PASS]->Bind();
 		this->frameBuffer->UnbindFrameBuffer();
 		
-		this->fcs->BindShader();
+		this->filterComputeShader->BindShader();
 		this->count += 0.1f;
 		this->frameBuffer->BindImageTexturesToProgram(glGetUniformLocation(this->cs, "destTex"), 0);
-		this->fcs->dispatchCompute(1024 / 32, 768 / 32, 1);
-		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
-		//this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture2"), 1);
-		//this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture3"), 2);
+		this->filterComputeShader->UniformVec3("colorVector",glm::vec3(0.0f,0.0f,0.5f));
+		this->filterComputeShader->DispatchCompute(1024 / 32, 768 / 32, 1);
 		
 		shaders[PASS]->Bind();
 		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
