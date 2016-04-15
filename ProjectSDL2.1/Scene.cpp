@@ -1,11 +1,23 @@
 #include "Scene.h"
 #include "obj_loader.h"
-#include "LoadMesh.h"
 
+
+
+void Scene::LoadModels()
+{
+	models.push_back(new GLModel(FSH_Loader, "Models/TestBin.FSH"));
+}
+
+void Scene::LoadModels(char * folder)
+{
+}
 
 Scene::Scene() {
 	for (int i = 0; i < 1; i++) {
-		this->players.push_back(GLPlayer());
+		this->players.push_back(new GLPlayer());
+	}
+	for (int i = 0; i < 1; i++) {
+		this->NPCs.push_back(new GLNPC());
 	}
 	shaders[MODELS] = new GLShader("test");
 	shaders[PASS] = new GLShader("pass");
@@ -35,8 +47,7 @@ Scene::Scene() {
 	this->frameBuffer = new FrameBuffer();
 	this->frameBuffer->CreateFrameBuffer(3);
 	this->frameBuffer->UnbindFrameBuffer();
-	tempModel = new GLModel();
-	testProj = new GLProjectile();
+	tempMesh->GetTransform().SetPos(glm::vec3(3, 0, 3));
 	//first make vertex for all vertexes
 	filterComputeShader = new FilterComputeShader("derp");
 	filterComputeShader->LoadShader("blueFilter.glsl");
@@ -50,17 +61,28 @@ Scene::~Scene(){
 	}
 	delete tempMesh;
 	delete this->frameBuffer;
-	delete tempModel;
-	delete testProj;
 	delete this->filterComputeShader;
+	for (int i = 0; i < models.size(); i++)
+	{
+		delete models.at(i);
+	}
+
+	for (int i = 0; i < players.size(); i++)
+	{
+		delete players.at(i);
+	}
+
+	for (int i = 0; i < NPCs.size(); i++)
+	{
+		delete NPCs.at(i);
+	}
 }
 
 void Scene::Update(float& deltaTime) {
-	//for (int i = 0; i < this->player.count(); i++) {
-		//this->player.at(i).update(deltTime);
-	//}
+	for (int i = 0; i < this->players.size(); i++) {
+		this->players.at(i)->Update(GLPlayer::NOTHING ,glm::vec3(deltaTime));
+	}
 	//std::cout << deltaTime << std::endl;
-	testProj->TestUpdate(deltaTime);
 }
 
 //Loads the scene, models, matrices
@@ -75,11 +97,17 @@ void Scene::DrawScene() {
 		//glViewport(0, window::HEIGHT / (i + 1), window::WIDTH, window::HEIGHT / 2);
 		//for(int j = 0; j<this->models.count();j++){
 		shaders[MODELS]->Bind();
-		shaders[MODELS]->Update(players.at(i).GetCamera());
+		shaders[MODELS]->Update(players.at(i)->GetCamera());
 		this->frameBuffer->BindFrameBuffer();
 		//tempModel->Draw(*shaders[MODELS]);
-		tempModel->Draw(*shaders[MODELS]);
-		testProj->TestDraw(*shaders[MODELS]);
+		players.at(0)->Draw(*shaders[MODELS]);
+		NPCs.at(0)->NPCDraw(*shaders[MODELS]);
+
+		tempMesh->Draw(*shaders[MODELS], GLTransform());
+
+		players.at(0)->tempGetProjectile()->TestDraw(*shaders[MODELS]);
+
+
 		//tempModel->Draw(*shaders[MODELS]);
 		//shaders[PASS]->Bind();
 		this->frameBuffer->UnbindFrameBuffer();
@@ -131,5 +159,123 @@ void Scene::RenderQuad()
 }
 
 void Scene::HandleEvenet(SDL_Event* e) {
-	
+
+		if (e->type == SDL_CONTROLLERDEVICEADDED)
+		{
+			players.at(e->cdevice.which)->Update(GLPlayer::JOY_ADDED, glm::vec3(e->cdevice.which));
+		}
+		else if (e->type == SDL_CONTROLLERDEVICEREMOVED)
+		{
+			players.at(e->cdevice.which)->Update(GLPlayer::JOY_REMOVED, glm::vec3(e->cdevice.which));
+		}
+		else if (e->type == SDL_CONTROLLERAXISMOTION)
+		{
+			switch (e->caxis.axis)
+			{
+			case SDL_CONTROLLER_AXIS_RIGHTX:
+				players.at(e->caxis.which)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(e->caxis.value, 0, 0));
+				break;
+			case SDL_CONTROLLER_AXIS_RIGHTY:
+				players.at(e->caxis.which)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(0, e->caxis.value, 0));
+				break;
+			case  SDL_CONTROLLER_AXIS_LEFTX:
+				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(e->caxis.value, 0, 0));
+				break;
+			case SDL_CONTROLLER_AXIS_LEFTY:
+				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, e->caxis.value, 0));
+				break;
+			case SDL_CONTROLLER_AXIS_TRIGGERRIGHT:
+				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, 0, e->caxis.value));
+				break;
+			default:
+				break;
+			}
+		}
+		else if (e->type == SDL_CONTROLLERBUTTONDOWN)
+		{
+			switch (e->cbutton.button)
+			{
+			case SDL_CONTROLLER_BUTTON_A:
+				players.at(e->cbutton.which)->Update(GLPlayer::PLAYER_SHOOT, glm::vec3(0));
+				break;
+			default:
+				break;
+			}
+		}
+		else if (e->type == SDL_KEYUP)
+		{
+			switch (e->key.keysym.scancode)
+			{
+			case SDL_SCANCODE_UP:
+				players.at(0)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(0, 1, 0));
+				break;
+			case SDL_SCANCODE_DOWN:
+				players.at(0)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(0, 1, 0));
+				break;
+			case SDL_SCANCODE_LEFT:
+				players.at(0)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(1, 0, 0));
+				break;
+			case SDL_SCANCODE_RIGHT:
+				players.at(0)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(1, 0, 0));
+				break;
+			case SDL_SCANCODE_W:
+				players.at(0)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, 1, 0));
+				break;
+			case SDL_SCANCODE_S:
+				players.at(0)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, 1, 0));
+				break;
+			case SDL_SCANCODE_A:
+				players.at(0)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(1, 0, 0));
+				break;
+			case SDL_SCANCODE_D:
+				players.at(0)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(1, 0, 0));
+				break;
+			default:
+				break;
+			}
+		}
+		else if (e->type == SDL_KEYDOWN)
+		{
+			switch (e->key.keysym.scancode)
+			{
+			case SDL_SCANCODE_SPACE:
+				players.at(0)->Update(GLPlayer::PLAYER_SHOOT, glm::vec3(0));
+				break;
+			}
+		}
+
+		const Uint8* keyState = SDL_GetKeyboardState(NULL);
+		if (keyState[SDL_SCANCODE_UP])
+		{
+			players.at(0)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(0, -(glm::pow(2, 15)), 0));
+		}
+		if (keyState[SDL_SCANCODE_DOWN])
+		{
+			players.at(0)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(0, (glm::pow(2, 15)), 0));
+		}
+		if (keyState[SDL_SCANCODE_LEFT])
+		{
+			players.at(0)->Update(GLPlayer::CAMERA_MOVE, glm::vec3((glm::pow(2, 15)), 0, 0));
+		}
+		if (keyState[SDL_SCANCODE_RIGHT])
+		{
+			players.at(0)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(-(glm::pow(2, 15)), 0, 0));
+		}
+		if (keyState[SDL_SCANCODE_W])
+		{
+			players.at(0)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, (glm::pow(2, 15)), 0));
+		}
+		if (keyState[SDL_SCANCODE_A])
+		{
+			players.at(0)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(-(glm::pow(2, 15)), 0, 0));
+		}
+		if (keyState[SDL_SCANCODE_S])
+		{
+			players.at(0)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, -(glm::pow(2, 15)), 0));
+		}
+		if (keyState[SDL_SCANCODE_D])
+		{
+			players.at(0)->Update(GLPlayer::PLAYER_MOVE, glm::vec3((glm::pow(2, 15)), 0, 0));
+			
+		}
 }

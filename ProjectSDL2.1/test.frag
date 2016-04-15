@@ -13,7 +13,7 @@ uniform sampler2D diffuseTexture;
 void main()
 {
 	
-	vec3 lightPos = vec3(3,3,3);
+	vec3 lightPos = vec3(1,2,3);
 
 	float angle = max(dot(normalize(lightPos-vsPos), vsNormal), 0.0);
 

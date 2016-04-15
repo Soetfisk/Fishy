@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FilterComputeShader.cpp" />
+    <ClCompile Include="GLNPC.cpp" />
     <ClCompile Include="FrameBuffer.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="GLCamera.cpp" />
@@ -29,16 +30,15 @@
     <ClCompile Include="GLProjectile.cpp" />
     <ClCompile Include="GLShader.cpp" />
     <ClCompile Include="GLWindow.cpp" />
-    <ClCompile Include="LoadMesh.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="obj_loader.cpp" />
     <ClCompile Include="Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FilterComputeShader.h" />
+    <ClInclude Include="GLNPC.h" />
     <ClInclude Include="FrameBuffer.h" />
     <ClInclude Include="GLProjectile.h" />
-    <ClInclude Include="LoadMesh.h" />
     <ClInclude Include="GameMain.h" />
     <ClInclude Include="GLCamera.h" />
     <ClInclude Include="GLMesh.h" />
@@ -130,6 +130,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>.\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

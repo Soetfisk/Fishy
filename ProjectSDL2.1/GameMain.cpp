@@ -25,6 +25,7 @@ void GameMain::GameLoop()
 
 	while (this->gameOn) // Main game loop
 	{
+
 		SDL_PumpEvents();
 		this->SetDeltaTime();
 		this->window->Clear(.2, .8, 0);
@@ -38,6 +39,14 @@ void GameMain::GameLoop()
 			if (e.type == SDL_QUIT) // quit when clicking
 			{
 				this->gameOn = false;
+			}
+			else if (e.type == SDL_KEYDOWN && e.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
+			{
+				this->gameOn = false;
+			}
+			else
+			{
+				this->scene->HandleEvenet(&e);
 			}
 		}
 		this->window->Update();

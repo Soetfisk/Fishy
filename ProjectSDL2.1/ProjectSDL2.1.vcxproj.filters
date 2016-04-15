@@ -48,10 +48,10 @@
     <ClCompile Include="GLModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LoadMesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GLProjectile.cpp">
+	<Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GLNPC.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FilterComputeShader.cpp">
@@ -95,13 +95,13 @@
     <ClInclude Include="GLModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LoadMesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FrameBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GLProjectile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GLNPC.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FilterComputeShader.h">

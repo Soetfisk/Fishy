@@ -31,64 +31,74 @@ glm::mat4 GLCamera::GetViewProjectionMatrix() const
 {
 	return m_perspective * glm::lookAt(m_position, m_position + m_forward, m_up);
 }
-
-void GLCamera::ProcessInput(float x, float y)
+//Processes lastX & lastY and adds them to pitch and angleAroundPlayer
+void GLCamera::ProcessInput(float x, float y, float deltaTime)
 {
 	float xOffset = x / (glm::pow(2, 15));
 	float yOffset = y / (glm::pow(2, 15));
 
-	xOffset *= sensitivity;
-	yOffset *= sensitivity;
+	xOffset *= cameraSpeed * deltaTime;
+	yOffset *= cameraSpeed * deltaTime;
 
-	angleAroundPlayer += xOffset;
-	pitch += yOffset;
+
+	angleAroundPlayer -= xOffset;
+	pitch -= yOffset;
 
 	if (pitch > 89.0f)
 		pitch = 89.0f;
-	if (pitch < -89.0f)
-		pitch = -89.0f;
-
-	glm::vec3 front;
-	front.x = -cos(glm::radians(pitch)) * cos(glm::radians(yaw));
-	front.y = -sin(glm::radians(pitch));
-	front.z = -cos(glm::radians(pitch)) * sin(glm::radians(yaw));
-	m_forward = glm::normalize(front);
+	if (pitch < -0.0f)
+		pitch = -0.0f;
 }
-
-void GLCamera::Update(GLTransform transform)
+//Get horizontal Distance from the camera
+float GLCamera::CalcHorizontalDist()
+{
+	return (float)distanceToPlayer * cosf(glm::radians(pitch));
+}
+//Get vertical Distance from the camera
+float GLCamera::CalcVerticalDist()
+{
+	return (float)distanceToPlayer * sinf(glm::radians(pitch));
+}
+//Calculates the x,y,z position of the camera and sets forward vector
+void GLCamera::CalcCameraPos(float horizDist, float verticDist, GLTransform transform)
+{
+	float theta = glm::degrees(transform.GetRot().y) + angleAroundPlayer;
+	float offsetX = horizDist * sinf(glm::radians(theta));
+	float offsetZ = horizDist * cosf(glm::radians(theta));
+	this->m_position.x = transform.GetPos().x - offsetX;
+	this->m_position.z = transform.GetPos().z - offsetZ;
+	this->m_position.y = transform.GetPos().y + verticDist;
+	this->yaw = 180 - (transform.GetRot().y + angleAroundPlayer);
+	this->m_forward = transform.GetPos() - this->m_position;
+}
+//updates camera position
+void GLCamera::Update(GLTransform transform, float deltaTime)
 {
 	if (lastX < -DEADZONE || lastX > DEADZONE || lastY < -DEADZONE || lastY > DEADZONE)
 	{
-		ProcessInput(lastX, lastY);
+		ProcessInput(lastX, lastY, deltaTime);
 	}
-
-
-	float theta = transform.GetRot().y + angleAroundPlayer;
-	float offsetX = (float)((distanceToPlayer * cosf(glm::radians(pitch))) * sinf(glm::radians(theta)));
-	float offsetZ = (float)((distanceToPlayer * cosf(glm::radians(pitch))) * cosf(glm::radians(theta)));
-
-	this->m_position.x = transform.GetPos().x - offsetX;
-	this->m_position.z = transform.GetPos().z - offsetZ;
-	this->m_position.y = transform.GetPos().y + distanceToPlayer * sinf(pitch);
-	this->yaw = 180 - (transform.GetRot().y + angleAroundPlayer);
+	
+	float horizDist = CalcHorizontalDist();
+	float verticDist = CalcVerticalDist();
+	CalcCameraPos(horizDist, verticDist, transform);
 }
-
+//sets lastX & lastY based on input
 void GLCamera::SetInput(float x, float y)
 {
-	if (x < -DEADZONE || x > DEADZONE)
+	if ((x < -DEADZONE || x > DEADZONE))
 	{
 		lastX = x;
 	}
-	else
+	else if (x != -1)
 	{
 		lastX = 0;
-
 	}
-	if (y < -DEADZONE || y > DEADZONE)
+	if ((y < -DEADZONE || y > DEADZONE))
 	{
 		lastY = y;
 	}
-	else
+	else if (y != -1)
 	{
 		lastY = 0;
 	}

@@ -3,6 +3,7 @@
 
 #include "GLUtil.h"
 #include "GLPlayer.h"
+#include "GLNPC.h"
 #include "GLShader.h"
 #include "FrameBuffer.h"
 #include "GLModel.h"
@@ -21,12 +22,13 @@ private:
 
 	//todo implement
 	//std::vector<Model> models;
-	std::vector<GLPlayer> players;
-	//std::vector<Npc> npc;
+	FishBox FSH_Loader;
+	std::vector<GLPlayer*> players;
+	std::vector<GLNPC*> NPCs;
 	GLShader* shaders[NUM_SHADERS];
 	GLMesh* tempMesh;
 	GLuint quadVAO = 0;
-	GLModel* tempModel;
+	std::vector<GLModel*> models;
 	GLuint quadVBO;
 	GLuint cs;
 	FrameBuffer* frameBuffer;
@@ -34,7 +36,10 @@ private:
 	GLProjectile* testProj;
 	float count = 0;
 	FilterComputeShader* filterComputeShader;
-
+	
+private:
+	void LoadModels();
+	void LoadModels(char* folder);
 public:
 	Scene();
 	~Scene();
