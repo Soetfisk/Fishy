@@ -6,7 +6,7 @@ uniform vec3 colorVector;
 
 void main() {
 	ivec2 storePos = ivec2(gl_GlobalInvocationID.xy);
-	float globalCoef = sin(float(gl_WorkGroupID.x + gl_WorkGroupID.y));
+	float globalCoef = sin(float(gl_WorkGroupID.x + gl_WorkGroupID.y) * number);
 	vec4 color = imageLoad(destTex,storePos) + vec4(colorVector * globalCoef, 0.0);
 	imageStore(destTex, storePos,  color );
 	memoryBarrier();

@@ -9,6 +9,7 @@
 #include "GLModel.h"
 #include "GLProjectile.h"
 #include "FilterComputeShader.h"
+#include "RNG.h"
 
 class Scene {
 private:
@@ -36,6 +37,7 @@ private:
 	GLProjectile* testProj;
 	float count = 0;
 	FilterComputeShader* filterComputeShader;
+	float deltaTime;
 	
 private:
 	void LoadModels();
