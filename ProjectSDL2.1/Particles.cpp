@@ -20,32 +20,11 @@ Particles::Particles()
 
 	//Temporary randoming numbers
 	for (int i = 0; i < particle::NUM_PARTICLES; i++) {
-		points[i].x = .2f + (i*.01);
-		points[i].y = 0 + i*.1;
+		points[i].x = 1 + i*.1;
+		points[i].y = 1 + i*.1;
 		points[i].z = 0;
 		points[i].w = 1;
-	}
-
-	points[0].x = -1;
-	points[0].y = 1;
-	points[0].z = -3;
-	points[0].w = 1;
-
-	points[1].x = -1;
-	points[1].y = -1;
-	points[1].z = -3;
-	points[1].w = 1;
-
-	points[2].x = 1;
-	points[2].y = 1;
-	points[2].z = -3;
-	points[2].w = 1;
-
-	points[3].x =1 ;
-	points[3].y = -1;
-	points[3].z = -3;
-	points[3].w = 1;
-	                                        
+	}             
 
 	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 
@@ -97,15 +76,15 @@ Particles::Particles()
 	CheckShaderError(compute_program, GL_LINK_STATUS, true);
 
 
-
-
-
 	glGenVertexArrays(1, &m_vertexArrayObject);
 	glBindVertexArray(m_vertexArrayObject);
-	
-	glBindBuffer(GL_ARRAY_BUFFER, posSSbo);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4*sizeof(float), 0);
+
+	glGenBuffers(1, &m_vertexDrawBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, m_vertexDrawBuffer);
+	glBufferData(GL_ARRAY_BUFFER, particle::NUM_PARTICLES * sizeof(points[0]), &points[0], GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+	
 	glBindVertexArray(0);
 
 
@@ -137,7 +116,7 @@ void Particles::Update() {
 	glDispatchCompute(particle::NUM_PARTICLES / particle::WORK_GROUP_SIZE, 1, 1);
 	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 
-	std::cout << points[0].x << std::endl;
+	std::cout << points[10].x << std::endl;
 }
 
 void Particles::Draw() {
@@ -145,7 +124,7 @@ void Particles::Draw() {
 
 	glBindVertexArray(m_vertexArrayObject);
 
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, particle::NUM_PARTICLES);
+	glDrawArrays(GL_TRIANGLES, 0, particle::NUM_PARTICLES);
 	glBindVertexArray(0);
 	//glBindBuffer(GL_ARRAY_BUFFER, posSSbo);
 	//glVertexPointer(4, GL_FLOAT, 0, (void *)0);

@@ -42,6 +42,7 @@ private:
 	};
 
 	GLuint m_vertexArrayObject;
+	GLuint m_vertexDrawBuffer;
 
 
 public:
