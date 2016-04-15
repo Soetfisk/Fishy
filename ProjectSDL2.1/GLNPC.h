@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GLModel.h" 
+#include "RNG.h"
 
 class GLNPC : public GLModel
 {
@@ -18,6 +19,7 @@ private:
 	//void NpcDraw();
 
 public:	
+	GLNPC(void);
 	void update();
 	void NPCDraw(GLShader& shader);
 	
