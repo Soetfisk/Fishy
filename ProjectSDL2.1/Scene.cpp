@@ -176,6 +176,9 @@ void Scene::HandleEvenet(SDL_Event* e) {
 			case SDL_CONTROLLER_AXIS_TRIGGERRIGHT:
 				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, 0, e->caxis.value));
 				break;
+			case SDL_CONTROLLER_AXIS_TRIGGERLEFT:
+				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, 0, -e->caxis.value));
+				break;
 			default:
 				break;
 			}

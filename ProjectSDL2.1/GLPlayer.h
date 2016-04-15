@@ -30,6 +30,7 @@ private:
 	const int DEADZONE = 8000;
 	const int MOVEMENT_FRICTION = 100;
 	const int MAX_SPEED = 10;
+	const float MAX_ANGLE = 75;
 
 	float lastHorizontal = 0;
 	float lastVertical = 0;
