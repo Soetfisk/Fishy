@@ -16,7 +16,7 @@ Scene::Scene() {
 	for (int i = 0; i < 1; i++) {
 		this->players.push_back(new GLPlayer());
 	}
-	for (int i = 0; i < 1; i++) {
+	for (int i = 0; i < 10; i++) {
 		this->NPCs.push_back(new GLNPC());
 	}
 	shaders[MODELS] = new GLShader("test");
@@ -101,11 +101,16 @@ void Scene::DrawScene() {
 		this->frameBuffer->BindFrameBuffer();
 		//tempModel->Draw(*shaders[MODELS]);
 		players.at(0)->Draw(*shaders[MODELS]);
-		NPCs.at(0)->NPCDraw(*shaders[MODELS]);
+		players.at(0)->tempGetProjectile()->TestDraw(*shaders[MODELS]);
+		for (unsigned int i = 0; i < NPCs.size(); i++)
+		{
+			NPCs.at(i)->NPCDraw(*shaders[MODELS]);
+		}
+		
 
 		tempMesh->Draw(*shaders[MODELS], GLTransform());
 
-		players.at(0)->tempGetProjectile()->TestDraw(*shaders[MODELS]);
+		
 
 
 		//tempModel->Draw(*shaders[MODELS]);

@@ -3,7 +3,7 @@
 
 GLNPC::GLNPC(void)
 {
-	transform->SetPos(glm::vec3(RNG::range(-4,4), RNG::range(-2,2), RNG::range(1,2)));
+	transform->SetPos(glm::vec3(RNG::range(-20,20), RNG::range(-2,2), RNG::range(-20,20)));
 }
 
 void GLNPC::update()
