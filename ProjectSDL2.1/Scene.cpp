@@ -84,6 +84,10 @@ void Scene::Update(float& deltaTime) {
 	for (int i = 0; i < this->players.size(); i++) {
 		this->players.at(i)->Update(GLPlayer::NOTHING ,glm::vec3(deltaTime));
 	}
+
+	for (int i = 0; i < this->NPCs.size(); i++) {
+		this->NPCs.at(i)->NPCUpdate(deltaTime);
+	}
 	//std::cout << deltaTime << std::endl;
 }
 

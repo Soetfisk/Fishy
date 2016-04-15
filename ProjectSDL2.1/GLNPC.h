@@ -20,7 +20,7 @@ private:
 
 public:	
 	GLNPC(void);
-	void update();
+	void NPCUpdate(float deltaTime);
 	void NPCDraw(GLShader& shader);
 	
 
