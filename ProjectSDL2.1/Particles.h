@@ -4,20 +4,23 @@
 #include "GLUtil.h"
 
 namespace particle {
-	const int NUM_PARTICLES = 1024 * 1024; //Number of particles
-	const int WORK_GROUP_SIZE = 128;       //items per work group
+	//const int NUM_PARTICLES = 1024 * 1024; //Number of particles
+	//const int WORK_GROUP_SIZE = 128;       //items per work group
+
+	const int NUM_PARTICLES = 2*2; //Number of particles
+	const int WORK_GROUP_SIZE = 1;       //items per work group
 }
 
 struct pos {
-	float x, y, z, w;
+	GLfloat x, y, z, w;
 };
 
 struct vel {
-	float vx, vy, vz, vw;
+	GLfloat vx, vy, vz, vw;
 };
 
 struct color {
-	float r, g, b, a;
+	GLfloat r, g, b, a;
 };
 
 

@@ -85,13 +85,13 @@ void Scene::DrawScene() {
 		//tempModel->Draw(*shaders[MODELS]);
 
 
-		//testParticle->Update();
-		//shaders[PARTICLE]->Bind();
-		//shaders[PARTICLE]->Update(players.at(i)->GetCamera());
-		//testParticle->Draw();
+		testParticle->Update();
 		shaders[PARTICLE]->Bind();
 		shaders[PARTICLE]->Update(players.at(i)->GetCamera());
-		this->RenderQuad();
+		testParticle->Draw();
+		//shaders[PARTICLE]->Bind();
+		//shaders[PARTICLE]->Update(players.at(i)->GetCamera());
+		//this->RenderQuad();
 
 		shaders[PASS]->Bind();
 		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);

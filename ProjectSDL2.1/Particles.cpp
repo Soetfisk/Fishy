@@ -19,12 +19,33 @@ Particles::Particles()
 	points = (struct pos*)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, particle::NUM_PARTICLES * sizeof(pos), bufMask);
 
 	//Temporary randoming numbers
-	for (int i = 0; i < particle::NUM_PARTICLES; i++) {
-		points[i].x = 1 + i*.1;
-		points[i].y = 1 + i*.1;
+/*	for (int i = 0; i < particle::NUM_PARTICLES; i++) {
+		points[i].x = 0 + i*.1;
+		points[i].y = 0 + i*.1;
 		points[i].z = 0;
 		points[i].w = 1;
-	}             
+	}    */         
+	points[0].x = -1.0f;
+	points[0].y = 1.0f;
+	points[0].z = 0.0f;
+	points[0].w = 1.0f;
+
+	points[1].x = -1.0f;
+	points[1].y = -1.0f;
+	points[1].z = 0.0f;
+	points[1].w = 1.0f;
+
+	points[2].x = 1.0f;
+	points[2].y = 1.0f;
+	points[2].z = 0.0f;
+	points[2].w = 1.0f;
+
+	points[3].x = 1.0f;
+	points[3].y = -1.0f;
+	points[3].z = 0.0f;
+	points[3].w = 1.0f;
+
+
 
 	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 
@@ -76,16 +97,20 @@ Particles::Particles()
 	CheckShaderError(compute_program, GL_LINK_STATUS, true);
 
 
-	glGenVertexArrays(1, &m_vertexArrayObject);
-	glBindVertexArray(m_vertexArrayObject);
-	glEnableVertexAttribArray(0);
-
 	glGenBuffers(1, &m_vertexDrawBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, m_vertexDrawBuffer);
 	glBufferData(GL_ARRAY_BUFFER, particle::NUM_PARTICLES * sizeof(points[0]), &points[0], GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+
+	glGenVertexArrays(1, &m_vertexArrayObject); 
+	glBindVertexArray(m_vertexArrayObject);
+
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, NULL);
 	
-	glBindVertexArray(0);
+	
+	
+	//glBindVertexArray(0);
 
 
 	//glGenVertexArrays(1, &m_vertexArrayObject);
@@ -116,7 +141,11 @@ void Particles::Update() {
 	glDispatchCompute(particle::NUM_PARTICLES / particle::WORK_GROUP_SIZE, 1, 1);
 	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 
-	std::cout << points[10].x << std::endl;
+	for (int i = 0; i < particle::NUM_PARTICLES; i++) {
+		//printf(i + " : " + (int)points[i].x);
+		//std::cout<<i<<" : " << points[i].x << std::endl;
+	}
+	
 }
 
 void Particles::Draw() {
@@ -124,7 +153,7 @@ void Particles::Draw() {
 
 	glBindVertexArray(m_vertexArrayObject);
 
-	glDrawArrays(GL_TRIANGLES, 0, particle::NUM_PARTICLES);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, particle::NUM_PARTICLES);
 	glBindVertexArray(0);
 	//glBindBuffer(GL_ARRAY_BUFFER, posSSbo);
 	//glVertexPointer(4, GL_FLOAT, 0, (void *)0);
