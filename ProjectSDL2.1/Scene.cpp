@@ -106,8 +106,8 @@ void Scene::DrawScene() {
 		shaders[MODELS]->Update(players.at(i)->GetCamera());
 		this->frameBuffer->BindFrameBuffer();
 		//tempModel->Draw(*shaders[MODELS]);
-		players.at(0)->Draw(*shaders[MODELS]);
-		players.at(0)->tempGetProjectile()->TestDraw(*shaders[MODELS]);
+		players.at(0)->TestDraw(*shaders[MODELS]);
+		//players.at(0)->tempGetProjectile()->TestDraw(*shaders[MODELS]);
 		for (unsigned int i = 0; i < NPCs.size(); i++)
 		{
 			NPCs.at(i)->NPCDraw(*shaders[MODELS]);

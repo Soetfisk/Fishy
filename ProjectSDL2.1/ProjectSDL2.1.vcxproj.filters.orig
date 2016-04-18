@@ -49,12 +49,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GLProjectile.cpp">
-<<<<<<< HEAD
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GLNPC.cpp">
-=======
->>>>>>> FSHstuff-John
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FilterComputeShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GLProjectileHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -101,7 +104,17 @@
     <ClInclude Include="GLProjectile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< HEAD
+    <ClInclude Include="GLProjectileHandler.h">
+=======
     <ClInclude Include="GLNPC.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FilterComputeShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\RNG.h">
+>>>>>>> 75bf018ad6738f01d5fbf7164a59949d6d372cd0
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -110,5 +123,8 @@
     <None Include="test.vert" />
     <None Include="pass.frag" />
     <None Include="pass.vert" />
+    <None Include="blueFilter.glsl">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

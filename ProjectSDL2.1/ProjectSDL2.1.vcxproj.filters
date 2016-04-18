@@ -57,6 +57,9 @@
     <ClCompile Include="FilterComputeShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GLProjectileHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLUtil.h">
@@ -99,6 +102,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GLProjectile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GLProjectileHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GLNPC.h">

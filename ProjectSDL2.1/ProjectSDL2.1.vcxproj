@@ -28,6 +28,7 @@
     <ClCompile Include="GLModel.cpp" />
     <ClCompile Include="GLPlayer.cpp" />
     <ClCompile Include="GLProjectile.cpp" />
+    <ClCompile Include="GLProjectileHandler.cpp" />
     <ClCompile Include="GLShader.cpp" />
     <ClCompile Include="GLWindow.cpp" />
     <ClCompile Include="main.cpp" />
@@ -40,6 +41,7 @@
     <ClInclude Include="GLNPC.h" />
     <ClInclude Include="FrameBuffer.h" />
     <ClInclude Include="GLProjectile.h" />
+    <ClInclude Include="GLProjectileHandler.h" />
     <ClInclude Include="GameMain.h" />
     <ClInclude Include="GLCamera.h" />
     <ClInclude Include="GLMesh.h" />
