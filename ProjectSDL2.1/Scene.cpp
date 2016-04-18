@@ -17,7 +17,8 @@ Scene::Scene() {
 	for (int i = 0; i < 2; i++) {
 		this->players.push_back(new GLPlayer(FSH_Loader, "Models/tempfish.FSH"));
 	}
-
+	this->players.at(0)->GetTransform().SetPos(glm::vec3(20, 0, 0));
+	this->players.at(0)->GetTransform().SetPos(glm::vec3(-20, 0, 0));
 	
 	for (int i = 0; i < 50; i++) {
 		this->NPCs.push_back(new GLNPC(FSH_Loader, "Models/tempfish.FSH"));
