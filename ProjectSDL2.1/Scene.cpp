@@ -1,6 +1,6 @@
 #include "Scene.h"
 #include "obj_loader.h"
-
+#include "AABB.h"
 
 
 void Scene::LoadModels()
@@ -87,7 +87,19 @@ void Scene::Update(float& deltaTime) {
 
 	for (int i = 0; i < this->NPCs.size(); i++) {
 		this->NPCs.at(i)->NPCUpdate(deltaTime);
+
+		AABB a(NPCs.at(i)->GetTransform().GetPos(), glm::vec3(0.5, 0.5, 1));
+		AABB b(players.at(0)->GetTransform().GetPos(), glm::vec3(0.5, 0.5, 0.5));
+
+		if (a.containsAABB(b))
+		{
+			delete NPCs.at(i);
+			NPCs.erase(NPCs.begin() + i);
+		}
 	}
+
+	
+
 	//std::cout << deltaTime << std::endl;
 }
 
