@@ -31,7 +31,7 @@ void GLNPC::NPCUpdate(float deltaTime)
 	{
 		this->transform->m_pos += this->GetForward() * forwardSpeed * deltaTime;
 
-		this->transform->m_scale += scaleChange * deltaTime;
+		//this->transform->m_scale += scaleChange * deltaTime;
 		this->transform->m_rot += rotationChange * deltaTime;
 	}
 	
@@ -40,4 +40,12 @@ void GLNPC::NPCUpdate(float deltaTime)
 void GLNPC::NPCDraw(GLShader & shader)
 {
 	this->Draw(shader);
+}
+
+void GLNPC::gettingEaten(float deltaTime)
+{
+	glm::vec3 reduce = this->transform->GetScale() - deltaTime;
+	this->transform->SetScale(reduce);
+	
+	
 }

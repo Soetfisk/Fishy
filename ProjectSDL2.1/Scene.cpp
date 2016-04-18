@@ -93,8 +93,14 @@ void Scene::Update(float& deltaTime) {
 
 		if (a.containsAABB(b))
 		{
-			delete NPCs.at(i);
-			NPCs.erase(NPCs.begin() + i);
+			
+			NPCs.at(i)->gettingEaten(deltaTime);
+			
+			if (NPCs.at(i)->GetTransform().GetScale().y<0.1)
+			{
+				delete NPCs.at(i);
+				NPCs.erase(NPCs.begin() + i);
+			}
 		}
 	}
 

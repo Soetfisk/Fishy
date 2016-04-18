@@ -10,7 +10,7 @@ class GLNPC : public GLModel
 private:
 	enum NPCStates
 	{
-		DEAD,
+		DYING,
 		NOTHING,
 		NPCMOVE,
 		AGGRESIVE,
@@ -19,6 +19,7 @@ private:
 	unsigned int currentState;
 	float TimeUntilChange, scaleChange,forwardSpeed;
 	glm::vec3 rotationChange;
+
 private:
 	//Dash();
 	//Eat();
@@ -29,6 +30,7 @@ public:
 	GLNPC(void);
 	void NPCUpdate(float deltaTime);
 	void NPCDraw(GLShader& shader);
+	void gettingEaten(float deltaTime);
 
 	
 
