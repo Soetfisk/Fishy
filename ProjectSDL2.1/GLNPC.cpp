@@ -39,7 +39,6 @@ void GLNPC::NPCUpdate(float deltaTime)
 		this->rotationChange = glm::vec3(0, RNG::range(-1.0f, 1.0f), 0);
 	}
 
-	//transform->SetPos(glm::vec3(RNG::range(-20, 20), RNG::range(-2, 2), RNG::range(-20, 20)));
 
 	if (currentState == NPCMOVE)
 	{
@@ -50,7 +49,12 @@ void GLNPC::NPCUpdate(float deltaTime)
 	}
 	else if (currentState == FLEEING)
 	{
-		this->transform->m_pos += this->GetForward() * 8.0f * deltaTime;
+		this->transform->m_pos += this->GetForward() * 12.0f * deltaTime;
+		this->transform->m_rot += rotationChange * deltaTime;
+	}
+	else if (currentState == BEINGEATEN)
+	{
+		;
 	}
 	
 }
@@ -64,13 +68,17 @@ void GLNPC::gettingEaten(float deltaTime)
 {
 	glm::vec3 reduce = this->transform->GetScale() - deltaTime;
 	this->transform->SetScale(reduce);
+	this->currentState = BEINGEATEN;
 	
 	
 }
 
 void GLNPC::initiateFleeingState(glm::vec3 playerForwardVector)
 {
-	this->currentState = FLEEING;
-	this->transform->SetRot(playerForwardVector);
+	if (this->currentState != BEINGEATEN)
+	{
+		this->currentState = FLEEING;
+	//this->transform->SetRot(playerForwardVector);
 	fleeingTimer = 10;
+	}
 }

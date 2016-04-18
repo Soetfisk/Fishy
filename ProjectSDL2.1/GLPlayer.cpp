@@ -166,6 +166,11 @@ void GLPlayer::PlayerShoot()
 		this->m_projectile->Activate();
 	}*/
 }
+void GLPlayer::PlayerEating(float deltaTime)
+{
+	glm::vec3 scaleIncrease = this->transform->GetScale() + (deltaTime / 2);
+	this->transform->SetScale(scaleIncrease);
+}
 //
 //this->GetTransform().m_pos += m_forward * (this->m_velocity.x * deltaTime);
 //this->GetTransform().m_pos.x = sin(this->m_velocity.x) * 0.01;

@@ -19,7 +19,7 @@ Scene::Scene() {
 	}
 
 	
-	for (int i = 0; i < 20; i++) {
+	for (int i = 0; i < 60; i++) {
 		this->NPCs.push_back(new GLNPC(FSH_Loader, "Models/tempfish.FSH"));
 	}
 	shaders[MODELS] = new GLShader("test");
@@ -73,16 +73,19 @@ void Scene::Update(float& deltaTime) {
 	for (int i = 0; i < this->NPCs.size(); i++) {
 		this->NPCs.at(i)->NPCUpdate(deltaTime);
 
+		float PHD = players.at(0)->GetTransform().GetScale().y/2;
+
 		AABB a(NPCs.at(i)->GetTransform().GetPos(), glm::vec3(0.5f, 0.5f, 1));
 		AABB NpcSeenSpace(NPCs.at(i)->GetTransform().GetPos(), glm::vec3(5, 5, 5));
-		AABB b(players.at(0)->GetTransform().GetPos(), glm::vec3(0.5f, 0.5f, 0.5f));
-
+		//AABB b(players.at(0)->GetTransform().GetPos(), glm::vec3(0.5f, 0.5f, 0.5f));
+		AABB b(players.at(0)->GetTransform().GetPos(), glm::vec3(PHD, PHD, PHD));
 		if (a.containsAABB(b))
 		{
 			
 			NPCs.at(i)->gettingEaten(deltaTime);
-			
-			if (NPCs.at(i)->GetTransform().GetScale().y<0.1)
+			players.at(0)->PlayerEating(deltaTime);
+
+			if (NPCs.at(i)->GetTransform().GetScale().y<0.2)
 			{
 				delete NPCs.at(i);
 				NPCs.erase(NPCs.begin() + i);

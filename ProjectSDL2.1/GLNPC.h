@@ -10,7 +10,7 @@ class GLNPC : public GLModel
 private:
 	enum NPCStates
 	{
-		DYING,
+		BEINGEATEN,
 		NOTHING,
 		NPCMOVE,
 		AGGRESIVE,
