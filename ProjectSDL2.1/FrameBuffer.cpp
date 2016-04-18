@@ -18,7 +18,7 @@ FrameBuffer::~FrameBuffer()
 		delete this->drawBuffers;
 }
 
-void FrameBuffer::CreateFrameBuffer(int textureAmount)
+void FrameBuffer::CreateFrameBuffer(int textureAmount, int screenWidth, int screenHeight)
 {
 	this->textureAmount = textureAmount;
 	glGenFramebuffers(1, &this->framebufferName);
@@ -39,7 +39,7 @@ void FrameBuffer::CreateFrameBuffer(int textureAmount)
 		glBindTexture(GL_TEXTURE_2D, this->textures[i]);
 
 		// Give an empty image to OpenGL ( the last "0" )
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1024, 768, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, screenWidth, screenHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
 
 		// Poor filtering. Needed !
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -61,7 +61,7 @@ void FrameBuffer::CreateFrameBuffer(int textureAmount)
 	GLuint depthrenderbuffer;
 	glGenRenderbuffers(1, &depthrenderbuffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, depthrenderbuffer);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, 1024, 768);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, screenWidth, screenHeight);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthrenderbuffer);
 
 	for (int i = 0; i < this->textureAmount; i++)
