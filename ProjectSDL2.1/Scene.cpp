@@ -1,11 +1,23 @@
 #include "Scene.h"
 #include "obj_loader.h"
-#include "LoadMesh.h"
 
+
+
+void Scene::LoadModels()
+{
+	models.push_back(new GLModel(FSH_Loader, "Models/TestBin.FSH"));
+}
+
+void Scene::LoadModels(char * folder)
+{
+}
 
 Scene::Scene() {
 	for (int i = 0; i < 1; i++) {
 		this->players.push_back(new GLPlayer());
+	}
+	for (int i = 0; i < 10; i++) {
+		this->NPCs.push_back(new GLNPC());
 	}
 	shaders[MODELS] = new GLShader("test");
 	shaders[PASS] = new GLShader("pass");
@@ -35,9 +47,12 @@ Scene::Scene() {
 	this->frameBuffer = new FrameBuffer();
 	this->frameBuffer->CreateFrameBuffer(3);
 	this->frameBuffer->UnbindFrameBuffer();
-	tempModel = new GLModel();
 	tempMesh->GetTransform().SetPos(glm::vec3(3, 0, 3));
 	//first make vertex for all vertexes
+	filterComputeShader = new FilterComputeShader("derp");
+	filterComputeShader->LoadShader("blueFilter.glsl");
+	filterComputeShader->CreateShader(filterComputeShader->LoadShader("blueFilter.glsl"));
+	this->deltaTime = 0;
 }
 
 
@@ -47,14 +62,25 @@ Scene::~Scene(){
 	}
 	delete tempMesh;
 	delete this->frameBuffer;
-	delete tempModel;
+	delete this->filterComputeShader;
+	for (int i = 0; i < models.size(); i++)
+	{
+		delete models.at(i);
+	}
+
 	for (int i = 0; i < players.size(); i++)
 	{
 		delete players.at(i);
 	}
+
+	for (int i = 0; i < NPCs.size(); i++)
+	{
+		delete NPCs.at(i);
+	}
 }
 
 void Scene::Update(float& deltaTime) {
+	this->deltaTime = deltaTime;
 	for (int i = 0; i < this->players.size(); i++) {
 		this->players.at(i)->Update(GLPlayer::NOTHING ,glm::vec3(deltaTime));
 	}
@@ -77,14 +103,32 @@ void Scene::DrawScene() {
 		this->frameBuffer->BindFrameBuffer();
 		//tempModel->Draw(*shaders[MODELS]);
 		players.at(0)->TestDraw(*shaders[MODELS]);
-		tempMesh->Draw(*shaders[MODELS], GLTransform());
 		//players.at(0)->tempGetProjectile()->TestDraw(*shaders[MODELS]);
+		for (unsigned int i = 0; i < NPCs.size(); i++)
+		{
+			NPCs.at(i)->NPCDraw(*shaders[MODELS]);
+		}
+		
+
+		tempMesh->Draw(*shaders[MODELS], GLTransform());
+
+		
+
+
 		//tempModel->Draw(*shaders[MODELS]);
+		//shaders[PASS]->Bind();
+		this->frameBuffer->UnbindFrameBuffer();
+		this->filterComputeShader->BindShader();
+		this->count += 0.1f * this->deltaTime;
+		this->frameBuffer->BindImageTexturesToProgram(glGetUniformLocation(this->cs, "destTex"), 0);
+		this->filterComputeShader->UniformVec3("colorVector",glm::vec3(0.0f,0.0f, 1.0f));
+		this->filterComputeShader->Uniform1f("number",count);
+		this->filterComputeShader->DispatchCompute(1024 / 32, 768 / 32, 1);
+		
 		shaders[PASS]->Bind();
 		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
-		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture2"), 1);
-		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture3"), 2);
-		this->frameBuffer->UnbindFrameBuffer();
+		//this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture2"), 1);
+		//this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture3"), 2);
 		this->RenderQuad();
 		
 		//shaders[MODELS].update(models.at(j), player.at(i).getCamera()); 
@@ -139,19 +183,16 @@ void Scene::HandleEvenet(SDL_Event* e) {
 				players.at(e->caxis.which)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(e->caxis.value, 0, 0));
 				break;
 			case SDL_CONTROLLER_AXIS_RIGHTY:
- 				players.at(e->caxis.which)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(0, e->caxis.value, 0));
-				break;    
+				players.at(e->caxis.which)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(0, e->caxis.value, 0));
+				break;
 			case  SDL_CONTROLLER_AXIS_LEFTX:
 				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(e->caxis.value, 0, 0));
 				break;
 			case SDL_CONTROLLER_AXIS_LEFTY:
-				if(e->caxis.value > 20000)
-					std::cout << e->caxis.value << std::endl;
 				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, e->caxis.value, 0));
-				std::cout << e->caxis.value << std::endl;
 				break;
 			case SDL_CONTROLLER_AXIS_TRIGGERRIGHT:
-				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, e->caxis.value, 0));
+				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, 0, e->caxis.value));
 				break;
 			default:
 				break;
@@ -195,6 +236,9 @@ void Scene::HandleEvenet(SDL_Event* e) {
 				break;
 			case SDL_SCANCODE_D:
 				players.at(0)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(1, 0, 0));
+				break;
+			case SDL_SCANCODE_LSHIFT:
+				players.at(0)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, 0, 1));
 				break;
 			default:
 				break;
@@ -243,5 +287,9 @@ void Scene::HandleEvenet(SDL_Event* e) {
 		{
 			players.at(0)->Update(GLPlayer::PLAYER_MOVE, glm::vec3((glm::pow(2, 15)), 0, 0));
 			
+		}
+		if (keyState[SDL_SCANCODE_LSHIFT])
+		{
+			players.at(0)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, 0, (glm::pow(2, 15))));
 		}
 }

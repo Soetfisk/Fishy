@@ -20,7 +20,7 @@ GLProjectile::GLProjectile(int maxDist, float speed) : GLModel()
 	currentState = ProjectileStates::INACTIVE;
 }
 
-GLProjectile::GLProjectile(std::string& filePath, int maxDist, float speed) : GLModel(filePath)
+GLProjectile::GLProjectile(FishBox& FSH_Loader, char* filePath, int maxDist, float speed) : GLModel(FSH_Loader, filePath)
 {
 	maxDistance = maxDist;
 	distanceTraveled = 0.0;

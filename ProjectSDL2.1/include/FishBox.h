@@ -13,50 +13,97 @@
 #include <vector>
 #include <iostream>
 #include "stdio.h"
+#include <fstream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <io.h>
 //#include "GLUtil.h"
 
-
-class FISHBOX_API FSHMaterial
+namespace FSHData
 {
-private: //variables
-	std::string materialName = "MaterialName";
-	std::string textureFilePath;
-	std::string normalFilePAth;
-	float ambient[3];
-	float diffuse[3];
-	float specular[3];
-	float shinyValue;
-public: //functions
-	FSHMaterial(void);
-	std::string getMaterialName();
-	std::string getTextureFilePath();
-	float* getAmbient();
-	float* getDiffuse();
-	float* getSpecular();
-	float getShinyness();
-};
 
+	struct fileHeader
+	{
+		unsigned int meshCount;
+		unsigned int materialCount;
+		unsigned int directionalLightCount;
+		unsigned int pointLightCount;
+		unsigned int areaLightCount;
+		unsigned int cameraCount;
+	};
+	struct mesh
+	{
+		char materialName[256];
+		unsigned int vertexCount;
+		unsigned int blendshapesCount;
+		unsigned int indexCount;
 
+	};
+	struct vertexData
+	{
+		float pos[3];
+		float normal[3];
+		float uv[2];
+	};
+	struct index
+	{
+		unsigned int vertexIndex;
+	};
+	struct blendShape
+	{
+		float pos[3];
+	};
+	struct material
+	{
+		char materialName[256];
+		char textureFilePath[256];
+		char normalFilePath[256];
 
-struct FSHVertexData
-{
-	float pos[3];
-	float normal[3];
-	float uv[2];
-};
+		float ambient[3];
+		float diffuse[3];
+		float spec[3];
+		float shinyness;
+	};
+	struct directionalLight
+	{
+		float intensity;
+		float lightColor;
+		float direction[3];
+	};
+	struct pointLight
+	{
+		float intensity;
+		float lightColor;
+		float pos[3];
+	};
+	struct areaLight
+	{
+		float intensity;
+		float lightColor;
+		float pos[3];
+		float direction[3];
+		float scale[3];
+	};
+	struct camera
+	{
+		float pos[3];
+		float rotation[3];
+		float target[3];
+		float upVec[3];
+	};
 
+}
 
+using namespace FSHData;
 
 class FISHBOX_API FSHMesh {
-private: //structs
-	
 
 private: //variables 
-	std::string materialName;
-	std::vector<FSHVertexData> vertexVector;
+	std::ifstream * infile;
+
+	mesh meshHEADER;
 	unsigned int* indices = nullptr;
-	unsigned int vertexCount;
-	unsigned int indexCount;
+	vertexData * vertices = nullptr;
 
 private: //functions
 	void loadVertexData();
@@ -64,10 +111,15 @@ private: //functions
 
 public: //functiuons
 	FSHMesh(void);
+	FSHMesh(std::ifstream*& infile);
 	~FSHMesh(void);
+
+	mesh * GetMeshData();
+	unsigned int * GetIndices();
+	vertexData * GetVertices();
 	unsigned int getVertexCount();
-	std::vector<FSHVertexData>& GetVertices();
 	unsigned int getIndexCount();
+
 	//getUVs();
 	//getMaterial();
 	//getTexture();
@@ -77,22 +129,27 @@ public: //functiuons
 
 
 
-
-
-
-class FISHBOX_API FSHModel
+class FISHBOX_API FSHScene
 {
+
 private:
-	std::vector <FSHMesh> MeshList;
-	std::vector<FSHMaterial> MaterialList;
+	fileHeader HEADER;
+	std::ifstream * infile;
+	std::vector<FSHMesh*> meshes;
+	char*SCENE_ID;
+
+
 private:
+
 	void LoadMeshes();
 	void LoadMaterials();
+	FSHScene(void);
 public:
-	FSHModel(void);
-	 unsigned int GetMeshCount();
-	std::vector<FSHMesh>& GetMeshList();
-	std::vector<FSHMaterial>& GetMaterialList();
+	FSHScene(char * filePath);
+	unsigned int GetMeshCount();
+	std::vector<FSHMesh*> GetMeshList();
+
+
 	void Release();
 };
 
@@ -104,24 +161,25 @@ public:
 
 
 class FISHBOX_API FishBox {
+private:
+
 
 private: //varaibles
-	std::vector<FSHModel> ModelList;
+	unsigned int SceneCount = 0;
+	FSHScene * Scenes;
+	std::vector<FSHScene> SceneList;
 public: //variables
-	FishBox(void);
-	void Test();
-	void LoadModel(/*std::string FilePath*/);
+
 
 public: //functions 
-	std::vector<FSHModel>& GetModelList();
+	FishBox(void);
+	void Test();
+	int GetModelCount();
+	void LoadScene(char * filePath);
 
+	void MeshData(unsigned int model, unsigned int mesh, vertexData *&vertexData, unsigned int *&indexData);
+	FSHData::mesh * MeshData(unsigned int model, unsigned int mesh);
+	FSHData::vertexData * VertexData(unsigned int model, unsigned int mesh);
+	unsigned int * IndexData(unsigned int model, unsigned int mesh);
+	unsigned int FishBox::ModelMeshCount(unsigned int model);
 };
-
-
-
-
-
-
-//extern FISHBOX_API int nFishBox;
-//
-//FISHBOX_API int fnFishBox(void);
