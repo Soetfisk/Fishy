@@ -13,11 +13,17 @@ private:
 		DEAD,
 		NOTHING,
 		NPCMOVE,
+		AGGRESIVE,
 		NPC_SHOOT
 	};
 	unsigned int currentState;
 	float TimeUntilChange, scaleChange,forwardSpeed;
 	glm::vec3 rotationChange;
+private:
+	//Dash();
+	//Eat();
+	;
+
 
 public:	
 	GLNPC(void);
