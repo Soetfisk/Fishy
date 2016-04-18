@@ -14,6 +14,7 @@ public:
 	virtual void Update(float& dt);
 
 	GLTransform& GetTransform();
+	glm::vec3 GetForward();
 protected:
 	std::vector<GLMesh*> meshes;
 	GLTransform* transform;

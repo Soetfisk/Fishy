@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FilterComputeShader.cpp" />
+    <ClCompile Include="GLNPC.cpp" />
     <ClCompile Include="FrameBuffer.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="GLCamera.cpp" />
@@ -26,20 +28,24 @@
     <ClCompile Include="GLModel.cpp" />
     <ClCompile Include="GLPlayer.cpp" />
     <ClCompile Include="GLProjectile.cpp" />
+    <ClCompile Include="GLProjectileHandler.cpp" />
     <ClCompile Include="GLShader.cpp" />
     <ClCompile Include="GLWindow.cpp" />
-    <ClCompile Include="LoadMesh.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="obj_loader.cpp" />
     <ClCompile Include="Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
-    <ClInclude Include="GLProjectile.h" />
-=======
+    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\RNG.h" />
+    <ClInclude Include="FilterComputeShader.h" />
+    <ClInclude Include="GLNPC.h" />
     <ClInclude Include="FrameBuffer.h" />
->>>>>>> 18b0d39ad53d7bad7d0c67fdb15ba00029ff63fb
+    <ClInclude Include="GLProjectile.h" />
+<<<<<<< HEAD
+    <ClInclude Include="GLProjectileHandler.h" />
     <ClInclude Include="LoadMesh.h" />
+=======
+>>>>>>> 75bf018ad6738f01d5fbf7164a59949d6d372cd0
     <ClInclude Include="GameMain.h" />
     <ClInclude Include="GLCamera.h" />
     <ClInclude Include="GLMesh.h" />
@@ -54,6 +60,7 @@
     <ClInclude Include="Scene.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="blueFilter.glsl" />
     <None Include="pass.frag" />
     <None Include="pass.vert" />
     <None Include="test.frag" />
@@ -130,6 +137,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>.\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

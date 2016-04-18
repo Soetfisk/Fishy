@@ -1,6 +1,6 @@
 #include "Scene.h"
 #include "obj_loader.h"
-
+#include "AABB.h"
 
 
 void Scene::LoadModels()
@@ -13,10 +13,10 @@ void Scene::LoadModels(char * folder)
 }
 
 Scene::Scene() {
-	for (int i = 0; i < 1; i++) {
+	for (int i = 0; i < 2; i++) {
 		this->players.push_back(new GLPlayer());
 	}
-	for (int i = 0; i < 1; i++) {
+	for (int i = 0; i < 20; i++) {
 		this->NPCs.push_back(new GLNPC());
 	}
 	shaders[MODELS] = new GLShader("test");
@@ -35,10 +35,14 @@ Scene::Scene() {
 	//tempMesh = GLMesh(vertices, vertices.size(), indices, indices.size(), GLMesh::Material());
 	tempMesh = objLoadFromFile("./res/OBJ/box2.obj");
 	this->frameBuffer = new FrameBuffer();
-	this->frameBuffer->CreateFrameBuffer(3);
+	this->frameBuffer->CreateFrameBuffer(3, SCREEN_WIDTH, SCREEN_HEIGHT);
 	this->frameBuffer->UnbindFrameBuffer();
 	tempMesh->GetTransform().SetPos(glm::vec3(3, 0, 3));
 	//first make vertex for all vertexes
+	filterComputeShader = new FilterComputeShader("derp");
+	filterComputeShader->LoadShader("blueFilter.glsl");
+	filterComputeShader->CreateShader(filterComputeShader->LoadShader("blueFilter.glsl"));
+	this->deltaTime = 0;
 }
 
 
@@ -48,7 +52,7 @@ Scene::~Scene(){
 	}
 	delete tempMesh;
 	delete this->frameBuffer;
-
+	delete this->filterComputeShader;
 	for (int i = 0; i < models.size(); i++)
 	{
 		delete models.at(i);
@@ -66,9 +70,32 @@ Scene::~Scene(){
 }
 
 void Scene::Update(float& deltaTime) {
+	this->deltaTime = deltaTime;
 	for (int i = 0; i < this->players.size(); i++) {
 		this->players.at(i)->Update(GLPlayer::NOTHING ,glm::vec3(deltaTime));
 	}
+
+	for (int i = 0; i < this->NPCs.size(); i++) {
+		this->NPCs.at(i)->NPCUpdate(deltaTime);
+
+		AABB a(NPCs.at(i)->GetTransform().GetPos(), glm::vec3(0.5, 0.5, 1));
+		AABB b(players.at(0)->GetTransform().GetPos(), glm::vec3(0.5, 0.5, 0.5));
+
+		if (a.containsAABB(b))
+		{
+			
+			NPCs.at(i)->gettingEaten(deltaTime);
+			
+			if (NPCs.at(i)->GetTransform().GetScale().y<0.1)
+			{
+				delete NPCs.at(i);
+				NPCs.erase(NPCs.begin() + i);
+			}
+		}
+	}
+
+	
+
 	//std::cout << deltaTime << std::endl;
 }
 
@@ -81,27 +108,42 @@ void Scene::LoadScene() {
 void Scene::DrawScene() {
 	for (int i = 0; i < this->players.size(); i++) {
 		//Set viewport
-		//glViewport(0, window::HEIGHT / (i + 1), window::WIDTH, window::HEIGHT / 2);
+		glViewport(0, 0, window::WIDTH, window::HEIGHT/ 2);
 		//for(int j = 0; j<this->models.count();j++){
 		shaders[MODELS]->Bind();
 		shaders[MODELS]->Update(players.at(i)->GetCamera());
 		this->frameBuffer->BindFrameBuffer();
 		//tempModel->Draw(*shaders[MODELS]);
-		players.at(0)->Draw(*shaders[MODELS]);
+		for (int j = 0; j < this->players.size(); j++) {
 		//NPCs.at(0)->NPCDraw(*shaders[MODELS]);
+		}
+		for (unsigned int i = 0; i < NPCs.size(); i++)
+		{
+			NPCs.at(i)->NPCDraw(*shaders[MODELS]);
+		}
+		
 
 		models[0]->Draw(*shaders[MODELS]);
 		//tempMesh->Draw(*shaders[MODELS], GLTransform());
 
-		players.at(0)->tempGetProjectile()->TestDraw(*shaders[MODELS]);
+		
 
 
 		//tempModel->Draw(*shaders[MODELS]);
+		//shaders[PASS]->Bind();
+		this->frameBuffer->UnbindFrameBuffer();
+		this->filterComputeShader->BindShader();
+		this->count += 0.1f * this->deltaTime;
+		this->frameBuffer->BindImageTexturesToProgram(glGetUniformLocation(this->cs, "destTex"), 0);
+		this->filterComputeShader->UniformVec3("colorVector",glm::vec3(0.0f,0.0f, 1.0f));
+		this->filterComputeShader->Uniform1f("number",count);
+		//this->filterComputeShader->DispatchCompute(1024 / 32, 768 / 32, 1);
+		
 		shaders[PASS]->Bind();
 		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
-		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture2"), 1);
-		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture3"), 2);
-		this->frameBuffer->UnbindFrameBuffer();
+		//this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture2"), 1);
+		//this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture3"), 2);
+		glViewport(0, window::HEIGHT - (window::HEIGHT / (i + 1)), window::WIDTH, window::HEIGHT / 2);
 		this->RenderQuad();
 		
 		//shaders[MODELS].update(models.at(j), player.at(i).getCamera()); 
@@ -142,30 +184,33 @@ void Scene::HandleEvenet(SDL_Event* e) {
 
 		if (e->type == SDL_CONTROLLERDEVICEADDED)
 		{
-			players.at(e->cdevice.which)->Update(GLPlayer::JOY_ADDED, glm::vec3(e->cdevice.which));
+			players.at(e->cdevice.which+1)->Update(GLPlayer::JOY_ADDED, glm::vec3(e->cdevice.which));
 		}
 		else if (e->type == SDL_CONTROLLERDEVICEREMOVED)
 		{
-			players.at(e->cdevice.which)->Update(GLPlayer::JOY_REMOVED, glm::vec3(e->cdevice.which));
+			players.at(e->cdevice.which + 1)->Update(GLPlayer::JOY_REMOVED, glm::vec3(e->cdevice.which));
 		}
 		else if (e->type == SDL_CONTROLLERAXISMOTION)
 		{
 			switch (e->caxis.axis)
 			{
 			case SDL_CONTROLLER_AXIS_RIGHTX:
-				players.at(e->caxis.which)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(e->caxis.value, 0, 0));
+				players.at(e->caxis.which + 1)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(e->caxis.value, 0, 0));
 				break;
 			case SDL_CONTROLLER_AXIS_RIGHTY:
-				players.at(e->caxis.which)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(0, e->caxis.value, 0));
+				players.at(e->caxis.which + 1)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(0, e->caxis.value, 0));
 				break;
 			case  SDL_CONTROLLER_AXIS_LEFTX:
-				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(e->caxis.value, 0, 0));
+				players.at(e->caxis.which + 1)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(e->caxis.value, 0, 0));
 				break;
 			case SDL_CONTROLLER_AXIS_LEFTY:
-				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, e->caxis.value, 0));
+				players.at(e->caxis.which + 1)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, e->caxis.value, 0));
 				break;
 			case SDL_CONTROLLER_AXIS_TRIGGERRIGHT:
-				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, e->caxis.value, 0));
+				players.at(e->caxis.which + 1)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, 0, e->caxis.value));
+				break;
+			case SDL_CONTROLLER_AXIS_TRIGGERLEFT:
+				players.at(e->caxis.which + 1)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, 0, -e->caxis.value));
 				break;
 			default:
 				break;
@@ -176,7 +221,7 @@ void Scene::HandleEvenet(SDL_Event* e) {
 			switch (e->cbutton.button)
 			{
 			case SDL_CONTROLLER_BUTTON_A:
-				players.at(e->cbutton.which)->Update(GLPlayer::PLAYER_SHOOT, glm::vec3(0));
+				players.at(e->cbutton.which + 1)->Update(GLPlayer::PLAYER_SHOOT, glm::vec3(0));
 				break;
 			default:
 				break;
@@ -209,6 +254,9 @@ void Scene::HandleEvenet(SDL_Event* e) {
 				break;
 			case SDL_SCANCODE_D:
 				players.at(0)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(1, 0, 0));
+				break;
+			case SDL_SCANCODE_LSHIFT:
+				players.at(0)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, 0, 1));
 				break;
 			default:
 				break;
@@ -257,5 +305,9 @@ void Scene::HandleEvenet(SDL_Event* e) {
 		{
 			players.at(0)->Update(GLPlayer::PLAYER_MOVE, glm::vec3((glm::pow(2, 15)), 0, 0));
 			
+		}
+		if (keyState[SDL_SCANCODE_LSHIFT])
+		{
+			players.at(0)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, 0, (glm::pow(2, 15))));
 		}
 }

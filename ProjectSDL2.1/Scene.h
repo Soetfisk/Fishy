@@ -8,6 +8,8 @@
 #include "FrameBuffer.h"
 #include "GLModel.h"
 #include "GLProjectile.h"
+#include "FilterComputeShader.h"
+#include "RNG.h"
 
 class Scene {
 private:
@@ -18,6 +20,8 @@ private:
 		PASS,
 		NUM_SHADERS
 	};
+	int SCREEN_WIDTH = window::WIDTH;
+	int SCREEN_HEIGHT = window::HEIGHT / 2;
 
 	//todo implement
 	//std::vector<Model> models;
@@ -29,8 +33,13 @@ private:
 	GLuint quadVAO = 0;
 	std::vector<GLModel*> models;
 	GLuint quadVBO;
+	GLuint cs;
 	FrameBuffer* frameBuffer;
+	FrameBuffer* frameBuffer2;
 	GLProjectile* testProj;
+	float count = 0;
+	FilterComputeShader* filterComputeShader;
+	float deltaTime;
 	
 private:
 	void LoadModels();

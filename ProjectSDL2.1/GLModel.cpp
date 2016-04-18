@@ -80,3 +80,12 @@ GLTransform& GLModel::GetTransform()
 {
 	return *transform;
 }
+
+glm::vec3 GLModel::GetForward()
+{
+	glm::vec3 front;
+	front.x = cos(this->transform->m_rot.x) * sin(this->transform->m_rot.y);
+	front.y = -sin(this->transform->m_rot.x);
+	front.z = cos(this->transform->m_rot.x) * cos(this->transform->m_rot.y);
+	return glm::normalize(front);
+}
