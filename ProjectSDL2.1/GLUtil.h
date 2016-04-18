@@ -20,6 +20,9 @@
 //SDL Includes
 #include <SDL2\SDL.h>
 
+//FSH includes
+#include <FishBox.h>
+
 //Structs
 
 //WINDOW

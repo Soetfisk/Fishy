@@ -3,6 +3,8 @@
 #include "GLCamera.h"
 #include "GLModel.h"
 #include "GLProjectile.h"
+#include "GLProjectileHandler.h"
+
 class GLPlayer : public GLModel
 {
 public:
@@ -26,22 +28,31 @@ public:
 	GLProjectile* tempGetProjectile();
 	void Update(Events state, glm::vec3 movementVec);
 	GLCamera GetCamera();
+
+	void TestDraw(GLShader& shader);
+	
 private:
 	const int DEADZONE = 8000;
 	const int MOVEMENT_FRICTION = 100;
 	const int MAX_SPEED = 10;
-	float lastX = 0;
-	float lastY = 0;
+
+	float lastHorizontal = 0;
+	float lastVertical = 0;
+	float lastForward = 0;
+	glm::vec3 m_velocity;
+
 	SDL_GameController *pad;
 	int instanceID;
-	glm::vec3 m_velocity;
-	glm::vec3 m_forward;
 	GLCamera m_camera;
 	GLProjectile *m_projectile;
+	GLProjectileHandler* m_projectileHandler;
+
+	float rotateSpeed = 2;
+	float moveSpeed = 2;
 
 	void AddController(int id);
 	void RemoveController(int id);
-	void PlayerMove(float x, float y);
+	void PlayerMove(float x, float y, float z);
 	void PlayerUpdate(float deltaTime);
 	void PlayerShoot();
 };

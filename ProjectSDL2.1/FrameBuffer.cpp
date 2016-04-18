@@ -39,7 +39,7 @@ void FrameBuffer::CreateFrameBuffer(int textureAmount)
 		glBindTexture(GL_TEXTURE_2D, this->textures[i]);
 
 		// Give an empty image to OpenGL ( the last "0" )
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1024, 768, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, 1024, 768, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
 
 		// Poor filtering. Needed !
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -102,4 +102,12 @@ void FrameBuffer::BindTexturesToProgram(GLuint uniform, GLuint texture)
 	//this->texUniformID = glGetUniformLocation(program, "renderedTexture");
 	glUniform1i(uniform, texture);
 	glBindTexture(GL_TEXTURE_2D, this->textures[texture]);
+}
+
+void FrameBuffer::BindImageTexturesToProgram(GLuint uniform, GLuint texture)
+{
+	glActiveTexture(GL_TEXTURE0 + texture);
+	//this->texUniformID = glGetUniformLocation(program, "renderedTexture");
+	glUniform1i(uniform, texture);
+	glBindImageTexture(texture, this->textures[texture],0,GL_FALSE,0,GL_READ_WRITE,GL_RGBA32F);
 }

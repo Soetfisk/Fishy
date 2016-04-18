@@ -6,8 +6,11 @@ GLPlayer::GLPlayer() : GLModel()
 {
 	this->m_camera;
 	this->m_projectile = new GLProjectile(10, 20.0f);
-	this->m_projectileHandler = new GLProjectileHandler(1, 20, 10.0f);
+<<<<<<< HEAD
+	this->m_projectileHandler = new GLProjectileHandler(1, 10, 1.0f);
+=======
 	this->m_velocity = glm::vec3(0);
+>>>>>>> 75bf018ad6738f01d5fbf7164a59949d6d372cd0
 }
 
 
@@ -111,10 +114,15 @@ void GLPlayer::PlayerMove(float x, float y, float z)
 void GLPlayer::PlayerUpdate(float deltaTime)
 {
 	//player update
+<<<<<<< HEAD
+	this->GetTransform().m_pos += m_forward * (this->m_velocity.x * deltaTime);
+ 	this->GetTransform().m_rot.y -= (this->m_velocity.z * deltaTime);
+=======
 	glm::vec3 v = glm::vec3((lastVertical / (glm::pow(2, 15))), (lastHorizontal / (glm::pow(2, 15))),0);
 	this->transform->m_rot += (v * rotateSpeed * deltaTime);
 
 	float maxAngle = 0.785398;
+>>>>>>> 75bf018ad6738f01d5fbf7164a59949d6d372cd0
 
 	if (this->meshes[0]->GetTransform().m_rot.z <= maxAngle && this->meshes[0]->GetTransform().m_rot.z >= -maxAngle)
 	{
@@ -143,7 +151,7 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 
 void GLPlayer::PlayerShoot()
 {
-	this->m_projectileHandler->Shoot(this->GetForward(), transform->m_pos, transform->m_rot);
+	this->m_projectileHandler->Shoot(m_forward, transform->m_pos, transform->m_rot);
 	/*if (!this->m_projectile->isActive())
 	{
 		this->m_projectile->SetForward(this->GetForward());
