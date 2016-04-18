@@ -20,6 +20,8 @@ private:
 		PASS,
 		NUM_SHADERS
 	};
+	int SCREEN_WIDTH = window::WIDTH;
+	int SCREEN_HEIGHT = window::HEIGHT / 2;
 
 	//todo implement
 	//std::vector<Model> models;
