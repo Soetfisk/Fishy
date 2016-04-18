@@ -33,7 +33,7 @@ public:
 	
 private:
 	const int DEADZONE = 8000;
-	const int MOVEMENT_FRICTION = 100;
+	const float MOVEMENT_FRICTION = 8.0f;
 	const int MAX_SPEED = 10;
 	const float MAX_ANGLE = 75;
 

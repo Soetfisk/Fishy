@@ -128,7 +128,7 @@ void Scene::DrawScene() {
 		this->frameBuffer->BindImageTexturesToProgram(glGetUniformLocation(this->cs, "destTex"), 0);
 		this->filterComputeShader->UniformVec3("colorVector",glm::vec3(0.0f,0.0f, 1.0f));
 		this->filterComputeShader->Uniform1f("number",count);
-		this->filterComputeShader->DispatchCompute(1024 / 32, 768 / 32, 1);
+		//this->filterComputeShader->DispatchCompute(1024 / 32, 768 / 32, 1);
 		
 		shaders[PASS]->Bind();
 		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);

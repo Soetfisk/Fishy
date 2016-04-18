@@ -136,7 +136,8 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	if (m_velocity != glm::vec3(0))
 	{
 		this->transform->m_pos += (m_velocity  * deltaTime);
-		m_velocity -= (m_velocity * (MOVEMENT_FRICTION * deltaTime));
+		glm::vec3 friction = (m_velocity * MOVEMENT_FRICTION);
+		m_velocity -= friction * deltaTime;
 	}
 
 	//camera update
