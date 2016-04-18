@@ -24,6 +24,7 @@ public:
 	};
 
 	GLPlayer();
+	GLPlayer(FishBox& FSH_Loader, char* filePath);
 	~GLPlayer();
 	GLProjectile* tempGetProjectile();
 	void Update(Events state, glm::vec3 movementVec);

@@ -10,6 +10,14 @@ GLPlayer::GLPlayer() : GLModel()
 	this->m_velocity = glm::vec3(0);
 }
 
+GLPlayer::GLPlayer(FishBox& FSH_Loader, char* filePath) : GLModel(FSH_Loader, filePath)
+{
+	this->m_camera;
+	this->m_projectile = new GLProjectile(10, 20.0f);
+	this->m_projectileHandler = new GLProjectileHandler(1, 20, 10.0f);
+	this->m_velocity = glm::vec3(0);
+}
+
 
 GLPlayer::~GLPlayer()
 {
@@ -124,11 +132,11 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	if (this->meshes[0]->GetTransform().m_rot.z <= maxAngle && this->meshes[0]->GetTransform().m_rot.z >= -maxAngle)
 	{
 		this->meshes[0]->GetTransform().m_rot.z += -(lastHorizontal / (glm::pow(2, 15))) * deltaTime;
-		this->meshes[1]->GetTransform().m_rot.z += -(lastHorizontal / (glm::pow(2, 15))) * deltaTime;
+		//this->meshes[1]->GetTransform().m_rot.z += -(lastHorizontal / (glm::pow(2, 15))) * deltaTime;
 	}
 		
 	this->meshes[0]->GetTransform().m_rot.z -= this->meshes[0]->GetTransform().m_rot.z * deltaTime;
-	this->meshes[1]->GetTransform().m_rot.z -= this->meshes[0]->GetTransform().m_rot.z * deltaTime;
+	//this->meshes[1]->GetTransform().m_rot.z -= this->meshes[0]->GetTransform().m_rot.z * deltaTime;
 
 	glm::vec3 forward = this->GetForward();
 	m_velocity += forward * (float)(lastForward / (glm::pow(2, 15)));
