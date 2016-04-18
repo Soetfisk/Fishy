@@ -1,6 +1,6 @@
 #include "GLPlayer.h"
 #include <math.h>
-
+#include "RNG.h"
 
 GLPlayer::GLPlayer() : GLModel()
 {
@@ -8,6 +8,7 @@ GLPlayer::GLPlayer() : GLModel()
 	this->m_projectile = new GLProjectile(10, 20.0f);
 	this->m_projectileHandler = new GLProjectileHandler(1, 20, 10.0f);
 	this->m_velocity = glm::vec3(0);
+	
 }
 
 GLPlayer::GLPlayer(FishBox& FSH_Loader, char* filePath) : GLModel(FSH_Loader, filePath)
@@ -168,7 +169,7 @@ void GLPlayer::PlayerShoot()
 }
 void GLPlayer::PlayerEating(float deltaTime)
 {
-	glm::vec3 scaleIncrease = this->transform->GetScale() + (deltaTime / 2);
+	glm::vec3 scaleIncrease = this->transform->GetScale() + (deltaTime / 4);
 	this->transform->SetScale(scaleIncrease);
 }
 //

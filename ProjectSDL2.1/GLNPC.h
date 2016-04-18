@@ -18,6 +18,7 @@ private:
 		NPC_SHOOT
 
 	};
+	const int DEADZONEX = 200, DEADZONEY = 200, DEADZONEZ = 200;
 	unsigned int currentState;
 	float fleeingTimer,TimeUntilChange, scaleChange,forwardSpeed;
 	glm::vec3 rotationChange;

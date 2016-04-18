@@ -28,7 +28,7 @@ void GameMain::GameLoop()
 
 		SDL_PumpEvents();
 		this->SetDeltaTime();
-		this->window->Clear(.2, .8, 0);
+		this->window->Clear(0, .1f, 1);
 		
 		//std::cout << 1 / this->deltaTime << std::endl;
 		this->scene->Update(this->deltaTime);

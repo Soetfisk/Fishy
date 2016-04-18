@@ -19,7 +19,7 @@ Scene::Scene() {
 	}
 
 	
-	for (int i = 0; i < 60; i++) {
+	for (int i = 0; i < 50; i++) {
 		this->NPCs.push_back(new GLNPC(FSH_Loader, "Models/tempfish.FSH"));
 	}
 	shaders[MODELS] = new GLShader("test");
@@ -85,6 +85,8 @@ void Scene::Update(float& deltaTime) {
 			NPCs.at(i)->gettingEaten(deltaTime);
 			players.at(0)->PlayerEating(deltaTime);
 
+			
+			
 			if (NPCs.at(i)->GetTransform().GetScale().y<0.2)
 			{
 				delete NPCs.at(i);
