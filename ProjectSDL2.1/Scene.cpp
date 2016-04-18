@@ -244,6 +244,9 @@ void Scene::HandleEvenet(SDL_Event* e) {
 			case SDL_SCANCODE_LSHIFT:
 				players.at(0)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, 0, 1));
 				break;
+			case SDL_SCANCODE_E:
+				players.at(0)->Update(GLPlayer::PLAYER_DASH, glm::vec3(0, 0, 1));
+				break;
 			default:
 				break;
 			}

@@ -14,6 +14,7 @@ public:
 		CAMERA_MOVE,
 		PLAYER_MOVE,
 		PLAYER_SHOOT,
+		PLAYER_DASH,
 		JOY_ADDED,
 		JOY_REMOVED,
 		NUM_EVENTSTATES
@@ -41,6 +42,11 @@ private:
 	float lastForward = 0;
 	glm::vec3 m_velocity;
 
+	float dashDuration;
+	float dashCurrentDuration;
+	float dashMultiplier;
+	bool isDashing;
+
 	SDL_GameController *pad;
 	int instanceID;
 	GLCamera m_camera;
@@ -55,5 +61,6 @@ private:
 	void PlayerMove(float x, float y, float z);
 	void PlayerUpdate(float deltaTime);
 	void PlayerShoot();
+	void PlayerDash();
 };
 

@@ -8,6 +8,11 @@ GLPlayer::GLPlayer() : GLModel()
 	this->m_projectile = new GLProjectile(10, 20.0f);
 	this->m_projectileHandler = new GLProjectileHandler(1, 20, 10.0f);
 	this->m_velocity = glm::vec3(0);
+	
+	this->dashCurrentDuration = 0.0f;
+	this->dashDuration = 0.2f;
+	this->dashMultiplier = 1.0f;
+	this->isDashing = false;
 }
 
 
@@ -35,6 +40,9 @@ void GLPlayer::Update(Events state, glm::vec3 movementVec)
 		break;
 	case PLAYER_SHOOT:
 		this->PlayerShoot();
+		break;
+	case PLAYER_DASH:
+		this->PlayerDash();
 		break;
 	case JOY_ADDED:
 		this->AddController(movementVec.x);
@@ -126,11 +134,19 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	this->meshes[1]->GetTransform().m_rot.z -= this->meshes[0]->GetTransform().m_rot.z * deltaTime;
 
 	
+	if (dashCurrentDuration >= dashDuration && isDashing)
+	{
+		isDashing = false;
+		dashMultiplier = 1.0f;
+	}
+	else
+		dashCurrentDuration += deltaTime;
+
 	glm::vec3 forward = this->GetForward();
 	m_velocity += forward * (float)(lastForward / (glm::pow(2, 15)));
 	if (m_velocity != glm::vec3(0))
 	{
-		this->transform->m_pos += (m_velocity  * deltaTime);
+		this->transform->m_pos += (m_velocity  * deltaTime * dashMultiplier);
 		m_velocity -= (m_velocity * (MOVEMENT_FRICTION * deltaTime));
 	}
 
@@ -151,6 +167,16 @@ void GLPlayer::PlayerShoot()
 		this->m_projectile->GetTransform().m_rot = this->transform->m_rot;
 		this->m_projectile->Activate();
 	}*/
+}
+void GLPlayer::PlayerDash()
+{
+	if (!isDashing)
+	{
+		isDashing = true;
+		dashCurrentDuration = 0.0f;
+		dashMultiplier = 100.0f;
+		lastForward = 0.0f;
+	}
 }
 //
 //this->GetTransform().m_pos += m_forward * (this->m_velocity.x * deltaTime);
