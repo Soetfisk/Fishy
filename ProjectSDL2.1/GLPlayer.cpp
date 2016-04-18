@@ -10,7 +10,7 @@ GLPlayer::GLPlayer() : GLModel()
 	this->m_velocity = glm::vec3(0);
 	
 	this->dashCurrentDuration = 0.0f;
-	this->dashDuration = 0.2f;
+	this->dashDuration = 1.0f;
 	this->dashMultiplier = 1.0f;
 	this->isDashing = false;
 }
@@ -119,7 +119,7 @@ void GLPlayer::PlayerMove(float x, float y, float z)
 void GLPlayer::PlayerUpdate(float deltaTime)
 {
 	//player update
-	glm::vec3 v = glm::vec3((lastVertical / (glm::pow(2, 15))), (lastHorizontal / (glm::pow(2, 15))),0);
+	glm::vec3 v = glm::vec3((lastVertical / (MAX_IMPUT)), (lastHorizontal / (MAX_IMPUT)),0);
 	this->transform->m_rot += (v * rotateSpeed * deltaTime);
 
 	if (this->transform->m_rot.x > glm::radians(MAX_ANGLE))
@@ -131,8 +131,8 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 
 	if (this->meshes[0]->GetTransform().m_rot.z <= maxAngle && this->meshes[0]->GetTransform().m_rot.z >= -maxAngle)
 	{
-		this->meshes[0]->GetTransform().m_rot.z += -(lastHorizontal / (glm::pow(2, 15))) * deltaTime;
-		this->meshes[1]->GetTransform().m_rot.z += -(lastHorizontal / (glm::pow(2, 15))) * deltaTime;
+		this->meshes[0]->GetTransform().m_rot.z += -(lastHorizontal / (MAX_IMPUT)) * deltaTime;
+		this->meshes[1]->GetTransform().m_rot.z += -(lastHorizontal / (MAX_IMPUT)) * deltaTime;
 	}
 		
 	this->meshes[0]->GetTransform().m_rot.z -= this->meshes[0]->GetTransform().m_rot.z * deltaTime;
@@ -144,16 +144,21 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 		dashMultiplier = 1.0f;
 	}
 	else
+	{
 		dashCurrentDuration += deltaTime;
+	}
+		
 
 	glm::vec3 forward = this->GetForward();
-	m_velocity += forward * (float)(lastForward / (glm::pow(2, 15)));
+	m_velocity += forward * (float)(lastForward / (MAX_IMPUT));
 
 	if (m_velocity != glm::vec3(0))
 	{
-		this->transform->m_pos += (m_velocity  * deltaTime * dashMultiplier);
+		m_velocity += (forward  *  dashMultiplier) *deltaTime;
+		this->transform->m_pos += (m_velocity  * deltaTime);
 		glm::vec3 friction = (m_velocity * MOVEMENT_FRICTION);
 		m_velocity -= friction * deltaTime;
+		
 	}
 
 	//camera update
@@ -180,8 +185,12 @@ void GLPlayer::PlayerDash()
 	{
 		isDashing = true;
 		dashCurrentDuration = 0.0f;
-		dashMultiplier = 100.0f;
-		lastForward = 0.0f;
+		dashMultiplier = 5.0f;
+		lastForward = 32768.0f;
+	}
+	else
+	{
+		lastForward = 0;
 	}
 }
 //

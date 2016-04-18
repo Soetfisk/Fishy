@@ -34,9 +34,10 @@ public:
 	
 private:
 	const int DEADZONE = 8000;
-	const float MOVEMENT_FRICTION = 8.0f;
+	const float MOVEMENT_FRICTION = 20.0f;
 	const int MAX_SPEED = 10;
 	const float MAX_ANGLE = 75;
+	const int MAX_IMPUT = glm::pow(2, 15);
 
 	float lastHorizontal = 0;
 	float lastVertical = 0;
