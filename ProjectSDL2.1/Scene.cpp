@@ -91,6 +91,8 @@ void Scene::Update(float& deltaTime) {
 		AABB a(NPCs.at(i)->GetTransform().GetPos(), glm::vec3(0.5, 0.5, 1));
 		AABB b(players.at(0)->GetTransform().GetPos(), glm::vec3(0.5, 0.5, 0.5));
 
+		players.at(0)->tempGetProjectile()->
+
 		if (a.containsAABB(b))
 		{
 			delete NPCs.at(i);

@@ -13,13 +13,7 @@ GLPlayer::GLPlayer() : GLModel()
 
 GLPlayer::~GLPlayer()
 {
-	delete this->m_projectile;
 	delete this->m_projectileHandler;
-}
-
-GLProjectile * GLPlayer::tempGetProjectile()
-{
-	return this->m_projectile;
 }
 
 //handles events sent too the player

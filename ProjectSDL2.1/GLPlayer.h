@@ -25,7 +25,6 @@ public:
 
 	GLPlayer();
 	~GLPlayer();
-	GLProjectile* tempGetProjectile();
 	void Update(Events state, glm::vec3 movementVec);
 	GLCamera GetCamera();
 
@@ -45,7 +44,6 @@ private:
 	SDL_GameController *pad;
 	int instanceID;
 	GLCamera m_camera;
-	GLProjectile *m_projectile;
 	GLProjectileHandler* m_projectileHandler;
 
 	float rotateSpeed = 2;
