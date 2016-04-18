@@ -76,6 +76,12 @@ private:
 
 
 	//TEST
+	std::vector<unsigned int> objindex;
+	std::vector<unsigned int> getobjindex() { return objindex; };
+
+	std::vector<Vertex> objvertices;
+	std::vector<Vertex> getobjvertices() { return objvertices; };
+
 	GLuint vertexBuffer;
 	GLuint indexBuffer;
 };

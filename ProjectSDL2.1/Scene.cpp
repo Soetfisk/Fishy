@@ -5,7 +5,7 @@
 
 void Scene::LoadModels()
 {
-	models.push_back(new GLModel(FSH_Loader, "Models/TestBin.FSH"));
+	models.push_back(new GLModel(FSH_Loader, "Models/tempfish.FSH"));
 }
 
 void Scene::LoadModels(char * folder)

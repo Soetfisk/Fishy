@@ -145,6 +145,7 @@ private:
 	void LoadMaterials();
 	FSHScene(void);
 public:
+
 	FSHScene(char * filePath);
 	unsigned int GetMeshCount();
 	std::vector<FSHMesh*> GetMeshList();
@@ -166,13 +167,15 @@ private:
 
 private: //varaibles
 	unsigned int SceneCount = 0;
-	FSHScene * Scenes;
 	std::vector<FSHScene> SceneList;
 public: //variables
 
 
 public: //functions 
 	FishBox(void);
+	FishBox::~FishBox();
+
+	void release();
 	void Test();
 	int GetModelCount();
 	void LoadScene(char * filePath);

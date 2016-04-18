@@ -99,11 +99,6 @@ GLMesh *objLoadFromFile(const std::string& fileName) {
 			indices.push_back(final_Index++);
 		}
 	}
-	printf("\nMESH INDICES (%d): ", indices.size());
 
-	for (int i = 0; i < indices.size(); i++)
-		printf("\n%d", indices[i]);
-
-	printf("\n\n\n");
 	return new GLMesh(final_vertices, final_vertices.size(), indices, indices.size(), temp_material);
 }
