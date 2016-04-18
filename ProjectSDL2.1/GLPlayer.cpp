@@ -122,6 +122,11 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	glm::vec3 v = glm::vec3((lastVertical / (glm::pow(2, 15))), (lastHorizontal / (glm::pow(2, 15))),0);
 	this->transform->m_rot += (v * rotateSpeed * deltaTime);
 
+	if (this->transform->m_rot.x > glm::radians(MAX_ANGLE))
+		this->transform->m_rot.x = glm::radians(MAX_ANGLE);
+	if (this->transform->m_rot.x < -glm::radians(MAX_ANGLE))
+		this->transform->m_rot.x = -glm::radians(MAX_ANGLE);
+
 	float maxAngle = 0.785398;
 
 	if (this->meshes[0]->GetTransform().m_rot.z <= maxAngle && this->meshes[0]->GetTransform().m_rot.z >= -maxAngle)
@@ -133,7 +138,6 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	this->meshes[0]->GetTransform().m_rot.z -= this->meshes[0]->GetTransform().m_rot.z * deltaTime;
 	this->meshes[1]->GetTransform().m_rot.z -= this->meshes[0]->GetTransform().m_rot.z * deltaTime;
 
-	
 	if (dashCurrentDuration >= dashDuration && isDashing)
 	{
 		isDashing = false;
@@ -144,10 +148,12 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 
 	glm::vec3 forward = this->GetForward();
 	m_velocity += forward * (float)(lastForward / (glm::pow(2, 15)));
+
 	if (m_velocity != glm::vec3(0))
 	{
 		this->transform->m_pos += (m_velocity  * deltaTime * dashMultiplier);
-		m_velocity -= (m_velocity * (MOVEMENT_FRICTION * deltaTime));
+		glm::vec3 friction = (m_velocity * MOVEMENT_FRICTION);
+		m_velocity -= friction * deltaTime;
 	}
 
 	//camera update
