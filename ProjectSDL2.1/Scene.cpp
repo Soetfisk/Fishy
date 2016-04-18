@@ -5,7 +5,7 @@
 
 void Scene::LoadModels()
 {
-	models.push_back(new GLModel(FSH_Loader, "Models/tempfish.FSH"));
+	//models.push_back(new GLModel(FSH_Loader, "Models/tempfish.FSH"));
 }
 
 void Scene::LoadModels(char * folder)
@@ -13,31 +13,26 @@ void Scene::LoadModels(char * folder)
 }
 
 Scene::Scene() {
+	
 	for (int i = 0; i < 2; i++) {
-		this->players.push_back(new GLPlayer());
+		this->players.push_back(new GLPlayer(FSH_Loader, "Models/tempfish.FSH"));
 	}
+
+	
 	for (int i = 0; i < 20; i++) {
-		this->NPCs.push_back(new GLNPC());
+		this->NPCs.push_back(new GLNPC(FSH_Loader, "Models/tempfish.FSH"));
 	}
 	shaders[MODELS] = new GLShader("test");
 	shaders[PASS] = new GLShader("pass");
 
 	LoadModels();
 
+	
 
-	//vertices.push_back(Vertex(glm::vec3(-.5, .5, 0), glm::vec2(0, 1), glm::vec3(0, 0, 1)));
-	//vertices.push_back(Vertex(glm::vec3(-.5, -.5, 0), glm::vec2(0, 0), glm::vec3(0, 0, 1)));
-	//vertices.push_back(Vertex(glm::vec3(.5, -.5, 0), glm::vec2(1, 0), glm::vec3(0, 0, 1)));
-	//vertices.push_back(Vertex(glm::vec3(.5, .5, 0), glm::vec2(1, 1), glm::vec3(0, 0, 1)));
-
-	//std::vector<unsigned int> indices = {0, 1, 2, 2, 3, 0};
-	//
-	//tempMesh = GLMesh(vertices, vertices.size(), indices, indices.size(), GLMesh::Material());
-	tempMesh = objLoadFromFile("./res/OBJ/box2.obj");
 	this->frameBuffer = new FrameBuffer();
 	this->frameBuffer->CreateFrameBuffer(3, SCREEN_WIDTH, SCREEN_HEIGHT);
 	this->frameBuffer->UnbindFrameBuffer();
-	tempMesh->GetTransform().SetPos(glm::vec3(3, 0, 3));
+	//tempMesh->GetTransform().SetPos(glm::vec3(3, 0, 3));
 	//first make vertex for all vertexes
 	filterComputeShader = new FilterComputeShader("derp");
 	filterComputeShader->LoadShader("blueFilter.glsl");
@@ -50,7 +45,7 @@ Scene::~Scene(){
 	for (int i = 0; i < NUM_SHADERS; i++) {
 		delete shaders[i];
 	}
-	delete tempMesh;
+	
 	delete this->frameBuffer;
 	delete this->filterComputeShader;
 	for (int i = 0; i < models.size(); i++)
@@ -115,15 +110,15 @@ void Scene::DrawScene() {
 		this->frameBuffer->BindFrameBuffer();
 		//tempModel->Draw(*shaders[MODELS]);
 		for (int j = 0; j < this->players.size(); j++) {
-		//NPCs.at(0)->NPCDraw(*shaders[MODELS]);
+			players.at(j)->TestDraw(*shaders[MODELS]);
 		}
 		for (unsigned int i = 0; i < NPCs.size(); i++)
 		{
 			NPCs.at(i)->NPCDraw(*shaders[MODELS]);
 		}
 		
-
-		models[0]->Draw(*shaders[MODELS]);
+	
+		//models[0]->Draw(*shaders[MODELS]);
 		//tempMesh->Draw(*shaders[MODELS], GLTransform());
 
 		
