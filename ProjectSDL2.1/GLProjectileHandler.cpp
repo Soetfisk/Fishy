@@ -13,7 +13,7 @@ GLProjectileHandler::GLProjectileHandler(int nrOfProjectiles, int projectileTrav
 	for (int i = 0; i < nrOfProjectiles; i++)
 	{
 		projectiles.push_back(new GLProjectile(projectileTravelDisntace, projectileSpeed));
-		inactiveProjectiles.push_back(projectiles.at(i));
+		//inactiveProjectiles.push_back(projectiles.at(i));
 	}
 }
 
@@ -33,7 +33,7 @@ void GLProjectileHandler::Shoot(glm::vec3& forward, glm::vec3& pos, glm::vec3& r
 	else
 	{
 		projectiles.push_back(new GLProjectile(projectileTravelDistance, projectileSpeed));
-		ActivateProjectile(projectiles.back(), forward, pos, rot);
+		//ActivateProjectile(projectiles.back(), forward, pos, rot);
 	}
 }
 
