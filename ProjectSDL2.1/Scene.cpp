@@ -88,8 +88,9 @@ void Scene::Update(float& deltaTime) {
 	for (int i = 0; i < this->NPCs.size(); i++) {
 		this->NPCs.at(i)->NPCUpdate(deltaTime);
 
-		AABB a(NPCs.at(i)->GetTransform().GetPos(), glm::vec3(0.5, 0.5, 1));
-		AABB b(players.at(0)->GetTransform().GetPos(), glm::vec3(0.5, 0.5, 0.5));
+		AABB a(NPCs.at(i)->GetTransform().GetPos(), glm::vec3(0.5f, 0.5f, 1));
+		AABB NpcSeenSpace(NPCs.at(i)->GetTransform().GetPos(), glm::vec3(5, 5, 5));
+		AABB b(players.at(0)->GetTransform().GetPos(), glm::vec3(0.5f, 0.5f, 0.5f));
 
 		if (a.containsAABB(b))
 		{
@@ -101,6 +102,11 @@ void Scene::Update(float& deltaTime) {
 				delete NPCs.at(i);
 				NPCs.erase(NPCs.begin() + i);
 			}
+			
+		}
+		else if (NpcSeenSpace.containsAABB(b))
+		{
+			NPCs.at(i)->initiateFleeingState(players.at(0)->GetForward() );
 		}
 	}
 

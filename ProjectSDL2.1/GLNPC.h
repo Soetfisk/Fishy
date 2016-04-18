@@ -14,10 +14,12 @@ private:
 		NOTHING,
 		NPCMOVE,
 		AGGRESIVE,
+		FLEEING,
 		NPC_SHOOT
+
 	};
 	unsigned int currentState;
-	float TimeUntilChange, scaleChange,forwardSpeed;
+	float fleeingTimer,TimeUntilChange, scaleChange,forwardSpeed;
 	glm::vec3 rotationChange;
 
 private:
@@ -31,6 +33,7 @@ public:
 	void NPCUpdate(float deltaTime);
 	void NPCDraw(GLShader& shader);
 	void gettingEaten(float deltaTime);
+	void initiateFleeingState(glm::vec3 playerForwardVector);
 
 	
 
