@@ -18,6 +18,7 @@ private:
 		//PARTICLES,
 		//BLUR,
 		PASS,
+		WAVY,
 		NUM_SHADERS
 	};
 	int SCREEN_WIDTH = window::WIDTH;
