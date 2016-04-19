@@ -119,6 +119,9 @@
     <ClInclude Include="AABB.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SphereBS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="test.frag" />

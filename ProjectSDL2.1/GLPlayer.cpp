@@ -5,7 +5,6 @@
 GLPlayer::GLPlayer() : GLModel()
 {
 	this->m_camera;
-	this->m_projectile = new GLProjectile(10, 20.0f);
 	this->m_projectileHandler = new GLProjectileHandler(1, 20, 10.0f);
 	this->m_velocity = glm::vec3(0);
 	
@@ -14,7 +13,6 @@ GLPlayer::GLPlayer() : GLModel()
 GLPlayer::GLPlayer(FishBox& FSH_Loader, char* filePath) : GLModel(FSH_Loader, filePath)
 {
 	this->m_camera;
-	this->m_projectile = new GLProjectile(10, 20.0f);
 	this->m_projectileHandler = new GLProjectileHandler(1, 20, 10.0f);
 	this->m_velocity = glm::vec3(0);
 }
