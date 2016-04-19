@@ -68,7 +68,6 @@ GLMesh::GLMesh(FSHData::mesh * meshData, FSHData::vertexData * vertices, unsigne
 
 	this->m_transfrom = GLTransform();
 
-
 	std::vector<glm::vec3> positions;
 	std::vector<glm::vec3> normals;
 	std::vector<glm::vec2> uv;
