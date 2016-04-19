@@ -166,7 +166,6 @@ private:
 
 
 private: //varaibles
-	unsigned int SceneCount = 0;
 	std::vector<FSHScene> SceneList;
 public: //variables
 
@@ -186,3 +185,10 @@ public: //functions
 	unsigned int * IndexData(unsigned int model, unsigned int mesh);
 	unsigned int FishBox::ModelMeshCount(unsigned int model);
 };
+
+#ifdef _DEBUG 
+#ifndef DBG_NEW
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ ) 
+#define new DBG_NEW 
+#endif
+#endif  // _DEBUG

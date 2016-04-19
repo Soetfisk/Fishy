@@ -11,7 +11,15 @@ GLPlayer::GLPlayer() : GLModel()
 	
 }
 
-GLPlayer::GLPlayer(FishBox& FSH_Loader, char* filePath) : GLModel(FSH_Loader, filePath)
+GLPlayer::GLPlayer(FishBox& FSH_Loader, char* filePath) : GLModel(FSH_Loader, filePath) //DEPRICATED USE AT OWN RISK
+{
+	this->m_camera;
+	this->m_projectile = new GLProjectile(10, 20.0f);
+	this->m_projectileHandler = new GLProjectileHandler(1, 20, 10.0f);
+	this->m_velocity = glm::vec3(0);
+}
+
+GLPlayer::GLPlayer(FishBox & FSH_Loader, unsigned int modelID) : GLModel(FSH_Loader, modelID)
 {
 	this->m_camera;
 	this->m_projectile = new GLProjectile(10, 20.0f);
