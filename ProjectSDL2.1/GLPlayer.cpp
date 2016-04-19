@@ -1,8 +1,21 @@
 #include "GLPlayer.h"
 #include <math.h>
-
+#include "RNG.h"
 
 GLPlayer::GLPlayer() : GLModel()
+{
+	this->m_camera;
+	this->m_projectile = new GLProjectile(10, 20.0f);
+	this->m_projectileHandler = new GLProjectileHandler(1, 20, 10.0f);
+	this->m_velocity = glm::vec3(0);
+	
+	this->dashCurrentDuration = 0.0f;
+	this->dashDuration = 1.0f;
+	this->dashMultiplier = 1.0f;
+	this->isDashing = false;
+}
+
+GLPlayer::GLPlayer(FishBox& FSH_Loader, char* filePath) : GLModel(FSH_Loader, filePath)
 {
 	this->m_camera;
 	this->m_projectile = new GLProjectile(10, 20.0f);
@@ -132,11 +145,11 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	if (this->meshes[0]->GetTransform().m_rot.z <= maxAngle && this->meshes[0]->GetTransform().m_rot.z >= -maxAngle)
 	{
 		this->meshes[0]->GetTransform().m_rot.z += -(lastHorizontal / (MAX_IMPUT)) * deltaTime;
-		this->meshes[1]->GetTransform().m_rot.z += -(lastHorizontal / (MAX_IMPUT)) * deltaTime;
+		//this->meshes[1]->GetTransform().m_rot.z += -(lastHorizontal / (glm::pow(2, 15))) * deltaTime;
 	}
 		
 	this->meshes[0]->GetTransform().m_rot.z -= this->meshes[0]->GetTransform().m_rot.z * deltaTime;
-	this->meshes[1]->GetTransform().m_rot.z -= this->meshes[0]->GetTransform().m_rot.z * deltaTime;
+	//this->meshes[1]->GetTransform().m_rot.z -= this->meshes[0]->GetTransform().m_rot.z * deltaTime;
 
 	if (dashCurrentDuration >= dashDuration && isDashing)
 	{
@@ -192,6 +205,12 @@ void GLPlayer::PlayerDash()
 	{
 		lastForward = 0;
 	}
+}
+
+void GLPlayer::PlayerEating(float deltaTime)
+{
+	glm::vec3 scaleIncrease = this->transform->GetScale() + (deltaTime / 4);
+	this->transform->SetScale(scaleIncrease);
 }
 //
 //this->GetTransform().m_pos += m_forward * (this->m_velocity.x * deltaTime);

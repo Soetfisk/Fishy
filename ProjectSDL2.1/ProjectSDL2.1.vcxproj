@@ -37,6 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\RNG.h" />
+    <ClInclude Include="AABB.h" />
     <ClInclude Include="FilterComputeShader.h" />
     <ClInclude Include="GLNPC.h" />
     <ClInclude Include="FrameBuffer.h" />
