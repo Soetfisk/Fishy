@@ -10,15 +10,19 @@ class GLNPC : public GLModel
 private:
 	enum NPCStates
 	{
-		DEAD,
+		BEINGEATEN,
 		NOTHING,
 		NPCMOVE,
 		AGGRESIVE,
+		FLEEING,
 		NPC_SHOOT
+
 	};
+	const int DEADZONEX = 200, DEADZONEY = 200, DEADZONEZ = 200;
 	unsigned int currentState;
-	float TimeUntilChange, scaleChange,forwardSpeed;
+	float fleeingTimer,TimeUntilChange, scaleChange,forwardSpeed;
 	glm::vec3 rotationChange;
+
 private:
 	//Dash();
 	//Eat();
@@ -27,8 +31,11 @@ private:
 
 public:	
 	GLNPC(void);
+	GLNPC(FishBox& FSH_Loader, char* filePath);
 	void NPCUpdate(float deltaTime);
 	void NPCDraw(GLShader& shader);
+	void gettingEaten(float deltaTime);
+	void initiateFleeingState(glm::vec3 playerForwardVector);
 
 	
 
