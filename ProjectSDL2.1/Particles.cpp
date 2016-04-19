@@ -128,8 +128,11 @@ Particles::Particles(GLShader * shader)
 }
 
 void Particles::Update() {
-
+	GLfloat tempNr = rand() % 10;
+	if (tempNr < 5)
+		tempNr = -tempNr;
 	glUseProgram(compute_program);
+	glUniform1fv(glGetUniformLocation(compute_program, "time"), 1, &tempNr);
 	glDispatchCompute(particle::NUM_PARTICLES / particle::WORK_GROUP_SIZE, 1, 1);
 	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 
@@ -141,7 +144,8 @@ void Particles::Update() {
 }
 
 void Particles::Draw(GLShader * shader) {
-
+	glBindBuffer(GL_ARRAY_BUFFER, m_vertexDrawBuffer);
+	glBufferData(GL_ARRAY_BUFFER, particle::NUM_PARTICLES * sizeof(points[0]), &points[0], GL_STATIC_DRAW);
 	//glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 4, posSSbo);
 	glUniform1fv(p_SizeLocation, 1, &p_size);
 	//glUniform4fv(p_PosLocation, particle::NUM_PARTICLES, glm::value_ptr(&points));

@@ -19,11 +19,13 @@ layout(std140, binding = 6) buffer Col{
 
 layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
 
-void main(){
+uniform float time;
 
+void main(){
+	
 	uint gid = gl_GlobalInvocationID.x;
 	vec3 p = Position[gid].xyz;
-	p = p + vec3(1,0,0);
+	p = ((time*.1f) * vec3(1,0,0));
 	Position[gid].xyz = p;
 	
 	//Position[gid].xyz = Position[gid].xyz;

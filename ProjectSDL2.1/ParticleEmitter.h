@@ -14,18 +14,25 @@ private:
 	std::vector<Particle*> particles;
 	ParticleComputeShader* emitterComputeShader;
 	GLuint transformationLocation;
+
 	glm::mat4* transformLocation;
 	glm::vec3 emitterPosition;
+	GLuint pe_VertexArrayObject;
+	GLuint pe_VertexArrayBuffer;
 
+	glm::mat4* particleTransformationMatrices;
+	glm::vec4* particleVelocities;
 
 	float distanceFromObject;
-	glm::vec4 directionFromObject;
+	glm::vec3 directionFromObject;
 	int nrMaxParticles;
+	int nrCurrentParticles;
 	float spawnTimer;
 
 
 	void InstantiateProjectileEmitter();
 	void InstantiateEmitter();
+	void InstantiateRenderShader();
 
 	
 public:
