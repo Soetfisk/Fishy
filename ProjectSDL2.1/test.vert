@@ -9,13 +9,14 @@ out vec3 vsNormal;
 out vec3 vsPos;
 
 uniform mat4 TransformMatrix;
-uniform mat4 ProjectionViewMatrix;
+uniform mat4 ProjectionMatrix;
+uniform mat4 ViewMatrix;
 uniform mat4 ViewPos;
 
 void main()
 {
  
-	gl_Position = ProjectionViewMatrix * TransformMatrix * vec4(position, 1);
+	gl_Position = ProjectionMatrix * ViewMatrix * TransformMatrix * vec4(position, 1);
 	vsTexCoord = texCoord;
 	vsNormal = normal;
 	vsPos = vec3(TransformMatrix * vec4(position, 1));

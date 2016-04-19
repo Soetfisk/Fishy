@@ -2,12 +2,13 @@
 #define PARTICLES_H
 
 #include "GLUtil.h"
+#include "GLShader.h"
 
 namespace particle {
 	//const int NUM_PARTICLES = 1024 * 1024; //Number of particles
 	//const int WORK_GROUP_SIZE = 128;       //items per work group
 
-	const int NUM_PARTICLES = 2*2; //Number of particles
+	const int NUM_PARTICLES = 1*2; //Number of particles
 	const int WORK_GROUP_SIZE = 1;       //items per work group
 }
 
@@ -30,12 +31,14 @@ private:
 	//Shader storage buffer bjects of position, velocity, color
 	GLuint posSSbo, velSSbo, colSSbo;
 	GLuint compute_shader, compute_program;
+	GLuint p_SizeLocation;
 	pos* points;
+	glm::mat4* worldMatrices;
 
 	GLuint CreateShader(const std::string& text, GLenum shaderType);
 	void CheckShaderError(GLuint shader, GLuint flag, bool isProgram);
 	std::string LoadShader(const std::string& fileName);
-
+	float p_size;
 
 	enum
 	{
@@ -49,9 +52,9 @@ private:
 
 
 public:
-	void Draw();
+	void Draw(GLShader * shader);
 	void Update();
-	Particles();
+	Particles(GLShader * shader);
 	~Particles();
 };
 

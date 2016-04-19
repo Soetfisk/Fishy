@@ -63,6 +63,9 @@
     <ClCompile Include="Particles.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ParticleComputeShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLUtil.h">
@@ -108,6 +111,8 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Particles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="GLProjectileHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -118,6 +123,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\RNG.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleComputeShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -132,5 +140,6 @@
     <None Include="blueFilter.glsl">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="Particle.geom" />
   </ItemGroup>
 </Project>

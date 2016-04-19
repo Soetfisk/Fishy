@@ -6,10 +6,12 @@
 
 
 
-Particles::Particles()
+Particles::Particles(GLShader * shader)
 {
+	p_SizeLocation = shader->GetUnifromLocation("particelSize");
+	float p_size = .5f;
 	srand(time(0));
-
+	
 	glGenBuffers(1, &this->posSSbo);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, posSSbo);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, particle::NUM_PARTICLES * sizeof(pos), NULL, GL_STATIC_DRAW);
@@ -25,25 +27,15 @@ Particles::Particles()
 		points[i].z = 0;
 		points[i].w = 1;
 	}    */         
-	points[0].x = -1.0f;
-	points[0].y = 1.0f;
-	points[0].z = 0.0f;
+	points[0].x = 1.0f;
+	points[0].y = 3.0f;
+	points[0].z = 6.0f;
 	points[0].w = 1.0f;
 
-	points[1].x = -1.0f;
-	points[1].y = -1.0f;
-	points[1].z = 0.0f;
+	points[1].x = 3.0f;
+	points[1].y = 3.0f;
+	points[1].z = 6.0f;
 	points[1].w = 1.0f;
-
-	points[2].x = 1.0f;
-	points[2].y = 1.0f;
-	points[2].z = 0.0f;
-	points[2].w = 1.0f;
-
-	points[3].x = 1.0f;
-	points[3].y = -1.0f;
-	points[3].z = 0.0f;
-	points[3].w = 1.0f;
 
 
 
@@ -109,7 +101,6 @@ Particles::Particles()
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, NULL);
 	
 	
-	
 	//glBindVertexArray(0);
 
 
@@ -137,23 +128,27 @@ Particles::Particles()
 }
 
 void Particles::Update() {
-	glUseProgram(compute_program);
-	glDispatchCompute(particle::NUM_PARTICLES / particle::WORK_GROUP_SIZE, 1, 1);
-	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+
+	//glUseProgram(compute_program);
+	//glDispatchCompute(particle::NUM_PARTICLES / particle::WORK_GROUP_SIZE, 1, 1);
+	//glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 
 	for (int i = 0; i < particle::NUM_PARTICLES; i++) {
 		//printf(i + " : " + (int)points[i].x);
-		//std::cout<<i<<" : " << points[i].x << std::endl;
+		std::cout<<i<<" : " << points[i].x << std::endl;
 	}
 	
 }
 
-void Particles::Draw() {
+void Particles::Draw(GLShader * shader) {
+
 	//glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 4, posSSbo);
+	glUniform1fv(p_SizeLocation, 1, &p_size);
+	//glUniform4fv(p_PosLocation, particle::NUM_PARTICLES, glm::value_ptr(&points));
 
 	glBindVertexArray(m_vertexArrayObject);
 
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, particle::NUM_PARTICLES);
+	glDrawArrays(GL_POINTS, 0, particle::NUM_PARTICLES);
 	glBindVertexArray(0);
 	//glBindBuffer(GL_ARRAY_BUFFER, posSSbo);
 	//glVertexPointer(4, GL_FLOAT, 0, (void *)0);

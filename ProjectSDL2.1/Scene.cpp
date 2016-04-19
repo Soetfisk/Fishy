@@ -21,7 +21,7 @@ Scene::Scene() {
 	}
 	shaders[MODELS] = new GLShader("test");
 	shaders[PASS] = new GLShader("pass");
-	shaders[PARTICLE] = new GLShader("Particle");
+	shaders[PARTICLE] = new GLShader("Particle", true);
 
 	//FishBox FishBoxController;
 	//std::vector<FSHVertexData> FSHVertexes = FishBoxController.GetModelList()[0].GetMeshList()[0].GetVertices();
@@ -49,7 +49,7 @@ Scene::Scene() {
 	this->frameBuffer->CreateFrameBuffer(3);
 	this->frameBuffer->UnbindFrameBuffer();
 	tempMesh->GetTransform().SetPos(glm::vec3(3, 0, 3));
-	testParticle = new Particles();
+	testParticle = new Particles(shaders[PARTICLE]);
 	//first make vertex for all vertexes
 	filterComputeShader = new FilterComputeShader("derp");
 	filterComputeShader->LoadShader("blueFilter.glsl");
@@ -128,7 +128,7 @@ void Scene::DrawScene() {
 		testParticle->Update();
 		shaders[PARTICLE]->Bind();
 		shaders[PARTICLE]->Update(players.at(i)->GetCamera());
-		testParticle->Draw();
+		testParticle->Draw(shaders[PARTICLE]);
 		//shaders[PARTICLE]->Bind();
 		//shaders[PARTICLE]->Update(players.at(i)->GetCamera());
 		//this->RenderQuad();
