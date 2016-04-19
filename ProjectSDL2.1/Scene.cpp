@@ -314,7 +314,10 @@ void Scene::HandleEvenet(SDL_Event* e) {
 		if (keyState[SDL_SCANCODE_D])
 		{
 			players.at(0)->Update(GLPlayer::PLAYER_MOVE, glm::vec3((glm::pow(2, 15)), 0, 0));
-			
+		}
+		if (keyState[SDL_SCANCODE_E])
+		{
+			players.at(0)->Update(GLPlayer::PLAYER_DASH, glm::vec3(0, 0, (glm::pow(2, 15))));
 		}
 		if (keyState[SDL_SCANCODE_LSHIFT])
 		{

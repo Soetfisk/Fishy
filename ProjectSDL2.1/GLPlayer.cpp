@@ -10,9 +10,11 @@ GLPlayer::GLPlayer() : GLModel()
 	this->m_velocity = glm::vec3(0);
 	
 	this->dashCurrentDuration = 0.0f;
-	this->dashDuration = 1.0f;
-	this->dashMultiplier = 1.0f;
+	this->dashDuration = 0.2f;
+	this->dashCooldown = 5;
+	this->dashCooldownCounter = 0;
 	this->isDashing = false;
+	this->dashOnCooldown = false;
 }
 
 GLPlayer::GLPlayer(FishBox& FSH_Loader, char* filePath) : GLModel(FSH_Loader, filePath)
@@ -23,9 +25,11 @@ GLPlayer::GLPlayer(FishBox& FSH_Loader, char* filePath) : GLModel(FSH_Loader, fi
 	this->m_velocity = glm::vec3(0);
 	
 	this->dashCurrentDuration = 0.0f;
-	this->dashDuration = 1.0f;
-	this->dashMultiplier = 1.0f;
+	this->dashDuration = 0.25f;
+	this->dashCooldown = 1;
+	this->dashCooldownCounter = 0;
 	this->isDashing = false;
+	this->dashOnCooldown = false;
 }
 
 
@@ -132,7 +136,7 @@ void GLPlayer::PlayerMove(float x, float y, float z)
 void GLPlayer::PlayerUpdate(float deltaTime)
 {
 	//player update
-	glm::vec3 v = glm::vec3((lastVertical / (MAX_IMPUT)), (lastHorizontal / (MAX_IMPUT)),0);
+	glm::vec3 v = glm::vec3((lastVertical / (MAX_INPUT)), (lastHorizontal / (MAX_INPUT)),0);
 	this->transform->m_rot += (v * rotateSpeed * deltaTime);
 
 	if (this->transform->m_rot.x > glm::radians(MAX_ANGLE))
@@ -144,34 +148,48 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 
 	if (this->meshes[0]->GetTransform().m_rot.z <= maxAngle && this->meshes[0]->GetTransform().m_rot.z >= -maxAngle)
 	{
-		this->meshes[0]->GetTransform().m_rot.z += -(lastHorizontal / (MAX_IMPUT)) * deltaTime;
+		this->meshes[0]->GetTransform().m_rot.z += -(lastHorizontal / (MAX_INPUT)) * deltaTime;
 		//this->meshes[1]->GetTransform().m_rot.z += -(lastHorizontal / (glm::pow(2, 15))) * deltaTime;
 	}
 		
 	this->meshes[0]->GetTransform().m_rot.z -= this->meshes[0]->GetTransform().m_rot.z * deltaTime;
 	//this->meshes[1]->GetTransform().m_rot.z -= this->meshes[0]->GetTransform().m_rot.z * deltaTime;
-
-	if (dashCurrentDuration >= dashDuration && isDashing)
-	{
-		isDashing = false;
-		dashMultiplier = 1.0f;
-	}
-	else
-	{
-		dashCurrentDuration += deltaTime;
-	}
-		
-
-	glm::vec3 forward = this->GetForward();
-	m_velocity += forward * (float)(lastForward / (MAX_IMPUT));
-
+	
 	if (m_velocity != glm::vec3(0))
 	{
-		m_velocity += (forward  *  dashMultiplier) *deltaTime;
+		if (isDashing)
+			m_velocity += m_velocity * 0.2f;
+
 		this->transform->m_pos += (m_velocity  * deltaTime);
 		glm::vec3 friction = (m_velocity * MOVEMENT_FRICTION);
 		m_velocity -= friction * deltaTime;
-		
+	}
+
+
+	glm::vec3 forward = this->GetForward();
+	m_velocity += forward * (float)(lastForward / (MAX_INPUT));
+
+	if (isDashing)
+	{
+		dashCurrentDuration += deltaTime;
+		this->PlayerMove(0, 0, (MAX_INPUT - MAX_INPUT * dashCurrentDuration / dashDuration));
+		if (dashCurrentDuration >= dashDuration)
+		{
+			dashCurrentDuration = 0.0f;
+			isDashing = false;
+			dashOnCooldown = true;
+		}
+	}
+	else if (dashOnCooldown)
+	{
+		dashCooldownCounter += deltaTime;
+		//this->PlayerMove(0, 0, (MAX_INPUT - MAX_INPUT * dashCurrentDuration / dashDuration));
+		std::cout << dashCooldownCounter << std::endl;;
+		if (dashCooldown <= dashCooldownCounter)
+		{
+			dashOnCooldown = false;
+			dashCooldownCounter = 0.0f;
+		}
 	}
 
 	//camera update
@@ -184,26 +202,15 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 void GLPlayer::PlayerShoot()
 {
 	this->m_projectileHandler->Shoot(this->GetForward(), transform->m_pos, transform->m_rot);
-	/*if (!this->m_projectile->isActive())
-	{
-		this->m_projectile->SetForward(this->GetForward());
-		this->m_projectile->ResetTo(this->transform->m_pos);
-		this->m_projectile->GetTransform().m_rot = this->transform->m_rot;
-		this->m_projectile->Activate();
-	}*/
 }
 void GLPlayer::PlayerDash()
 {
-	if (!isDashing)
+	if (!isDashing && !dashOnCooldown)
 	{
 		isDashing = true;
 		dashCurrentDuration = 0.0f;
-		dashMultiplier = 5.0f;
+		dashCooldownCounter = 0.0f;
 		lastForward = 32768.0f;
-	}
-	else
-	{
-		lastForward = 0;
 	}
 }
 
