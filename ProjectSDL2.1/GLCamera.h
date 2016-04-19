@@ -32,8 +32,8 @@ private:
 
 	void ProcessInput(float x, float y, float deltaTime);
 
-	float CalcHorizontalDist();
-	float CalcVerticalDist();
+	float CalcHorizontalDist(GLTransform transform);
+	float CalcVerticalDist(GLTransform transform);
 
 	void CalcCameraPos(float horizDist, float verticDist, GLTransform transform);
 };

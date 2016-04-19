@@ -24,11 +24,13 @@ public:
 	};
 
 	GLPlayer();
+	GLPlayer(FishBox& FSH_Loader, char* filePath);
 	~GLPlayer();
 	GLProjectile* tempGetProjectile();
 	void Update(Events state, glm::vec3 movementVec);
 	GLCamera GetCamera();
 
+	void PlayerEating(float deltaTime);
 	void TestDraw(GLShader& shader);
 	
 private:
@@ -56,5 +58,6 @@ private:
 	void PlayerMove(float x, float y, float z);
 	void PlayerUpdate(float deltaTime);
 	void PlayerShoot();
+	
 };
 

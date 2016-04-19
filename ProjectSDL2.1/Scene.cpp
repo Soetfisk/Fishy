@@ -1,11 +1,11 @@
 #include "Scene.h"
 #include "obj_loader.h"
-
+#include "AABB.h"
 
 
 void Scene::LoadModels()
 {
-	models.push_back(new GLModel(FSH_Loader, "Models/TestBin.FSH"));
+	//models.push_back(new GLModel(FSH_Loader, "Models/tempfish.FSH"));
 }
 
 void Scene::LoadModels(char * folder)
@@ -13,41 +13,27 @@ void Scene::LoadModels(char * folder)
 }
 
 Scene::Scene() {
+	
 	for (int i = 0; i < 2; i++) {
-		this->players.push_back(new GLPlayer());
+		this->players.push_back(new GLPlayer(FSH_Loader, "Models/tempfish.FSH"));
 	}
-	for (int i = 0; i < 20; i++) {
-		this->NPCs.push_back(new GLNPC());
+	this->players.at(0)->GetTransform().SetPos(glm::vec3(20, 0, 0));
+	this->players.at(0)->GetTransform().SetPos(glm::vec3(-20, 0, 0));
+	
+	for (int i = 0; i < 50; i++) {
+		this->NPCs.push_back(new GLNPC(FSH_Loader, "Models/tempfish.FSH"));
 	}
 	shaders[MODELS] = new GLShader("test");
 	shaders[PASS] = new GLShader("pass");
 
-	//FishBox FishBoxController;
-	//std::vector<FSHVertexData> FSHVertexes = FishBoxController.GetModelList()[0].GetMeshList()[0].GetVertices();
-	//std::vector<Vertex> Vertices = ModelDataConvert::convertFSHVertex(FSHVertexes);
+	LoadModels();
 
-	//FSHMaterial Material = FishBoxController.GetModelList()[0].GetMaterialList()[0];
-	//GL::Mesh GLMaterial = ModelDataConvert::convertFSHMaterial(Material);
 	
-	//new GLMesh(Vertices, Vertices.size(), /*indices*/, FishBoxController.GetModelList()[0].GetMeshList()[0].getIndexCount(), GLMaterial)
 
-	//float hello = Material.getAmbient()[0];
-	//printf("%f", hello);
-	//std::vector<Vertex> vertices;
-
-	//vertices.push_back(Vertex(glm::vec3(-.5, .5, 0), glm::vec2(0, 1), glm::vec3(0, 0, 1)));
-	//vertices.push_back(Vertex(glm::vec3(-.5, -.5, 0), glm::vec2(0, 0), glm::vec3(0, 0, 1)));
-	//vertices.push_back(Vertex(glm::vec3(.5, -.5, 0), glm::vec2(1, 0), glm::vec3(0, 0, 1)));
-	//vertices.push_back(Vertex(glm::vec3(.5, .5, 0), glm::vec2(1, 1), glm::vec3(0, 0, 1)));
-
-	//std::vector<unsigned int> indices = {0, 1, 2, 2, 3, 0};
-	//
-	//tempMesh = GLMesh(vertices, vertices.size(), indices, indices.size(), GLMesh::Material());
-	tempMesh = objLoadFromFile("./res/OBJ/box2.obj");
 	this->frameBuffer = new FrameBuffer();
 	this->frameBuffer->CreateFrameBuffer(3, SCREEN_WIDTH, SCREEN_HEIGHT);
 	this->frameBuffer->UnbindFrameBuffer();
-	tempMesh->GetTransform().SetPos(glm::vec3(3, 0, 3));
+	//tempMesh->GetTransform().SetPos(glm::vec3(3, 0, 3));
 	//first make vertex for all vertexes
 	filterComputeShader = new FilterComputeShader("derp");
 	filterComputeShader->LoadShader("blueFilter.glsl");
@@ -60,7 +46,7 @@ Scene::~Scene(){
 	for (int i = 0; i < NUM_SHADERS; i++) {
 		delete shaders[i];
 	}
-	delete tempMesh;
+	
 	delete this->frameBuffer;
 	delete this->filterComputeShader;
 	for (int i = 0; i < models.size(); i++)
@@ -87,7 +73,36 @@ void Scene::Update(float& deltaTime) {
 
 	for (int i = 0; i < this->NPCs.size(); i++) {
 		this->NPCs.at(i)->NPCUpdate(deltaTime);
+
+		float PHD = players.at(0)->GetTransform().GetScale().y/2;
+
+		AABB a(NPCs.at(i)->GetTransform().GetPos(), glm::vec3(0.5f, 0.5f, 1));
+		AABB NpcSeenSpace(NPCs.at(i)->GetTransform().GetPos(), glm::vec3(5, 5, 5));
+		//AABB b(players.at(0)->GetTransform().GetPos(), glm::vec3(0.5f, 0.5f, 0.5f));
+		AABB b(players.at(0)->GetTransform().GetPos(), glm::vec3(PHD, PHD, PHD));
+		if (a.containsAABB(b))
+		{
+			
+			NPCs.at(i)->gettingEaten(deltaTime);
+			players.at(0)->PlayerEating(deltaTime);
+
+			
+			
+			if (NPCs.at(i)->GetTransform().GetScale().y<0.2)
+			{
+				delete NPCs.at(i);
+				NPCs.erase(NPCs.begin() + i);
+			}
+			
+		}
+		else if (NpcSeenSpace.containsAABB(b))
+		{
+			NPCs.at(i)->initiateFleeingState(players.at(0)->GetForward() );
+		}
 	}
+
+	
+
 	//std::cout << deltaTime << std::endl;
 }
 
@@ -114,8 +129,9 @@ void Scene::DrawScene() {
 			NPCs.at(i)->NPCDraw(*shaders[MODELS]);
 		}
 		
-
-		tempMesh->Draw(*shaders[MODELS], GLTransform());
+	
+		//models[0]->Draw(*shaders[MODELS]);
+		//tempMesh->Draw(*shaders[MODELS], GLTransform());
 
 		
 
