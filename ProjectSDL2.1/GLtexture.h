@@ -1,5 +1,5 @@
 #pragma once
-#include "stb_image.h"
+#include "./include/stb_image.h"
 class GLTexture
 {
 public:

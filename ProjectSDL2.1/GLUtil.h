@@ -31,6 +31,14 @@ namespace window {
 	const int WIDTH = 1024;
 	const int HEIGHT = 768;
 }
+
+enum EmitterType
+{
+	PROJECTILE,
+	PLAYERFOLLOW,
+	STATICSTREAM,
+	EMITERTYPENR
+};
 #ifdef _DEBUG 
 #ifndef DBG_NEW
 #define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ ) 

@@ -129,9 +129,9 @@ Particles::Particles(GLShader * shader)
 
 void Particles::Update() {
 
-	//glUseProgram(compute_program);
-	//glDispatchCompute(particle::NUM_PARTICLES / particle::WORK_GROUP_SIZE, 1, 1);
-	//glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+	glUseProgram(compute_program);
+	glDispatchCompute(particle::NUM_PARTICLES / particle::WORK_GROUP_SIZE, 1, 1);
+	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 
 	for (int i = 0; i < particle::NUM_PARTICLES; i++) {
 		//printf(i + " : " + (int)points[i].x);
