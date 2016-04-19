@@ -26,6 +26,7 @@ Scene::Scene() {
 	shaders[MODELS] = new GLShader("test");
 	shaders[PASS] = new GLShader("pass");
 	shaders[WAVY] = new GLShader("wavy");
+	shaders[POST] = new GLShader("post");
 
 	LoadModels();
 
@@ -38,6 +39,10 @@ Scene::Scene() {
 	this->frameBuffer2 = new FrameBuffer();
 	this->frameBuffer2->CreateFrameBuffer(1, SCREEN_WIDTH, SCREEN_HEIGHT);
 	this->frameBuffer2->UnbindFrameBuffer();
+
+	this->frameBuffer3 = new FrameBuffer();
+	this->frameBuffer3->CreateFrameBuffer(1, SCREEN_WIDTH, SCREEN_HEIGHT);
+	this->frameBuffer3->UnbindFrameBuffer();
 	//tempMesh->GetTransform().SetPos(glm::vec3(3, 0, 3));
 	//first make vertex for all vertexes
 	filterComputeShader = new FilterComputeShader("derp");
@@ -159,10 +164,17 @@ void Scene::DrawScene() {
 		//glViewport(0, window::HEIGHT - (window::HEIGHT / (i + 1)), window::WIDTH, window::HEIGHT / 2);
 		this->RenderQuad();
 		this->frameBuffer2->UnbindFrameBuffer();
+
+		this->frameBuffer3->BindFrameBuffer();
+		shaders[POST]->Bind();
+		this->frameBuffer2->BindTexturesToProgram(shaders[POST]->GetUnifromLocation("texture"), 0);
+		//glViewport(0, window::HEIGHT - (window::HEIGHT / (i + 1)), window::WIDTH, window::HEIGHT / 2);
+		this->RenderQuad();
+		this->frameBuffer3->UnbindFrameBuffer();
 		
 
 		shaders[PASS]->Bind();
-		this->frameBuffer2->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
+		this->frameBuffer3->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
 		//this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture2"), 1);
 		//this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture3"), 2);
 		glViewport(0, window::HEIGHT - (window::HEIGHT / (i + 1)), window::WIDTH, window::HEIGHT / 2);

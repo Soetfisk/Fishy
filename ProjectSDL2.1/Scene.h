@@ -19,6 +19,7 @@ private:
 		//BLUR,
 		PASS,
 		WAVY,
+		POST,
 		NUM_SHADERS
 	};
 	int SCREEN_WIDTH = window::WIDTH;
@@ -37,6 +38,7 @@ private:
 	GLuint cs;
 	FrameBuffer* frameBuffer;
 	FrameBuffer* frameBuffer2;
+	FrameBuffer* frameBuffer3;
 	GLProjectile* testProj;
 	float count = 0;
 	FilterComputeShader* filterComputeShader;
