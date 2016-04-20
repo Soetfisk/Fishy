@@ -33,7 +33,7 @@ GLPlayer::GLPlayer(FishBox & FSH_Loader, unsigned int modelID) : GLModel(FSH_Loa
 	this->m_velocity = glm::vec3(0);
 	
 	this->dashCurrentDuration = 0.0f;
-	this->dashDuration = 0.5f;
+	this->dashDuration = 0.3f;
 	this->dashCooldown = 1;
 	this->dashCooldownCounter = 0;
 	this->isDashing = false;
