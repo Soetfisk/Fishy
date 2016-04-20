@@ -60,6 +60,8 @@
     <None Include="blueFilter.glsl" />
     <None Include="pass.frag" />
     <None Include="pass.vert" />
+    <None Include="post.frag" />
+    <None Include="post.vert" />
     <None Include="test.frag" />
     <None Include="test.vert" />
     <None Include="wavy.frag" />
