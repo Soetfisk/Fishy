@@ -131,15 +131,15 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	this->meshes[0]->GetTransform().m_rot.z -= this->meshes[0]->GetTransform().m_rot.z * deltaTime;
 	//this->meshes[1]->GetTransform().m_rot.z -= this->meshes[0]->GetTransform().m_rot.z * deltaTime;
 
-	glm::vec3 forward = this->GetForward();
-	m_velocity += forward * (float)(lastForward / (glm::pow(2, 15)));
-
 	if (m_velocity != glm::vec3(0))
 	{
 		this->transform->m_pos += (m_velocity  * deltaTime);
 		glm::vec3 friction = (m_velocity * MOVEMENT_FRICTION);
 		m_velocity -= friction * deltaTime;
 	}
+
+	glm::vec3 forward = this->GetForward();
+	m_velocity += forward * (float)(lastForward / (glm::pow(2, 15)));
 
 	//camera update
 	this->m_camera.Update(this->GetTransform(), deltaTime);
@@ -164,23 +164,3 @@ void GLPlayer::PlayerEating(float deltaTime)
 	glm::vec3 scaleIncrease = this->transform->GetScale() + (deltaTime / 4);
 	this->transform->SetScale(scaleIncrease);
 }
-//
-//this->GetTransform().m_pos += m_forward * (this->m_velocity.x * deltaTime);
-//this->GetTransform().m_pos.x = sin(this->m_velocity.x) * 0.01;
-//this->GetTransform().m_rot.y -= (this->m_velocity.z * deltaTime);
-//
-//if ((lastX < -DEADZONE || lastX > DEADZONE) && (this->m_velocity.z >= -MAX_SPEED && this->m_velocity.z <= MAX_SPEED))
-//{
-//	this->m_velocity.z += lastX / (glm::pow(2, 15));
-//}
-//if ((lastY < -DEADZONE || lastY > DEADZONE) && (this->m_velocity.x >= -MAX_SPEED && this->m_velocity.x <= MAX_SPEED))
-//{
-//	this->m_velocity.x += lastY / (glm::pow(2, 15));
-//}
-//
-//if (m_velocity.x > 0) m_velocity.x = glm::max(m_velocity.x - MOVEMENT_FRICTION * deltaTime, 0.0f);
-////if (m_velocity.y > 0) m_velocity.y = glm::max(m_velocity.y - FRICTION * deltaTime, 0.0f);
-//if (m_velocity.z > 0) m_velocity.z = glm::max(m_velocity.z - MOVEMENT_FRICTION * deltaTime, 0.0f);
-//if (m_velocity.x < 0) m_velocity.x = glm::min(m_velocity.x + MOVEMENT_FRICTION * deltaTime, 0.0f);
-////if (m_velocity.y < 0) m_velocity.y = glm::min(m_velocity.y + FRICTION * deltaTime, 0.0f);
-//if (m_velocity.z < 0) m_velocity.z = glm::min(m_velocity.z + MOVEMENT_FRICTION * deltaTime, 0.0f);

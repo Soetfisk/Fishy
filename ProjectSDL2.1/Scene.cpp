@@ -28,7 +28,7 @@ Scene::Scene() {
 
 	LoadModels();
 
-	
+	tempMesh = objLoadFromFile("./res/OBJ/box2.obj");
 
 	this->frameBuffer = new FrameBuffer();
 	this->frameBuffer->CreateFrameBuffer(3, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -67,6 +67,32 @@ Scene::~Scene(){
 
 void Scene::Update(float& deltaTime) {
 	this->deltaTime = deltaTime;
+
+	AABB box(glm::vec3(3, 0, 3), glm::vec3(5, 5, 1));
+
+	glm::vec3 pos = players.at(0)->GetTransform().GetPos();
+
+	pos.x += (players.at(0)->getVelocity().x * deltaTime);
+
+	if (box.containsAABB( AABB(pos, players.at(0)->GetTransform().GetScale()) ))
+	{
+		players.at(0)->getVelocity().x = 0;
+	}
+	pos = players.at(0)->GetTransform().GetPos();
+	pos.y += (players.at(0)->getVelocity().y * deltaTime);
+
+	if (box.containsAABB(AABB(pos, players.at(0)->GetTransform().GetScale())))
+	{
+		players.at(0)->getVelocity().y = 0;
+	}
+	pos = players.at(0)->GetTransform().GetPos();
+	pos.z += (players.at(0)->getVelocity().z * deltaTime);
+
+	if (box.containsAABB(AABB(pos, players.at(0)->GetTransform().GetScale())))
+	{
+		players.at(0)->getVelocity().z = 0;
+	}
+
 	for (int i = 0; i < this->players.size(); i++) {
 		this->players.at(i)->Update(GLPlayer::NOTHING ,glm::vec3(deltaTime));
 	}
@@ -131,7 +157,7 @@ void Scene::DrawScene() {
 		
 	
 		//models[0]->Draw(*shaders[MODELS]);
-		//tempMesh->Draw(*shaders[MODELS], GLTransform());
+		tempMesh->Draw(*shaders[MODELS], GLTransform(glm::vec3(3,0,3), glm::vec3(0), glm::vec3(10,10,2)));
 
 		
 

@@ -20,7 +20,6 @@ GameMain::~GameMain()
 // The main gameloop
 void GameMain::GameLoop()
 {
-
 	while (this->gameOn) // Main game loop
 	{
 

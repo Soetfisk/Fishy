@@ -28,6 +28,9 @@ public:
 	~GLPlayer();
 	void Update(Events state, glm::vec3 movementVec);
 	GLCamera GetCamera();
+	glm::vec3& getVelocity() {
+		return m_velocity;
+	}
 
 	void PlayerEating(float deltaTime);
 	void TestDraw(GLShader& shader);
