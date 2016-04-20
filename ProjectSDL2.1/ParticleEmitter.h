@@ -4,14 +4,19 @@
 #include "Particle.h"
 #include "ParticleComputeShader.h"
 
-
+struct ParticleTest {
+	glm::vec4 pos;
+	glm::vec4 vel;
+	float LifetimeMillis;
+};
 
 
 class ParticleEmitter
 {
 private:
 	EmitterType type;
-	std::vector<Particle*> particles;
+	std::vector<ParticleTest> particles;
+
 	ParticleComputeShader* emitterComputeShader;
 	GLuint transformationLocation;
 
@@ -25,6 +30,9 @@ private:
 
 	float distanceFromObject;
 	glm::vec3 directionFromObject;
+
+
+	int nrActiveParticles;
 	int nrMaxParticles;
 	int nrCurrentParticles;
 	float spawnTimer;

@@ -19,6 +19,7 @@ ParticleEmitter::ParticleEmitter(EmitterType type, glm::vec3 position, GLuint tr
 
 	InstantiateEmitter();
 	InstantiateRenderShader();
+
 }
 
 
@@ -49,14 +50,14 @@ void ParticleEmitter::InstantiateEmitter() {
 void ParticleEmitter::InstantiateRenderShader() {
 	glGenBuffers(1, &pe_VertexArrayBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, pe_VertexArrayBuffer);
-	glBufferData(GL_ARRAY_BUFFER, this->nrMaxParticles * sizeof(this->particleTransformationMatrices[0]), &particleTransformationMatrices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, this->nrMaxParticles * sizeof(ParticleTest), &this->particles.at(0), GL_STATIC_DRAW);
 
 
 	glGenVertexArrays(1, &pe_VertexArrayObject);
 	glBindVertexArray(pe_VertexArrayObject);
 
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, NULL);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(ParticleTest), 0);
 }
 
 void ParticleEmitter::InstantiateProjectileEmitter() {
@@ -64,6 +65,7 @@ void ParticleEmitter::InstantiateProjectileEmitter() {
 	this->distanceFromObject = 2;
 	this->nrMaxParticles = 50;
 	this->spawnTimer = .1f;
+	this->nrActiveParticles;
 }
 
 
@@ -78,8 +80,10 @@ void ParticleEmitter::UpdateEmitter(const float& deltaTime) {
 }
 
 void ParticleEmitter::Draw() {
+
+	
 	glBindVertexArray(pe_VertexArrayObject);
 
-	glDrawArrays(GL_POINTS, 0, this->nrCurrentParticles);
+	glDrawArrays(GL_POINTS, 0, this->nrActiveParticles);
 	glBindVertexArray(0);
 }

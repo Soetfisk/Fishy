@@ -24,6 +24,12 @@ struct color {
 	GLfloat r, g, b, a;
 };
 
+struct PTest {
+	glm::vec4 pos;
+	glm::vec4 vel;
+	glm::vec4 color;
+};
+
 
 class Particles
 {
@@ -33,6 +39,7 @@ private:
 	GLuint compute_shader, compute_program;
 	GLuint p_SizeLocation;
 	pos* points;
+	std::vector<pos>* pointsTest;
 	glm::mat4* worldMatrices;
 
 	GLuint CreateShader(const std::string& text, GLenum shaderType);

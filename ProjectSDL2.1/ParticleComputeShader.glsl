@@ -3,6 +3,11 @@
 #extension GL_ARB_compute_shader : enable
 #extension GL_ARB_shader_storage_buffer_object : enable
 
+struct Particle{
+	vec4 pos;
+	float speed;
+	mat4 transformMatrix;
+};
 
 
 layout( std140, binding=4 ) buffer Pos {
@@ -25,7 +30,7 @@ void main(){
 	
 	uint gid = gl_GlobalInvocationID.x;
 	vec3 p = Position[gid].xyz;
-	p = ((time*.1f) * vec3(1,0,0));
+	p = p+vec3(1,0,0);
 	Position[gid].xyz = p;
 	
 	//Position[gid].xyz = Position[gid].xyz;
