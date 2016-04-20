@@ -46,6 +46,10 @@ Scene::Scene() {
 	this->frameBuffer3 = new FrameBuffer();
 	this->frameBuffer3->CreateFrameBuffer(1, SCREEN_WIDTH, SCREEN_HEIGHT);
 	this->frameBuffer3->UnbindFrameBuffer();
+
+	this->frameBuffer4 = new FrameBuffer();
+	this->frameBuffer4->CreateFrameBuffer(1, SCREEN_WIDTH, SCREEN_HEIGHT);
+	this->frameBuffer4->UnbindFrameBuffer();
 	//tempMesh->GetTransform().SetPos(glm::vec3(3, 0, 3));
 	//first make vertex for all vertexes
 	filterComputeShader = new FilterComputeShader("derp");
@@ -61,6 +65,9 @@ Scene::~Scene(){
 	}
 	
 	delete this->frameBuffer;
+	delete this->frameBuffer2;
+	delete this->frameBuffer3;
+	delete this->frameBuffer4;
 	delete this->filterComputeShader;
 	for (int i = 0; i < models.size(); i++)
 	{
@@ -164,20 +171,28 @@ void Scene::DrawScene() {
 		shaders[WAVY]->Bind();
 		shaders[WAVY]->Uniform1f("offset",count);
 		this->frameBuffer->BindTexturesToProgram(shaders[WAVY]->GetUnifromLocation("texture"), 0);
-		//glViewport(0, window::HEIGHT - (window::HEIGHT / (i + 1)), window::WIDTH, window::HEIGHT / 2);
 		this->RenderQuad();
 		this->frameBuffer2->UnbindFrameBuffer();
 
 		this->frameBuffer3->BindFrameBuffer();
 		shaders[POST]->Bind();
+		shaders[POST]->Uniform1f("width", window::WIDTH);
+		shaders[POST]->Uniform1f("height", window::HEIGHT / 2);
 		this->frameBuffer2->BindTexturesToProgram(shaders[POST]->GetUnifromLocation("texture"), 0);
-		//glViewport(0, window::HEIGHT - (window::HEIGHT / (i + 1)), window::WIDTH, window::HEIGHT / 2);
 		this->RenderQuad();
 		this->frameBuffer3->UnbindFrameBuffer();
+
+		this->frameBuffer4->BindFrameBuffer();
+		shaders[POST]->Bind();
+		shaders[POST]->Uniform1f("width", window::WIDTH);
+		shaders[POST]->Uniform1f("height", window::HEIGHT / 2);
+		this->frameBuffer3->BindTexturesToProgram(shaders[POST]->GetUnifromLocation("texture"), 0);
+		this->RenderQuad();
+		this->frameBuffer4->UnbindFrameBuffer();
 		
 
 		shaders[PASS]->Bind();
-		this->frameBuffer3->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
+		this->frameBuffer4->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
 		//this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture2"), 1);
 		//this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture3"), 2);
 		glViewport(0, window::HEIGHT - (window::HEIGHT / (i + 1)), window::WIDTH, window::HEIGHT / 2);

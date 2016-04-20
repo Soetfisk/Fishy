@@ -7,16 +7,18 @@ layout(location = 2) in vec3 normal;
 out vec2 vsTexCoord;
 out vec3 vsNormal;
 out vec3 vsPos;
+out vec3 vsViewPos;
 
 uniform mat4 TransformMatrix;
 uniform mat4 ProjectionViewMatrix;
-uniform mat4 ViewPos;
+uniform vec3 ViewPos;
 
 void main()
 {
  
 	gl_Position = ProjectionViewMatrix * TransformMatrix * vec4(position, 1);
 	vsTexCoord = texCoord;
-	vsNormal = normal;
+	vsNormal = normalize(mat3(TransformMatrix) * normal);
 	vsPos = vec3(TransformMatrix * vec4(position, 1));
+	vsViewPos = ViewPos;
 }
