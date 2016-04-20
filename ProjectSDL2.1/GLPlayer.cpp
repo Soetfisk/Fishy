@@ -33,7 +33,7 @@ GLPlayer::GLPlayer(FishBox & FSH_Loader, unsigned int modelID) : GLModel(FSH_Loa
 	this->m_velocity = glm::vec3(0);
 	
 	this->dashCurrentDuration = 0.0f;
-	this->dashDuration = 0.25f;
+	this->dashDuration = 0.5f;
 	this->dashCooldown = 1;
 	this->dashCooldownCounter = 0;
 	this->isDashing = false;
@@ -163,42 +163,9 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	this->meshes[0]->GetTransform().m_rot.z -= this->meshes[0]->GetTransform().m_rot.z * deltaTime;
 	//this->meshes[1]->GetTransform().m_rot.z -= this->meshes[0]->GetTransform().m_rot.z * deltaTime;
 	
-	if (m_velocity != glm::vec3(0))
-	{
-		if (isDashing)
-			m_velocity += m_velocity * 0.2f;
+	CalcVelocity(deltaTime);
 
-		this->transform->m_pos += (m_velocity  * deltaTime);
-		glm::vec3 friction = (m_velocity * MOVEMENT_FRICTION);
-		m_velocity -= friction * deltaTime;
-	}
-
-
-	glm::vec3 forward = this->GetForward();
-	m_velocity += forward * (float)(lastForward / (MAX_INPUT));
-
-	if (isDashing)
-	{
-		dashCurrentDuration += deltaTime;
-		this->PlayerMove(0, 0, (MAX_INPUT - MAX_INPUT * dashCurrentDuration / dashDuration));
-		if (dashCurrentDuration >= dashDuration)
-		{
-			dashCurrentDuration = 0.0f;
-			isDashing = false;
-			dashOnCooldown = true;
-		}
-	}
-	else if (dashOnCooldown)
-	{
-		dashCooldownCounter += deltaTime;
-		//this->PlayerMove(0, 0, (MAX_INPUT - MAX_INPUT * dashCurrentDuration / dashDuration));
-		std::cout << dashCooldownCounter << std::endl;;
-		if (dashCooldown <= dashCooldownCounter)
-		{
-			dashOnCooldown = false;
-			dashCooldownCounter = 0.0f;
-		}
-	}
+	HandleDash(deltaTime);
 
 	//camera update
 	this->m_camera.Update(this->GetTransform(), deltaTime);
@@ -219,6 +186,54 @@ void GLPlayer::PlayerDash()
 		dashCurrentDuration = 0.0f;
 		dashCooldownCounter = 0.0f;
 		lastForward = 32768.0f;
+	}
+}
+
+void GLPlayer::CalcVelocity(float& deltaTime)
+{
+	if (m_velocity != glm::vec3(0))
+	{
+		if (isDashing)
+			m_velocity += m_velocity * 0.2f;
+
+		this->transform->m_pos += (m_velocity  * deltaTime);
+		glm::vec3 friction = (m_velocity * MOVEMENT_FRICTION);
+		m_velocity -= friction * deltaTime;
+	}
+
+	glm::vec3 forward = this->GetForward();
+	m_velocity += forward * (float)(lastForward / (MAX_INPUT));
+}
+
+void GLPlayer::HandleDash(float & deltaTime)
+{
+	if (isDashing)
+	{
+		m_camera.AddDistance(5 * deltaTime);
+		dashCurrentDuration += deltaTime;
+		this->PlayerMove(0, 0, (MAX_INPUT - MAX_INPUT * dashCurrentDuration / dashDuration));
+		if (dashCurrentDuration >= dashDuration)
+		{
+			//dashCurrentDuration = 0.0f;
+			isDashing = false;
+			dashOnCooldown = true;
+		}
+	}
+	else if (dashOnCooldown)
+	{
+		if (dashCurrentDuration >= 0)
+		{
+			m_camera.DecreaseDistance(5 * deltaTime);
+			dashCurrentDuration -= deltaTime;
+		}
+		dashCooldownCounter += deltaTime;
+		//this->PlayerMove(0, 0, (MAX_INPUT - MAX_INPUT * dashCurrentDuration / dashDuration));
+		std::cout << dashCooldownCounter << std::endl;;
+		if (dashCooldown <= dashCooldownCounter)
+		{
+			dashOnCooldown = false;
+			dashCooldownCounter = 0.0f;
+		}
 	}
 }
 

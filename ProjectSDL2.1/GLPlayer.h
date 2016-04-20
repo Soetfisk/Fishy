@@ -69,5 +69,8 @@ private:
 	void PlayerUpdate(float deltaTime);
 	void PlayerShoot();
 	void PlayerDash();
+
+	void CalcVelocity(float& deltaTime);
+	void HandleDash(float& deltaTime);
 };
 
