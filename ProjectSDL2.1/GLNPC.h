@@ -32,6 +32,7 @@ private:
 public:	
 	GLNPC(void);
 	GLNPC(FishBox& FSH_Loader, char* filePath);
+	GLNPC(FishBox& FSH_Loader, unsigned int modelID);
 	void NPCUpdate(float deltaTime);
 	void NPCDraw(GLShader& shader);
 	void gettingEaten(float deltaTime);
