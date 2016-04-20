@@ -93,8 +93,9 @@ void Scene::Update(float& deltaTime) {
 			
 			if (NPCs.at(i)->GetTransform().GetScale().y<0.2)
 			{
-				delete NPCs.at(i);
-				NPCs.erase(NPCs.begin() + i);
+				NPCs.at(i)->NPCKill();
+				//delete NPCs.at(i);
+				//NPCs.erase(NPCs.begin() + i);
 			}
 			
 		}

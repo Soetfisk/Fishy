@@ -11,7 +11,7 @@ private:
 	enum NPCStates
 	{
 		BEINGEATEN,
-		NOTHING,
+		INACTIVE,
 		NPCMOVE,
 		AGGRESIVE,
 		FLEEING,
@@ -36,6 +36,7 @@ public:
 	void NPCUpdate(float deltaTime);
 	void NPCDraw(GLShader& shader);
 	void gettingEaten(float deltaTime);
+	void NPCKill();
 	void initiateFleeingState(glm::vec3 playerForwardVector);
 
 	
