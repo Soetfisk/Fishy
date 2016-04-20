@@ -5,7 +5,14 @@
 
 void Scene::LoadModels()
 {
-	//models.push_back(new GLModel(FSH_Loader, "Models/tempfish.FSH"));
+	FSH_Loader.LoadScene("Models/tempfish.FSH"); //PlayerFish
+	
+	for (int i = 0; i < 2; i++) {
+		this->players.push_back(new GLPlayer(FSH_Loader, PlayerFish));
+	}
+	for (int i = 0; i < 50; i++) {
+		this->NPCs.push_back(new GLNPC(FSH_Loader, PlayerFish));
+	}
 }
 
 void Scene::LoadModels(char * folder)
@@ -14,19 +21,15 @@ void Scene::LoadModels(char * folder)
 
 Scene::Scene() {
 	
-	for (int i = 0; i < 2; i++) {
-		this->players.push_back(new GLPlayer(FSH_Loader, "Models/tempfish.FSH"));
-	}
+	LoadModels();
+	
 	this->players.at(0)->GetTransform().SetPos(glm::vec3(20, 0, 0));
 	this->players.at(0)->GetTransform().SetPos(glm::vec3(-20, 0, 0));
 	
-	for (int i = 0; i < 50; i++) {
-		this->NPCs.push_back(new GLNPC(FSH_Loader, "Models/tempfish.FSH"));
-	}
 	shaders[MODELS] = new GLShader("test");
 	shaders[PASS] = new GLShader("pass");
 
-	LoadModels();
+	
 
 	tempMesh = objLoadFromFile("./res/OBJ/box2.obj");
 
