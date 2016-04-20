@@ -42,6 +42,8 @@ Scene::Scene() {
 	filterComputeShader->LoadShader("blueFilter.glsl");
 	filterComputeShader->CreateShader(filterComputeShader->LoadShader("blueFilter.glsl"));
 	this->deltaTime = 0;
+
+	guiTest = new GUI();
 }
 
 
@@ -66,6 +68,8 @@ Scene::~Scene(){
 	{
 		delete NPCs.at(i);
 	}
+
+	delete guiTest;
 }
 
 void Scene::Update(float& deltaTime) {

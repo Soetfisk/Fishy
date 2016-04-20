@@ -3,6 +3,7 @@
 #include "GLUtil.h"
 #include "GLWindow.h"
 #include "Scene.h"
+
 class GameMain
 {
 private:

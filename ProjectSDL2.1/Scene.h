@@ -10,6 +10,7 @@
 #include "GLProjectile.h"
 #include "FilterComputeShader.h"
 #include "RNG.h"
+#include "GUI.h"
 
 class Scene {
 private:
@@ -45,6 +46,8 @@ private:
 	FilterComputeShader* filterComputeShader;
 	float deltaTime;
 	
+	GUI* guiTest;
+
 private:
 	void LoadModels();
 	void LoadModels(char* folder);
