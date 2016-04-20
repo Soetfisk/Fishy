@@ -22,6 +22,10 @@ private:
 		POST,
 		NUM_SHADERS
 	};
+	enum
+	{
+		PlayerFish
+	};
 	int SCREEN_WIDTH = window::WIDTH;
 	int SCREEN_HEIGHT = window::HEIGHT / 2;
 
