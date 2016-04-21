@@ -36,19 +36,19 @@ Scene::Scene() {
 	
 
 	this->frameBuffer = new FrameBuffer();
-	this->frameBuffer->CreateFrameBuffer(3, SCREEN_WIDTH, SCREEN_HEIGHT);
+	this->frameBuffer->CreateFrameBuffer(3, SCREEN_WIDTH, SCREEN_HEIGHT, GL_SRGB);
 	this->frameBuffer->UnbindFrameBuffer();
 
 	this->frameBuffer2 = new FrameBuffer();
-	this->frameBuffer2->CreateFrameBuffer(1, SCREEN_WIDTH, SCREEN_HEIGHT);
+	this->frameBuffer2->CreateFrameBuffer(1, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGB);
 	this->frameBuffer2->UnbindFrameBuffer();
 
 	this->frameBuffer3 = new FrameBuffer();
-	this->frameBuffer3->CreateFrameBuffer(1, SCREEN_WIDTH, SCREEN_HEIGHT);
+	this->frameBuffer3->CreateFrameBuffer(1, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGB);
 	this->frameBuffer3->UnbindFrameBuffer();
 
 	this->frameBuffer4 = new FrameBuffer();
-	this->frameBuffer4->CreateFrameBuffer(1, SCREEN_WIDTH, SCREEN_HEIGHT);
+	this->frameBuffer4->CreateFrameBuffer(1, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGB);
 	this->frameBuffer4->UnbindFrameBuffer();
 	//tempMesh->GetTransform().SetPos(glm::vec3(3, 0, 3));
 	//first make vertex for all vertexes
@@ -56,6 +56,16 @@ Scene::Scene() {
 	filterComputeShader->LoadShader("blueFilter.glsl");
 	filterComputeShader->CreateShader(filterComputeShader->LoadShader("blueFilter.glsl"));
 	this->deltaTime = 0;
+
+	//GLfloat fogColor[4] = { 1.0f,1.0f,1.0f,1.0f };
+
+	//glFogi(GL_FOG_MODE, GL_LINEAR);
+	//glFogfv(GL_FOG_COLOR, fogColor);
+	//glFogf(GL_FOG_DENSITY, 1.0f);
+	//glHint(GL_FOG_HINT, GL_DONT_CARE); glFogf(GL_FOG_START, 2.0f); // Fog Start Depth 
+	//glFogf(GL_FOG_END, 8.0f); // Fog End Depth
+	//glEnable(GL_FOG);
+	//glEnable(GL_DEPTH_TEST);
 }
 
 
@@ -133,6 +143,7 @@ void Scene::LoadScene() {
 
 //Calls the models.draw
 void Scene::DrawScene() {
+
 	for (int i = 0; i < this->players.size(); i++) {
 		//Set viewport
 		glViewport(0, 0, window::WIDTH, window::HEIGHT/ 2);
@@ -168,9 +179,10 @@ void Scene::DrawScene() {
 		this->frameBuffer->UnbindFrameBuffer();
 
 		this->frameBuffer2->BindFrameBuffer();
-		shaders[WAVY]->Bind();
-		shaders[WAVY]->Uniform1f("offset",count);
-		this->frameBuffer->BindTexturesToProgram(shaders[WAVY]->GetUnifromLocation("texture"), 0);
+		shaders[POST]->Bind();
+		shaders[POST]->Uniform1f("width", window::WIDTH);
+		shaders[POST]->Uniform1f("height", window::HEIGHT / 2);
+		this->frameBuffer->BindTexturesToProgram(shaders[POST]->GetUnifromLocation("texture"), 0);
 		this->RenderQuad();
 		this->frameBuffer2->UnbindFrameBuffer();
 
@@ -183,10 +195,9 @@ void Scene::DrawScene() {
 		this->frameBuffer3->UnbindFrameBuffer();
 
 		this->frameBuffer4->BindFrameBuffer();
-		shaders[POST]->Bind();
-		shaders[POST]->Uniform1f("width", window::WIDTH);
-		shaders[POST]->Uniform1f("height", window::HEIGHT / 2);
-		this->frameBuffer3->BindTexturesToProgram(shaders[POST]->GetUnifromLocation("texture"), 0);
+		shaders[WAVY]->Bind();
+		shaders[WAVY]->Uniform1f("offset", count);
+		this->frameBuffer2->BindTexturesToProgram(shaders[WAVY]->GetUnifromLocation("texture"), 0);
 		this->RenderQuad();
 		this->frameBuffer4->UnbindFrameBuffer();
 		
