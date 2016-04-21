@@ -97,11 +97,32 @@ void GUI::RenderText(GLShader& shader, std::string text, GLfloat x, GLfloat y, G
 		GLfloat ypos = y - (ch.size.y - ch.bearing.y) * scale;
 		GLfloat w = ch.size.x * scale;
 		GLfloat h = ch.size.y * scale;
-		/*GLfloat vertices[6][4] =
+		
+		// Update VBO for each character
+		GLfloat vertices[6][4] =
 		{
 			{xpos,		ypos + h,	0.0, 0.0},
 			{xpos,		ypos,		0.0, 1.0},
 			{xpos + w,	ypos,		1.0, 1.0},
-		}*/
+
+			{xpos,		ypos + h,	0.0, 0.0},
+			{xpos + w,	ypos,		1.0, 1.0},
+			{xpos + w, ypos + h,	1.0, 0.0}
+		};
+		
+		// Render glyph texture over quad
+		glBindTexture(GL_TEXTURE_2D, ch.textureID);
+
+		// Update VBO
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		// Move cursors for next glyph (move is number of 1/64 pixels)
+		x += (ch.advance >> 6) * scale;	// Bitshift by 6 to get value in pixels (2^6 = 64)
 	}
+	glBindVertexArray(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }

@@ -19,6 +19,7 @@ private:
 		//PARTICLES,
 		//BLUR,
 		PASS,
+		TEXT,
 		NUM_SHADERS
 	};
 	enum
@@ -47,6 +48,7 @@ private:
 	float deltaTime;
 	
 	GUI* guiTest;
+	glm::mat4 projection;
 
 private:
 	void LoadModels();

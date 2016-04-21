@@ -29,9 +29,14 @@ Scene::Scene() {
 	shaders[MODELS] = new GLShader("test");
 	shaders[PASS] = new GLShader("pass");
 
-	
-
-	
+	guiTest = new GUI();
+	shaders[TEXT] = new GLShader("text");
+	projection = glm::ortho(0.0f, static_cast<GLfloat>(window::WIDTH), 0.0f, static_cast<GLfloat>(window::HEIGHT));
+	shaders[TEXT]->Bind();
+	glUniformMatrix4fv(shaders[TEXT]->GetUnifromLocation("projection"), 1, GL_FALSE, glm::value_ptr(projection));
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDisable(GL_BLEND);
 
 	this->frameBuffer = new FrameBuffer();
 	this->frameBuffer->CreateFrameBuffer(3, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -42,8 +47,6 @@ Scene::Scene() {
 	filterComputeShader->LoadShader("blueFilter.glsl");
 	filterComputeShader->CreateShader(filterComputeShader->LoadShader("blueFilter.glsl"));
 	this->deltaTime = 0;
-
-	guiTest = new GUI();
 }
 
 
@@ -120,9 +123,18 @@ void Scene::LoadScene() {
 
 //Calls the models.draw
 void Scene::DrawScene() {
+
+	glViewport(0, 0, window::WIDTH, window::HEIGHT);
+	glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	guiTest->RenderText(*shaders[TEXT], "Hello! I am text", 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+	guiTest->RenderText(*shaders[TEXT], "I am also text", 0, window::HEIGHT / 2, 2, glm::vec3(0, 0.8f, 0.2f));
+	glDisable(GL_BLEND);
+
 	for (int i = 0; i < this->players.size(); i++) {
 		//Set viewport
 		glViewport(0, 0, window::WIDTH, window::HEIGHT/ 2);
+
 		//for(int j = 0; j<this->models.count();j++){
 		shaders[MODELS]->Bind();
 		shaders[MODELS]->Update(players.at(i)->GetCamera());
@@ -140,7 +152,6 @@ void Scene::DrawScene() {
 		//models[0]->Draw(*shaders[MODELS]);
 		//tempMesh->Draw(*shaders[MODELS], GLTransform());
 
-		
 
 
 		//tempModel->Draw(*shaders[MODELS]);
@@ -159,12 +170,12 @@ void Scene::DrawScene() {
 		//this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture3"), 2);
 		glViewport(0, window::HEIGHT - (window::HEIGHT / (i + 1)), window::WIDTH, window::HEIGHT / 2);
 		this->RenderQuad();
-		
+
 		//shaders[MODELS].update(models.at(j), player.at(i).getCamera()); 
 		//	models.at(j).draw(player.at(i).getCamera());
 		//}
 	}
-	
+
 }
 
 void Scene::RenderQuad()
