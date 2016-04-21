@@ -28,15 +28,9 @@ Scene::Scene() {
 	
 	shaders[MODELS] = new GLShader("test");
 	shaders[PASS] = new GLShader("pass");
-
-	guiTest = new GUI();
 	shaders[TEXT] = new GLShader("text");
-	projection = glm::ortho(0.0f, static_cast<GLfloat>(window::WIDTH), 0.0f, static_cast<GLfloat>(window::HEIGHT));
-	shaders[TEXT]->Bind();
-	glUniformMatrix4fv(shaders[TEXT]->GetUnifromLocation("projection"), 1, GL_FALSE, glm::value_ptr(projection));
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glDisable(GL_BLEND);
+
+	guih = new GLGUIHandler(*shaders[TEXT]);
 
 	this->frameBuffer = new FrameBuffer();
 	this->frameBuffer->CreateFrameBuffer(3, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -72,11 +66,14 @@ Scene::~Scene(){
 		delete NPCs.at(i);
 	}
 
-	delete guiTest;
+	delete guih;
 }
 
 void Scene::Update(float& deltaTime) {
 	this->deltaTime = deltaTime;
+
+	guih->Update(deltaTime);
+
 	for (int i = 0; i < this->players.size(); i++) {
 		this->players.at(i)->Update(GLPlayer::NOTHING ,glm::vec3(deltaTime));
 	}
@@ -124,12 +121,7 @@ void Scene::LoadScene() {
 //Calls the models.draw
 void Scene::DrawScene() {
 
-	glViewport(0, 0, window::WIDTH, window::HEIGHT);
-	glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	guiTest->RenderText(*shaders[TEXT], "Hello! I am text", 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
-	guiTest->RenderText(*shaders[TEXT], "I am also text", 0, window::HEIGHT / 2, 2, glm::vec3(0, 0.8f, 0.2f));
-	glDisable(GL_BLEND);
+	guih->Draw(*shaders[TEXT]);
 
 	for (int i = 0; i < this->players.size(); i++) {
 		//Set viewport

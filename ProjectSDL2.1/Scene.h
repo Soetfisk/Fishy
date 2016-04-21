@@ -11,6 +11,7 @@
 #include "FilterComputeShader.h"
 #include "RNG.h"
 #include "GUI.h"
+#include "GLGUIHandler.h"
 
 class Scene {
 private:
@@ -49,6 +50,7 @@ private:
 	
 	GUI* guiTest;
 	glm::mat4 projection;
+	GLGUIHandler* guih;
 
 private:
 	void LoadModels();

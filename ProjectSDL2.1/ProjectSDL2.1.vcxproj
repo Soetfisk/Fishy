@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FilterComputeShader.cpp" />
+    <ClCompile Include="GLGUIHandler.cpp" />
     <ClCompile Include="GLNPC.cpp" />
     <ClCompile Include="FrameBuffer.cpp" />
     <ClCompile Include="GameMain.cpp" />
@@ -40,6 +41,7 @@
     <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\RNG.h" />
     <ClInclude Include="AABB.h" />
     <ClInclude Include="FilterComputeShader.h" />
+    <ClInclude Include="GLGUIHandler.h" />
     <ClInclude Include="GLNPC.h" />
     <ClInclude Include="FrameBuffer.h" />
     <ClInclude Include="GLProjectile.h" />

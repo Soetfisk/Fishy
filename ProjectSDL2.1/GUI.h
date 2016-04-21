@@ -12,6 +12,8 @@ public:
 	GUI();
 	virtual ~GUI();
 	void RenderText(GLShader& shader, std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
+	GLfloat getTextLenght(std::string& text, GLfloat& scale);
+
 private:
 	struct Character
 	{
@@ -29,6 +31,5 @@ private:
 	GLuint VAO, VBO;
 
 	void InitCharacters();
-	void Update(float& dt, int player1, int player2);
 };
 

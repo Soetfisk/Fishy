@@ -21,10 +21,6 @@ GUI::~GUI()
 	
 }
 
-void GUI::Update(float& dt, int player1, int player2)
-{
-}
-
 void GUI::InitCharacters()
 {
 	// Initialize lib
@@ -125,4 +121,16 @@ void GUI::RenderText(GLShader& shader, std::string text, GLfloat x, GLfloat y, G
 	}
 	glBindVertexArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+GLfloat GUI::getTextLenght(std::string& text, GLfloat& scale)
+{
+	GLfloat lenght = 0;
+	std::string::const_iterator c;
+	for (c = text.begin(); c != text.end(); c++)
+	{
+		Character ch = characters[*c];
+		lenght += (ch.advance >> 6) * scale;
+	}
+	return lenght;
 }
