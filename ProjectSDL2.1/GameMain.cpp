@@ -25,7 +25,7 @@ void GameMain::GameLoop()
 
 	while (this->gameOn) // Main game loop
 	{
-		std::cout << 1 / this->deltaTime << std::endl;
+		//std::cout << 1 / this->deltaTime << std::endl;
 		SDL_PumpEvents();
 		this->SetDeltaTime();
 		this->window->Clear(0, .1f, 1);
