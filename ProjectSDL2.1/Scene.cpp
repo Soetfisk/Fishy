@@ -1,6 +1,5 @@
 #include "Scene.h"
 #include "obj_loader.h"
-#include "AABB.h"
 
 
 void Scene::LoadModels()
@@ -13,6 +12,10 @@ void Scene::LoadModels()
 	for (int i = 0; i < 50; i++) {
 		this->NPCs.push_back(new GLNPC(FSH_Loader, PlayerFish));
 	}
+
+	this->collisionHandler.AddNPC(NPCs);
+	this->collisionHandler.AddPlayer(players);
+	this->collisionHandler.AddModel(models);
 }
 
 void Scene::LoadModels(char * folder)
@@ -97,44 +100,18 @@ Scene::~Scene(){
 
 void Scene::Update(float& deltaTime) {
 	this->deltaTime = deltaTime;
+
+
+	//std::cout << 1 / deltaTime << std::endl;
+	this->collisionHandler.CheckCollisions(deltaTime);
+
 	for (int i = 0; i < this->players.size(); i++) {
 		this->players.at(i)->Update(GLPlayer::NOTHING ,glm::vec3(deltaTime));
 	}
 
 	for (int i = 0; i < this->NPCs.size(); i++) {
 		this->NPCs.at(i)->NPCUpdate(deltaTime);
-
-		float PHD = players.at(0)->GetTransform().GetScale().y/2;
-
-		AABB a(NPCs.at(i)->GetTransform().GetPos(), glm::vec3(0.5f, 0.5f, 1));
-		AABB NpcSeenSpace(NPCs.at(i)->GetTransform().GetPos(), glm::vec3(5, 5, 5));
-		//AABB b(players.at(0)->GetTransform().GetPos(), glm::vec3(0.5f, 0.5f, 0.5f));
-		AABB b(players.at(0)->GetTransform().GetPos(), glm::vec3(PHD, PHD, PHD));
-		if (a.containsAABB(b))
-		{
-			
-			NPCs.at(i)->gettingEaten(deltaTime);
-			players.at(0)->PlayerEating(deltaTime);
-
-			
-			
-			if (NPCs.at(i)->GetTransform().GetScale().y<0.2)
-			{
-				NPCs.at(i)->NPCKill();
-				//delete NPCs.at(i);
-				//NPCs.erase(NPCs.begin() + i);
-			}
-			
-		}
-		else if (NpcSeenSpace.containsAABB(b))
-		{
-			NPCs.at(i)->initiateFleeingState(players.at(0)->GetForward() );
-		}
 	}
-
-	
-
-	//std::cout << deltaTime << std::endl;
 }
 
 //Loads the scene, models, matrices

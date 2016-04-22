@@ -53,6 +53,11 @@ void GLProjectileHandler::Draw(GLShader& shader)
 		projectiles.at(i)->TestDraw(shader);
 }
 
+std::vector<GLProjectile*>& GLProjectileHandler::GetProjectiles()
+{
+	return this->projectiles;
+}
+
 GLProjectile* GLProjectileHandler::GetInactiveProjectile()
 {
 	GLProjectile* projectilePtr = nullptr;

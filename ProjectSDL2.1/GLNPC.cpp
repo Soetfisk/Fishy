@@ -54,7 +54,7 @@ void GLNPC::NPCUpdate(float deltaTime)
 
 		if (currentState == NPCMOVE)
 		{
-			this->transform->m_pos += this->GetForward() * forwardSpeed * deltaTime;
+		this->transform->m_pos += (this->GetForward() * forwardSpeed) * deltaTime;
 			this->transform->m_rot += rotationChange * deltaTime;
 		}
 		else if (currentState == FLEEING)

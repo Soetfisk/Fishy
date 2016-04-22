@@ -1,5 +1,4 @@
 #include "GameMain.h"
-
 GameMain::GameMain()
 {
 	this->gameOn = true;
@@ -21,8 +20,6 @@ GameMain::~GameMain()
 // The main gameloop
 void GameMain::GameLoop()
 {
-	
-
 	while (this->gameOn) // Main game loop
 	{
 		std::cout << 1 / this->deltaTime << std::endl;

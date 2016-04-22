@@ -52,12 +52,24 @@ void GLCamera::ProcessInput(float x, float y, float deltaTime)
 //Get horizontal Distance from the camera
 float GLCamera::CalcHorizontalDist(GLTransform transform)
 {
-	return (float)distanceToPlayer * cosf(glm::radians(pitch)) /*oskAddHere*/ * transform.GetScale().y;
+	float rotation = pitch + glm::degrees(transform.GetRot().x);
+	if (rotation > 90.0f)
+		rotation = 89.0f;
+	if (rotation < -90.0f)
+		rotation = -89.0f;
+
+	return (float)distanceToPlayer * cosf(glm::radians(rotation)) /*oskAddHere*/ * transform.GetScale().y;
 }
 //Get vertical Distance from the camera
 float GLCamera::CalcVerticalDist(GLTransform transform)
 {
-	return (float)distanceToPlayer * sinf(glm::radians(pitch)) /*oskAddHere*/ * transform.GetScale().y;
+	float rotation = pitch + glm::degrees(transform.GetRot().x);
+	if (rotation > 90.0f)
+		rotation = 89.0f;
+	if (rotation < -90.0f)
+		rotation = -89.0f;
+
+	return (float)distanceToPlayer * sinf(glm::radians(rotation)) /*oskAddHere*/ * transform.GetScale().y;
 }
 //Calculates the x,y,z position of the camera and sets forward vector
 void GLCamera::CalcCameraPos(float horizDist, float verticDist, GLTransform transform)

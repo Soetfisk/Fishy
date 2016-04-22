@@ -10,6 +10,7 @@
 #include "GLProjectile.h"
 #include "FilterComputeShader.h"
 #include "RNG.h"
+#include "GLCollisionHandler.h"
 
 class Scene {
 private:
@@ -48,6 +49,7 @@ private:
 	float count = 0;
 	FilterComputeShader* filterComputeShader;
 	float deltaTime;
+	GLCollisionHandler collisionHandler;
 	
 private:
 	void LoadModels();
