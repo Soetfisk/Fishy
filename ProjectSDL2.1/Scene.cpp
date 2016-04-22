@@ -1,6 +1,5 @@
 #include "Scene.h"
 #include "obj_loader.h"
-#include "AABB.h"
 
 
 void Scene::LoadModels()
@@ -10,7 +9,7 @@ void Scene::LoadModels()
 	for (int i = 0; i < 2; i++) {
 		this->players.push_back(new GLPlayer(FSH_Loader, PlayerFish));
 	}
-	for (int i = 0; i < 50; i++) {
+	for (int i = 0; i < 10; i++) {
 		this->NPCs.push_back(new GLNPC(FSH_Loader, PlayerFish));
 	}
 }
@@ -29,9 +28,10 @@ Scene::Scene() {
 	shaders[MODELS] = new GLShader("test");
 	shaders[PASS] = new GLShader("pass");
 
-	
+	this->collisionHandler.AddPlayer(players);
+	this->collisionHandler.AddNPC(NPCs);
 
-	tempMesh = objLoadFromFile("./res/OBJ/box2.obj");
+	//tempMesh = objLoadFromFile("./res/OBJ/box2.obj");
 
 	this->frameBuffer = new FrameBuffer();
 	this->frameBuffer->CreateFrameBuffer(3, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -71,64 +71,46 @@ Scene::~Scene(){
 void Scene::Update(float& deltaTime) {
 	this->deltaTime = deltaTime;
 
-	AABB box(glm::vec3(3, 0, 3), glm::vec3(5, 5, 1));
+	std::cout << "DeltaTime: " << deltaTime << "FPS: " << 1 / deltaTime << std::endl;
 
-	glm::vec3 pos = players.at(0)->GetTransform().GetPos();
-
-	pos.x += (players.at(0)->getVelocity().x * deltaTime);
-
-	if (box.containsAABB( AABB(pos, players.at(0)->GetTransform().GetScale()) ))
-	{
-		players.at(0)->getVelocity().x = 0;
-	}
-	pos = players.at(0)->GetTransform().GetPos();
-	pos.y += (players.at(0)->getVelocity().y * deltaTime);
-
-	if (box.containsAABB(AABB(pos, players.at(0)->GetTransform().GetScale())))
-	{
-		players.at(0)->getVelocity().y = 0;
-	}
-	pos = players.at(0)->GetTransform().GetPos();
-	pos.z += (players.at(0)->getVelocity().z * deltaTime);
-
-	if (box.containsAABB(AABB(pos, players.at(0)->GetTransform().GetScale())))
-	{
-		players.at(0)->getVelocity().z = 0;
-	}
+	collisionHandler.CheckCollisions(deltaTime);
 
 	for (int i = 0; i < this->players.size(); i++) {
 		this->players.at(i)->Update(GLPlayer::NOTHING ,glm::vec3(deltaTime));
 	}
-
 	for (int i = 0; i < this->NPCs.size(); i++) {
 		this->NPCs.at(i)->NPCUpdate(deltaTime);
-
-		float PHD = players.at(0)->GetTransform().GetScale().y/2;
-
-		AABB a(NPCs.at(i)->GetTransform().GetPos(), glm::vec3(0.5f, 0.5f, 1));
-		AABB NpcSeenSpace(NPCs.at(i)->GetTransform().GetPos(), glm::vec3(5, 5, 5));
-		//AABB b(players.at(0)->GetTransform().GetPos(), glm::vec3(0.5f, 0.5f, 0.5f));
-		AABB b(players.at(0)->GetTransform().GetPos(), glm::vec3(PHD, PHD, PHD));
-		if (a.containsAABB(b))
-		{
-			
-			NPCs.at(i)->gettingEaten(deltaTime);
-			players.at(0)->PlayerEating(deltaTime);
-
-			
-			
-			if (NPCs.at(i)->GetTransform().GetScale().y<0.2)
-			{
-				delete NPCs.at(i);
-				NPCs.erase(NPCs.begin() + i);
-			}
-			
-		}
-		else if (NpcSeenSpace.containsAABB(b))
-		{
-			NPCs.at(i)->initiateFleeingState(players.at(0)->GetForward() );
-		}
 	}
+
+	//for (int i = 0; i < this->NPCs.size(); i++) {
+	//	this->NPCs.at(i)->NPCUpdate(deltaTime);
+
+	//	float PHD = players.at(0)->GetTransform().GetScale().y/2;
+
+	//	AABB a(NPCs.at(i)->GetTransform().GetPos(), glm::vec3(0.5f, 0.5f, 1));
+	//	AABB NpcSeenSpace(NPCs.at(i)->GetTransform().GetPos(), glm::vec3(5, 5, 5));
+	//	//AABB b(players.at(0)->GetTransform().GetPos(), glm::vec3(0.5f, 0.5f, 0.5f));
+	//	AABB b(players.at(0)->GetTransform().GetPos(), glm::vec3(PHD, PHD, PHD));
+	//	if (a.containsAABB(b))
+	//	{
+	//		
+	//		NPCs.at(i)->gettingEaten(deltaTime);
+	//		players.at(0)->PlayerEating(deltaTime);
+
+	//		
+	//		
+	//		if (NPCs.at(i)->GetTransform().GetScale().y<0.2)
+	//		{
+	//			delete NPCs.at(i);
+	//			NPCs.erase(NPCs.begin() + i);
+	//		}
+	//		
+	//	}
+	//	else if (NpcSeenSpace.containsAABB(b))
+	//	{
+	//		//NPCs.at(i)->initiateFleeingState(players.at(0)->GetForward() );
+	//	}
+	//}
 
 	
 
@@ -160,7 +142,7 @@ void Scene::DrawScene() {
 		
 	
 		//models[0]->Draw(*shaders[MODELS]);
-		tempMesh->Draw(*shaders[MODELS], GLTransform(glm::vec3(3,0,3), glm::vec3(0), glm::vec3(10,10,2)));
+		//tempMesh->Draw(*shaders[MODELS], GLTransform(glm::vec3(3,0,3), glm::vec3(0), glm::vec3(10,10,2)));
 
 		
 

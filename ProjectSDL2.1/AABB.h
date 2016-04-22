@@ -11,6 +11,7 @@ public:
 		this->center = center;
 		this->halfDimension = halfDimensions;
 	}
+	AABB() {}
 	~AABB() {}
 
 	bool containsPoint(glm::vec3& pt) const {

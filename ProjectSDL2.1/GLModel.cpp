@@ -100,3 +100,16 @@ glm::vec3 GLModel::GetForward()
 	front.z = cos(this->transform->m_rot.x) * cos(this->transform->m_rot.y);
 	return glm::normalize(front);
 }
+
+AABB GLModel::GetBoundingBox()
+{
+	this->boundingBox.center = this->transform->GetPos();
+	this->boundingBox.halfDimension = this->transform->GetScale()/2.f;
+	return this->boundingBox;
+}
+
+void GLModel::SetBoundingBox(glm::vec3 center, glm::vec3 extents)
+{
+	this->boundingBox.center = center;
+	this->boundingBox.halfDimension = extents;
+}
