@@ -136,6 +136,7 @@ private:
 	fileHeader HEADER;
 	std::ifstream * infile;
 	std::vector<FSHMesh*> meshes;
+	std::vector<material*> materials;
 	char*SCENE_ID;
 
 
@@ -149,7 +150,7 @@ public:
 	FSHScene(char * filePath);
 	unsigned int GetMeshCount();
 	std::vector<FSHMesh*> GetMeshList();
-
+	std::vector<material*> GetMaterialList();
 
 	void Release();
 };
@@ -183,7 +184,8 @@ public: //functions
 	FSHData::mesh * MeshData(unsigned int model, unsigned int mesh);
 	FSHData::vertexData * VertexData(unsigned int model, unsigned int mesh);
 	unsigned int * IndexData(unsigned int model, unsigned int mesh);
-	unsigned int FishBox::ModelMeshCount(unsigned int model);
+	unsigned int ModelMeshCount(unsigned int model);
+	FSHData::material * meshMaterial(unsigned int model, unsigned int mesh);
 };
 
 #ifdef _DEBUG 

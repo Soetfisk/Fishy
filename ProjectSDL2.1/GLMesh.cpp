@@ -1,7 +1,7 @@
 #include "GLMesh.h"
 #include "obj_loader.h"
 
-GLMesh::GLMesh(std::vector<Vertex> vertices, unsigned int numVertices, std::vector<unsigned int> indices, unsigned int numIndices, Material material)
+GLMesh::GLMesh(std::vector<Vertex> vertices, unsigned int numVertices, std::vector<unsigned int> indices, unsigned int numIndices, Material material) //depricated
 {
 	objindex = indices;
 	objvertices = vertices;
@@ -61,11 +61,11 @@ GLMesh::GLMesh(std::vector<Vertex> vertices, unsigned int numVertices, std::vect
 	glBindVertexArray(0);
 }
 
-GLMesh::GLMesh(FSHData::mesh * meshData, FSHData::vertexData * vertices, unsigned int * indices)
+GLMesh::GLMesh(FSHData::mesh * meshData, FSHData::vertexData * vertices, unsigned int * indices, FSHData::material* material)
 {
 	this->m_drawCount = meshData->indexCount;
-
-
+	this->material = material;
+	printf("\n%s", material->materialName);
 	this->m_transfrom = GLTransform();
 
 	std::vector<glm::vec3> positions;

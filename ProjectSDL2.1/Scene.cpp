@@ -5,7 +5,7 @@
 
 void Scene::LoadModels()
 {
-	FSH_Loader.LoadScene("Models/tempfish.FSH"); //PlayerFish
+	FSH_Loader.LoadScene("Models/tempfishTex.FSH"); //PlayerFish
 	
 	for (int i = 0; i < 2; i++) {
 		this->players.push_back(new GLPlayer(FSH_Loader, PlayerFish));

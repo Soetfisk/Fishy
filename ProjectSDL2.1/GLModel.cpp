@@ -22,9 +22,11 @@ GLModel::GLModel(FishBox& FSH_Loader, char* filePath) //DEPRICATED USE AT OWN RI
 	FSH_Loader.LoadScene(filePath);
 	modelID = (FSH_Loader.GetModelCount() - 1);
 
+	
+
 	for (unsigned int i = 0; i < FSH_Loader.ModelMeshCount(modelID); i++)
 	{
-		meshes.push_back(new GLMesh(FSH_Loader.MeshData(modelID, i), FSH_Loader.VertexData(modelID, i), FSH_Loader.IndexData(modelID, i)));
+		meshes.push_back(new GLMesh(FSH_Loader.MeshData(modelID, i), FSH_Loader.VertexData(modelID, i), FSH_Loader.IndexData(modelID, i), FSH_Loader.meshMaterial(modelID, i)));
 	}
 }
 
@@ -35,8 +37,10 @@ GLModel::GLModel(FishBox& FSH_Loader, unsigned int modelID)
 
 	for (unsigned int i = 0; i < FSH_Loader.ModelMeshCount(modelID); i++)
 	{
-		meshes.push_back(new GLMesh(FSH_Loader.MeshData(modelID, i), FSH_Loader.VertexData(modelID, i), FSH_Loader.IndexData(modelID, i)));
+		meshes.push_back(new GLMesh(FSH_Loader.MeshData(modelID, i), FSH_Loader.VertexData(modelID, i), FSH_Loader.IndexData(modelID, i), FSH_Loader.meshMaterial(modelID, i)));
 	}
+
+	FSHData::material * test = FSH_Loader.meshMaterial(modelID, 0);
 }
 
 
@@ -64,6 +68,8 @@ void GLModel::Draw(GLShader& shader)
 
 	/*meshes[0]->GetTransform().m_scale += 0.00001;
 	meshes[1]->GetTransform().m_scale += 0.00001;*/
+
+	int test = meshes.size();
 
 	for (int i = 0; i < meshes.size(); i++)
 	{
