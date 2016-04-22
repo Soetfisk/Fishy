@@ -149,7 +149,7 @@ void Scene::DrawScene() {
 		//shaders[PASS]->Bind();
 		
 		//this->filterComputeShader->BindShader();
-		this->count += 0.01f;
+		this->count += 0.5f * this->deltaTime;
 		//this->frameBuffer->BindImageTexturesToProgram(glGetUniformLocation(this->cs, "destTex"), 0);
 		//this->filterComputeShader->UniformVec3("colorVector",glm::vec3(0.0f,0.0f, 1.0f));
 		//this->filterComputeShader->Uniform1f("number",count);

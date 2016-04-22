@@ -22,8 +22,8 @@ void main()
 
 	float dist = gl_FragCoord.z / gl_FragCoord.w; // distance
 	float fogFactor = 0;
-	float fogEnd = 130;
-	float fogStart = 50;
+	float fogEnd = 100;
+	float fogStart = 20;
 
 	fogFactor = (fogEnd-dist) / (fogEnd - fogStart);
 	fogFactor = clamp(fogFactor,0.0,1.0);
