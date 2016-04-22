@@ -63,7 +63,7 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 				}
 				else if (NpcSeenSpace.containsAABB(players.at(i)->GetBoundingBox()))
 				{
-					//NPCs.at(j)->initiateFleeingState(players.at(i)->GetForward());
+					NPCs.at(j)->initiateFleeingState(players.at(i)->GetForward());
 				}
 			}
 		}
