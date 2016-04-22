@@ -17,6 +17,6 @@ void main()
  
 	gl_Position = ProjectionViewMatrix * TransformMatrix * vec4(position, 1);
 	vsTexCoord = texCoord;
-	vsNormal = normal;
+	vsNormal = vec3(transpose(inverse(TransformMatrix)) * vec4(normal, 1));
 	vsPos = vec3(TransformMatrix * vec4(position, 1));
 }
