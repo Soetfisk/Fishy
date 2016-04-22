@@ -16,10 +16,14 @@ public:
 		PLAYER_SHOOT,
 		JOY_ADDED,
 		JOY_REMOVED,
+
 		NUM_EVENTSTATES
 	};
 	enum PlayerStates
 	{
+		MOVING,
+		EATING,
+
 		NUM_PLAYERSTATES
 	};
 
@@ -35,6 +39,9 @@ public:
 
 	void PlayerEating(float deltaTime);
 	void TestDraw(GLShader& shader);
+	void HandleCollision(PlayerStates state, glm::vec3 momentum);
+	std::vector<GLProjectile*>& GetProjectiles();
+	glm::vec3 GetVelocity();
 	
 private:
 	const int DEADZONE = 8000;

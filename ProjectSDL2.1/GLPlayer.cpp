@@ -13,7 +13,6 @@ GLPlayer::GLPlayer() : GLModel()
 GLPlayer::GLPlayer(FishBox& FSH_Loader, char* filePath) : GLModel(FSH_Loader, filePath) //DEPRICATED USE AT OWN RISK
 {
 	this->m_camera;
-	this->m_projectile = new GLProjectile(10, 20.0f);
 	this->m_projectileHandler = new GLProjectileHandler(1, 20, 10.0f);
 	this->m_velocity = glm::vec3(0);
 }
@@ -69,6 +68,30 @@ void GLPlayer::TestDraw(GLShader & shader)
 {
 	this->Draw(shader);
 	this->m_projectileHandler->Draw(shader);
+}
+
+void GLPlayer::HandleCollision(PlayerStates state, glm::vec3 momentum)
+{
+	switch (state)
+	{
+	case MOVING:
+		this->m_velocity = momentum;
+	break;
+	case EATING:
+		glm::vec3 scaleIncrease = this->transform->GetScale();// + (deltaTime / 4);
+		this->transform->SetScale(scaleIncrease);
+	break;
+	}
+}
+
+std::vector<GLProjectile*>& GLPlayer::GetProjectiles()
+{
+	return this->m_projectileHandler->GetProjectiles();
+}
+
+glm::vec3 GLPlayer::GetVelocity()
+{
+	return this->m_velocity;
 }
 
 //adds a controller too the player
@@ -169,6 +192,5 @@ void GLPlayer::PlayerShoot()
 }
 void GLPlayer::PlayerEating(float deltaTime)
 {
-	glm::vec3 scaleIncrease = this->transform->GetScale() + (deltaTime / 4);
-	this->transform->SetScale(scaleIncrease);
+	
 }
