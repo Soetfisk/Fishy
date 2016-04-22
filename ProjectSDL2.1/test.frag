@@ -30,6 +30,7 @@ void main()
 	vec3 tempColor  = clamp(angle * vec3(1, 0, 0) + vec3(0.01,0.01,0.01),0.0,1.0);
 
 	color = clamp(mix(fogColor, tempColor, fogFactor),0.0,1.0);
+	//color = vec3(0.5,0.5,0.5);
 
 	color2 = vec3(dist,dist,dist);
 	color3 = vec3(0, 0, 1);
