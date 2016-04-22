@@ -60,8 +60,12 @@
     <None Include="blueFilter.glsl" />
     <None Include="pass.frag" />
     <None Include="pass.vert" />
+    <None Include="post.frag" />
+    <None Include="post.vert" />
     <None Include="test.frag" />
     <None Include="test.vert" />
+    <None Include="wavy.frag" />
+    <None Include="wavy.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{238DD780-B6E5-4F60-8CCF-FFD915BD6E8B}</ProjectGuid>

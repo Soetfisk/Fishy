@@ -28,20 +28,44 @@ Scene::Scene() {
 	
 	shaders[MODELS] = new GLShader("test");
 	shaders[PASS] = new GLShader("pass");
+	shaders[WAVY] = new GLShader("wavy");
+	shaders[POST] = new GLShader("post");
 
 	
 
 	
 
 	this->frameBuffer = new FrameBuffer();
-	this->frameBuffer->CreateFrameBuffer(3, SCREEN_WIDTH, SCREEN_HEIGHT);
+	this->frameBuffer->CreateFrameBuffer(3, SCREEN_WIDTH, SCREEN_HEIGHT, GL_SRGB);
 	this->frameBuffer->UnbindFrameBuffer();
+
+	this->frameBuffer2 = new FrameBuffer();
+	this->frameBuffer2->CreateFrameBuffer(1, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGB);
+	this->frameBuffer2->UnbindFrameBuffer();
+
+	this->frameBuffer3 = new FrameBuffer();
+	this->frameBuffer3->CreateFrameBuffer(1, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGB);
+	this->frameBuffer3->UnbindFrameBuffer();
+
+	this->frameBuffer4 = new FrameBuffer();
+	this->frameBuffer4->CreateFrameBuffer(1, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGB);
+	this->frameBuffer4->UnbindFrameBuffer();
 	//tempMesh->GetTransform().SetPos(glm::vec3(3, 0, 3));
 	//first make vertex for all vertexes
 	filterComputeShader = new FilterComputeShader("derp");
 	filterComputeShader->LoadShader("blueFilter.glsl");
 	filterComputeShader->CreateShader(filterComputeShader->LoadShader("blueFilter.glsl"));
 	this->deltaTime = 0;
+
+	//GLfloat fogColor[4] = { 1.0f,1.0f,1.0f,1.0f };
+
+	//glFogi(GL_FOG_MODE, GL_LINEAR);
+	//glFogfv(GL_FOG_COLOR, fogColor);
+	//glFogf(GL_FOG_DENSITY, 1.0f);
+	//glHint(GL_FOG_HINT, GL_DONT_CARE); glFogf(GL_FOG_START, 2.0f); // Fog Start Depth 
+	//glFogf(GL_FOG_END, 8.0f); // Fog End Depth
+	//glEnable(GL_FOG);
+	//glEnable(GL_DEPTH_TEST);
 }
 
 
@@ -51,6 +75,9 @@ Scene::~Scene(){
 	}
 	
 	delete this->frameBuffer;
+	delete this->frameBuffer2;
+	delete this->frameBuffer3;
+	delete this->frameBuffer4;
 	delete this->filterComputeShader;
 	for (int i = 0; i < models.size(); i++)
 	{
@@ -93,8 +120,9 @@ void Scene::Update(float& deltaTime) {
 			
 			if (NPCs.at(i)->GetTransform().GetScale().y<0.2)
 			{
-				delete NPCs.at(i);
-				NPCs.erase(NPCs.begin() + i);
+				NPCs.at(i)->NPCKill();
+				//delete NPCs.at(i);
+				//NPCs.erase(NPCs.begin() + i);
 			}
 			
 		}
@@ -116,6 +144,7 @@ void Scene::LoadScene() {
 
 //Calls the models.draw
 void Scene::DrawScene() {
+
 	for (int i = 0; i < this->players.size(); i++) {
 		//Set viewport
 		glViewport(0, 0, window::WIDTH, window::HEIGHT/ 2);
@@ -141,16 +170,41 @@ void Scene::DrawScene() {
 
 		//tempModel->Draw(*shaders[MODELS]);
 		//shaders[PASS]->Bind();
-		this->frameBuffer->UnbindFrameBuffer();
-		this->filterComputeShader->BindShader();
-		this->count += 0.1f * this->deltaTime;
-		this->frameBuffer->BindImageTexturesToProgram(glGetUniformLocation(this->cs, "destTex"), 0);
-		this->filterComputeShader->UniformVec3("colorVector",glm::vec3(0.0f,0.0f, 1.0f));
-		this->filterComputeShader->Uniform1f("number",count);
-		//this->filterComputeShader->DispatchCompute(1024 / 32, 768 / 32, 1);
 		
+		//this->filterComputeShader->BindShader();
+		this->count += 0.01f;
+		//this->frameBuffer->BindImageTexturesToProgram(glGetUniformLocation(this->cs, "destTex"), 0);
+		//this->filterComputeShader->UniformVec3("colorVector",glm::vec3(0.0f,0.0f, 1.0f));
+		//this->filterComputeShader->Uniform1f("number",count);
+		//this->filterComputeShader->DispatchCompute(1024 / 32, 768 / 32, 1);
+		this->frameBuffer->UnbindFrameBuffer();
+
+		this->frameBuffer2->BindFrameBuffer();
+		shaders[POST]->Bind();
+		shaders[POST]->Uniform1f("width", window::WIDTH);
+		shaders[POST]->Uniform1f("height", window::HEIGHT / 2);
+		this->frameBuffer->BindTexturesToProgram(shaders[POST]->GetUnifromLocation("texture"), 0);
+		this->RenderQuad();
+		this->frameBuffer2->UnbindFrameBuffer();
+
+		this->frameBuffer3->BindFrameBuffer();
+		shaders[POST]->Bind();
+		shaders[POST]->Uniform1f("width", window::WIDTH);
+		shaders[POST]->Uniform1f("height", window::HEIGHT / 2);
+		this->frameBuffer2->BindTexturesToProgram(shaders[POST]->GetUnifromLocation("texture"), 0);
+		this->RenderQuad();
+		this->frameBuffer3->UnbindFrameBuffer();
+
+		this->frameBuffer4->BindFrameBuffer();
+		shaders[WAVY]->Bind();
+		shaders[WAVY]->Uniform1f("offset", count);
+		this->frameBuffer2->BindTexturesToProgram(shaders[WAVY]->GetUnifromLocation("texture"), 0);
+		this->RenderQuad();
+		this->frameBuffer4->UnbindFrameBuffer();
+		
+
 		shaders[PASS]->Bind();
-		this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
+		this->frameBuffer4->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
 		//this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture2"), 1);
 		//this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture3"), 2);
 		glViewport(0, window::HEIGHT - (window::HEIGHT / (i + 1)), window::WIDTH, window::HEIGHT / 2);
@@ -268,6 +322,9 @@ void Scene::HandleEvenet(SDL_Event* e) {
 			case SDL_SCANCODE_LSHIFT:
 				players.at(0)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, 0, 1));
 				break;
+			case SDL_SCANCODE_E:
+				players.at(0)->Update(GLPlayer::PLAYER_DASH, glm::vec3(0, 0, 1));
+				break;
 			default:
 				break;
 			}
@@ -314,7 +371,10 @@ void Scene::HandleEvenet(SDL_Event* e) {
 		if (keyState[SDL_SCANCODE_D])
 		{
 			players.at(0)->Update(GLPlayer::PLAYER_MOVE, glm::vec3((glm::pow(2, 15)), 0, 0));
-			
+		}
+		if (keyState[SDL_SCANCODE_E])
+		{
+			players.at(0)->Update(GLPlayer::PLAYER_DASH, glm::vec3(0, 0, (glm::pow(2, 15))));
 		}
 		if (keyState[SDL_SCANCODE_LSHIFT])
 		{

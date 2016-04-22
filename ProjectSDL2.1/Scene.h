@@ -18,6 +18,8 @@ private:
 		//PARTICLES,
 		//BLUR,
 		PASS,
+		WAVY,
+		POST,
 		NUM_SHADERS
 	};
 	enum
@@ -40,6 +42,8 @@ private:
 	GLuint cs;
 	FrameBuffer* frameBuffer;
 	FrameBuffer* frameBuffer2;
+	FrameBuffer* frameBuffer3;
+	FrameBuffer* frameBuffer4;
 	GLProjectile* testProj;
 	float count = 0;
 	FilterComputeShader* filterComputeShader;

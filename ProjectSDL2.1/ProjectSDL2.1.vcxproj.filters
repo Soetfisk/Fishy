@@ -128,5 +128,17 @@
     <None Include="blueFilter.glsl">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="wavy.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="wavy.vert">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="post.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="post.vert">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
