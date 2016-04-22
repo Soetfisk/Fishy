@@ -36,7 +36,7 @@ Scene::Scene() {
 	
 
 	this->frameBuffer = new FrameBuffer();
-	this->frameBuffer->CreateFrameBuffer(3, SCREEN_WIDTH, SCREEN_HEIGHT, GL_SRGB);
+	this->frameBuffer->CreateFrameBuffer(3, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGB);
 	this->frameBuffer->UnbindFrameBuffer();
 
 	this->frameBuffer2 = new FrameBuffer();
