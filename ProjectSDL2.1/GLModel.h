@@ -2,6 +2,7 @@
 
 #include "GLMesh.h"
 #include "GLShader.h"
+#include "AABB.h"
 
 class GLModel
 {
@@ -16,10 +17,13 @@ public:
 
 	GLTransform& GetTransform();
 	glm::vec3 GetForward();
+
+	AABB GetBoundingBox();
+	void SetBoundingBox(glm::vec3 center, glm::vec3 extents);
 protected:
 	std::vector<GLMesh*> meshes;
 	GLTransform* transform;
 	int modelID;
-
+	AABB boundingBox;
 };
 

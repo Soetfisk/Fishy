@@ -13,6 +13,8 @@ public:
 
 	void Bind();
 	void Update(GLCamera& camera);
+	void Uniform1f(std::string name, float number);
+	void UniformVec3(std::string name, glm::vec3 vector);
 	/*void Update(GLMesh& mesh, GLCamera& camera);
 	void Update(GLTransform& tranform, GLCamera& camera);*/
 	GLuint& GetUnifromLocation(std::string name);
@@ -36,4 +38,5 @@ private:
 	GLuint CreateShader(const std::string& text, GLenum shaderType);
 	void CheckShaderError(GLuint shader, GLuint flag, bool isProgram);
 	std::string LoadShader(const std::string& fileName);
+
 };

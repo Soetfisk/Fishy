@@ -10,6 +10,7 @@
 #include "GLProjectile.h"
 #include "FilterComputeShader.h"
 #include "RNG.h"
+#include "GLCollisionHandler.h"
 
 class Scene {
 private:
@@ -18,6 +19,8 @@ private:
 		//PARTICLES,
 		//BLUR,
 		PASS,
+		WAVY,
+		POST,
 		NUM_SHADERS
 	};
 	enum
@@ -40,10 +43,13 @@ private:
 	GLuint cs;
 	FrameBuffer* frameBuffer;
 	FrameBuffer* frameBuffer2;
+	FrameBuffer* frameBuffer3;
+	FrameBuffer* frameBuffer4;
 	GLProjectile* testProj;
 	float count = 0;
 	FilterComputeShader* filterComputeShader;
 	float deltaTime;
+	GLCollisionHandler collisionHandler;
 	
 private:
 	void LoadModels();

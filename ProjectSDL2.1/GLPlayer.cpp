@@ -5,7 +5,6 @@
 GLPlayer::GLPlayer() : GLModel()
 {
 	this->m_camera;
-	this->m_projectile = new GLProjectile(10, 20.0f);
 	this->m_projectileHandler = new GLProjectileHandler(1, 20, 10.0f);
 	this->m_velocity = glm::vec3(0);
 	
@@ -20,7 +19,6 @@ GLPlayer::GLPlayer() : GLModel()
 GLPlayer::GLPlayer(FishBox& FSH_Loader, char* filePath) : GLModel(FSH_Loader, filePath) //DEPRICATED USE AT OWN RISK
 {
 	this->m_camera;
-	this->m_projectile = new GLProjectile(10, 20.0f);
 	this->m_projectileHandler = new GLProjectileHandler(1, 20, 10.0f);
 	this->m_velocity = glm::vec3(0);
 }
@@ -28,7 +26,6 @@ GLPlayer::GLPlayer(FishBox& FSH_Loader, char* filePath) : GLModel(FSH_Loader, fi
 GLPlayer::GLPlayer(FishBox & FSH_Loader, unsigned int modelID) : GLModel(FSH_Loader, modelID)
 {
 	this->m_camera;
-	this->m_projectile = new GLProjectile(10, 20.0f);
 	this->m_projectileHandler = new GLProjectileHandler(1, 20, 10.0f);
 	this->m_velocity = glm::vec3(0);
 	
@@ -43,13 +40,7 @@ GLPlayer::GLPlayer(FishBox & FSH_Loader, unsigned int modelID) : GLModel(FSH_Loa
 
 GLPlayer::~GLPlayer()
 {
-	delete this->m_projectile;
 	delete this->m_projectileHandler;
-}
-
-GLProjectile * GLPlayer::tempGetProjectile()
-{
-	return this->m_projectile;
 }
 
 //handles events sent too the player
@@ -93,6 +84,30 @@ void GLPlayer::TestDraw(GLShader & shader)
 {
 	this->Draw(shader);
 	this->m_projectileHandler->Draw(shader);
+}
+
+void GLPlayer::HandleCollision(PlayerStates state, glm::vec3 momentum)
+{
+	switch (state)
+	{
+	case MOVING:
+		this->m_velocity = momentum;
+	break;
+	case EATING:
+		glm::vec3 scaleIncrease = this->transform->GetScale();// + (deltaTime / 4);
+		this->transform->SetScale(scaleIncrease);
+	break;
+	}
+}
+
+std::vector<GLProjectile*>& GLPlayer::GetProjectiles()
+{
+	return this->m_projectileHandler->GetProjectiles();
+}
+
+glm::vec3 GLPlayer::GetVelocity()
+{
+	return this->m_velocity;
 }
 
 //adds a controller too the player
@@ -164,7 +179,6 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	//this->meshes[1]->GetTransform().m_rot.z -= this->meshes[0]->GetTransform().m_rot.z * deltaTime;
 	
 	CalcVelocity(deltaTime);
-
 	HandleDash(deltaTime);
 
 	//camera update
@@ -239,26 +253,5 @@ void GLPlayer::HandleDash(float & deltaTime)
 
 void GLPlayer::PlayerEating(float deltaTime)
 {
-	glm::vec3 scaleIncrease = this->transform->GetScale() + (deltaTime / 4);
-	this->transform->SetScale(scaleIncrease);
+	
 }
-//
-//this->GetTransform().m_pos += m_forward * (this->m_velocity.x * deltaTime);
-//this->GetTransform().m_pos.x = sin(this->m_velocity.x) * 0.01;
-//this->GetTransform().m_rot.y -= (this->m_velocity.z * deltaTime);
-//
-//if ((lastX < -DEADZONE || lastX > DEADZONE) && (this->m_velocity.z >= -MAX_SPEED && this->m_velocity.z <= MAX_SPEED))
-//{
-//	this->m_velocity.z += lastX / (glm::pow(2, 15));
-//}
-//if ((lastY < -DEADZONE || lastY > DEADZONE) && (this->m_velocity.x >= -MAX_SPEED && this->m_velocity.x <= MAX_SPEED))
-//{
-//	this->m_velocity.x += lastY / (glm::pow(2, 15));
-//}
-//
-//if (m_velocity.x > 0) m_velocity.x = glm::max(m_velocity.x - MOVEMENT_FRICTION * deltaTime, 0.0f);
-////if (m_velocity.y > 0) m_velocity.y = glm::max(m_velocity.y - FRICTION * deltaTime, 0.0f);
-//if (m_velocity.z > 0) m_velocity.z = glm::max(m_velocity.z - MOVEMENT_FRICTION * deltaTime, 0.0f);
-//if (m_velocity.x < 0) m_velocity.x = glm::min(m_velocity.x + MOVEMENT_FRICTION * deltaTime, 0.0f);
-////if (m_velocity.y < 0) m_velocity.y = glm::min(m_velocity.y + FRICTION * deltaTime, 0.0f);
-//if (m_velocity.z < 0) m_velocity.z = glm::min(m_velocity.z + MOVEMENT_FRICTION * deltaTime, 0.0f);

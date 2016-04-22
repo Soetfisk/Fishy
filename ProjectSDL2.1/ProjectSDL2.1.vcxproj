@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FilterComputeShader.cpp" />
+    <ClCompile Include="GLCollisionHandler.cpp" />
     <ClCompile Include="GLNPC.cpp" />
     <ClCompile Include="FrameBuffer.cpp" />
     <ClCompile Include="GameMain.cpp" />
@@ -39,6 +40,7 @@
     <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\RNG.h" />
     <ClInclude Include="AABB.h" />
     <ClInclude Include="FilterComputeShader.h" />
+    <ClInclude Include="GLCollisionHandler.h" />
     <ClInclude Include="GLNPC.h" />
     <ClInclude Include="FrameBuffer.h" />
     <ClInclude Include="GLProjectile.h" />
@@ -55,13 +57,18 @@
     <ClInclude Include="GLWindow.h" />
     <ClInclude Include="obj_loader.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SphereBS.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="blueFilter.glsl" />
     <None Include="pass.frag" />
     <None Include="pass.vert" />
+    <None Include="post.frag" />
+    <None Include="post.vert" />
     <None Include="test.frag" />
     <None Include="test.vert" />
+    <None Include="wavy.frag" />
+    <None Include="wavy.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{238DD780-B6E5-4F60-8CCF-FFD915BD6E8B}</ProjectGuid>
