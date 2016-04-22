@@ -137,6 +137,8 @@ private:
 	std::ifstream * infile;
 	std::vector<FSHMesh*> meshes;
 	std::vector<material*> materials;
+	std::vector<char*> textures;
+	std::vector<std::string> textureNames;
 	char*SCENE_ID;
 
 
@@ -144,6 +146,7 @@ private:
 
 	void LoadMeshes();
 	void LoadMaterials();
+	void LoadTextures();
 	FSHScene(void);
 public:
 

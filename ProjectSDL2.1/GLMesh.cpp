@@ -65,7 +65,6 @@ GLMesh::GLMesh(FSHData::mesh * meshData, FSHData::vertexData * vertices, unsigne
 {
 	this->m_drawCount = meshData->indexCount;
 	this->material = material;
-	printf("\n%s", material->materialName);
 	this->m_transfrom = GLTransform();
 
 	std::vector<glm::vec3> positions;

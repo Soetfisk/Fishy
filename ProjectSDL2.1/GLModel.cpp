@@ -69,7 +69,6 @@ void GLModel::Draw(GLShader& shader)
 	/*meshes[0]->GetTransform().m_scale += 0.00001;
 	meshes[1]->GetTransform().m_scale += 0.00001;*/
 
-	int test = meshes.size();
 
 	for (int i = 0; i < meshes.size(); i++)
 	{
