@@ -119,12 +119,13 @@ void GLNPC::NPCDraw(GLShader & shader)
 	}
 }
 
-void GLNPC::gettingEaten(float deltaTime)
+void GLNPC::gettingEaten(float deltaTime, GLTransform playerTransform)
 {
 	if (this->currentState != NPC_INACTIVE)
 	{
 		glm::vec3 reduce = this->transform->GetScale() - deltaTime;
 		this->transform->SetScale(reduce);
+		this->transform->SetPos(playerTransform.GetPos());
 		this->currentState = NPC_BEINGEATEN;
 		
 	}
@@ -145,4 +146,9 @@ void GLNPC::initiateFleeingState(glm::vec3 playerForwardVector)
 	//this->transform->SetRot(playerForwardVector);
 	fleeingTimer = 4;
 	}
+}
+
+int GLNPC::GetCurrentState()
+{
+	return this->currentState;
 }
