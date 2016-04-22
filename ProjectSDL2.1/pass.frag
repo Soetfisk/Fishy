@@ -13,5 +13,6 @@ void main()
 
 
 	//color  = vec3(1, 1, 0);
-	color = vec3(texture2D(texture, frag_uv)) + vec3(texture2D(texture2, frag_uv)) + vec3(texture2D(texture3, frag_uv));
+	//color = vec3(texture2D(texture, frag_uv)) + vec3(texture2D(texture2, frag_uv)) + vec3(texture2D(texture3, frag_uv));
+	color = vec3(texture2D(texture, frag_uv));
 }
