@@ -120,8 +120,9 @@ void Scene::Update(float& deltaTime) {
 			
 			if (NPCs.at(i)->GetTransform().GetScale().y<0.2)
 			{
-				delete NPCs.at(i);
-				NPCs.erase(NPCs.begin() + i);
+				NPCs.at(i)->NPCKill();
+				//delete NPCs.at(i);
+				//NPCs.erase(NPCs.begin() + i);
 			}
 			
 		}
@@ -321,6 +322,9 @@ void Scene::HandleEvenet(SDL_Event* e) {
 			case SDL_SCANCODE_LSHIFT:
 				players.at(0)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, 0, 1));
 				break;
+			case SDL_SCANCODE_E:
+				players.at(0)->Update(GLPlayer::PLAYER_DASH, glm::vec3(0, 0, 1));
+				break;
 			default:
 				break;
 			}
@@ -367,7 +371,10 @@ void Scene::HandleEvenet(SDL_Event* e) {
 		if (keyState[SDL_SCANCODE_D])
 		{
 			players.at(0)->Update(GLPlayer::PLAYER_MOVE, glm::vec3((glm::pow(2, 15)), 0, 0));
-			
+		}
+		if (keyState[SDL_SCANCODE_E])
+		{
+			players.at(0)->Update(GLPlayer::PLAYER_DASH, glm::vec3(0, 0, (glm::pow(2, 15))));
 		}
 		if (keyState[SDL_SCANCODE_LSHIFT])
 		{

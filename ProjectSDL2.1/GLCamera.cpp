@@ -103,3 +103,13 @@ void GLCamera::SetInput(float x, float y)
 		lastY = 0;
 	}
 }
+
+void GLCamera::AddDistance(float dist)
+{
+	distanceToPlayer += dist;
+}
+
+void GLCamera::DecreaseDistance(float dist)
+{
+	distanceToPlayer -= dist;
+}
