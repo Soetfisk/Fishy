@@ -63,6 +63,9 @@
     <ClCompile Include="GUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GLCollisionHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="GLGUIHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -128,7 +131,13 @@
     <ClInclude Include="GUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SphereBS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="GLGUIHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GLCollisionHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -143,7 +152,15 @@
     <None Include="text.frag">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="wavy.frag">
+      <Filter>Source Files</Filter>
+    </None>
     <None Include="text.vert">
+
+    <None Include="post.frag">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="post.vert">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>

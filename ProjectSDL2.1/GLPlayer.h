@@ -17,10 +17,14 @@ public:
 		PLAYER_DASH,
 		JOY_ADDED,
 		JOY_REMOVED,
+
 		NUM_EVENTSTATES
 	};
 	enum PlayerStates
 	{
+		MOVING,
+		EATING,
+
 		NUM_PLAYERSTATES
 	};
 
@@ -28,12 +32,17 @@ public:
 	GLPlayer(FishBox& FSH_Loader, char* filePath);
 	GLPlayer(FishBox& FSH_Loader, unsigned int modelID);
 	~GLPlayer();
-	GLProjectile* tempGetProjectile();
 	void Update(Events state, glm::vec3 movementVec);
 	GLCamera GetCamera();
+	glm::vec3& getVelocity() {
+		return m_velocity;
+	}
 
 	void PlayerEating(float deltaTime);
 	void TestDraw(GLShader& shader);
+	void HandleCollision(PlayerStates state, glm::vec3 momentum);
+	std::vector<GLProjectile*>& GetProjectiles();
+	glm::vec3 GetVelocity();
 	
 private:
 	const int DEADZONE = 8000;
@@ -57,7 +66,6 @@ private:
 	SDL_GameController *pad;
 	int instanceID;
 	GLCamera m_camera;
-	GLProjectile *m_projectile;
 	GLProjectileHandler* m_projectileHandler;
 
 	float rotateSpeed = 2;

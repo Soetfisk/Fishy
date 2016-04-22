@@ -188,3 +188,13 @@ std::string GLShader::LoadShader(const std::string & fileName)
 
 	return shaderText;
 }
+
+void GLShader::Uniform1f(std::string name, float number)
+{
+	glUniform1f(glGetUniformLocation(this->m_program, name.c_str()), number);
+}
+
+void GLShader::UniformVec3(std::string name, glm::vec3 vector)
+{
+	glUniform3fv(glGetUniformLocation(this->m_program, name.c_str()), 1, &vector[0]);
+}

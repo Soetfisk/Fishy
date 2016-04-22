@@ -12,6 +12,7 @@
 #include "RNG.h"
 #include "GUI.h"
 #include "GLGUIHandler.h"
+#include "GLCollisionHandler.h"
 
 class Scene {
 private:
@@ -21,6 +22,8 @@ private:
 		//BLUR,
 		PASS,
 		TEXT,
+		WAVY,
+		POST,
 		NUM_SHADERS
 	};
 	enum
@@ -43,10 +46,13 @@ private:
 	GLuint cs;
 	FrameBuffer* frameBuffer;
 	FrameBuffer* frameBuffer2;
+	FrameBuffer* frameBuffer3;
+	FrameBuffer* frameBuffer4;
 	GLProjectile* testProj;
 	float count = 0;
 	FilterComputeShader* filterComputeShader;
 	float deltaTime;
+	GLCollisionHandler collisionHandler;
 	
 	GUI* guiTest;
 	glm::mat4 projection;
