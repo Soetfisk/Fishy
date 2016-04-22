@@ -23,7 +23,7 @@ private:
 public:
 	FrameBuffer();
 	~FrameBuffer();
-	void CreateFrameBuffer(int textureAmount, int screenWidth, int screenHeight);
+	void CreateFrameBuffer(int textureAmount, int screenWidth, int screenHeight, GLint RGBformat);
 	void BindFrameBuffer();
 	void UnbindFrameBuffer();
 	void BindTexturesToProgram(GLuint uniform, GLuint texture);

@@ -16,9 +16,11 @@ FrameBuffer::~FrameBuffer()
 {
 	if(this->drawBuffers != nullptr)
 		delete this->drawBuffers;
+
+	glDeleteFramebuffers(1,&this->framebufferName);
 }
 
-void FrameBuffer::CreateFrameBuffer(int textureAmount, int screenWidth, int screenHeight)
+void FrameBuffer::CreateFrameBuffer(int textureAmount, int screenWidth, int screenHeight, GLint RGBformat)
 {
 	this->textureAmount = textureAmount;
 	glGenFramebuffers(1, &this->framebufferName);
@@ -39,7 +41,7 @@ void FrameBuffer::CreateFrameBuffer(int textureAmount, int screenWidth, int scre
 		glBindTexture(GL_TEXTURE_2D, this->textures[i]);
 
 		// Give an empty image to OpenGL ( the last "0" )
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, screenWidth, screenHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+		glTexImage2D(GL_TEXTURE_2D, 0, RGBformat, screenWidth, screenHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
 
 		// Poor filtering. Needed !
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);

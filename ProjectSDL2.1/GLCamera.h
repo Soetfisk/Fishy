@@ -13,6 +13,8 @@ public:
 	glm::mat4 GetViewProjectionMatrix() const;
 	void Update(GLTransform transform, float deltaTime);
 	void SetInput(float x, float y);
+	void AddDistance(float dist);
+	void DecreaseDistance(float dist);
 	
 private:
 	
