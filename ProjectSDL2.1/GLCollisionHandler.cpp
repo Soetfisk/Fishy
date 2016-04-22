@@ -5,6 +5,7 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 {
 	glm::vec3 distance;
 	float distSqrd;
+
 	for (int i = 0; i < players.size(); i++)
 	{
 		distance = players.at(i)->GetTransform().GetPos() - players.at(1 - i)->GetTransform().GetPos();
@@ -54,6 +55,11 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 
 					NPCs.at(j)->gettingEaten(deltaTime);
 					players.at(i)->HandleCollision(GLPlayer::EATING, glm::vec3(0));
+
+					if (NPCs.at(j)->GetTransform().GetScale().y<0.2)
+					{
+						NPCs.at(j)->NPCKill();
+					}
 				}
 				else if (NpcSeenSpace.containsAABB(players.at(i)->GetBoundingBox()))
 				{
