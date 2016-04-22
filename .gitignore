@@ -25,6 +25,9 @@ Thumbs.db
 _ReSharper*/
 [Tt]est[Rr]esult*
 
+#Fuck orig files
+*.orig
+
 # Compiled Object files
 *.slo
 *.lo
