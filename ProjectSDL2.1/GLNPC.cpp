@@ -3,7 +3,7 @@
 
 GLNPC::GLNPC(void)
 {
-	this->currentState = NPCMOVE;
+	this->currentState = NPC_MOVE;
 	transform->SetPos(glm::vec3(RNG::range(-20, 20), RNG::range(-2, 2), RNG::range(-20, 20)));
 
 	this->TimeUntilChange = RNG::range(0.2, 3.0f);
@@ -16,7 +16,7 @@ GLNPC::GLNPC(void)
 
 GLNPC::GLNPC(FishBox& FSH_Loader, char* filePath) : GLModel(FSH_Loader, filePath)
 {
-	this->currentState = NPCMOVE;
+	this->currentState = NPC_MOVE;
 	transform->SetPos(glm::vec3(RNG::range(-20, 20), RNG::range(-2, 2), RNG::range(-20, 20)));
 
 	this->TimeUntilChange = RNG::range(0.2, 3.0f);
@@ -29,7 +29,7 @@ GLNPC::GLNPC(FishBox& FSH_Loader, char* filePath) : GLModel(FSH_Loader, filePath
 
 GLNPC::GLNPC(FishBox & FSH_Loader, unsigned int modelID) : GLModel(FSH_Loader, modelID)
 {
-	this->currentState = NPCMOVE;
+	this->currentState = NPC_MOVE;
 	transform->SetPos(glm::vec3(RNG::range(-20, 20), RNG::range(-2, 2), RNG::range(-20, 20)));
 
 	this->TimeUntilChange = RNG::range(0.2, 3.0f);
@@ -41,7 +41,7 @@ GLNPC::GLNPC(FishBox & FSH_Loader, unsigned int modelID) : GLModel(FSH_Loader, m
 
 void GLNPC::NPCUpdate(float deltaTime)
 {
-	if (currentState != INACTIVE)
+	if (currentState != NPC_INACTIVE)
 	{
 		TimeUntilChange -= deltaTime;
 		if (TimeUntilChange < 0)
@@ -52,27 +52,30 @@ void GLNPC::NPCUpdate(float deltaTime)
 		}
 
 
-		if (currentState == NPCMOVE)
+		if (currentState == NPC_MOVE)
 		{
 		this->transform->m_pos += (this->GetForward() * forwardSpeed) * deltaTime;
 			this->transform->m_rot += rotationChange * deltaTime;
 		}
-		else if (currentState == FLEEING)
+		else if (currentState == NPC_FLEEING)
 		{
-			this->transform->m_pos += this->GetForward() * 10.0f * deltaTime;
+			this->transform->m_pos += this->GetForward() * (forwardSpeed+2* 2) * deltaTime;
 			this->transform->m_rot += rotationChange * deltaTime;
 
 			fleeingTimer -= deltaTime;
 			if (fleeingTimer < 0)
 			{
-				currentState = NPCMOVE;
+				currentState = NPC_MOVE;
 			}
 
 
 		}
-		else if (currentState == BEINGEATEN)
+		else if (currentState == NPC_BEINGEATEN)
 		{
+		/*forwardSpeed *= 0.999f;
+		this->transform->m_pos += (this->GetForward() * forwardSpeed) * deltaTime;*/
 			;
+
 		}
 
 		//temp
@@ -110,7 +113,7 @@ void GLNPC::NPCUpdate(float deltaTime)
 
 void GLNPC::NPCDraw(GLShader & shader)
 {
-	if (currentState != INACTIVE)
+	if (currentState != NPC_INACTIVE)
 	{
 		this->Draw(shader);
 	}
@@ -118,11 +121,11 @@ void GLNPC::NPCDraw(GLShader & shader)
 
 void GLNPC::gettingEaten(float deltaTime)
 {
-	if (this->currentState != INACTIVE)
+	if (this->currentState != NPC_INACTIVE)
 	{
 		glm::vec3 reduce = this->transform->GetScale() - deltaTime;
 		this->transform->SetScale(reduce);
-		this->currentState = BEINGEATEN;
+		this->currentState = NPC_BEINGEATEN;
 		
 	}
 	
@@ -130,15 +133,15 @@ void GLNPC::gettingEaten(float deltaTime)
 
 void GLNPC::NPCKill()
 {
-	this->currentState = INACTIVE;
+	this->currentState = NPC_INACTIVE;
 }
 
 void GLNPC::initiateFleeingState(glm::vec3 playerForwardVector)
 {
 	
-	if (this->currentState != BEINGEATEN && this->currentState != INACTIVE)
+	if (this->currentState != NPC_BEINGEATEN && this->currentState != NPC_INACTIVE)
 	{
-		this->currentState = FLEEING;
+		this->currentState = NPC_FLEEING;
 	//this->transform->SetRot(playerForwardVector);
 	fleeingTimer = 4;
 	}
