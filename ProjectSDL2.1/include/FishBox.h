@@ -154,7 +154,8 @@ public:
 	unsigned int GetMeshCount();
 	std::vector<FSHMesh*> GetMeshList();
 	std::vector<material*> GetMaterialList();
-
+	std::vector<char*> GetTexureList();
+	std::vector<std::string> GetTexureNameList();
 	void Release();
 };
 
@@ -189,8 +190,8 @@ public: //functions
 	unsigned int * IndexData(unsigned int model, unsigned int mesh);
 	unsigned int ModelMeshCount(unsigned int model);
 	FSHData::material * meshMaterial(unsigned int model, unsigned int mesh);
+	char* meshTexture(unsigned int model, unsigned int mesh);
 };
-
 #ifdef _DEBUG 
 #ifndef DBG_NEW
 #define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ ) 

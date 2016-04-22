@@ -61,10 +61,11 @@ GLMesh::GLMesh(std::vector<Vertex> vertices, unsigned int numVertices, std::vect
 	glBindVertexArray(0);
 }
 
-GLMesh::GLMesh(FSHData::mesh * meshData, FSHData::vertexData * vertices, unsigned int * indices, FSHData::material* material)
+GLMesh::GLMesh(FSHData::mesh * meshData, FSHData::vertexData * vertices, unsigned int * indices, FSHData::material* material, char * texture)
 {
 	this->m_drawCount = meshData->indexCount;
 	this->material = material;
+	this->texture = texture;
 	this->m_transfrom = GLTransform();
 
 	std::vector<glm::vec3> positions;
