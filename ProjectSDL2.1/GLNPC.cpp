@@ -4,7 +4,7 @@
 GLNPC::GLNPC(void)
 {
 	this->currentState = NPC_MOVE;
-	transform->SetPos(glm::vec3(RNG::range(-20, 20), RNG::range(-2, 2), RNG::range(-20, 20)));
+	transform->SetPos(glm::vec3(RNG::range(-100, 100), RNG::range(-4, 4), RNG::range(-100, 100)));
 
 	this->TimeUntilChange = RNG::range(0.2, 3.0f);
 	this->scaleChange = RNG::range(-0.02f, 0.02f);
@@ -54,13 +54,14 @@ void GLNPC::NPCUpdate(float deltaTime)
 
 		if (currentState == NPC_MOVE)
 		{
-		this->transform->m_pos += (this->GetForward() * forwardSpeed) * deltaTime;
+		this->transform->m_pos += (this->GetForward() * forwardSpeed ) * deltaTime;
 			this->transform->m_rot += rotationChange * deltaTime;
 		}
 		else if (currentState == NPC_FLEEING)
 		{
-			this->transform->m_pos += this->GetForward() * (forwardSpeed+2* 2) * deltaTime;
-			this->transform->m_rot += rotationChange * deltaTime;
+			this->TimeUntilChange -= deltaTime;
+			this->transform->m_pos += this->GetForward() * (forwardSpeed+2* 3) * deltaTime;
+			this->transform->m_rot += rotationChange * deltaTime * 2.f;
 
 			fleeingTimer -= deltaTime;
 			if (fleeingTimer < 0)
@@ -72,8 +73,6 @@ void GLNPC::NPCUpdate(float deltaTime)
 		}
 		else if (currentState == NPC_BEINGEATEN)
 		{
-		/*forwardSpeed *= 0.999f;
-		this->transform->m_pos += (this->GetForward() * forwardSpeed) * deltaTime;*/
 			;
 
 		}
@@ -123,7 +122,7 @@ void GLNPC::gettingEaten(float deltaTime, GLTransform playerTransform)
 {
 	if (this->currentState != NPC_INACTIVE)
 	{
-		glm::vec3 reduce = this->transform->GetScale() - deltaTime;
+		glm::vec3 reduce = this->transform->GetScale() - deltaTime/2;
 		this->transform->SetScale(reduce);
 		this->transform->SetPos(playerTransform.GetPos());
 		this->currentState = NPC_BEINGEATEN;
@@ -144,7 +143,7 @@ void GLNPC::initiateFleeingState(glm::vec3 playerForwardVector)
 	{
 		this->currentState = NPC_FLEEING;
 	//this->transform->SetRot(playerForwardVector);
-	fleeingTimer = 4;
+	fleeingTimer = RNG::range(3,10);
 	}
 }
 
