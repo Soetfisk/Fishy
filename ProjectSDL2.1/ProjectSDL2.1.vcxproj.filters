@@ -69,6 +69,9 @@
     <ClCompile Include="GLGUIHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ParticleData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLUtil.h">
@@ -140,6 +143,9 @@
     <ClInclude Include="GLCollisionHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ParticleData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="test.frag" />
@@ -156,7 +162,7 @@
       <Filter>Source Files</Filter>
     </None>
     <None Include="text.vert">
-	<Filter>Source Files</Filter>
+      <Filter>Source Files</Filter>
     </None>
     <None Include="post.frag">
       <Filter>Source Files</Filter>
@@ -164,5 +170,6 @@
     <None Include="post.vert">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="wavy.vert" />
   </ItemGroup>
 </Project>
