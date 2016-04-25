@@ -94,9 +94,8 @@ void GLPlayer::HandleCollision(PlayerStates state, float deltaTime, glm::vec3 mo
 		this->m_velocity = momentum;
 	break;
 	case EATING:
-		glm::vec3 scaleIncrease = this->transform->GetScale() + (deltaTime / 4);
-		this->transform->SetScale(scaleIncrease);
-	break;
+		this->transform->SetScale(this->transform->GetScale() + (deltaTime / 4));
+		break;
 	case HIT:
 		this->m_velocity += momentum;
 		break;
