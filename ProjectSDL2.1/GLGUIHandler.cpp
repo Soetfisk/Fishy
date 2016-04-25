@@ -95,7 +95,7 @@ void GLGUIHandler::Update(float dt)
 			newSec = 0;
 			printText[TIME] = textStart[TIME] + std::to_string(time) + textEnd[TIME];
 			textPos[TIME][0] = window::HALF_WIDTH - (gui->getTextLenght(printText[TIME], textScale[TIME]) * 0.5);
-			if (time == 5)
+			if (time == 10)
 				Player2Won();
 
 			// Update FPS
