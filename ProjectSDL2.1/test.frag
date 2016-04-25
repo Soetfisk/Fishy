@@ -11,7 +11,7 @@ layout(location = 2)out vec3 color3;
 
 uniform sampler2D diffuseTexture;
 
-const vec3 fogColor = vec3(0.0,0.0,1);
+const vec3 fogColor = vec3(0.1,0.1,1);
 
 void main()
 {
