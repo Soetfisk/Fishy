@@ -28,7 +28,8 @@ private:
 	};
 	enum
 	{
-		PlayerFish
+		PlayerFish,
+		GoldFish
 	};
 	int SCREEN_WIDTH = window::WIDTH;
 	int SCREEN_HEIGHT = window::HEIGHT / 2;
