@@ -86,7 +86,7 @@ void GLPlayer::TestDraw(GLShader & shader)
 	this->m_projectileHandler->Draw(shader);
 }
 
-void GLPlayer::HandleCollision(PlayerStates state, glm::vec3 momentum)
+void GLPlayer::HandleCollision(PlayerStates state, float deltaTime, glm::vec3 momentum)
 {
 	switch (state)
 	{
@@ -94,7 +94,7 @@ void GLPlayer::HandleCollision(PlayerStates state, glm::vec3 momentum)
 		this->m_velocity = momentum;
 	break;
 	case EATING:
-		glm::vec3 scaleIncrease = this->transform->GetScale();// + (deltaTime / 4);
+		glm::vec3 scaleIncrease = this->transform->GetScale() + (deltaTime / 4);
 		this->transform->SetScale(scaleIncrease);
 	break;
 	}

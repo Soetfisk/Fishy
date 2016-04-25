@@ -37,9 +37,10 @@ public:
 	GLNPC(FishBox& FSH_Loader, unsigned int modelID);
 	void NPCUpdate(float deltaTime);
 	void NPCDraw(GLShader& shader);
-	void gettingEaten(float deltaTime);
+	void gettingEaten(float deltaTime, GLTransform playerTransform);
 	void NPCKill();
 	void initiateFleeingState(glm::vec3 playerForwardVector);
+	int GetCurrentState();
 
 	
 
