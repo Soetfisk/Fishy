@@ -38,7 +38,16 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 
 			if (newVelocity != glm::vec3(-1))
 			{
-				this->players.at(i)->HandleCollision(GLPlayer::MOVING, newVelocity);
+				this->players.at(i)->HandleCollision(GLPlayer::MOVING, deltaTime, newVelocity);
+			}
+		}
+
+		for (int j = 0; j < players.at(i)->GetProjectiles().size(); j++)
+		{
+			if (players.at(i)->GetProjectiles().at(j)->GetBoundingBox().containsAABB(players.at(1 - i)->GetBoundingBox()))
+			{
+				players.at(1 - i)->HandleCollision(GLPlayer::HIT, deltaTime,players.at(i)->GetProjectiles().at(j)->GetForward() * 30.0f);
+				players.at(i)->GetProjectiles().at(j)->Inactivate();
 			}
 		}
 
@@ -52,14 +61,18 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 
 				if (NPCs.at(j)->GetBoundingBox().containsAABB(players.at(i)->GetBoundingBox()))
 				{
-
-					NPCs.at(j)->gettingEaten(deltaTime);
-					players.at(i)->HandleCollision(GLPlayer::EATING, glm::vec3(0));
-
-					if (NPCs.at(j)->GetTransform().GetScale().y<0.2)
+					if (NPCs.at(j)->GetCurrentState()!=NPC_INACTIVE)
 					{
-						NPCs.at(j)->NPCKill();
+						NPCs.at(j)->gettingEaten(deltaTime, players.at(i)->GetTransform());
+						players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(0));
+
+						if (NPCs.at(j)->GetTransform().GetScale().y < 0.2)
+						{
+							NPCs.at(j)->NPCKill();
+						}
 					}
+					
+
 				}
 				else if (NpcSeenSpace.containsAABB(players.at(i)->GetBoundingBox()))
 				{

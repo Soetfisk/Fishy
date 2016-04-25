@@ -23,6 +23,7 @@ public:
 	enum PlayerStates
 	{
 		MOVING,
+		HIT,
 		EATING,
 
 		NUM_PLAYERSTATES
@@ -40,13 +41,13 @@ public:
 
 	void PlayerEating(float deltaTime);
 	void TestDraw(GLShader& shader);
-	void HandleCollision(PlayerStates state, glm::vec3 momentum);
+	void HandleCollision(PlayerStates state, float deltaTime, glm::vec3 momentum);
 	std::vector<GLProjectile*>& GetProjectiles();
 	glm::vec3 GetVelocity();
 	
 private:
 	const int DEADZONE = 8000;
-	const float MOVEMENT_FRICTION = 8.0f;
+	float MOVEMENT_FRICTION = 2.0f;
 	const int MAX_SPEED = 10;
 	const float MAX_ANGLE = 75;
 	const int MAX_INPUT = glm::pow(2, 15);
