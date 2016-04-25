@@ -8,6 +8,9 @@ struct ParticleTest {
 	glm::vec4 pos;
 	glm::vec4 vel;
 	float LifetimeMillis;
+
+	ParticleTest(): pos(), vel(), LifetimeMillis(){}
+	ParticleTest(glm::vec4 cpos, glm::vec4 cvel, float ctime): pos(cpos), vel(cvel), LifetimeMillis(ctime){}
 };
 
 

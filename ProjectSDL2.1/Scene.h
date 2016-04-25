@@ -11,6 +11,7 @@
 #include "Particles.h"
 #include "FilterComputeShader.h"
 #include "RNG.h"
+#include "ParticleHandler.h"
 
 class Scene {
 private:
@@ -41,6 +42,7 @@ private:
 	float count = 0;
 	FilterComputeShader* filterComputeShader;
 	float deltaTime;
+	ParticleHandler *pHandler;
 	
 private:
 	void LoadModels();

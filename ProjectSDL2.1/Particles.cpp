@@ -23,6 +23,7 @@ Particles::Particles(GLShader * shader)
 
 	testingHurr = (std::vector<PTest>*)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, particle::NUM_PARTICLES * sizeof(PTest), bufMask);
 
+	testingHurr->push_back(PTest());
 	//Temporary randoming numbers
 /*	for (int i = 0; i < particle::NUM_PARTICLES; i++) {
 		points[i].x = 0 + i*.1;

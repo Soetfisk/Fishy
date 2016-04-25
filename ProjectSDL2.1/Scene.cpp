@@ -44,6 +44,11 @@ Scene::Scene() {
 	//std::vector<unsigned int> indices = {0, 1, 2, 2, 3, 0};
 	//
 	//tempMesh = GLMesh(vertices, vertices.size(), indices, indices.size(), GLMesh::Material());
+
+
+	pHandler = new ParticleHandler(shaders[PARTICLE]);
+	pHandler->AddEmiter(EmitterType::PROJECTILE, glm::vec3(0, 0, 3));
+
 	tempMesh = objLoadFromFile("./res/OBJ/box2.obj");
 	this->frameBuffer = new FrameBuffer();
 	this->frameBuffer->CreateFrameBuffer(3);
@@ -80,6 +85,8 @@ Scene::~Scene(){
 	{
 		delete NPCs.at(i);
 	}
+
+	delete pHandler;
 }
 
 void Scene::Update(float& deltaTime) {
@@ -124,6 +131,7 @@ void Scene::DrawScene() {
 
 		//tempModel->Draw(*shaders[MODELS]);
 
+		//pHandler->UpdateParticles(this->deltaTime);
 
 		testParticle->Update();
 		shaders[PARTICLE]->Bind();

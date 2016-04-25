@@ -28,6 +28,8 @@ struct PTest {
 	glm::vec4 pos;
 	glm::vec4 vel;
 	glm::vec4 color;
+
+	PTest() : pos(glm::vec4(0, 0, 3, 1)), vel(), color() {}
 };
 
 
