@@ -30,6 +30,10 @@
 namespace window {
 	const int WIDTH = 1024;
 	const int HEIGHT = 768;
+	const float HALF_WIDTH = WIDTH * 0.5;
+	const float HALF_HEIGHT = HEIGHT * 0.5;
+	const float QUARTER_WIDHT = HALF_WIDTH * 0.5;
+	const float QUARTER_HEIGHT = HALF_HEIGHT * 0.5;
 }
 #ifdef _DEBUG 
 #ifndef DBG_NEW

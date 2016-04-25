@@ -31,12 +31,11 @@ Scene::Scene() {
 	
 	shaders[MODELS] = new GLShader("test");
 	shaders[PASS] = new GLShader("pass");
+	shaders[TEXT] = new GLShader("text");
 	shaders[WAVY] = new GLShader("wavy");
 	shaders[POST] = new GLShader("post");
 
-	
-
-	
+	guih = new GLGUIHandler(*shaders[TEXT]);
 
 	this->frameBuffer = new FrameBuffer();
 	this->frameBuffer->CreateFrameBuffer(3, SCREEN_WIDTH, SCREEN_HEIGHT, GL_SRGB);
@@ -96,13 +95,15 @@ Scene::~Scene(){
 	{
 		delete NPCs.at(i);
 	}
+
+	delete guih;
 }
 
 void Scene::Update(float& deltaTime) {
 	this->deltaTime = deltaTime;
 
+	guih->Update(deltaTime);
 
-	//std::cout << 1 / deltaTime << std::endl;
 	this->collisionHandler.CheckCollisions(deltaTime);
 
 	for (int i = 0; i < this->players.size(); i++) {
@@ -122,9 +123,12 @@ void Scene::LoadScene() {
 //Calls the models.draw
 void Scene::DrawScene() {
 
+	guih->Draw(*shaders[TEXT]);
+
 	for (int i = 0; i < this->players.size(); i++) {
 		//Set viewport
 		glViewport(0, 0, window::WIDTH, window::HEIGHT/ 2);
+
 		//for(int j = 0; j<this->models.count();j++){
 		shaders[MODELS]->Bind();
 		shaders[MODELS]->Update(players.at(i)->GetCamera());
@@ -142,7 +146,6 @@ void Scene::DrawScene() {
 		//models[0]->Draw(*shaders[MODELS]);
 		//tempMesh->Draw(*shaders[MODELS], GLTransform());
 
-		
 
 
 		//tempModel->Draw(*shaders[MODELS]);
@@ -186,12 +189,12 @@ void Scene::DrawScene() {
 		//this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture3"), 2);
 		glViewport(0, window::HEIGHT - (window::HEIGHT / (i + 1)), window::WIDTH, window::HEIGHT / 2);
 		this->RenderQuad();
-		
+
 		//shaders[MODELS].update(models.at(j), player.at(i).getCamera()); 
 		//	models.at(j).draw(player.at(i).getCamera());
 		//}
 	}
-	
+
 }
 
 void Scene::RenderQuad()
