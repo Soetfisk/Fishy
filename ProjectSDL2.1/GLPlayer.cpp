@@ -94,8 +94,11 @@ void GLPlayer::HandleCollision(PlayerStates state, float deltaTime, glm::vec3 mo
 		this->m_velocity = momentum;
 	break;
 	case EATING:
-		glm::vec3 scaleIncrease = this->transform->GetScale() + (deltaTime / 4);
-		this->transform->SetScale(scaleIncrease);
+		this->transform->SetScale(this->transform->GetScale() + (deltaTime / 4));
+		break;
+	case HIT:
+		this->m_velocity += momentum;
+		break;
 	break;
 	}
 }
@@ -217,6 +220,10 @@ void GLPlayer::CalcVelocity(float& deltaTime)
 
 	glm::vec3 forward = this->GetForward();
 	m_velocity += forward * (float)(lastForward / (MAX_INPUT));
+
+	m_velocity.x = (m_velocity.x > MAX_SPEED) ? MAX_SPEED : m_velocity.x;
+	m_velocity.y = (m_velocity.y > MAX_SPEED) ? MAX_SPEED : m_velocity.y;
+	m_velocity.z = (m_velocity.z > MAX_SPEED) ? MAX_SPEED : m_velocity.z;
 }
 
 void GLPlayer::HandleDash(float & deltaTime)

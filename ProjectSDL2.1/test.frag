@@ -11,23 +11,25 @@ layout(location = 2)out vec3 color3;
 
 uniform sampler2D diffuseTexture;
 
-const vec3 fogColor = vec3(0.0,0.0,1);
+const vec3 fogColor = vec3(0.1,0.1,1);
 
 void main()
 {
-	vec3 lightPos = vec3(5,5,5);
+	vec3 lightPos = vec3(1,200000,3);
 	vec3 V = normalize(frag_ViewPos - frag_worldpos); // pos to camera
 	vec3 L = normalize(lightPos - frag_worldpos); // pos to light
 	
 
 	float dist = gl_FragCoord.z / gl_FragCoord.w; // distance
 	float fogFactor = 0;
+	float fogEnd = 100;
+	float fogStart = 20;
 
-	fogFactor = (80-dist) / (80 - 2);
+	fogFactor = (fogEnd-dist) / (fogEnd - fogStart);
 	fogFactor = clamp(fogFactor,0.0,1.0);
 
 	float angle = max(dot(L, frag_normal), 0.0);
-	vec3 tempColor  = clamp(angle * vec3(1, 0, 0) + vec3(0.01,0.01,0.01),0.0,1.0);
+	vec3 tempColor  = clamp(angle * vec3(1, 0, 0),0.0,1.0);
 
 	color = clamp(mix(fogColor, tempColor, fogFactor),0.0,1.0);
 	//color = vec3(0.5,0.5,0.5);
