@@ -12,7 +12,7 @@ public:
 	ParticleHandler(GLShader* renderShader);
 	~ParticleHandler();
 
-	void UpdateParticles(const float& deltaTime);
+	void UpdateParticles(const float& deltaTime, GLShader* shader, GLCamera& camera);
 	void AddEmiter(EmitterType type, glm::mat4*& transformMatrix);
 	void AddEmiter(EmitterType type, glm::vec3 position);
 

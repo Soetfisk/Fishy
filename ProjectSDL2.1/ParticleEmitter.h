@@ -20,6 +20,17 @@ private:
 	EmitterType type;
 	std::vector<ParticleTest> particles;
 
+	//Particle Data
+	glm::vec4* p_pos;
+	glm::vec4* p_col;
+	glm::vec4* p_startCol;
+	glm::vec4* p_endCol;
+	glm::vec4* p_vel;
+	glm::vec4* p_acc;
+	glm::vec4* p_time;
+	glm::vec4* p_alive;
+	
+
 	ParticleComputeShader* emitterComputeShader;
 	GLuint transformationLocation;
 
@@ -44,6 +55,7 @@ private:
 	void InstantiateProjectileEmitter();
 	void InstantiateEmitter();
 	void InstantiateRenderShader();
+	void InstantiateSpaces();
 
 	
 public:

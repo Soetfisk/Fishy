@@ -131,12 +131,13 @@ void Scene::DrawScene() {
 
 		//tempModel->Draw(*shaders[MODELS]);
 
-		//pHandler->UpdateParticles(this->deltaTime);
+		pHandler->UpdateParticles(this->deltaTime, shaders[PARTICLE], players.at(i)->GetCamera());
 
-		testParticle->Update();
-		shaders[PARTICLE]->Bind();
-		shaders[PARTICLE]->Update(players.at(i)->GetCamera());
-		testParticle->Draw(shaders[PARTICLE]);
+		//testParticle->Update();
+		//shaders[PARTICLE]->Bind();
+		//shaders[PARTICLE]->Update(players.at(i)->GetCamera());
+		//testParticle->Draw(shaders[PARTICLE]);
+
 		//shaders[PARTICLE]->Bind();
 		//shaders[PARTICLE]->Update(players.at(i)->GetCamera());
 		//this->RenderQuad();

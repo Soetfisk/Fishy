@@ -13,10 +13,16 @@ ParticleHandler::~ParticleHandler(){
 	}
 }
 
-void ParticleHandler::UpdateParticles(const float& deltaTime) {
+void ParticleHandler::UpdateParticles(const float& deltaTime, GLShader* shader, GLCamera& camera) {
+
 	for (int i = 0; i < this->emiters.size(); i++) {
 		this->emiters.at(i)->ComputeUpdate();
 		this->emiters.at(i)->UpdateEmitter(deltaTime);
+	}
+
+	shader->Bind();
+	shader->Update(camera);
+	for (int i = 0; i < this->emiters.size(); i++) {
 		this->emiters.at(i)->Draw();
 		//this->emiters.at(i).Update(deltaTime);
 	}
