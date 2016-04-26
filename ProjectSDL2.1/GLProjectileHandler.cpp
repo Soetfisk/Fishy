@@ -11,10 +11,8 @@ GLProjectileHandler::GLProjectileHandler(int nrOfProjectiles, int projectileTrav
 	this->projectileTravelDistance = projectileTravelDisntace;
 	this->projectileSpeed = projectileSpeed;
 	for (int i = 0; i < nrOfProjectiles; i++)
-	{
 		projectiles.push_back(new GLProjectile(projectileTravelDisntace, projectileSpeed));
-		//inactiveProjectiles.push_back(projectiles.at(i));
-	}
+
 }
 
 GLProjectileHandler::~GLProjectileHandler()
@@ -27,24 +25,16 @@ void GLProjectileHandler::Shoot(glm::vec3& forward, glm::vec3& pos, glm::vec3& r
 {
 	GLProjectile* projectilePtr = GetInactiveProjectile();
 	if (projectilePtr != nullptr)
-	{
 		ActivateProjectile(projectilePtr, forward, pos, rot);
-	}
 	else
-	{
 		projectiles.push_back(new GLProjectile(projectileTravelDistance, projectileSpeed));
-		//ActivateProjectile(projectiles.back(), forward, pos, rot);
-	}
 }
 
 void GLProjectileHandler::Update(float& dt)
 {
 	GLProjectile* temp = nullptr;
-	//std::cout << projectiles.size() << std::endl;
 	for (int i = 0; i < projectiles.size(); i++)
-	{
 		projectiles.at(i)->TestUpdate(dt);
-	}
 }
 
 void GLProjectileHandler::Draw(GLShader& shader)
@@ -63,7 +53,7 @@ GLProjectile* GLProjectileHandler::GetInactiveProjectile()
 	GLProjectile* projectilePtr = nullptr;
 	for (int i = 0; i < projectiles.size(); i++)
 	{
-		if (!projectiles.at(i)->isActive())
+		if (!projectiles.at(i)->IsActive())
 		{
 			projectilePtr = projectiles.at(i);
 			i = projectiles.size();
