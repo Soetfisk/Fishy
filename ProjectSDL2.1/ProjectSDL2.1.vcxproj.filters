@@ -1,31 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="FilterComputeShader.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="FilterComputeShader.cpp" />
     <ClCompile Include="GLGUIHandler.cpp" />
     <ClCompile Include="GLCollisionHandler.cpp" />
-    <ClCompile Include="FilterComputeShader.cpp" />
-    <ClCompile Include="GLGUIHandler.cpp" />
-    <ClCompile Include="GLCollisionHandler.cpp" />
-    <ClCompile Include="GLNPC.cpp" />
-    <ClCompile Include="FrameBuffer.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="GameMain.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="GLCamera.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="GLCollisionHandler.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="GLGUIHandler.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="FrameBuffer.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="GLCamera.cpp" />
@@ -42,46 +20,13 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="GLNPC.cpp">
       <Filter>Source\NPCs</Filter>
-    <ClCompile Include="GLMesh.cpp">
-      <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\GLNPC_GoldFish.cpp">
       <Filter>Source\NPCs</Filter>
-    <ClCompile Include="GLModel.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="GLNPC.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="GLPlayer.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="GLProjectile.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="GLProjectileHandler.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="GLShader.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="GLWindow.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="obj_loader.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\RNG.h" />
     <ClInclude Include="AABB.h">
       <Filter>Header</Filter>
     </ClInclude>
@@ -147,56 +92,23 @@
     </ClInclude>
     <ClInclude Include="GLNPC.h">
       <Filter>Header\NPCs</Filter>
-    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\RNG.h">
-      <Filter>Shaders</Filter>
     </ClInclude>
     <ClInclude Include="GLNPC_GoldFish.h">
       <Filter>Header\NPCs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="blueFilter.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="pass.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="pass.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="post.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="post.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="test.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="test.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="text.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="text.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="wavy.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="wavy.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="test.geom">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="lighting.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="lighting.vert">
-      <Filter>Shaders</Filter>
-    </None>
+    <None Include="blueFilter.glsl" />
+    <None Include="pass.frag" />
+    <None Include="pass.vert" />
+    <None Include="post.frag" />
+    <None Include="post.vert" />
+    <None Include="test.frag" />
+    <None Include="test.vert" />
+    <None Include="text.frag" />
+    <None Include="text.vert" />
+    <None Include="wavy.frag" />
+    <None Include="wavy.vert" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header">

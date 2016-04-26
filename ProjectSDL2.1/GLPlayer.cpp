@@ -30,6 +30,8 @@ GLPlayer::GLPlayer(FishBox & FSH_Loader, unsigned int modelID) : GLModel(FSH_Loa
 	this->m_velocity = glm::vec3(0);
 	
 	this->dashCurrentDuration = 0.0f;
+	this->dashDuration = 0.3f;
+	this->dashCooldown = 1;
 	this->dashCooldownCounter = 0;
 	this->isDashing = false;
 	this->dashOnCooldown = false;
@@ -191,8 +193,7 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 
 void GLPlayer::PlayerShoot()
 {
-	this->m_projectileHandler->Shoot(GetForward(), transform->m_pos, transform->m_rot);
-	std::cout << m_velocity.x << " " << m_velocity.y << " " << m_velocity.z << std::endl;
+	this->m_projectileHandler->Shoot(this->GetForward(), transform->m_pos, transform->m_rot);
 }
 void GLPlayer::PlayerDash()
 {
@@ -207,63 +208,52 @@ void GLPlayer::PlayerDash()
 
 void GLPlayer::CalcVelocity(float& deltaTime)
 {
-	glm::vec3 forward = this->GetForward();
 	if (m_velocity != glm::vec3(0))
 	{
 		if (isDashing)
-		{
-			m_velocity +=  forward * DASH_SCALE;
-			// If VALUE > MAX_SPEED set it to MAX_SPEED else if VALUE < -MAX_SPEED set it to -MAX_SPEED else keep VALUE
-			m_velocity.x = (m_velocity.x > MAX_DASHSPEED) ? MAX_DASHSPEED : (m_velocity.x < -MAX_DASHSPEED) ? -MAX_DASHSPEED : m_velocity.x;
-			m_velocity.y = (m_velocity.y > MAX_DASHSPEED) ? MAX_DASHSPEED : (m_velocity.y < -MAX_DASHSPEED) ? -MAX_DASHSPEED : m_velocity.y;
-			m_velocity.z = (m_velocity.z > MAX_DASHSPEED) ? MAX_DASHSPEED : (m_velocity.z < -MAX_DASHSPEED) ? -MAX_DASHSPEED : m_velocity.z;
-		}
-		else if(!isDashing)
-		{
-			// If VALUE > MAX_SPEED set it to MAX_SPEED else if VALUE < -MAX_SPEED set it to -MAX_SPEED else keep VALUE
-			m_velocity.x = (m_velocity.x > MAX_SPEED) ? MAX_SPEED : (m_velocity.x < -MAX_SPEED) ? -MAX_SPEED : m_velocity.x;
-			m_velocity.y = (m_velocity.y > MAX_SPEED) ? MAX_SPEED : (m_velocity.y < -MAX_SPEED) ? -MAX_SPEED : m_velocity.y;
-			m_velocity.z = (m_velocity.z > MAX_SPEED) ? MAX_SPEED : (m_velocity.z < -MAX_SPEED) ? -MAX_SPEED : m_velocity.z;
-		}
+			m_velocity += m_velocity * 0.2f;
 
 		this->transform->m_pos += (m_velocity  * deltaTime);
 		glm::vec3 friction = (m_velocity * MOVEMENT_FRICTION);
 		m_velocity -= friction * deltaTime;
 	}
 
+	glm::vec3 forward = this->GetForward();
 	m_velocity += forward * (float)(lastForward / (MAX_INPUT));
-	m_velocity.x = (glm::abs(m_velocity.x) < MIN_SPEED) ? 0.0f : m_velocity.x;
-	m_velocity.y = (glm::abs(m_velocity.y) < MIN_SPEED) ? 0.0f : m_velocity.y;
-	m_velocity.z = (glm::abs(m_velocity.z) < MIN_SPEED) ? 0.0f : m_velocity.z;
+
+	m_velocity.x = (m_velocity.x > MAX_SPEED) ? MAX_SPEED : m_velocity.x;
+	m_velocity.y = (m_velocity.y > MAX_SPEED) ? MAX_SPEED : m_velocity.y;
+	m_velocity.z = (m_velocity.z > MAX_SPEED) ? MAX_SPEED : m_velocity.z;
 }
 
 void GLPlayer::HandleDash(float & deltaTime)
 {
 	if (isDashing)
 	{
-		m_camera.AddDistance(MOVE_CAM_DISTANCE * deltaTime);
+		m_camera.AddDistance(5 * deltaTime);
 		dashCurrentDuration += deltaTime;
 		this->PlayerMove(0, 0, (MAX_INPUT - MAX_INPUT * dashCurrentDuration / dashDuration));
-		if (dashCurrentDuration >= DASH_DURATION)
+		if (dashCurrentDuration >= dashDuration)
 		{
+			//dashCurrentDuration = 0.0f;
 			isDashing = false;
 			dashOnCooldown = true;
-			dashCurrentDuration = DASH_DURATION;
 		}
 	}
 	else if (dashOnCooldown)
 	{
 		if (dashCurrentDuration >= 0)
 		{
-			m_camera.DecreaseDistance(MOVE_CAM_DISTANCE * deltaTime);
+			m_camera.DecreaseDistance(5 * deltaTime);
 			dashCurrentDuration -= deltaTime;
 		}
 		dashCooldownCounter += deltaTime;
-		if (DASH_COOLDOWN <= dashCooldownCounter)
+		//this->PlayerMove(0, 0, (MAX_INPUT - MAX_INPUT * dashCurrentDuration / dashDuration));
+		std::cout << dashCooldownCounter << std::endl;;
+		if (dashCooldown <= dashCooldownCounter)
 		{
 			dashOnCooldown = false;
 			dashCooldownCounter = 0.0f;
-			lastForward = 0.0f;
 		}
 	}
 }

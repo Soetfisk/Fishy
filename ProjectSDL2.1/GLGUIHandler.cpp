@@ -90,13 +90,13 @@ void GLGUIHandler::Update(float dt)
 		if (newSec >= 1)
 		{
 			time++;
-			/*AddScorePlayer1(time);
-			AddScorePlayer2(1);*/
+			AddScorePlayer1(time);
+			AddScorePlayer2(1);
 			newSec = 0;
 			printText[TIME] = textStart[TIME] + std::to_string(time) + textEnd[TIME];
 			textPos[TIME][0] = window::HALF_WIDTH - (gui->getTextLenght(printText[TIME], textScale[TIME]) * 0.5);
-			/*if (time == 10)
-				Player2Won();*/
+			if (time == 10)
+				Player2Won();
 
 			// Update FPS
 			printText[FPS] = textStart[FPS] + std::to_string((int)(1 / dt));
@@ -108,9 +108,9 @@ void GLGUIHandler::Update(float dt)
 		if (newSec >= 1)
 		{
 			newSec = 0;
-			/*time++;
+			time++;
 			if (time == 20)
-				Reset();*/
+				Reset();
 
 			// Update FPS
 			printText[FPS] = textStart[FPS] + std::to_string((int)(1 / dt));

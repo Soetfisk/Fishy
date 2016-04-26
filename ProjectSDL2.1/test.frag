@@ -8,9 +8,10 @@ in vec3 frag_ViewPos;
 layout(location = 0)out vec3 color;
 layout(location = 1)out vec3 color2;
 layout(location = 2)out vec3 color3;
-layout(location = 3)out vec3 color4;
 
 uniform sampler2D diffuseTexture;
+
+const vec3 fogColor = vec3(0.1,0.1,1);
 
 void main()
 {
@@ -20,14 +21,19 @@ void main()
 	
 
 	float dist = gl_FragCoord.z / gl_FragCoord.w; // distance
+	float fogFactor = 0;
+	float fogEnd = 100;
+	float fogStart = 20;
 
-	color4 = vec3(dist,0,0);
+	fogFactor = (fogEnd-dist) / (fogEnd - fogStart);
+	fogFactor = clamp(fogFactor,0.0,1.0);
 
-	vec3 tempColor  = clamp(vec3(1, 0, 0),0.0,1.0);
+	float angle = max(dot(L, frag_normal), 0.0);
+	vec3 tempColor  = clamp(angle * vec3(1, 0, 0),0.0,1.0);
 
-	color = tempColor;
+	color = clamp(mix(fogColor, tempColor, fogFactor),0.0,1.0);
 	//color = vec3(0.5,0.5,0.5);
 
-	color2 = frag_worldpos;
-	color3 = frag_normal;
+	color2 = vec3(dist,dist,dist);
+	color3 = vec3(0, 0, 1);
 }
