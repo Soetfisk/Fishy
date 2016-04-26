@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\GLNPC_GoldFish.cpp" />
     <ClCompile Include="FilterComputeShader.cpp" />
     <ClCompile Include="GLGUIHandler.cpp" />
     <ClCompile Include="GLCollisionHandler.cpp" />
@@ -39,6 +40,7 @@
     <ClCompile Include="Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\GLNPC_GoldFish.h" />
     <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\RNG.h" />
     <ClInclude Include="AABB.h" />
     <ClInclude Include="FilterComputeShader.h" />
