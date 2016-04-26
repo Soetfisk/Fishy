@@ -27,19 +27,20 @@ Scene::Scene() {
 	
 	LoadModels();
 	
-	this->players.at(0)->GetTransform().SetPos(glm::vec3(20, 0, 0));
-	this->players.at(0)->GetTransform().SetPos(glm::vec3(-20, 0, 0));
+	this->players.at(1)->GetTransform().SetPos(glm::vec3(3, 3, 3));
+	this->players.at(0)->GetTransform().SetPos(glm::vec3(0, 0, 0));
 	
-	shaders[MODELS] = new GLShader("test");
+	shaders[MODELS] = new GLShader("test", true);
 	shaders[PASS] = new GLShader("pass");
 	shaders[TEXT] = new GLShader("text");
 	shaders[WAVY] = new GLShader("wavy");
 	shaders[POST] = new GLShader("post");
+	shaders[LIGHTING] = new GLShader("lighting");
 
 	guih = new GLGUIHandler(*shaders[TEXT]);
 
 	this->frameBuffer = new FrameBuffer();
-	this->frameBuffer->CreateFrameBuffer(3, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGB);
+	this->frameBuffer->CreateFrameBuffer(4, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGB16F);
 	this->frameBuffer->UnbindFrameBuffer();
 
 	this->frameBuffer2 = new FrameBuffer();
@@ -53,6 +54,10 @@ Scene::Scene() {
 	this->frameBuffer4 = new FrameBuffer();
 	this->frameBuffer4->CreateFrameBuffer(1, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGB);
 	this->frameBuffer4->UnbindFrameBuffer();
+
+	this->frameBuffer5 = new FrameBuffer();
+	this->frameBuffer5->CreateFrameBuffer(1, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGB);
+	this->frameBuffer5->UnbindFrameBuffer();
 	//tempMesh->GetTransform().SetPos(glm::vec3(3, 0, 3));
 	//first make vertex for all vertexes
 	filterComputeShader = new FilterComputeShader("derp");
@@ -81,6 +86,7 @@ Scene::~Scene(){
 	delete this->frameBuffer2;
 	delete this->frameBuffer3;
 	delete this->frameBuffer4;
+	delete this->frameBuffer5;
 	delete this->filterComputeShader;
 	for (int i = 0; i < models.size(); i++)
 	{
@@ -134,6 +140,7 @@ void Scene::DrawScene() {
 		shaders[MODELS]->Bind();
 		shaders[MODELS]->Update(players.at(i)->GetCamera());
 		this->frameBuffer->BindFrameBuffer();
+
 		//tempModel->Draw(*shaders[MODELS]);
 		for (int j = 0; j < this->players.size(); j++) {
 			players.at(j)->TestDraw(*shaders[MODELS]);
@@ -143,12 +150,35 @@ void Scene::DrawScene() {
 			NPCs.at(i)->NPCDraw(*shaders[MODELS]);
 		}
 		
-	
+		this->frameBuffer->UnbindFrameBuffer();
 		//models[0]->Draw(*shaders[MODELS]);
 		//tempMesh->Draw(*shaders[MODELS], GLTransform());
 
+		this->frameBuffer2->BindFrameBuffer();
+		shaders[LIGHTING]->Bind();
 
+		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(0) + "].ambient"), 1, glm::value_ptr(glm::vec3(0.0f, 0.1f, 0.0f)));
+		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(0) + "].diffuse"), 1, glm::value_ptr(glm::vec3(0.65f, 0.0f, 1.0f)));
+		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(0) + "].position"), 1, glm::value_ptr(glm::vec3(-3, 0, -3)));
+		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(0) + "].specular"), 1, glm::value_ptr(glm::vec3(0.5f, 0.0f, 0.0f)));
+		glUniform1f(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(0) + "].constant"), 1.0f);
+		glUniform1f(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(0) + "].linear"), 0.045f);
+		glUniform1f(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(0) + "].quadratic"), 0.0075);
 
+		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("ViewPos"), 1, glm::value_ptr(players.at(i)->GetCamera().Position()));
+
+		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.dir"), 1, glm::value_ptr(glm::vec3(0.5, 1, 0.5)));
+		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.ambient"), 1, glm::value_ptr(glm::vec3(0.1f, 0.1f, 0.1f)));
+		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.diffuse"), 1, glm::value_ptr(glm::vec3(0.5f, 0.5f, 0.5f)));
+		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.specular"), 1, glm::value_ptr(glm::vec3(0.5f, 0.0f, 0.0f)));
+
+		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("colorTexture"), 0);
+		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("posTexture"), 1);
+		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("normalTexture"), 2);
+		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("distTexture"), 3);
+
+		this->RenderQuad();
+		this->frameBuffer2->UnbindFrameBuffer();
 		//tempModel->Draw(*shaders[MODELS]);
 		//shaders[PASS]->Bind();
 		
@@ -158,15 +188,7 @@ void Scene::DrawScene() {
 		//this->filterComputeShader->UniformVec3("colorVector",glm::vec3(0.0f,0.0f, 1.0f));
 		//this->filterComputeShader->Uniform1f("number",count);
 		//this->filterComputeShader->DispatchCompute(1024 / 32, 768 / 32, 1);
-		this->frameBuffer->UnbindFrameBuffer();
-
-		this->frameBuffer2->BindFrameBuffer();
-		shaders[POST]->Bind();
-		shaders[POST]->Uniform1f("width", window::WIDTH);
-		shaders[POST]->Uniform1f("height", window::HEIGHT / 2);
-		this->frameBuffer->BindTexturesToProgram(shaders[POST]->GetUnifromLocation("texture"), 0);
-		this->RenderQuad();
-		this->frameBuffer2->UnbindFrameBuffer();
+		
 
 		this->frameBuffer3->BindFrameBuffer();
 		shaders[POST]->Bind();
@@ -177,15 +199,23 @@ void Scene::DrawScene() {
 		this->frameBuffer3->UnbindFrameBuffer();
 
 		this->frameBuffer4->BindFrameBuffer();
+		shaders[POST]->Bind();
+		shaders[POST]->Uniform1f("width", window::WIDTH);
+		shaders[POST]->Uniform1f("height", window::HEIGHT / 2);
+		this->frameBuffer3->BindTexturesToProgram(shaders[POST]->GetUnifromLocation("texture"), 0);
+		this->RenderQuad();
+		this->frameBuffer4->UnbindFrameBuffer();
+
+		this->frameBuffer5->BindFrameBuffer();
 		shaders[WAVY]->Bind();
 		shaders[WAVY]->Uniform1f("offset", count);
 		this->frameBuffer2->BindTexturesToProgram(shaders[WAVY]->GetUnifromLocation("texture"), 0);
 		this->RenderQuad();
-		this->frameBuffer4->UnbindFrameBuffer();
+		this->frameBuffer5->UnbindFrameBuffer();
 		
 
 		shaders[PASS]->Bind();
-		this->frameBuffer4->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
+		this->frameBuffer2->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
 		//this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture2"), 1);
 		//this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture3"), 2);
 		glViewport(0, window::HEIGHT - (window::HEIGHT / (i + 1)), window::WIDTH, window::HEIGHT / 2);
