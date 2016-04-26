@@ -25,9 +25,6 @@
     <ClCompile Include="GLModel.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="GLNPC.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="GLPlayer.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -54,6 +51,12 @@
     </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\GLNPC_GoldFish.cpp">
+      <Filter>Source\NPCs</Filter>
+    </ClCompile>
+    <ClCompile Include="GLNPC.cpp">
+      <Filter>Source\NPCs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -124,6 +127,9 @@
       <Filter>Shaders</Filter>
     </ClInclude>
     <ClInclude Include="GLNPC_GoldFish.h">
+      <Filter>Header\NPCs</Filter>
+    </ClInclude>
+    <ClInclude Include="GLNPC.h">
       <Filter>Header\NPCs</Filter>
     </ClInclude>
   </ItemGroup>
