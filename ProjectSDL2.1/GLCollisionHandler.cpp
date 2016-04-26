@@ -57,7 +57,7 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 			distSqrd = glm::dot(distance, distance);
 			if (distSqrd < 30)
 			{
-				AABB NpcSeenSpace(NPCs.at(j)->GetTransform().GetPos(), glm::vec3(5, 5, 5));
+				AABB NpcSeenSpace(NPCs.at(j)->GetTransform().GetPos() +(NPCs.at(j)->GetForward() *10.f), glm::vec3(10, 10, 10));
 
 				if (NPCs.at(j)->GetBoundingBox().containsAABB(players.at(i)->GetBoundingBox()))
 				{

@@ -5,12 +5,13 @@
 void Scene::LoadModels()
 {
 	FSH_Loader.LoadScene("Models/tempfishTex.FSH"); //PlayerFish
+	FSH_Loader.LoadScene("Models/Goldfish.FSH"); //PlayerFish
 	
 	for (int i = 0; i < 2; i++) {
 		this->players.push_back(new GLPlayer(FSH_Loader, PlayerFish));
 	}
 	for (int i = 0; i < 50; i++) {
-		this->NPCs.push_back(new GLNPC(FSH_Loader, PlayerFish));
+		this->NPCs.push_back(new GLNPC(FSH_Loader, GoldFish));
 	}
 
 	this->collisionHandler.AddNPC(NPCs);
