@@ -48,7 +48,13 @@ public:
 private:
 	const int DEADZONE = 8000;
 	float MOVEMENT_FRICTION = 2.0f;
-	const int MAX_SPEED = 10;
+	const int MAX_SPEED = 10;	
+	const float MIN_SPEED = 0.5f;
+	const int MAX_DASHSPEED = 20;				
+	const float DASH_DURATION = 0.3f;			// Dash duration in sec
+	const float DASH_COOLDOWN = 1.0f;			// Dash cooldown in sec
+	const float DASH_SCALE = 1.2f;				// 
+	const float MOVE_CAM_DISTANCE = 5.0f;		// (MOVE_CAM_DISTANCE * deltaTime) == Distnace camera is moved each update during and after dash
 	const float MAX_ANGLE = 75;
 	const int MAX_INPUT = glm::pow(2, 15);
 
