@@ -21,6 +21,7 @@ private:
 		//PARTICLES,
 		//BLUR,
 		PASS,
+		LIGHTING,
 		TEXT,
 		WAVY,
 		POST,
@@ -48,6 +49,7 @@ private:
 	FrameBuffer* frameBuffer2;
 	FrameBuffer* frameBuffer3;
 	FrameBuffer* frameBuffer4;
+	FrameBuffer* frameBuffer5;
 	GLProjectile* testProj;
 	float count = 0;
 	FilterComputeShader* filterComputeShader;
