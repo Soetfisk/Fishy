@@ -67,11 +67,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="blueFilter.glsl" />
+    <None Include="lighting.frag" />
+    <None Include="lighting.vert" />
     <None Include="pass.frag" />
     <None Include="pass.vert" />
     <None Include="post.frag" />
     <None Include="post.vert" />
     <None Include="test.frag" />
+    <None Include="test.geom" />
     <None Include="test.vert" />
     <None Include="text.frag" />
     <None Include="text.vert" />
