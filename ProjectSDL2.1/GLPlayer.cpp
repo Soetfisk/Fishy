@@ -217,27 +217,21 @@ void GLPlayer::CalcVelocity(float& deltaTime)
 			m_velocity.x = (m_velocity.x > MAX_DASHSPEED) ? MAX_DASHSPEED : (m_velocity.x < -MAX_DASHSPEED) ? -MAX_DASHSPEED : m_velocity.x;
 			m_velocity.y = (m_velocity.y > MAX_DASHSPEED) ? MAX_DASHSPEED : (m_velocity.y < -MAX_DASHSPEED) ? -MAX_DASHSPEED : m_velocity.y;
 			m_velocity.z = (m_velocity.z > MAX_DASHSPEED) ? MAX_DASHSPEED : (m_velocity.z < -MAX_DASHSPEED) ? -MAX_DASHSPEED : m_velocity.z;
-			//std::cout << m_velocity.x << " " << m_velocity.y << " " << m_velocity.z << std::endl;
 		}
 		else if(!isDashing)
 		{
+			// If VALUE > MAX_SPEED set it to MAX_SPEED else if VALUE < -MAX_SPEED set it to -MAX_SPEED else keep VALUE
 			m_velocity.x = (m_velocity.x > MAX_SPEED) ? MAX_SPEED : (m_velocity.x < -MAX_SPEED) ? -MAX_SPEED : m_velocity.x;
 			m_velocity.y = (m_velocity.y > MAX_SPEED) ? MAX_SPEED : (m_velocity.y < -MAX_SPEED) ? -MAX_SPEED : m_velocity.y;
 			m_velocity.z = (m_velocity.z > MAX_SPEED) ? MAX_SPEED : (m_velocity.z < -MAX_SPEED) ? -MAX_SPEED : m_velocity.z;
-			std::cout << m_velocity.x << " " << m_velocity.y << " " << m_velocity.z << std::endl;
 		}
 
 		this->transform->m_pos += (m_velocity  * deltaTime);
 		glm::vec3 friction = (m_velocity * MOVEMENT_FRICTION);
 		m_velocity -= friction * deltaTime;
-		//std::cout << m_velocity.x << " " << m_velocity.y << " " << m_velocity.z << std::endl;
 	}
 
 	m_velocity += forward * (float)(lastForward / (MAX_INPUT));
-
-	// If VALUE > MAX_SPEED set it to MAX_SPEED else if VALUE < -MAX_SPEED set it to -MAX_SPEED else keep VALUE
-	
-
 	m_velocity.x = (glm::abs(m_velocity.x) < MIN_SPEED) ? 0.0f : m_velocity.x;
 	m_velocity.y = (glm::abs(m_velocity.y) < MIN_SPEED) ? 0.0f : m_velocity.y;
 	m_velocity.z = (glm::abs(m_velocity.z) < MIN_SPEED) ? 0.0f : m_velocity.z;
