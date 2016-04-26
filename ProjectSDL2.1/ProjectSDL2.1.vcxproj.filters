@@ -4,6 +4,7 @@
     <ClCompile Include="FilterComputeShader.cpp" />
     <ClCompile Include="GLGUIHandler.cpp" />
     <ClCompile Include="GLCollisionHandler.cpp" />
+    <ClCompile Include="GLNPC.cpp" />
     <ClCompile Include="FrameBuffer.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="GLCamera.cpp" />
@@ -18,12 +19,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="obj_loader.cpp" />
     <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="GLNPC.cpp">
-      <Filter>Source\NPCs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\GLNPC_GoldFish.cpp">
-      <Filter>Source\NPCs</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\RNG.h" />
@@ -52,6 +47,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="GLModel.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GLNPC.h">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="GLPlayer.h">
@@ -90,12 +88,6 @@
     <ClInclude Include="SphereBS.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="GLNPC.h">
-      <Filter>Header\NPCs</Filter>
-    </ClInclude>
-    <ClInclude Include="GLNPC_GoldFish.h">
-      <Filter>Header\NPCs</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="blueFilter.glsl" />
@@ -119,12 +111,6 @@
     </Filter>
     <Filter Include="Shaders">
       <UniqueIdentifier>{e8b73c92-61ec-434a-a513-1770d8b81781}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\NPCs">
-      <UniqueIdentifier>{e1fe26d4-adf3-43a7-9d4b-2ec87f7e644a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header\NPCs">
-      <UniqueIdentifier>{81a1f4a4-2766-49f7-aeb7-192ca4e20b60}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
