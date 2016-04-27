@@ -185,7 +185,6 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	//camera update
 	this->m_camera.Update(this->GetTransform(), deltaTime);
 
-	//this->m_projectile->TestUpdate(deltaTime);
 	this->m_projectileHandler->Update(deltaTime);
 }
 
