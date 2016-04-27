@@ -1,4 +1,5 @@
-#pragma once
+#ifndef COLLISION_HANDLER_H
+#define COLLISION_HANDLER_H
 #include "GLUtil.h"
 #include "GLModel.h"
 #include "GLNPC.h"
@@ -29,4 +30,5 @@ private:
 	std::vector<GLNPC*> NPCs;
 	std::vector<GLModel*> models;
 };
+#endif
 
