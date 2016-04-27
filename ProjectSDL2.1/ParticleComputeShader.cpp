@@ -13,10 +13,16 @@ ParticleComputeShader::~ParticleComputeShader()
 
 void ParticleComputeShader::Initialize(EmitterType type, int nrMaxParticles, glm::mat4*& pTransformMatrices, glm::vec4* pVelocitiesS, glm::vec4*& pos) {
 
+	this->testPos = new glm::vec4[2];
+
+	for (int i = 0; i < 2; i++) {
+		testPos[i] = glm::vec4(i);
+	}
 
 	glGenBuffers(1, &this->transSSbo);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, this->transSSbo);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, nrMaxParticles * sizeof(glm::vec3), pos, GL_DYNAMIC_DRAW);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, 2 * sizeof(glm::vec4), &testPos, GL_DYNAMIC_COPY);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 5, this->transSSbo);
 
@@ -28,6 +34,10 @@ void ParticleComputeShader::Initialize(EmitterType type, int nrMaxParticles, glm
 	compute_shader = CreateShader(LoadShader("ParticleProjectileComputeShader.glsl"), GL_COMPUTE_SHADER);
 
 	glCompileShader(compute_shader);
+
+	int rvalue;
+
+	glGetShaderiv(compute_shader, GL_COMPILE_STATUS, &rvalue);
 
 	glAttachShader(compute_program, compute_shader);
 
@@ -55,9 +65,29 @@ void ParticleComputeShader::Initialize(EmitterType type, int nrMaxParticles, glm
 }
 
 void ParticleComputeShader::Update(const float & deltaTime, int nrActiveParticles) {
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, this->transSSbo);
+	GLvoid* p = glMapBuffer(GL_SHADER_STORAGE_BUFFER, GL_WRITE_ONLY);
+	memcpy(p, &testPos, nrActiveParticles * sizeof(glm::vec4));
+	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+
+	GLuint block_index = 0;
+
+	block_index = glGetProgramResourceIndex(this->compute_program, GL_SHADER_STORAGE_BLOCK, "Vel");
+	GLuint ssbo_binding_point_index = 5;
+	glShaderStorageBlockBinding(this->compute_program, block_index, ssbo_binding_point_index);
+	glShaderStorageBlockBinding(this->compute_program, block_index, 80);
+	GLuint binding_point_index = 80;
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, binding_point_index, this->transSSbo);
+
 	glUseProgram(this->compute_program);
 	glDispatchCompute(nrActiveParticles, 1, 1);
 	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+
+	glm::vec4 result;
+	for (int i = 0; i < 2; i++) {
+		 result = testPos[i];
+	}
+
 }
 
 void ParticleComputeShader::InitializeProjectileShader() {

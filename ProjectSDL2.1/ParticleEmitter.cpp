@@ -59,7 +59,7 @@ void ParticleEmitter::InstantiateSpaces() {
 
 ParticleEmitter::~ParticleEmitter()
 {
-	//delete emitterComputeShader;
+	delete emitterComputeShader;
 	delete[]this->p_transMat;
 	delete[]this->p_pos;
 	delete[]this->p_col;
