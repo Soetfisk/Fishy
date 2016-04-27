@@ -34,7 +34,7 @@ Scene::Scene() {
 	shaders[PASS] = new GLShader("pass");
 	shaders[TEXT] = new GLShader("text");
 	shaders[WAVY] = new GLShader("wavy");
-	shaders[POST] = new GLShader("post");
+	shaders[BORDER] = new GLShader("post");
 	shaders[LIGHTING] = new GLShader("lighting");
 
 	guih = new GLGUIHandler(*shaders[TEXT]);
@@ -168,18 +168,18 @@ void Scene::DrawScene() {
 		this->count += 0.5f * this->deltaTime;
 
 		this->frameBuffer3->BindFrameBuffer();
-		shaders[POST]->Bind();
-		shaders[POST]->Uniform1f("width", window::WIDTH);
-		shaders[POST]->Uniform1f("height", window::HEIGHT / 2);
-		this->frameBuffer2->BindTexturesToProgram(shaders[POST]->GetUnifromLocation("texture"), 0);
+		shaders[BORDER]->Bind();
+		shaders[BORDER]->Uniform1f("width", window::WIDTH);
+		shaders[BORDER]->Uniform1f("height", window::HEIGHT / 2);
+		this->frameBuffer2->BindTexturesToProgram(shaders[BORDER]->GetUnifromLocation("texture"), 0);
 		this->RenderQuad();
 		this->frameBuffer3->UnbindFrameBuffer();
 
 		this->frameBuffer4->BindFrameBuffer();
-		shaders[POST]->Bind();
-		shaders[POST]->Uniform1f("width", window::WIDTH);
-		shaders[POST]->Uniform1f("height", window::HEIGHT / 2);
-		this->frameBuffer3->BindTexturesToProgram(shaders[POST]->GetUnifromLocation("texture"), 0);
+		shaders[BORDER]->Bind();
+		shaders[BORDER]->Uniform1f("width", window::WIDTH);
+		shaders[BORDER]->Uniform1f("height", window::HEIGHT / 2);
+		this->frameBuffer3->BindTexturesToProgram(shaders[BORDER]->GetUnifromLocation("texture"), 0);
 		this->RenderQuad();
 		this->frameBuffer4->UnbindFrameBuffer();
 
