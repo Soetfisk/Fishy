@@ -2,17 +2,18 @@
 
 GLProjectileHandler::GLProjectileHandler()
 {
-	projectileTravelDistance = 0;
+	projectileActiveTime = 0;
 	projectileSpeed = 0;
 }
 
-GLProjectileHandler::GLProjectileHandler(int nrOfProjectiles, int projectileTravelDisntace, float projectileSpeed)
+GLProjectileHandler::GLProjectileHandler(FishBox* FSH_Loader, unsigned int modelID, int nrOfProjectiles, int projectileActiveTime, float projectileSpeed)
 {
-	this->projectileTravelDistance = projectileTravelDisntace;
+	this->FSH_Loader = FSH_Loader;
+	this->modelID = modelID;
+	this->projectileActiveTime = projectileActiveTime;
 	this->projectileSpeed = projectileSpeed;
 	for (int i = 0; i < nrOfProjectiles; i++)
-		projectiles.push_back(new GLProjectile(projectileTravelDisntace, projectileSpeed));
-
+		projectiles.push_back(new GLProjectile(*FSH_Loader, modelID, projectileActiveTime, projectileSpeed));
 }
 
 GLProjectileHandler::~GLProjectileHandler()
@@ -21,13 +22,13 @@ GLProjectileHandler::~GLProjectileHandler()
 		delete projectiles.at(i);
 }
 
-void GLProjectileHandler::Shoot(glm::vec3& forward, glm::vec3& pos, glm::vec3& rot)
+void GLProjectileHandler::Shoot(glm::vec3 forward, glm::vec3 pos, glm::vec3 rot, glm::vec3 velocity)
 {
 	GLProjectile* projectilePtr = GetInactiveProjectile();
 	if (projectilePtr != nullptr)
-		ActivateProjectile(projectilePtr, forward, pos, rot);
+		projectilePtr->Shoot(pos, forward, velocity, rot);
 	else
-		projectiles.push_back(new GLProjectile(projectileTravelDistance, projectileSpeed));
+		projectiles.push_back(new GLProjectile(*FSH_Loader, modelID, projectileActiveTime, projectileSpeed));
 }
 
 void GLProjectileHandler::Update(float& dt)
@@ -60,12 +61,4 @@ GLProjectile* GLProjectileHandler::GetInactiveProjectile()
 		}
 	}
 	return projectilePtr;
-}
-
-void GLProjectileHandler::ActivateProjectile(GLProjectile* projectile, glm::vec3& forward, glm::vec3& pos, glm::vec3& rot)
-{
-	projectile->SetForward(forward);
-	projectile->ResetTo(pos);
-	projectile->GetTransform().m_rot = rot;
-	projectile->Activate();
 }

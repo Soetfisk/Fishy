@@ -2,8 +2,8 @@
 
 GLProjectile::GLProjectile() : GLModel()
 {
-	maxDistance = 0;
-	distanceTraveled = 0.0;
+	maxActiveTime = 0;
+	timeActive = 0.0;
 	//speed = 0;
 	forward = glm::vec3(0);
 	//forwardSpeed = glm::vec3(0);
@@ -12,21 +12,34 @@ GLProjectile::GLProjectile() : GLModel()
 
 GLProjectile::GLProjectile(int maxDist) : GLModel()
 {
-	maxDistance = maxDist;
-	distanceTraveled = 0.0;
-	//this->speed = speed;
-	forward = glm::vec3(0);
-	//forwardSpeed = glm::vec3(0);
+	maxActiveTime = maxDist;
+	timeActive = 0.0;
+	speed = 1.0;
+	velocity = glm::vec3();
+	forward = glm::vec3();
+	forwardVel = glm::vec3();
 	currentState = INACTIVE;
 }
 
-GLProjectile::GLProjectile(FishBox& FSH_Loader, char* filePath, int maxDist, float speed) : GLModel(FSH_Loader, filePath)
+GLProjectile::GLProjectile(FishBox& FSH_Loader, char* filePath, int projectileActiveTime, float projectileSpeed) : GLModel(FSH_Loader, filePath)
 {
-	maxDistance = maxDist;
-	distanceTraveled = 0.0;
-	//this->speed = speed;
-	forward = glm::vec3(0);
-	//forwardSpeed = glm::vec3(0);
+	maxActiveTime = projectileActiveTime;
+	timeActive = 0.0;
+	this->speed = projectileSpeed;
+	velocity = glm::vec3();
+	forward = glm::vec3();
+	forwardVel = glm::vec3();
+	currentState = INACTIVE;
+}
+
+GLProjectile::GLProjectile(FishBox& FSH_Loader, unsigned int modelID, int projectileActiveTime, float projectileSpeed) : GLModel(FSH_Loader, modelID)
+{
+	maxActiveTime = projectileActiveTime;
+	timeActive = 0.0;
+	this->speed = projectileSpeed;
+	velocity = glm::vec3();
+	forward = glm::vec3();
+	forwardVel = glm::vec3();
 	currentState = INACTIVE;
 }
 
@@ -55,11 +68,11 @@ void GLProjectile::TestUpdate(float& dt)
 	switch (currentState)
 	{
 	case ACTIVE:
-		distanceTraveled += dt;							// Add to distanceTraveled
-		if (distanceTraveled >= maxDistance)			// Check if maxDistance was reached
+		timeActive += dt;						
+		if (timeActive >= maxActiveTime)			// Check if maxDistance was reached
 			currentState = INACTIVE;
 		else
-			transform->m_pos += dt;		// Move Projectile forward
+			transform->m_pos += forwardVel * dt;	// Move Projectile forward
 		break;
 	case INACTIVE:
 		break;
@@ -71,13 +84,12 @@ void GLProjectile::TestUpdate(float& dt)
 void GLProjectile::ResetTo(glm::vec3& pos)
 {
 	transform->SetPos(pos);
-	distanceTraveled = 0.0;
+	timeActive = 0.0;
 }
 
 void GLProjectile::SetForward(glm::vec3 forward)
 {
 	this->forward = forward;
-	//forwardSpeed = forward * speed;
 }
 
 void GLProjectile::SetVelocity(glm::vec3 velocity)
@@ -85,13 +97,28 @@ void GLProjectile::SetVelocity(glm::vec3 velocity)
 	this->velocity = velocity;
 }
 
-void GLProjectile::ShootAt(glm::vec3 startPos, glm::vec3 forward, glm::vec3 velocity)
+void GLProjectile::Shoot(glm::vec3 startPos, glm::vec3 forward, glm::vec3 velocity, glm::vec3 rot)
 {
-	transform->SetPos(startPos);
-	distanceTraveled = 0.0;
+	transform->m_pos = startPos;
+	transform->m_rot = rot;
+	timeActive = 0.0;
 	this->forward = forward;
 	this->velocity = velocity;
-	forwardVel = forward * velocity;
+
+	forwardVel.x = (velocity.x > MIN_SPEED || velocity.x < -MIN_SPEED) ? forward.x * glm::abs(velocity.x) : forward.x;
+	forwardVel.x = (forwardVel.x < MIN_PROJECTILE_SPEED && forwardVel.x > 0) ? MIN_PROJECTILE_SPEED : (forwardVel.x > -MIN_PROJECTILE_SPEED && forwardVel.x < 0) ? -MIN_PROJECTILE_SPEED : forwardVel.x;
+
+	forwardVel.y = (velocity.y > MIN_SPEED || velocity.y < -MIN_SPEED) ? forward.y * glm::abs(velocity.y) : forward.y;
+	forwardVel.y = (forwardVel.y < MIN_PROJECTILE_SPEED && forwardVel.y > 0) ? MIN_PROJECTILE_SPEED : (forwardVel.y > -MIN_PROJECTILE_SPEED && forwardVel.y < 0) ? -MIN_PROJECTILE_SPEED : forwardVel.y;
+	
+	forwardVel.z = (velocity.z > MIN_SPEED || velocity.z < -MIN_SPEED) ? forward.z * glm::abs(velocity.z) : forward.z;
+	forwardVel.z = (forwardVel.z < MIN_PROJECTILE_SPEED && forwardVel.z > 0) ? MIN_PROJECTILE_SPEED : (forwardVel.z > -MIN_PROJECTILE_SPEED && forwardVel.z < 0) ? -MIN_PROJECTILE_SPEED : forwardVel.z;
+	
+	/*forwardVel.x = (forwardVel.x > 0 && forwardVel.x < MIN_PROJECTILE_SPEED) ? forwardVel.x + MIN_PROJECTILE_SPEED : (forward.x < 0) ? -MIN_PROJECTILE_SPEED : 0;
+	forwardVel.y = (forwardVel.y != 0 && forwardVel.y < MIN_PROJECTILE_SPEED) ? MIN_PROJECTILE_SPEED : (forward.y < 0) ? -MIN_PROJECTILE_SPEED : 0;
+	forwardVel.z = (forwardVel.z != 0 && forwardVel.z < MIN_PROJECTILE_SPEED) ? MIN_PROJECTILE_SPEED : (forward.z < 0) ? -MIN_PROJECTILE_SPEED : 0;
+	forwardVel *= speed;*/
+	std::cout << "ProjectileForwardVel:\t" << forwardVel.x << "\t" << forwardVel.y << "\t" << forwardVel.z << "\n";
 	currentState = ACTIVE;
 }
 
@@ -102,8 +129,7 @@ void GLProjectile::Scale(glm::vec3 scale)
 
 void GLProjectile::SetSpeed(float& speed)
 {
-	//this->speed = speed;
-	//forwardSpeed = forward * speed;
+	this->speed = speed;
 }
 
 void GLProjectile::Activate()
@@ -113,7 +139,7 @@ void GLProjectile::Activate()
 
 void GLProjectile::Inactivate()
 {
-	currentState = ProjectileStates::INACTIVE;
+	currentState = INACTIVE;
 }
 
 bool GLProjectile::IsActive()

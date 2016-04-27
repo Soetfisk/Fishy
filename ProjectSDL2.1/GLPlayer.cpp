@@ -5,7 +5,7 @@
 GLPlayer::GLPlayer() : GLModel()
 {
 	this->m_camera;
-	this->m_projectileHandler = new GLProjectileHandler(1, 20, 10.0f);
+	this->m_projectileHandler = new GLProjectileHandler();
 	this->m_velocity = glm::vec3(0);
 	
 	this->dashCurrentDuration = 0.0f;
@@ -19,14 +19,14 @@ GLPlayer::GLPlayer() : GLModel()
 GLPlayer::GLPlayer(FishBox& FSH_Loader, char* filePath) : GLModel(FSH_Loader, filePath) //DEPRICATED USE AT OWN RISK
 {
 	this->m_camera;
-	this->m_projectileHandler = new GLProjectileHandler(1, 20, 10.0f);
+	this->m_projectileHandler = new GLProjectileHandler(&FSH_Loader, modelID, 1, 3, 1.2f);
 	this->m_velocity = glm::vec3(0);
 }
 
 GLPlayer::GLPlayer(FishBox & FSH_Loader, unsigned int modelID) : GLModel(FSH_Loader, modelID)
 {
 	this->m_camera;
-	this->m_projectileHandler = new GLProjectileHandler(1, 20, 10.0f);
+	this->m_projectileHandler = new GLProjectileHandler(&FSH_Loader, modelID, 1, 3, 1.2f);
 	this->m_velocity = glm::vec3(0);
 	
 	this->dashCurrentDuration = 0.0f;
@@ -191,8 +191,9 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 
 void GLPlayer::PlayerShoot()
 {
-	this->m_projectileHandler->Shoot(GetForward(), transform->m_pos, transform->m_rot);
-	std::cout << m_velocity.x << " " << m_velocity.y << " " << m_velocity.z << std::endl;
+	glm::vec3 forward = this->GetForward();
+	std::cout << "PlayerForward:\t\t" << forward.x << "\t" << forward.y << "\t" << forward.z << std::endl;
+	this->m_projectileHandler->Shoot(forward, transform->m_pos, transform->m_rot, m_velocity);
 }
 void GLPlayer::PlayerDash()
 {
