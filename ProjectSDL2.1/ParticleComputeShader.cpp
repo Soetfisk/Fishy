@@ -11,48 +11,32 @@ ParticleComputeShader::~ParticleComputeShader()
 {
 }
 
-void ParticleComputeShader::Initialize(EmitterType type, int nrMaxParticles, glm::mat4* pTransformMatrices, glm::vec4* pVelocitiesS) {
+void ParticleComputeShader::Initialize(EmitterType type, int nrMaxParticles, glm::mat4*& pTransformMatrices, glm::vec4* pVelocitiesS, glm::vec4*& pos) {
+
 
 	glGenBuffers(1, &this->transSSbo);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, this->transSSbo);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, nrMaxParticles * sizeof(glm::mat4), NULL, GL_STATIC_DRAW);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, nrMaxParticles * sizeof(glm::vec3), pos, GL_DYNAMIC_DRAW);
 
-	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT;
-
-	pTransformMatrices = (glm::mat4*)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, nrMaxParticles* sizeof(glm::mat4), bufMask);
-	
-	for (int i = 0; i < nrMaxParticles; i++) {
-		pTransformMatrices[i] = glm::mat4(1.0);
-	}
-
-	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
-
-	glGenBuffers(1, &this->velSSbo);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, this->velSSbo);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, nrMaxParticles * sizeof(glm::vec4), NULL, GL_STATIC_DRAW);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 5, this->transSSbo);
 
 
-	pVelocitiesS = (glm::vec4*)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, nrMaxParticles* sizeof(glm::vec4), bufMask);
-
-	for (int i = 0; i < nrMaxParticles; i++) {
-		pVelocitiesS[i] = glm::vec4(0, 0, 3, 0);
-	}
-
-	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
-
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 4, this->transSSbo);
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 5, this->velSSbo);
 
 
 	compute_program = glCreateProgram();
 
 	compute_shader = CreateShader(LoadShader("ParticleProjectileComputeShader.glsl"), GL_COMPUTE_SHADER);
 
+	glCompileShader(compute_shader);
+
 	glAttachShader(compute_program, compute_shader);
 
 	glLinkProgram(compute_program);
 
 	CheckShaderError(compute_program, GL_LINK_STATUS, true);
+
+
+	
 
 	switch (type)
 	{
@@ -68,6 +52,12 @@ void ParticleComputeShader::Initialize(EmitterType type, int nrMaxParticles, glm
 	default:
 		break;
 	}
+}
+
+void ParticleComputeShader::Update(const float & deltaTime, int nrActiveParticles) {
+	glUseProgram(this->compute_program);
+	glDispatchCompute(nrActiveParticles, 1, 1);
+	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 }
 
 void ParticleComputeShader::InitializeProjectileShader() {

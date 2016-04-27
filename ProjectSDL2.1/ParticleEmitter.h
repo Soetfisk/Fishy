@@ -21,6 +21,7 @@ private:
 	std::vector<ParticleTest> particles;
 
 	//Particle Data
+	glm::mat4* p_transMat;
 	glm::vec4* p_pos;
 	glm::vec4* p_col;
 	glm::vec4* p_startCol;
@@ -28,7 +29,7 @@ private:
 	glm::vec4* p_vel;
 	glm::vec4* p_acc;
 	glm::vec4* p_time;
-	glm::vec4* p_alive;
+	bool* p_alive;
 	
 
 	ParticleComputeShader* emitterComputeShader;
@@ -37,7 +38,7 @@ private:
 	glm::mat4* transformLocation;
 	glm::vec3 emitterPosition;
 	GLuint pe_VertexArrayObject;
-	GLuint pe_VertexArrayBuffer;
+	GLuint pe_posBuf, pe_transBuf;
 
 	glm::mat4* particleTransformationMatrices;
 	glm::vec4* particleVelocities;
@@ -63,7 +64,7 @@ public:
 	ParticleEmitter(EmitterType type, glm::vec3 position, GLuint transformMatrixLocation);
 	~ParticleEmitter();
 
-	void ComputeUpdate();
+	void ComputeUpdate(const float&deltaTime);
 	void UpdateEmitter(const float& deltaTime);
 	void Draw();
 	

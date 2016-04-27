@@ -8,15 +8,16 @@ layout (triangle_strip, max_vertices = 4) out;
 uniform mat4 ProjectionMatrix;
 uniform mat4 ViewMatrix;
 
+in mat4 v_transMatrix[];
 
 
 
 void main(){
 	
 	for(int i = 0; i<4;i++){
-		vec4 eyePos  =ViewMatrix*  gl_in[0].gl_Position;
+		vec4 eyePos  =ViewMatrix *  gl_in[0].gl_Position;
 		eyePos.xy += corners[i] - vec2(.5);
-		gl_Position = ProjectionMatrix * eyePos;
+		gl_Position = ProjectionMatrix* v_transMatrix[0] * eyePos;
 		EmitVertex();
 	}
 

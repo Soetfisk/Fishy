@@ -13,8 +13,10 @@ public:
 	ParticleComputeShader();
 	~ParticleComputeShader();
 
-	void Initialize(EmitterType type, int nrMaxParticles, glm::mat4* pTransformMatrices, glm::vec4* pVelocities);
+	void Initialize(EmitterType type, int nrMaxParticles, glm::mat4*& pTransformMatrices, glm::vec4* pVelocities , glm::vec4*& pos);
 	void InitializeProjectileShader();
+
+	void Update(const float & deltaTime, int nrActiveParticles);
 };
 
 //g321

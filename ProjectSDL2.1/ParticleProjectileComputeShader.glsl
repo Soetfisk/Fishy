@@ -18,10 +18,7 @@ layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
 void main(){
 	
 	uint gid = gl_GlobalInvocationID.x;
-
-	mat4 tm = transMatrix[gid]
-	tm = tm * velocities[gid];
-	
+	Vel[gid] = Vel[gid] + vec4(0,.1f,0,0);
 	//Position[gid].xyz = Position[gid].xyz;
 	//Velocities[gid].xyz = Velocities[gid].xyz
 	//Colors[gid].xyz = Colors[gid].xyz;
