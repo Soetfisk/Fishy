@@ -25,7 +25,7 @@ private:
 		LIGHTING,
 		TEXT,
 		WAVY,
-		POST,
+		BORDER,
 		NUM_SHADERS
 	};
 	enum

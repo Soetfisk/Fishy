@@ -1,4 +1,6 @@
-#pragma once
+#ifndef GLCAMERA_H
+#define GLCAMERA_H
+
 #include "GLUtil.h"
 #include "GLTransform.h"
 class GLCamera
@@ -39,4 +41,4 @@ private:
 
 	void CalcCameraPos(float horizDist, float verticDist, GLTransform transform);
 };
-
+#endif
