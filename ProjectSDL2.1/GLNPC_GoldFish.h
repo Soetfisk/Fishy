@@ -15,7 +15,7 @@ private:
 public:
 	//GLNPC_GoldFish(void);
 
-	GLNPC_GoldFish(FishBox& FSH_Loader, unsigned int modelID);
+	GLNPC_GoldFish(FishBox* FSH_Loader, unsigned int modelID);
 	void NPCUpdate(float deltaTime);
 	void NPCDraw(GLShader& shader);
 	void gettingEaten(float deltaTime, GLTransform playerTransform);

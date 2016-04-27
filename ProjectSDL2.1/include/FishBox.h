@@ -35,7 +35,7 @@
 
 
 //#include "GLUtil.h"
-
+//#include "SOIL.h"
 
 namespace FSHData
 {
