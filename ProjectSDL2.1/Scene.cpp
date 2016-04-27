@@ -11,7 +11,7 @@ void Scene::LoadModels()
 		this->players.push_back(new GLPlayer(FSH_Loader, PlayerFish));
 	}
 	for (int i = 0; i < 50; i++) {
-		this->NPCs.push_back(new GLNPC(FSH_Loader, GoldFish));
+		this->NPCs.push_back(new GLNPC_GoldFish(FSH_Loader, GoldFish));
 	}
 
 	this->collisionHandler.AddNPC(NPCs);

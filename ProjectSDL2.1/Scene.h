@@ -4,6 +4,7 @@
 #include "GLUtil.h"
 #include "GLPlayer.h"
 #include "GLNPC.h"
+#include "GLNPC_GoldFish.h"
 #include "GLShader.h"
 #include "FrameBuffer.h"
 #include "GLModel.h"

@@ -28,6 +28,7 @@
     <ClCompile Include="GLCamera.cpp" />
     <ClCompile Include="GLMesh.cpp" />
     <ClCompile Include="GLModel.cpp" />
+    <ClCompile Include="GLNPC_GoldFish.cpp" />
     <ClCompile Include="GLPlayer.cpp" />
     <ClCompile Include="GLProjectile.cpp" />
     <ClCompile Include="GLProjectileHandler.cpp" />
@@ -39,6 +40,7 @@
     <ClCompile Include="Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\GLNPC_GoldFish.h" />
     <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\RNG.h" />
     <ClInclude Include="AABB.h" />
     <ClInclude Include="FilterComputeShader.h" />
