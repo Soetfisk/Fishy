@@ -109,6 +109,12 @@ namespace FSHData
 		float target[3];
 		float upVec[3];
 	};
+	struct texture
+	{
+		int height;
+		int width;
+		unsigned char * textureData;
+	};
 
 }
 
@@ -155,7 +161,7 @@ private:
 	std::ifstream * infile;
 	std::vector<FSHMesh*> meshes;
 	std::vector<material*> materials;
-	std::vector<GLuint*> textures;
+	std::vector<texture*> textures;
 	std::vector<std::string> textureNames;
 	char*SCENE_ID;
 
@@ -172,7 +178,7 @@ public:
 	unsigned int GetMeshCount();
 	std::vector<FSHMesh*> GetMeshList();
 	std::vector<material*> GetMaterialList();
-	std::vector<GLuint*> GetTexureList();
+	std::vector<texture*> GetTexureList();
 	std::vector<std::string> GetTexureNameList();
 	void Release();
 };
@@ -208,7 +214,7 @@ public: //functions
 	unsigned int * IndexData(unsigned int model, unsigned int mesh);
 	unsigned int ModelMeshCount(unsigned int model);
 	FSHData::material * meshMaterial(unsigned int model, unsigned int mesh);
-	GLuint * meshTexture(unsigned int model, unsigned int mesh);
+	texture* meshTexture(unsigned int model, unsigned int mesh);
 };
 #ifdef _DEBUG 
 #ifndef DBG_NEW
