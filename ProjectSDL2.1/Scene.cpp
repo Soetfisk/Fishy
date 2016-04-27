@@ -40,7 +40,7 @@ Scene::Scene() {
 	guih = new GLGUIHandler(*shaders[TEXT]);
 
 	this->frameBuffer = new FrameBuffer();
-	this->frameBuffer->CreateFrameBuffer(4, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGB16F);
+	this->frameBuffer->CreateFrameBuffer(4, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGBA16F);
 	this->frameBuffer->UnbindFrameBuffer();
 
 	this->frameBuffer2 = new FrameBuffer();
@@ -159,7 +159,6 @@ void Scene::DrawScene() {
 		{
 			NPCs.at(i)->NPCDraw(*shaders[MODELS]);
 		}
-		
 		this->frameBuffer->UnbindFrameBuffer();
 		//models[0]->Draw(*shaders[MODELS]);
 		//tempMesh->Draw(*shaders[MODELS], GLTransform());

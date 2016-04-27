@@ -34,6 +34,17 @@ private:
 	};
 	int SCREEN_WIDTH = window::WIDTH;
 	int SCREEN_HEIGHT = window::HEIGHT / 2;
+	struct PointLight {
+		glm::vec3 position;
+
+		glm::vec3 ambient;
+		glm::vec3 diffuse;
+		glm::vec3 specular;
+
+		float constant;
+		float linear;
+		float quadratic;
+	};
 
 	//todo implement
 	//std::vector<Model> models;
