@@ -55,7 +55,7 @@
     <ClCompile Include="GLNPC.cpp">
       <Filter>Source\NPCs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\GLNPC_GoldFish.cpp">
+    <ClCompile Include="GLNPC_GoldFish.cpp">
       <Filter>Source\NPCs</Filter>
     </ClCompile>
   </ItemGroup>
