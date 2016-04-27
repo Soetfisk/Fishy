@@ -42,14 +42,14 @@ public:
 
 
 	GLMesh(std::vector<Vertex> vertices, unsigned int numVertices, std::vector<unsigned int> indices, unsigned int numIndices, Material material);
-	GLMesh(FSHData::mesh * meshData, FSHData::vertexData * vertices, unsigned int * indices, FSHData::material* material, char * texture);
+	GLMesh(FSHData::mesh * meshData, FSHData::vertexData * vertices, unsigned int * indices, FSHData::material* material, FSHData::texture * texture);
 	GLMesh() {};
 	~GLMesh();
 
 	bool Draw(GLShader& shader, GLTransform& modelTrans);
 	GLTransform& GetTransform();
 	FSHData::material* GetMaterial() {	return material;}
-	char * GetTexture() { return texture; }
+	FSHData::texture * GetTexture() { return texture; }
 private:
 	enum
 	{
@@ -73,14 +73,9 @@ private:
 	FSHData::material * material;
 	//FSHData::material * 
 	Material m_material;
-	char * texture;
+	FSHData::texture * texture;
 
-	//TEST
-	std::vector<unsigned int> objindex;
-	std::vector<unsigned int> getobjindex() { return objindex; };
-
-	std::vector<Vertex> objvertices;
-	std::vector<Vertex> getobjvertices() { return objvertices; };
+	GLuint textureID;
 
 	GLuint vertexBuffer;
 	GLuint indexBuffer;
