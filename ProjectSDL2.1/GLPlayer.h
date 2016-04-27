@@ -42,9 +42,9 @@ public:
 	void PlayerEating(float deltaTime);
 	void TestDraw(GLShader& shader);
 	void HandleCollision(PlayerStates state, float deltaTime, glm::vec3 momentum);
-	std::vector<GLProjectile*>& GetProjectiles();
+	std::vector<GLProjectile*> GetProjectiles();
 	glm::vec3 GetVelocity();
-	
+	int point = 0;
 private:
 	const int DEADZONE = 8000;
 	float MOVEMENT_FRICTION = 2.0f;

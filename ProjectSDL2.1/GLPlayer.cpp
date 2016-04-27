@@ -93,6 +93,7 @@ void GLPlayer::HandleCollision(PlayerStates state, float deltaTime, glm::vec3 mo
 	break;
 	case EATING:
 		this->transform->SetScale(this->transform->GetScale() + (deltaTime/4));
+		this->point += 10;
 		break;
 	case HIT:
 		this->m_velocity += momentum;
@@ -101,9 +102,9 @@ void GLPlayer::HandleCollision(PlayerStates state, float deltaTime, glm::vec3 mo
 	}
 }
 
-std::vector<GLProjectile*>& GLPlayer::GetProjectiles()
+std::vector<GLProjectile*> GLPlayer::GetProjectiles()
 {
-	return this->m_projectileHandler->GetProjectiles();
+	return this->m_projectileHandler->GetActiveProjectiles();
 }
 
 glm::vec3 GLPlayer::GetVelocity()
@@ -179,6 +180,8 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	this->meshes[0]->GetTransform().m_rot.z -= this->meshes[0]->GetTransform().m_rot.z * deltaTime;
 	//this->meshes[1]->GetTransform().m_rot.z -= this->meshes[0]->GetTransform().m_rot.z * deltaTime;
 	
+	//std::cout << "X: " << this->m_velocity.x << " Y: " << this->m_velocity.y << " Z: " << this->m_velocity.z << std::endl;
+
 	CalcVelocity(deltaTime);
 	HandleDash(deltaTime);
 

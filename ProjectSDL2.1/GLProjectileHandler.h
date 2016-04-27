@@ -13,6 +13,7 @@ public:
 	void Update(float& dt);											// Update all active projectiles
 	void Draw(GLShader& shader);// Draw all active Projectiles
 	std::vector<GLProjectile*>& GetProjectiles();
+	std::vector<GLProjectile*> GetActiveProjectiles();
 
 private:
 	int projectileTravelDistance;																			// For creating projectiles

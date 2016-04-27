@@ -38,6 +38,7 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 
 			if (newVelocity != glm::vec3(-1))
 			{
+				std::cout << "Player Hit/n";
 				this->players.at(i)->HandleCollision(GLPlayer::MOVING, deltaTime, newVelocity);
 			}
 		}
@@ -46,6 +47,7 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 		{
 			if (players.at(i)->GetProjectiles().at(j)->GetBoundingBox().containsAABB(players.at(1 - i)->GetBoundingBox()))
 			{
+				std::cout << "Projectile Hit/n";
 				players.at(1 - i)->HandleCollision(GLPlayer::HIT, deltaTime,players.at(i)->GetProjectiles().at(j)->GetForward() * 30.0f);
 				players.at(i)->GetProjectiles().at(j)->Inactivate();
 			}
