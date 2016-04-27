@@ -51,55 +51,8 @@ void GLShader::Update(GLCamera& camera)
 	glUniformMatrix4fv(m_uniforms[PROJVIEW_U], 1, GL_FALSE, glm::value_ptr(projView));
 	glUniform3fv(m_uniforms[VIEWPOS_U], 1, glm::value_ptr(viewPos));
 }
-//void GLShader::Update(GLMesh& mesh, GLCamera& camera)
-//{
-//	glm::mat4 model = mesh.GetTransform().GetModel();
-//	glm::mat4 projView = camera.GetViewProjectionMatrix();
-//	glm::vec3 viewPos = camera.Position();
-//	glUniformMatrix4fv(m_uniforms[TRANSFROM_U], 1, GL_FALSE, glm::value_ptr(model));
-//	glUniformMatrix4fv(m_uniforms[PROJVIEW_U], 1, GL_FALSE, glm::value_ptr(projView));
-//	glUniform3fv(m_uniforms[VIEWPOS_U], 1, glm::value_ptr(viewPos));
-//
-//	//GLint matAmbientLoc =	glGetUniformLocation(m_program, "material.ambient");
-//	//GLint matDiffuseLoc =	glGetUniformLocation(m_program, "material.diffuse");
-//	//GLint matSpecularLoc =	glGetUniformLocation(m_program, "material.specular");
-//	//GLint matShineLoc =		glGetUniformLocation(m_program, "material.shininess");
-//
-//	//glUniform3fv(matAmbientLoc, 1, glm::value_ptr(mesh.GetMaterial().ambient));
-//	//glUniform3fv(matDiffuseLoc, 1, glm::value_ptr(mesh.GetMaterial().diffuse));
-//	//glUniform3fv(matSpecularLoc, 1, glm::value_ptr(mesh.GetMaterial().specular));
-//	//glUniform1f(matShineLoc, mesh.GetMaterial().shininess);
-//
-//	//mesh.GetMaterial().texture->Bind(0);
-//	//glUniform1i(this->GetUnifromLocation("diffuseTexture"), 0);
-//}
 
-/*
-	
-*/
-//void GLShader::Update(GLTransform& tranform, GLCamera& camera)
-//{
-//	glm::mat4 model = tranform.GetModel();
-//	glm::mat4 projView = camera.GetViewProjectionMatrix();
-//	glm::vec3 viewPos = camera.Position();
-//	glUniformMatrix4fv(m_uniforms[TRANSFROM_U], 1, GL_FALSE, glm::value_ptr(model));
-//	glUniformMatrix4fv(m_uniforms[PROJVIEW_U], 1, GL_FALSE, glm::value_ptr(projView));
-//	glUniform3fv(m_uniforms[VIEWPOS_U], 1, glm::value_ptr(viewPos));
-//
-//	GLint matAmbientLoc = glGetUniformLocation(m_program, "material.ambient");
-//	GLint matDiffuseLoc = glGetUniformLocation(m_program, "material.diffuse");
-//	GLint matSpecularLoc = glGetUniformLocation(m_program, "material.specular");
-//	GLint matShineLoc = glGetUniformLocation(m_program, "material.shininess");
-//
-//	glUniform3fv(matAmbientLoc, 1, glm::value_ptr(glm::vec3(1,1,1)));
-//	glUniform3fv(matDiffuseLoc, 1, glm::value_ptr(glm::vec3(1,1,1)));
-//	glUniform3fv(matSpecularLoc, 1, glm::value_ptr(glm::vec3(0,0,0)));
-//	glUniform1f(matShineLoc, 0.0f);
-//}
 
-/*
-	
-*/
 GLuint& GLShader::GetUnifromLocation(std::string name)
 {
 	GLuint unifrom = glGetUniformLocation(m_program, name.c_str());
@@ -115,8 +68,6 @@ GLShader::~GLShader()
 	}
 
 	glDeleteProgram(m_program);
-
-	//delete[]m_shaders;
 }
 
 GLuint GLShader::CreateShader(const std::string & text, GLenum shaderType)
@@ -137,9 +88,6 @@ GLuint GLShader::CreateShader(const std::string & text, GLenum shaderType)
 	return shader;
 }
 
-/*
-	
-*/
 void GLShader::CheckShaderError(GLuint shader, GLuint flag, bool isProgram)
 {
 	GLint success = 0;
