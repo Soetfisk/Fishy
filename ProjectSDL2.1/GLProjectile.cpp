@@ -72,7 +72,11 @@ void GLProjectile::TestUpdate(float& dt)
 		if (timeActive >= maxActiveTime)			// Check if maxDistance was reached
 			currentState = INACTIVE;
 		else
-			transform->m_pos += forwardVel * dt;	// Move Projectile forward
+		{
+			transform->m_pos += forward * MIN_PROJECTILE_SPEED * dt;	// Move Projectile forward
+			std::cout << "ProjectileForwardVel:\t" << forward.x << "\t" << forward.y << "\t" << forward.z << "\n";
+		}
+	
 		break;
 	case INACTIVE:
 		break;
@@ -105,20 +109,22 @@ void GLProjectile::Shoot(glm::vec3 startPos, glm::vec3 forward, glm::vec3 veloci
 	this->forward = forward;
 	this->velocity = velocity;
 
-	forwardVel.x = (velocity.x > MIN_SPEED || velocity.x < -MIN_SPEED) ? forward.x * glm::abs(velocity.x) : forward.x;
-	forwardVel.x = (forwardVel.x < MIN_PROJECTILE_SPEED && forwardVel.x > 0) ? MIN_PROJECTILE_SPEED : (forwardVel.x > -MIN_PROJECTILE_SPEED && forwardVel.x < 0) ? -MIN_PROJECTILE_SPEED : forwardVel.x;
 
-	forwardVel.y = (velocity.y > MIN_SPEED || velocity.y < -MIN_SPEED) ? forward.y * glm::abs(velocity.y) : forward.y;
-	forwardVel.y = (forwardVel.y < MIN_PROJECTILE_SPEED && forwardVel.y > 0) ? MIN_PROJECTILE_SPEED : (forwardVel.y > -MIN_PROJECTILE_SPEED && forwardVel.y < 0) ? -MIN_PROJECTILE_SPEED : forwardVel.y;
-	
-	forwardVel.z = (velocity.z > MIN_SPEED || velocity.z < -MIN_SPEED) ? forward.z * glm::abs(velocity.z) : forward.z;
-	forwardVel.z = (forwardVel.z < MIN_PROJECTILE_SPEED && forwardVel.z > 0) ? MIN_PROJECTILE_SPEED : (forwardVel.z > -MIN_PROJECTILE_SPEED && forwardVel.z < 0) ? -MIN_PROJECTILE_SPEED : forwardVel.z;
+
+	//forwardVel.x = (velocity.x > MIN_SPEED || velocity.x < -MIN_SPEED) ? forward.x * glm::abs(velocity.x) : forward.x;
+	//forwardVel.x = (forwardVel.x < MIN_PROJECTILE_SPEED && forwardVel.x > 0) ? MIN_PROJECTILE_SPEED : (forwardVel.x > -MIN_PROJECTILE_SPEED && forwardVel.x < 0) ? -MIN_PROJECTILE_SPEED : forwardVel.x;
+
+	//forwardVel.y = (velocity.y > MIN_SPEED || velocity.y < -MIN_SPEED) ? forward.y * glm::abs(velocity.y) : forward.y;
+	//forwardVel.y = (forwardVel.y < MIN_PROJECTILE_SPEED && forwardVel.y > 0) ? MIN_PROJECTILE_SPEED : (forwardVel.y > -MIN_PROJECTILE_SPEED && forwardVel.y < 0) ? -MIN_PROJECTILE_SPEED : forwardVel.y;
+	//
+	//forwardVel.z = (velocity.z > MIN_SPEED || velocity.z < -MIN_SPEED) ? forward.z * glm::abs(velocity.z) : forward.z;
+	//forwardVel.z = (forwardVel.z < MIN_PROJECTILE_SPEED && forwardVel.z > 0) ? MIN_PROJECTILE_SPEED : (forwardVel.z > -MIN_PROJECTILE_SPEED && forwardVel.z < 0) ? -MIN_PROJECTILE_SPEED : forwardVel.z;
 	
 	/*forwardVel.x = (forwardVel.x > 0 && forwardVel.x < MIN_PROJECTILE_SPEED) ? forwardVel.x + MIN_PROJECTILE_SPEED : (forward.x < 0) ? -MIN_PROJECTILE_SPEED : 0;
 	forwardVel.y = (forwardVel.y != 0 && forwardVel.y < MIN_PROJECTILE_SPEED) ? MIN_PROJECTILE_SPEED : (forward.y < 0) ? -MIN_PROJECTILE_SPEED : 0;
 	forwardVel.z = (forwardVel.z != 0 && forwardVel.z < MIN_PROJECTILE_SPEED) ? MIN_PROJECTILE_SPEED : (forward.z < 0) ? -MIN_PROJECTILE_SPEED : 0;
 	forwardVel *= speed;*/
-	std::cout << "ProjectileForwardVel:\t" << forwardVel.x << "\t" << forwardVel.y << "\t" << forwardVel.z << "\n";
+	//std::cout << "ProjectileForwardVel:\t" << forward.x << "\t" << forward.y << "\t" << forward.z << "\n";
 	currentState = ACTIVE;
 }
 
