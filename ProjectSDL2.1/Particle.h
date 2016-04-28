@@ -1,10 +1,6 @@
 #pragma once
 #include "GLUtil.h"
 
-struct ParticleData{
-	
-};
-
 
 class Particle
 {
@@ -12,7 +8,6 @@ private:
 	int particleID;
 	float lifeTimeMax, lifeTimeCurrent;
 	bool isActive;
-	ParticleData* pCompute;
 
 	glm::mat4 transformMatrix;
 	glm::vec4 velocity;

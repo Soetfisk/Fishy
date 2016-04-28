@@ -1,10 +1,18 @@
 #include "GLUtil.h"
+
+struct posParticleStruct {
+	glm::mat4 transformMatrix;
+	glm::vec4 position;
+	glm::vec4 velocity;
+};
+
 class ParticleComputeShader
 {
 private:
 	GLuint transSSbo, velSSbo;
 	GLuint compute_program, compute_shader;
 	glm::vec4* testPos;
+	posParticleStruct* velsTest;
 
 	GLuint CreateShader(const std::string& text, GLenum shaderType);
 	void CheckShaderError(GLuint shader, GLuint flag, bool isProgram);

@@ -31,6 +31,8 @@ ParticleEmitter::ParticleEmitter(EmitterType type, glm::vec3 position, GLuint tr
 }
 
 void ParticleEmitter::InstantiateSpaces() {
+
+
 	this->p_transMat = new glm::mat4[this->nrMaxParticles];
 	this->p_pos = new glm::vec4[this->nrMaxParticles];
 	this->p_col = new glm::vec4[this->nrMaxParticles];
@@ -40,7 +42,6 @@ void ParticleEmitter::InstantiateSpaces() {
 	this->p_acc = new glm::vec4[this->nrMaxParticles];
 	this->p_time = new glm::vec4[this->nrMaxParticles];
 	this->p_alive = new bool[this->nrMaxParticles];
-
 
 
 	this->p_pos[0] = glm::vec4(0, 0, 3, 1);
@@ -53,6 +54,7 @@ void ParticleEmitter::InstantiateSpaces() {
 
 
 	this->nrActiveParticles = 2;
+
 }
 
 
@@ -69,7 +71,25 @@ ParticleEmitter::~ParticleEmitter()
 	delete[]this->p_acc;
 	delete[]this->p_time;
 	delete[]this->p_alive;
+
+	//for (int i = 0; i < this->nrActiveParticles; i++) {
+	//	deleteParticleAtID(i);
+	//}
+
 }
+
+//void ParticleEmitter::deleteParticleAtID(unsigned int ID) {
+//
+//	delete particles[ID].p_transMat;
+//	delete particles[ID].p_pos;
+//	delete particles[ID].p_col;
+//	delete particles[ID].p_startCol;
+//	delete particles[ID].p_endCol;
+//	delete particles[ID].p_vel;
+//	delete particles[ID].p_acc;
+//	delete particles[ID].p_time;
+//	delete particles[ID].p_alive;
+//}
 
 void ParticleEmitter::InstantiateEmitter() {
 

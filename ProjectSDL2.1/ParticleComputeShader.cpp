@@ -12,21 +12,36 @@ ParticleComputeShader::~ParticleComputeShader()
 }
 
 void ParticleComputeShader::Initialize(EmitterType type, int nrMaxParticles, glm::mat4*& pTransformMatrices, glm::vec4* pVelocitiesS, glm::vec4*& pos) {
+	
+	//glGenBuffers(1, &this->transSSbo);
+	//glBindBuffer(GL_SHADER_STORAGE_BUFFER, this->transSSbo);
+	//glBufferData(GL_SHADER_STORAGE_BUFFER, nrMaxParticles * sizeof(posParticleStruct), NULL, GL_STATIC_DRAW);
 
-	this->testPos = new glm::vec4[2];
+	//GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT;
 
-	for (int i = 0; i < 2; i++) {
-		testPos[i] = glm::vec4(i);
-	}
+	//velsTest = (struct posParticleStruct*) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, nrMaxParticles * sizeof(posParticleStruct), bufMask);
+
+	//
+
+	//glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+
+	//glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 5, this->transSSbo);
+
+
 
 	glGenBuffers(1, &this->transSSbo);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, this->transSSbo);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, 2 * sizeof(glm::vec4), &testPos, GL_DYNAMIC_COPY);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, nrMaxParticles * sizeof(posParticleStruct), NULL, GL_STATIC_DRAW);
 
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 5, this->transSSbo);
+	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT;
+
+	velsTest = (struct posParticleStruct*) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, nrMaxParticles * sizeof(posParticleStruct), bufMask);
 
 
+
+	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 6, this->transSSbo);
 
 
 	compute_program = glCreateProgram();
@@ -46,6 +61,11 @@ void ParticleComputeShader::Initialize(EmitterType type, int nrMaxParticles, glm
 	CheckShaderError(compute_program, GL_LINK_STATUS, true);
 
 
+
+
+	glUseProgram(this->compute_program);
+	glDispatchCompute(2, 1, 1);
+	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 	
 
 	switch (type)
@@ -65,28 +85,17 @@ void ParticleComputeShader::Initialize(EmitterType type, int nrMaxParticles, glm
 }
 
 void ParticleComputeShader::Update(const float & deltaTime, int nrActiveParticles) {
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, this->transSSbo);
-	GLvoid* p = glMapBuffer(GL_SHADER_STORAGE_BUFFER, GL_WRITE_ONLY);
-	memcpy(p, &testPos, nrActiveParticles * sizeof(glm::vec4));
-	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
-
-	GLuint block_index = 0;
-
-	block_index = glGetProgramResourceIndex(this->compute_program, GL_SHADER_STORAGE_BLOCK, "Vel");
-	GLuint ssbo_binding_point_index = 5;
-	glShaderStorageBlockBinding(this->compute_program, block_index, ssbo_binding_point_index);
-	glShaderStorageBlockBinding(this->compute_program, block_index, 80);
-	GLuint binding_point_index = 80;
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, binding_point_index, this->transSSbo);
-
 	glUseProgram(this->compute_program);
 	glDispatchCompute(nrActiveParticles, 1, 1);
 	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 
-	glm::vec4 result;
 	for (int i = 0; i < 2; i++) {
-		 result = testPos[i];
+		 if (velsTest[i].position.x != 0) {
+			 int k = 0;
+		 }
 	}
+
+	
 
 }
 
