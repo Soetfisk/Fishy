@@ -2,7 +2,7 @@
 
 
 
-GLNPC_GoldFish::GLNPC_GoldFish(FishBox & FSH_Loader, unsigned int modelID) : GLNPC(FSH_Loader, modelID)
+GLNPC_GoldFish::GLNPC_GoldFish(FishBox * FSH_Loader, unsigned int modelID) : GLNPC(FSH_Loader, modelID)
 {
 	this->currentState = NPC_MOVE;
 	transform->SetPos(glm::vec3(RNG::range(-20, 20), RNG::range(-2, 2), RNG::range(-20, 20)));

@@ -23,7 +23,7 @@ void main()
 
 	color4 = vec3(dist,0,0);
 
-	vec3 tempColor  = clamp(vec3(1, 0, 0),0.0,1.0);
+	vec3 tempColor  = vec3(texture2D(diffuseTexture, frag_uv));
 
 	color = tempColor;
 	//color = vec3(0.5,0.5,0.5);

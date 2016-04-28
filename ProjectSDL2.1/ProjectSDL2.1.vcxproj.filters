@@ -129,7 +129,7 @@
     <ClInclude Include="GLNPC.h">
       <Filter>Header\NPCs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\GLNPC_GoldFish.h">
+    <ClInclude Include="GLNPC_GoldFish.h">
       <Filter>Header\NPCs</Filter>
     </ClInclude>
   </ItemGroup>

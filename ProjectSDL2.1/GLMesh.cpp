@@ -3,9 +3,6 @@
 
 GLMesh::GLMesh(std::vector<Vertex> vertices, unsigned int numVertices, std::vector<unsigned int> indices, unsigned int numIndices, Material material) //depricated
 {
-	objindex = indices;
-	objvertices = vertices;
-	
 	this->m_drawCount = numIndices;
 
 	this->m_transfrom = GLTransform();
@@ -61,7 +58,7 @@ GLMesh::GLMesh(std::vector<Vertex> vertices, unsigned int numVertices, std::vect
 	glBindVertexArray(0);
 }
 
-GLMesh::GLMesh(FSHData::mesh * meshData, FSHData::vertexData * vertices, unsigned int * indices, FSHData::material* material, char * texture)
+GLMesh::GLMesh(FSHData::mesh * meshData, FSHData::vertexData * vertices, unsigned int * indices, FSHData::material* material, FSHData::texture * texture)
 {
 	this->m_drawCount = meshData->indexCount;
 	this->material = material;
@@ -131,6 +128,16 @@ GLMesh::GLMesh(FSHData::mesh * meshData, FSHData::vertexData * vertices, unsigne
 
 	glBindVertexArray(0);
 
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture->width, texture->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture->textureData);
+
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+
 }
 
 GLMesh::~GLMesh()
@@ -143,6 +150,11 @@ bool GLMesh::Draw(GLShader& shader, GLTransform& modelTrans)
 {
 	glm::mat4 trans =  modelTrans.GetModel() * m_transfrom.GetModel();
 	glUniformMatrix4fv(shader.GetUnifromLocation("TransformMatrix"), 1, GL_FALSE, glm::value_ptr(trans));
+
+	
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+
 
 	glBindVertexArray(m_vertexArrayObject);
 
