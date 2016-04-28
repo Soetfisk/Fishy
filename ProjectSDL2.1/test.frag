@@ -29,7 +29,7 @@ void main()
 
 	color4 = vec4(dist,0,0,1);
 
-	vec4 tempColor  = vec4(diffuse, 1);
+	vec4 tempColor  = vec4(diffuse, 1) * texture2D(diffuseTexture, frag_uv);
 
 	color = tempColor;
 

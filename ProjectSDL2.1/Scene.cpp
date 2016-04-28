@@ -159,13 +159,12 @@ void Scene::DrawScene() {
 		glUniform1f(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(0) + "].linear"), 0.045f);
 		glUniform1f(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(0) + "].quadratic"), 0.0075);
 
-		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("ViewPos"), 1, glm::value_ptr(players.at(i)->GetCamera().Position()));
-
 		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.dir"), 1, glm::value_ptr(glm::vec3(0.5, 1, 0.5)));
 		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.ambient"), 1, glm::value_ptr(glm::vec3(0.1f, 0.1f, 0.1f)));
 		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.diffuse"), 1, glm::value_ptr(glm::vec3(0.5f, 0.5f, 0.5f)));
 		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.specular"), 1, glm::value_ptr(glm::vec3(0.5f, 0.0f, 0.0f)));
 		// IMPORTANT!!!!! projectiles do not have material and it is crashing
+		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("ViewPos"), 1, glm::value_ptr(players.at(i)->GetCamera().Position()));
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("colorTexture"), 0);
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("posTexture"), 1);
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("normalTexture"), 2);

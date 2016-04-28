@@ -51,6 +51,7 @@ private:
 	//todo implement
 	//std::vector<Model> models;
 	FishBox FSH_Loader;
+	std::vector<PointLight> pointLights;
 	std::vector<GLPlayer*> players;
 	std::vector<GLNPC*> NPCs;
 	GLShader* shaders[NUM_SHADERS];
