@@ -40,7 +40,7 @@ Scene::Scene() {
 	guih = new GLGUIHandler(*shaders[TEXT]);
 
 	this->frameBuffer = new FrameBuffer();
-	this->frameBuffer->CreateFrameBuffer(4, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGBA16F);
+	this->frameBuffer->CreateFrameBuffer(6, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGBA16F);
 	this->frameBuffer->UnbindFrameBuffer();
 
 	this->frameBuffer2 = new FrameBuffer();
@@ -162,7 +162,6 @@ void Scene::DrawScene() {
 		this->frameBuffer->UnbindFrameBuffer();
 		//models[0]->Draw(*shaders[MODELS]);
 		//tempMesh->Draw(*shaders[MODELS], GLTransform());
-
 		this->frameBuffer2->BindFrameBuffer();
 		shaders[LIGHTING]->Bind();
 
@@ -180,11 +179,14 @@ void Scene::DrawScene() {
 		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.ambient"), 1, glm::value_ptr(glm::vec3(0.1f, 0.1f, 0.1f)));
 		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.diffuse"), 1, glm::value_ptr(glm::vec3(0.5f, 0.5f, 0.5f)));
 		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.specular"), 1, glm::value_ptr(glm::vec3(0.5f, 0.0f, 0.0f)));
-
+		// IMPORTANT!!!!! projectiles do not have material and it is crashing
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("colorTexture"), 0);
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("posTexture"), 1);
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("normalTexture"), 2);
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("distTexture"), 3);
+		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("ambientTexture"), 4);
+		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("specularTexture"), 5);
+		
 
 		this->RenderQuad();
 		this->frameBuffer2->UnbindFrameBuffer();

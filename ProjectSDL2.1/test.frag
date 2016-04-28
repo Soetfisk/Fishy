@@ -1,16 +1,22 @@
-//////#version 430
+#version 430
 
 in vec2 frag_uv;
 in vec3 frag_normal;
 in vec3 frag_worldpos;
 in vec3 frag_ViewPos;
 
-layout(location = 0)out vec3 color;
-layout(location = 1)out vec3 color2;
-layout(location = 2)out vec3 color3;
-layout(location = 3)out vec3 color4;
+layout(location = 0)out vec4 color;
+layout(location = 1)out vec4 color2;
+layout(location = 2)out vec4 color3;
+layout(location = 3)out vec4 color4;
+layout(location = 4)out vec4 color5;
+layout(location = 5)out vec4 color6;
 
 uniform sampler2D diffuseTexture;
+uniform vec3 diffuse;
+uniform vec3 ambient;
+uniform vec3 specular;
+uniform float shininess;
 
 void main()
 {
@@ -21,13 +27,14 @@ void main()
 
 	float dist = gl_FragCoord.z / gl_FragCoord.w; // distance
 
-	color4 = vec3(dist,0,0);
+	color4 = vec4(dist,0,0,1);
 
-	vec3 tempColor  = clamp(vec3(1, 0, 0),0.0,1.0);
+	vec4 tempColor  = vec4(diffuse, 1);
 
 	color = tempColor;
-	//color = vec3(0.5,0.5,0.5);
 
-	color2 = frag_worldpos;
-	color3 = frag_normal;
+	color2 = vec4(frag_worldpos, 1);
+	color3 = vec4(frag_normal, 1);
+	color5 = vec4(ambient, 1);
+	color6 = vec4(specular, shininess);
 }

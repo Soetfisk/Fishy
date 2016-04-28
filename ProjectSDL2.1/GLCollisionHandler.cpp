@@ -38,7 +38,6 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 
 			if (newVelocity != glm::vec3(-1))
 			{
-				std::cout << "Player Hit/n";
 				this->players.at(i)->HandleCollision(GLPlayer::MOVING, deltaTime, newVelocity);
 			}
 		}
@@ -47,7 +46,6 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 		{
 			if (players.at(i)->GetProjectiles().at(j)->GetBoundingBox().containsAABB(players.at(1 - i)->GetBoundingBox()))
 			{
-				std::cout << "Projectile Hit/n";
 				players.at(1 - i)->HandleCollision(GLPlayer::HIT, deltaTime,players.at(i)->GetProjectiles().at(j)->GetForward() * 30.0f);
 				players.at(i)->GetProjectiles().at(j)->Inactivate();
 			}
@@ -55,7 +53,7 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 
 		for (int j = 0; j < this->NPCs.size(); j++) {
 
-			distance = players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos();
+ 			distance = players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos();
 			distSqrd = glm::dot(distance, distance);
 			if (distSqrd < 30)
 			{
