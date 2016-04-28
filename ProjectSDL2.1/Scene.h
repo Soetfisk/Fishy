@@ -78,6 +78,11 @@ private:
 private:
 	void LoadModels();
 	void LoadModels(char* folder);
+	// variables for border shader
+	float borderThreshold1, borderThreshold2;
+	glm::vec3 borderColor1;
+	// wavy
+	float wavyAmount;
 public:
 	Scene();
 	~Scene();

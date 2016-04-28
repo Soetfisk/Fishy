@@ -64,6 +64,11 @@ Scene::Scene() {
 	filterComputeShader->LoadShader("blueFilter.glsl");
 	filterComputeShader->CreateShader(filterComputeShader->LoadShader("blueFilter.glsl"));
 	this->deltaTime = 0;
+	// border shader variables
+	this->borderThreshold1 = 0.4f; // variable one must be the bigger otherwise the second will just overwrite it
+	this->borderThreshold2 = 0.9f; // values should be between 0-1
+	this->borderColor1 = glm::vec3(0, 0, 0);
+	this->wavyAmount = 10.0f;
 }
 
 
@@ -176,12 +181,13 @@ void Scene::DrawScene() {
 		this->RenderQuad();
 		this->frameBuffer2->UnbindFrameBuffer();
 		
-		this->count += 0.5f * this->deltaTime;
 
 		this->frameBuffer3->BindFrameBuffer();
 		shaders[BORDER]->Bind();
 		shaders[BORDER]->Uniform1f("width", window::WIDTH);
 		shaders[BORDER]->Uniform1f("height", window::HEIGHT / 2);
+		shaders[BORDER]->Uniform1f("thresholdFloat",this->borderThreshold1);
+		shaders[BORDER]->UniformVec3("borderColor",this->borderColor1);
 		this->frameBuffer2->BindTexturesToProgram(shaders[BORDER]->GetUnifromLocation("texture"), 0);
 		this->RenderQuad();
 		this->frameBuffer3->UnbindFrameBuffer();
@@ -190,20 +196,23 @@ void Scene::DrawScene() {
 		shaders[BORDER]->Bind();
 		shaders[BORDER]->Uniform1f("width", window::WIDTH);
 		shaders[BORDER]->Uniform1f("height", window::HEIGHT / 2);
+		shaders[BORDER]->Uniform1f("thresholdFloat", this->borderThreshold2);
+		shaders[BORDER]->UniformVec3("borderColor", this->borderColor1);
 		this->frameBuffer3->BindTexturesToProgram(shaders[BORDER]->GetUnifromLocation("texture"), 0);
 		this->RenderQuad();
 		this->frameBuffer4->UnbindFrameBuffer();
 
+		this->count += this->wavyAmount * this->deltaTime;
 		this->frameBuffer5->BindFrameBuffer();
 		shaders[WAVY]->Bind();
 		shaders[WAVY]->Uniform1f("offset", count);
-		this->frameBuffer2->BindTexturesToProgram(shaders[WAVY]->GetUnifromLocation("texture"), 0);
+		this->frameBuffer4->BindTexturesToProgram(shaders[WAVY]->GetUnifromLocation("texture"), 0);
 		this->RenderQuad();
 		this->frameBuffer5->UnbindFrameBuffer();
 		
 
 		shaders[PASS]->Bind();
-		this->frameBuffer2->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
+		this->frameBuffer5->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
 		glViewport(0, window::HEIGHT - (window::HEIGHT / (i + 1)), window::WIDTH, window::HEIGHT / 2);
 		this->RenderQuad();
 	}
