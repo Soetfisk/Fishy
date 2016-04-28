@@ -42,15 +42,6 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 
 void main()
 {
-	PointLight l;
-	l.position = vec3(3, 0, 3);
-	l.constant = 1.0f;
-	l.linear =  0.14f;
-	l.quadratic = 0.07;
-	l.ambient = vec3(0.25f, 0.15, 0.04);
-	l.diffuse = vec3(1.0f, 0.58, 0.16);
-	l.specular = vec3(0.5f, 0.0f, 0.0f);
-
 	vec3 Output = vec3(0);
 
 	vec3 FragPos = texture(posTexture, frag_uv).rgb;

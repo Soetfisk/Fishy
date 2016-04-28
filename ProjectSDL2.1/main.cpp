@@ -26,7 +26,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// Project is set to x64 by default, change it to x86 to make it work
 	// comment
 	GameMain* game = new GameMain();
-
+	
 	game->GameLoop();
 
 	delete game;
