@@ -47,7 +47,7 @@ Scene::Scene() {
 	guih = new GLGUIHandler(*shaders[TEXT]);
 
 	this->frameBuffer = new FrameBuffer();
-	this->frameBuffer->CreateFrameBuffer(4, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGB16F);
+	this->frameBuffer->CreateFrameBuffer(6, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGBA16F);
 	this->frameBuffer->UnbindFrameBuffer();
 
 	this->frameBuffer2 = new FrameBuffer();
@@ -69,6 +69,23 @@ Scene::Scene() {
 	filterComputeShader = new FilterComputeShader("derp");
 	filterComputeShader->LoadShader("blueFilter.glsl");
 	filterComputeShader->CreateShader(filterComputeShader->LoadShader("blueFilter.glsl"));
+
+	PointLight light1;
+	light1.ambient = glm::vec3(0.0f, 0.1f, 0.0f);
+	light1.diffuse = glm::vec3(0.65f, 0.0f, 1.0f);
+	light1.position = glm::vec3(-3, 0, -3);
+	light1.specular = glm::vec3(0.5f, 0.0f, 0.0f);
+	light1.constant = 1.0f;
+	light1.linear = 0.045f;
+	light1.quadratic = 0.0075;
+
+	this->pointLights.push_back(light1);
+
+	dirLight.ambient = glm::vec3(0.25, 0.61, 1);
+	dirLight.diffuse = glm::vec3(0.25, 0.61, 1);
+	dirLight.specular = glm::vec3(0.25, 0.61, 1);
+	dirLight.dir = glm::vec3(0.01, 1, 0.01);
+
 	this->deltaTime = 0;
 }
 
@@ -111,6 +128,16 @@ void Scene::Update(float& deltaTime) {
 
 	for (int i = 0; i < this->players.size(); i++) {
 		this->players.at(i)->Update(GLPlayer::NOTHING ,glm::vec3(deltaTime));
+		if (i == 0)
+		{
+			guih->AddScorePlayer1(this->players.at(i)->point);
+			this->players.at(i)->point = 0;
+		}
+		else
+		{
+			guih->AddScorePlayer2(this->players.at(i)->point);
+			this->players.at(i)->point = 0;
+		}
 	}
 
 	for (int i = 0; i < this->NPCs.size(); i++) {
@@ -148,31 +175,34 @@ void Scene::DrawScene() {
 		{
 			staticMeshes.at(i)->Draw(*shaders[MODELS]);
 		}
-		
 		this->frameBuffer->UnbindFrameBuffer();
-
 		this->frameBuffer2->BindFrameBuffer();
 		shaders[LIGHTING]->Bind();
 
-		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(0) + "].ambient"), 1, glm::value_ptr(glm::vec3(0.0f, 0.1f, 0.0f)));
-		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(0) + "].diffuse"), 1, glm::value_ptr(glm::vec3(0.65f, 0.0f, 1.0f)));
-		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(0) + "].position"), 1, glm::value_ptr(glm::vec3(-3, 0, -3)));
-		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(0) + "].specular"), 1, glm::value_ptr(glm::vec3(0.5f, 0.0f, 0.0f)));
-		glUniform1f(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(0) + "].constant"), 1.0f);
-		glUniform1f(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(0) + "].linear"), 0.045f);
-		glUniform1f(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(0) + "].quadratic"), 0.0075);
+		for (int i = 0; i < pointLights.size(); i++)
+		{
+			glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(i) + "].ambient"), 1, glm::value_ptr(pointLights.at(i).ambient));
+			glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(i) + "].diffuse"), 1, glm::value_ptr(pointLights.at(i).diffuse));
+			glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(i) + "].position"), 1, glm::value_ptr(pointLights.at(i).position));
+			glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(i) + "].specular"), 1, glm::value_ptr(pointLights.at(i).specular));
+			glUniform1f(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(i) + "].constant"), pointLights.at(i).constant);
+			glUniform1f(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(i) + "].linear"), pointLights.at(i).linear);
+			glUniform1f(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(i) + "].quadratic"), pointLights.at(i).quadratic);
+		}
+
+		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.dir"), 1, glm::value_ptr(dirLight.dir));
+		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.ambient"), 1, glm::value_ptr(dirLight.ambient));
+		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.diffuse"), 1, glm::value_ptr(dirLight.diffuse));
+		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.specular"), 1, glm::value_ptr(dirLight.specular));
 
 		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("ViewPos"), 1, glm::value_ptr(players.at(i)->GetCamera().Position()));
-
-		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.dir"), 1, glm::value_ptr(glm::vec3(0.5, 1, 0.5)));
-		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.ambient"), 1, glm::value_ptr(glm::vec3(0.1f, 0.1f, 0.1f)));
-		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.diffuse"), 1, glm::value_ptr(glm::vec3(0.5f, 0.5f, 0.5f)));
-		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.specular"), 1, glm::value_ptr(glm::vec3(0.5f, 0.0f, 0.0f)));
-
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("colorTexture"), 0);
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("posTexture"), 1);
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("normalTexture"), 2);
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("distTexture"), 3);
+		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("ambientTexture"), 4);
+		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("specularTexture"), 5);
+		
 
 		this->RenderQuad();
 		this->frameBuffer2->UnbindFrameBuffer();

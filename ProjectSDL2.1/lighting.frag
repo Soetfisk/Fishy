@@ -33,6 +33,8 @@ uniform sampler2D colorTexture;
 uniform sampler2D posTexture;
 uniform sampler2D normalTexture;
 uniform sampler2D distTexture;
+uniform sampler2D ambientTexture;
+uniform sampler2D specularTexture;
 uniform vec3 ViewPos;
 
 vec3 CalcDirLight(Light light, vec3 normal, vec3 viewDir, vec3 FragPos);
@@ -82,11 +84,11 @@ vec3 CalcDirLight(Light light, vec3 normal, vec3 viewDir, vec3 FragPos)
 	vec3 reflectDir = reflect(-lightDir, normal);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
 
-	vec3 ambient	= light.ambient;
-	vec3 diffuse	= (diff * light.diffuse) ;
-	vec3 specular	= light.specular * (spec) * texture(colorTexture, frag_uv).a;
+		vec3 ambient	= light.ambient * texture(ambientTexture, frag_uv).rgb;
+		vec3 diffuse	= (diff * light.diffuse * texture(colorTexture, frag_uv).rgb);
+		vec3 specular	= light.specular * (spec) * texture(specularTexture, frag_uv).rgb;
 
-	return (ambient + (diffuse)) * texture(colorTexture, frag_uv).rgb;
+	return (ambient + diffuse + specular);
 }
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 {
@@ -95,18 +97,18 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 		float diff = max(dot(normal, lightDir), 0.0);
 
 		vec3 reflectDir = reflect(-lightDir, normal);
-		float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+		float spec = pow(max(dot(viewDir, reflectDir), 0.0), texture(specularTexture, frag_uv).a);
 		
 		float dist    = length(light.position - fragPos);
 		float attenuation = 1.0f / (light.constant + light.linear * dist + 
   									light.quadratic * (dist * dist)); 
 
-		vec3 ambient	= light.ambient * texture(colorTexture, frag_uv).rgb;
+		vec3 ambient	= light.ambient * texture(ambientTexture, frag_uv).rgb;
 		vec3 diffuse	= (diff * light.diffuse * texture(colorTexture, frag_uv).rgb);
-		vec3 specular	= light.specular * (spec) * texture(colorTexture, frag_uv).a;
+		vec3 specular	= light.specular * (spec) * texture(specularTexture, frag_uv).rgb;
 		ambient  *= attenuation;
 		diffuse  *= attenuation;
 		specular *= attenuation;
 
-		return clamp((ambient + diffuse),0.0,1.0);
+		return clamp((ambient + diffuse + specular),0.0,1.0);
 }

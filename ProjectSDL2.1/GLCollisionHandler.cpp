@@ -53,7 +53,7 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 
 		for (int j = 0; j < this->NPCs.size(); j++) {
 
-			distance = players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos();
+ 			distance = players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos();
 			distSqrd = glm::dot(distance, distance);
 			if (distSqrd < 30)
 			{
