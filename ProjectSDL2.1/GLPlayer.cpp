@@ -2,7 +2,7 @@
 #include <math.h>
 #include "RNG.h"
 
-GLPlayer::GLPlayer() : GLModel()
+GLPlayer::GLPlayer() : GLModel() //NEVER USE
 {
 	this->m_camera;
 	this->m_projectileHandler = new GLProjectileHandler();
@@ -16,19 +16,31 @@ GLPlayer::GLPlayer() : GLModel()
 	this->dashOnCooldown = false;
 }
 
-GLPlayer::GLPlayer(FishBox& FSH_Loader, char* filePath) : GLModel(FSH_Loader, filePath) //DEPRICATED USE AT OWN RISK
+GLPlayer::GLPlayer(FishBox* FSH_Loader, char* filePath) : GLModel(FSH_Loader, filePath) //DEPRICATED USE AT OWN RISK
 {
 	this->m_camera;
-	this->m_projectileHandler = new GLProjectileHandler(&FSH_Loader, modelID, 1, 3, 1.2f);
+	this->m_projectileHandler = new GLProjectileHandler(1, 20, 10.0f, FSH_Loader, 2);
 	this->m_velocity = glm::vec3(0);
 }
 
-GLPlayer::GLPlayer(FishBox & FSH_Loader, unsigned int modelID) : GLModel(FSH_Loader, modelID)
+GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID) : GLModel(FSH_Loader, modelID)
 {
 	this->m_camera;
-	this->m_projectileHandler = new GLProjectileHandler(&FSH_Loader, modelID, 1, 3, 1.2f);
+	this->m_projectileHandler = new GLProjectileHandler(1, 20, 10.0f, FSH_Loader, 2);
 	this->m_velocity = glm::vec3(0);
 	
+	this->dashCurrentDuration = 0.0f;
+	this->dashCooldownCounter = 0;
+	this->isDashing = false;
+	this->dashOnCooldown = false;
+}
+
+GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int projectileModelID) : GLModel(FSH_Loader, modelID)
+{
+	this->m_camera;
+	this->m_projectileHandler = new GLProjectileHandler(1, 20, 10.0f, FSH_Loader, projectileModelID);
+	this->m_velocity = glm::vec3(0);
+
 	this->dashCurrentDuration = 0.0f;
 	this->dashCooldownCounter = 0;
 	this->isDashing = false;
@@ -185,7 +197,6 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	//camera update
 	this->m_camera.Update(this->GetTransform(), deltaTime);
 
-	//this->m_projectile->TestUpdate(deltaTime);
 	this->m_projectileHandler->Update(deltaTime);
 }
 

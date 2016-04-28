@@ -40,7 +40,6 @@
     <ClCompile Include="Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\GLNPC_GoldFish.h" />
     <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\RNG.h" />
     <ClInclude Include="AABB.h" />
     <ClInclude Include="FilterComputeShader.h" />
@@ -48,6 +47,7 @@
     <ClInclude Include="GLCollisionHandler.h" />
     <ClInclude Include="GLNPC.h" />
     <ClInclude Include="FrameBuffer.h" />
+    <ClInclude Include="GLNPC_GoldFish.h" />
     <ClInclude Include="GLProjectile.h" />
     <ClInclude Include="GLProjectileHandler.h" />
     <ClInclude Include="GameMain.h" />

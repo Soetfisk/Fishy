@@ -30,8 +30,9 @@ public:
 	};
 
 	GLPlayer();
-	GLPlayer(FishBox& FSH_Loader, char* filePath);
-	GLPlayer(FishBox& FSH_Loader, unsigned int modelID);
+	GLPlayer(FishBox * FSH_Loader, char* filePath);
+	GLPlayer(FishBox * FSH_Loader, unsigned int modelID);
+	GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int projectileModelID);
 	~GLPlayer();
 	void Update(Events state, glm::vec3 movementVec);
 	GLCamera GetCamera();

@@ -4,14 +4,15 @@
 
 void Scene::LoadModels()
 {
-	FSH_Loader.LoadScene("Models/tempfishTex.FSH"); //PlayerFish
-	FSH_Loader.LoadScene("Models/Goldfish.FSH"); //PlayerFish
+	FSH_Loader.LoadScene("Models/realfish.FSH"); //PlayerFish
+	FSH_Loader.LoadScene("Models/Goldfish.FSH"); //GoldFish
+	FSH_Loader.LoadScene("Models/Bubble1.FSH"); //Bubble
 	
 	for (int i = 0; i < 2; i++) {
-		this->players.push_back(new GLPlayer(FSH_Loader, PlayerFish));
+		this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));
 	}
 	for (int i = 0; i < 50; i++) {
-		this->NPCs.push_back(new GLNPC_GoldFish(FSH_Loader, GoldFish));
+		this->NPCs.push_back(new GLNPC_GoldFish(&FSH_Loader, GoldFish));
 	}
 
 	this->collisionHandler.AddNPC(NPCs);
@@ -34,7 +35,7 @@ Scene::Scene() {
 	shaders[PASS] = new GLShader("pass");
 	shaders[TEXT] = new GLShader("text");
 	shaders[WAVY] = new GLShader("wavy");
-	shaders[POST] = new GLShader("post");
+	shaders[BORDER] = new GLShader("post");
 	shaders[LIGHTING] = new GLShader("lighting");
 
 	guih = new GLGUIHandler(*shaders[TEXT]);
@@ -58,22 +59,11 @@ Scene::Scene() {
 	this->frameBuffer5 = new FrameBuffer();
 	this->frameBuffer5->CreateFrameBuffer(1, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGB);
 	this->frameBuffer5->UnbindFrameBuffer();
-	//tempMesh->GetTransform().SetPos(glm::vec3(3, 0, 3));
-	//first make vertex for all vertexes
+
 	filterComputeShader = new FilterComputeShader("derp");
 	filterComputeShader->LoadShader("blueFilter.glsl");
 	filterComputeShader->CreateShader(filterComputeShader->LoadShader("blueFilter.glsl"));
 	this->deltaTime = 0;
-
-	//GLfloat fogColor[4] = { 1.0f,1.0f,1.0f,1.0f };
-
-	//glFogi(GL_FOG_MODE, GL_LINEAR);
-	//glFogfv(GL_FOG_COLOR, fogColor);
-	//glFogf(GL_FOG_DENSITY, 1.0f);
-	//glHint(GL_FOG_HINT, GL_DONT_CARE); glFogf(GL_FOG_START, 2.0f); // Fog Start Depth 
-	//glFogf(GL_FOG_END, 8.0f); // Fog End Depth
-	//glEnable(GL_FOG);
-	//glEnable(GL_DEPTH_TEST);
 }
 
 
@@ -136,12 +126,10 @@ void Scene::DrawScene() {
 		//Set viewport
 		glViewport(0, 0, window::WIDTH, window::HEIGHT/ 2);
 
-		//for(int j = 0; j<this->models.count();j++){
 		shaders[MODELS]->Bind();
 		shaders[MODELS]->Update(players.at(i)->GetCamera());
 		this->frameBuffer->BindFrameBuffer();
 
-		//tempModel->Draw(*shaders[MODELS]);
 		for (int j = 0; j < this->players.size(); j++) {
 			players.at(j)->TestDraw(*shaders[MODELS]);
 		}
@@ -151,8 +139,6 @@ void Scene::DrawScene() {
 		}
 		
 		this->frameBuffer->UnbindFrameBuffer();
-		//models[0]->Draw(*shaders[MODELS]);
-		//tempMesh->Draw(*shaders[MODELS], GLTransform());
 
 		this->frameBuffer2->BindFrameBuffer();
 		shaders[LIGHTING]->Bind();
@@ -179,30 +165,22 @@ void Scene::DrawScene() {
 
 		this->RenderQuad();
 		this->frameBuffer2->UnbindFrameBuffer();
-		//tempModel->Draw(*shaders[MODELS]);
-		//shaders[PASS]->Bind();
 		
-		//this->filterComputeShader->BindShader();
 		this->count += 0.5f * this->deltaTime;
-		//this->frameBuffer->BindImageTexturesToProgram(glGetUniformLocation(this->cs, "destTex"), 0);
-		//this->filterComputeShader->UniformVec3("colorVector",glm::vec3(0.0f,0.0f, 1.0f));
-		//this->filterComputeShader->Uniform1f("number",count);
-		//this->filterComputeShader->DispatchCompute(1024 / 32, 768 / 32, 1);
-		
 
 		this->frameBuffer3->BindFrameBuffer();
-		shaders[POST]->Bind();
-		shaders[POST]->Uniform1f("width", window::WIDTH);
-		shaders[POST]->Uniform1f("height", window::HEIGHT / 2);
-		this->frameBuffer2->BindTexturesToProgram(shaders[POST]->GetUnifromLocation("texture"), 0);
+		shaders[BORDER]->Bind();
+		shaders[BORDER]->Uniform1f("width", window::WIDTH);
+		shaders[BORDER]->Uniform1f("height", window::HEIGHT / 2);
+		this->frameBuffer2->BindTexturesToProgram(shaders[BORDER]->GetUnifromLocation("texture"), 0);
 		this->RenderQuad();
 		this->frameBuffer3->UnbindFrameBuffer();
 
 		this->frameBuffer4->BindFrameBuffer();
-		shaders[POST]->Bind();
-		shaders[POST]->Uniform1f("width", window::WIDTH);
-		shaders[POST]->Uniform1f("height", window::HEIGHT / 2);
-		this->frameBuffer3->BindTexturesToProgram(shaders[POST]->GetUnifromLocation("texture"), 0);
+		shaders[BORDER]->Bind();
+		shaders[BORDER]->Uniform1f("width", window::WIDTH);
+		shaders[BORDER]->Uniform1f("height", window::HEIGHT / 2);
+		this->frameBuffer3->BindTexturesToProgram(shaders[BORDER]->GetUnifromLocation("texture"), 0);
 		this->RenderQuad();
 		this->frameBuffer4->UnbindFrameBuffer();
 
@@ -216,14 +194,8 @@ void Scene::DrawScene() {
 
 		shaders[PASS]->Bind();
 		this->frameBuffer2->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
-		//this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture2"), 1);
-		//this->frameBuffer->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture3"), 2);
 		glViewport(0, window::HEIGHT - (window::HEIGHT / (i + 1)), window::WIDTH, window::HEIGHT / 2);
 		this->RenderQuad();
-
-		//shaders[MODELS].update(models.at(j), player.at(i).getCamera()); 
-		//	models.at(j).draw(player.at(i).getCamera());
-		//}
 	}
 
 }
