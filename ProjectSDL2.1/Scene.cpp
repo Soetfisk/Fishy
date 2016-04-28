@@ -6,7 +6,7 @@ void Scene::LoadModels()
 {
 	FSH_Loader.LoadScene("Models/realfish.FSH"); //PlayerFish
 	FSH_Loader.LoadScene("Models/Goldfish.FSH"); //GoldFish
-	FSH_Loader.LoadScene("Models/Bubble1.FSH"); //Bubble
+	FSH_Loader.LoadScene("Models/Bubble2.FSH"); //Bubble
 	
 	for (int i = 0; i < 2; i++) {
 		this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));
@@ -197,13 +197,13 @@ void Scene::DrawScene() {
 		this->frameBuffer5->BindFrameBuffer();
 		shaders[WAVY]->Bind();
 		shaders[WAVY]->Uniform1f("offset", count);
-		this->frameBuffer2->BindTexturesToProgram(shaders[WAVY]->GetUnifromLocation("texture"), 0);
+		this->frameBuffer4->BindTexturesToProgram(shaders[WAVY]->GetUnifromLocation("texture"), 0);
 		this->RenderQuad();
 		this->frameBuffer5->UnbindFrameBuffer();
 		
 
 		shaders[PASS]->Bind();
-		this->frameBuffer2->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
+		this->frameBuffer5->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
 		glViewport(0, window::HEIGHT - (window::HEIGHT / (i + 1)), window::WIDTH, window::HEIGHT / 2);
 		this->RenderQuad();
 	}
