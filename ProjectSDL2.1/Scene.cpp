@@ -4,7 +4,7 @@
 
 void Scene::LoadModels()
 {
-	FSH_Loader.LoadScene("Models/realfish.FSH"); //PlayerFish
+	FSH_Loader.LoadScene("Models/fishy.FSH"); //PlayerFish
 	FSH_Loader.LoadScene("Models/Goldfish.FSH"); //GoldFish
 	FSH_Loader.LoadScene("Models/Bubble2.FSH"); //Bubble
 	
