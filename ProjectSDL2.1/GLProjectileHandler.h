@@ -2,6 +2,16 @@
 
 #include "GLProjectile.h"
 
+enum ProjectilePowerUpState
+{
+	REGULAR,
+	SHOTGUN,
+	BIG,
+	FAST,
+	STRONG,
+	NUM_STATES
+};
+
 class GLProjectileHandler
 {
 public:
@@ -19,8 +29,18 @@ private:
 	unsigned int modelID;
 	int projectileActiveTime;																								
 	float projectileSpeed;
+	float projectileStrength;
+	ProjectilePowerUpState currentState;
 	
 	std::vector<GLProjectile*>	projectiles;																			
-	GLProjectile* GetInactiveProjectile();																				
+	GLProjectile* GetInactiveProjectile();
+	void RegularShoot(glm::vec3 forward, glm::vec3 pos, glm::vec3 rot, glm::vec3 velocity);
+	void ShotgunShoot(glm::vec3 forward, glm::vec3 pos, glm::vec3 rot, glm::vec3 velocity);
 };
 
+/*
+	Shotgun
+	Stora
+	Snabba
+	Starka
+*/

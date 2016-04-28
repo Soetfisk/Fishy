@@ -12,8 +12,10 @@ GLProjectileHandler::GLProjectileHandler(FishBox* FSH_Loader, unsigned int model
 	this->modelID = modelID;
 	this->projectileActiveTime = projectileActiveTime;
 	this->projectileSpeed = projectileSpeed;
+	this->projectileStrength = 10;
 	for (int i = 0; i < nrOfProjectiles; i++)
-		projectiles.push_back(new GLProjectile(*FSH_Loader, modelID, projectileActiveTime, projectileSpeed));
+		projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed, projectileStrength));
+	currentState = SHOTGUN;
 }
 
 GLProjectileHandler::~GLProjectileHandler()
@@ -24,11 +26,27 @@ GLProjectileHandler::~GLProjectileHandler()
 
 void GLProjectileHandler::Shoot(glm::vec3 forward, glm::vec3 pos, glm::vec3 rot, glm::vec3 velocity)
 {
-	GLProjectile* projectilePtr = GetInactiveProjectile();
-	if (projectilePtr != nullptr)
-		projectilePtr->Shoot(pos, forward, velocity, rot);
-	else
-		projectiles.push_back(new GLProjectile(*FSH_Loader, modelID, projectileActiveTime, projectileSpeed));
+	switch (currentState)
+	{
+	case REGULAR:
+		RegularShoot(forward, pos, rot, velocity);
+		break;
+	case SHOTGUN:
+		ShotgunShoot(forward, pos, rot, velocity);
+		break;
+	case BIG:
+		RegularShoot(forward, pos, rot, velocity);
+		break;
+	case FAST:
+		RegularShoot(forward, pos, rot, velocity);
+		break;
+	case STRONG:
+		RegularShoot(forward, pos, rot, velocity);
+		break;
+	default:
+		break;
+	}
+	
 }
 
 void GLProjectileHandler::Update(float& dt)
@@ -61,4 +79,61 @@ GLProjectile* GLProjectileHandler::GetInactiveProjectile()
 		}
 	}
 	return projectilePtr;
+}
+
+void GLProjectileHandler::RegularShoot(glm::vec3 forward, glm::vec3 pos, glm::vec3 rot, glm::vec3 velocity)
+{
+	GLProjectile* projectilePtr = GetInactiveProjectile();
+	if (projectilePtr != nullptr)
+		projectilePtr->Shoot(pos, forward, velocity, rot);
+	else
+		projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed));
+}
+
+void GLProjectileHandler::ShotgunShoot(glm::vec3 forward, glm::vec3 pos, glm::vec3 rot, glm::vec3 velocity)
+{
+
+	GLProjectile* projectilePtr = GetInactiveProjectile();
+	if(projectilePtr != nullptr)
+		projectilePtr->Shoot(pos, forward, velocity, rot);
+	else
+	{
+		projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed, projectileStrength));
+		projectiles.back()->Shoot(pos, forward, velocity, rot);
+		projectilePtr = projectiles.back();
+	}
+	glm::vec3 offSet = projectilePtr->GetBoundingBox().halfDimension;
+	glm::vec3 projRight = projectilePtr->GetRight();
+	float size = glm::length(offSet) * 1.0f;
+
+	glm::vec3 tempRight;
+	for (float x = -1; x < 2; x++) {
+		for (float y = -1; y < 2; y++) {
+			if (x != 0 && y != 0) {
+				tempRight = glm::vec3(projRight.x * x, projRight.y * y, projRight.z);
+				projectilePtr = GetInactiveProjectile();
+				if (projectilePtr != nullptr)
+					projectilePtr->Shoot(pos + (tempRight*size), forward, velocity, rot);
+				else
+					projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed, projectileStrength));
+				projectiles.back()->Shoot(pos + (tempRight*size), forward, velocity, rot);
+			}
+
+			
+		}
+	}
+
+	for (float i = -1; i < 2; i+=2) {
+		projectilePtr = GetInactiveProjectile();
+		if (projectilePtr != nullptr)
+			projectilePtr->Shoot(pos + (projRight*i*size) , forward, velocity, rot);
+		else
+			projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed, projectileStrength));
+			projectiles.back()->Shoot(pos + (projRight*i*size), forward, velocity, rot);
+	}
+
+	
+
+	
+
 }

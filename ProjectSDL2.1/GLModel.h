@@ -17,6 +17,7 @@ public:
 
 	GLTransform& GetTransform();
 	glm::vec3 GetForward();
+	glm::vec3 GetRight();
 
 	AABB GetBoundingBox();
 	void SetBoundingBox(glm::vec3 center, glm::vec3 extents);

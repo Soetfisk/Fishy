@@ -71,7 +71,7 @@ void GLModel::Update(float & dt)
 	//meshes[0]->GetTransform().m_pos += glm::vec3(0.0001, 0, 0);
 	//meshes[1]->GetTransform().m_pos -= glm::vec3(0.0001, 0, 0);
 
-	///*meshes[0]->GetTransform().m_rot += glm::vec3(0, 0.001, 0);
+	//*meshes[0]->GetTransform().m_rot += glm::vec3(0, 0.001, 0);
 	//meshes[1]->GetTransform().m_rot -= glm::vec3(0, 0.001, 0);*/
 
 	//meshes[0]->GetTransform().m_scale += 0.00001;
@@ -87,9 +87,19 @@ glm::vec3 GLModel::GetForward()
 {
 	glm::vec3 front;
 	front.x = cos(this->transform->m_rot.x) * sin(this->transform->m_rot.y);
-	front.y = -sin(this->transform->m_rot.x);
+	front.y = sin(this->transform->m_rot.x);
 	front.z = cos(this->transform->m_rot.x) * cos(this->transform->m_rot.y);
 	return glm::normalize(front);
+	//return glm::vec3(0, 0, 1);
+}
+
+glm::vec3 GLModel::GetRight()
+{
+	glm::vec3 right;
+	right.x = sin(this->transform->m_rot.y - 3.14f / 2.0f);
+	right.y = 0;
+	right.z = cos(this->transform->m_rot.y - 3.14f / 2.0f);
+	return glm::normalize(right);
 }
 
 AABB GLModel::GetBoundingBox()
