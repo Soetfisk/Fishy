@@ -78,7 +78,7 @@ GLMesh::GLMesh(FSHData::mesh * meshData, FSHData::vertexData * vertices, unsigne
 		glm::vec3 tempn(vertices[i].normal[0], vertices[i].normal[1], vertices[i].normal[2]);
 		normals.push_back(tempn);
 
-		glm::vec2 tempuv(vertices[i].uv[0], 1 - vertices[i].uv[1]);
+		glm::vec2 tempuv(vertices[i].uv[0], vertices[i].uv[1]);
 		uv.push_back(tempuv);
 	}
 
