@@ -29,6 +29,17 @@ public:
 		NUM_PLAYERSTATES
 	};
 
+	enum PowerUps
+	{
+		NEUTRAL,
+		BUBBLESHOTGUN,
+		BUBBLEBIG,
+		BUBBLEFAST,
+		BUBBLESTRONG,
+
+		NUM_POWERUPS
+	};
+
 	GLPlayer();
 	GLPlayer(FishBox * FSH_Loader, char* filePath);
 	GLPlayer(FishBox * FSH_Loader, unsigned int modelID);
