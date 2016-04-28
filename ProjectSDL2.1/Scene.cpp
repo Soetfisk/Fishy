@@ -93,8 +93,11 @@ Scene::Scene() {
 	this->borderColor1 = glm::vec3(0, 0, 0);
 	// wavy variables
 	this->wavyAmount = 1.0f; // how fast the waves will go, higher = faster. Standard = 1
-	this->wavyLength = 1.0f; // how long the waves are. Lower = longer waves. standard = 1
+	this->wavyLength = 5.0f; // how long the waves are. Lower = longer waves. standard = 1
 	//fog variables
+	this->fogStart = 1.f;
+	this->fogEnd = 200.f;
+	this->fogColor = glm::vec3(0.1, 0.1, 0.8);
 
 }
 
@@ -205,6 +208,10 @@ void Scene::DrawScene() {
 		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.specular"), 1, glm::value_ptr(dirLight.specular));
 
 		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("ViewPos"), 1, glm::value_ptr(players.at(i)->GetCamera().Position()));
+
+		shaders[LIGHTING]->Uniform1f("fogStartFloat",this->fogStart);
+		shaders[LIGHTING]->Uniform1f("fogEndFloat", this->fogEnd);
+		shaders[LIGHTING]->UniformVec3("fogColorVector",this->fogColor);
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("colorTexture"), 0);
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("posTexture"), 1);
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("normalTexture"), 2);

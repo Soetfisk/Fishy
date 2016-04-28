@@ -94,6 +94,9 @@ private:
 	// wavy
 	float wavyAmount;
 	float wavyLength;
+	//fog
+	float fogStart, fogEnd;
+	glm::vec3 fogColor;
 public:
 	Scene();
 	~Scene();
