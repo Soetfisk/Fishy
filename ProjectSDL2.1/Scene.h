@@ -32,7 +32,8 @@ private:
 	{
 		PlayerFish,
 		GoldFish,
-		Bubble
+		Bubble,
+		Aquarium
 	};
 	int SCREEN_WIDTH = window::WIDTH;
 	int SCREEN_HEIGHT = window::HEIGHT / 2;
@@ -47,13 +48,22 @@ private:
 		float linear;
 		float quadratic;
 	};
+	struct Light
+	{
+		glm::vec3  dir;
 
+		glm::vec3 ambient;
+		glm::vec3 diffuse;
+		glm::vec3 specular;
+	};
 	//todo implement
 	//std::vector<Model> models;
 	FishBox FSH_Loader;
+	Light dirLight;
 	std::vector<PointLight> pointLights;
 	std::vector<GLPlayer*> players;
 	std::vector<GLNPC*> NPCs;
+	std::vector<GLModel*> staticMeshes;
 	GLShader* shaders[NUM_SHADERS];
 	GLMesh* tempMesh;
 	GLuint quadVAO = 0;
