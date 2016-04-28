@@ -83,6 +83,7 @@ private:
 	glm::vec3 borderColor1;
 	// wavy
 	float wavyAmount;
+	float wavyLength;
 public:
 	Scene();
 	~Scene();

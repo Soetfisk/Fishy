@@ -68,7 +68,11 @@ Scene::Scene() {
 	this->borderThreshold1 = 0.4f; // variable one must be the bigger otherwise the second will just overwrite it
 	this->borderThreshold2 = 0.9f; // values should be between 0-1
 	this->borderColor1 = glm::vec3(0, 0, 0);
-	this->wavyAmount = 10.0f;
+	// wavy variables
+	this->wavyAmount = 1.0f; // how fast the waves will go, higher = faster. Standard = 1
+	this->wavyLength = 1.0f; // how long the waves are. Lower = longer waves. standard = 1
+	//fog variables
+
 }
 
 
@@ -206,6 +210,7 @@ void Scene::DrawScene() {
 		this->frameBuffer5->BindFrameBuffer();
 		shaders[WAVY]->Bind();
 		shaders[WAVY]->Uniform1f("offset", count);
+		shaders[WAVY]->Uniform1f("waveLength", this->wavyLength);
 		this->frameBuffer4->BindTexturesToProgram(shaders[WAVY]->GetUnifromLocation("texture"), 0);
 		this->RenderQuad();
 		this->frameBuffer5->UnbindFrameBuffer();
