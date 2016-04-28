@@ -15,7 +15,7 @@ class GLProjectile : public GLModel
 public:
 	GLProjectile();
 	GLProjectile(int maxDist, float speed);
-	GLProjectile(FishBox& FSH_Loader, char* filePath, int maxDist, float speed);
+	GLProjectile(FishBox* FSH_Loader, unsigned int modelID, int maxDist, float speed);
 	virtual ~GLProjectile();
 	
 	void TestDraw(GLShader& shader);	// 

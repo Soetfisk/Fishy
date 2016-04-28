@@ -56,8 +56,6 @@ void FilterComputeShader::CreateShader(const std::string & text)
 		exit(41);
 	}
 	glUseProgram(this->program);
-
-	//glUniform1i(glGetUniformLocation(progHandle, "destTex"), 0);
 }
 
 void FilterComputeShader::BindShader()

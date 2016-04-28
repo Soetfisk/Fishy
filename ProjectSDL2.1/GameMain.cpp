@@ -27,7 +27,6 @@ void GameMain::GameLoop()
 		this->SetDeltaTime();
 		this->window->Clear(0, .1f, 1);
 		
-		//std::cout << 1 / this->deltaTime << std::endl;
 		this->scene->Update(this->deltaTime);
 		this->scene->DrawScene();
 

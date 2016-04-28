@@ -6,13 +6,15 @@ GLProjectileHandler::GLProjectileHandler()
 	projectileSpeed = 0;
 }
 
-GLProjectileHandler::GLProjectileHandler(int nrOfProjectiles, int projectileTravelDisntace, float projectileSpeed)
+GLProjectileHandler::GLProjectileHandler(int nrOfProjectiles, int projectileTravelDisntace, float projectileSpeed, FishBox* FSH_Loader, unsigned int modelID)
 {
+	this->projectileModelID = modelID;
+	this->FSH_Loader = FSH_Loader;
 	this->projectileTravelDistance = projectileTravelDisntace;
 	this->projectileSpeed = projectileSpeed;
 	for (int i = 0; i < nrOfProjectiles; i++)
 	{
-		projectiles.push_back(new GLProjectile(projectileTravelDisntace, projectileSpeed));
+		projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileTravelDisntace, projectileSpeed));
 		//inactiveProjectiles.push_back(projectiles.at(i));
 	}
 }
@@ -32,7 +34,7 @@ void GLProjectileHandler::Shoot(glm::vec3& forward, glm::vec3& pos, glm::vec3& r
 	}
 	else
 	{
-		projectiles.push_back(new GLProjectile(projectileTravelDistance, projectileSpeed));
+		projectiles.push_back(new GLProjectile(FSH_Loader, projectileModelID, projectileTravelDistance, projectileSpeed));
 		//ActivateProjectile(projectiles.back(), forward, pos, rot);
 	}
 }
