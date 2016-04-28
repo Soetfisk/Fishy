@@ -32,7 +32,8 @@ private:
 	{
 		PlayerFish,
 		GoldFish,
-		Bubble
+		Bubble,
+		Aquarium
 	};
 	int SCREEN_WIDTH = window::WIDTH;
 	int SCREEN_HEIGHT = window::HEIGHT / 2;
@@ -42,6 +43,7 @@ private:
 	FishBox FSH_Loader;
 	std::vector<GLPlayer*> players;
 	std::vector<GLNPC*> NPCs;
+	std::vector<GLModel*> staticMeshes;
 	GLShader* shaders[NUM_SHADERS];
 	GLMesh* tempMesh;
 	GLuint quadVAO = 0;
