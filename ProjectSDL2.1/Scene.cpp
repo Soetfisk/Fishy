@@ -7,6 +7,7 @@ void Scene::LoadModels()
 	FSH_Loader.LoadScene("Models/fishy.FSH"); //PlayerFish
 	FSH_Loader.LoadScene("Models/Goldfish.FSH"); //GoldFish
 	FSH_Loader.LoadScene("Models/Bubble2.FSH"); //Bubble
+	FSH_Loader.LoadScene("Models/tempAquarium.FSH"); //Aquarium
 	
 	for (int i = 0; i < 2; i++) {
 		this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));
@@ -14,7 +15,9 @@ void Scene::LoadModels()
 	for (int i = 0; i < 50; i++) {
 		this->NPCs.push_back(new GLNPC_GoldFish(&FSH_Loader, GoldFish));
 	}
-
+	for (int i = 0; i < 1; i++) {
+		this->staticMeshes.push_back(new GLModel(&FSH_Loader, Aquarium));
+	}
 	this->collisionHandler.AddNPC(NPCs);
 	this->collisionHandler.AddPlayer(players);
 	this->collisionHandler.AddModel(models);
@@ -29,8 +32,11 @@ Scene::Scene() {
 	LoadModels();
 	
 	this->players.at(1)->GetTransform().SetPos(glm::vec3(3, 3, 3));
-	this->players.at(0)->GetTransform().SetPos(glm::vec3(0, 0, 0));
-	
+	//this->players.at(0)->GetTransform().SetPos(glm::vec3(0, 0, 0));
+	this->staticMeshes.at(0)->GetTransform().SetPos(glm::vec3(0, 0, 0));
+
+	//this->staticMeshes.at(0)->GetTransform().SetRot(glm::vec3(4.71238898f, 0, 0));
+	//this->staticMeshes.at(0)->GetTransform().SetScale(glm::vec3(10, 10, 10));
 	shaders[MODELS] = new GLShader("test", true);
 	shaders[PASS] = new GLShader("pass");
 	shaders[TEXT] = new GLShader("text");
@@ -63,6 +69,23 @@ Scene::Scene() {
 	filterComputeShader = new FilterComputeShader("derp");
 	filterComputeShader->LoadShader("blueFilter.glsl");
 	filterComputeShader->CreateShader(filterComputeShader->LoadShader("blueFilter.glsl"));
+
+	PointLight light1;
+	light1.ambient = glm::vec3(0.0f, 0.1f, 0.0f);
+	light1.diffuse = glm::vec3(0.65f, 0.0f, 1.0f);
+	light1.position = glm::vec3(-3, 0, -3);
+	light1.specular = glm::vec3(0.5f, 0.0f, 0.0f);
+	light1.constant = 1.0f;
+	light1.linear = 0.045f;
+	light1.quadratic = 0.0075;
+
+	this->pointLights.push_back(light1);
+
+	dirLight.ambient = glm::vec3(0.25, 0.61, 1);
+	dirLight.diffuse = glm::vec3(0.25, 0.61, 1);
+	dirLight.specular = glm::vec3(0.25, 0.61, 1);
+	dirLight.dir = glm::vec3(0.01, 1, 0.01);
+
 	this->deltaTime = 0;
 }
 
@@ -91,6 +114,10 @@ Scene::~Scene(){
 	for (int i = 0; i < NPCs.size(); i++)
 	{
 		delete NPCs.at(i);
+	}
+	for (int i = 0; i < staticMeshes.size(); i++)
+	{
+		delete staticMeshes.at(i);
 	}
 
 	delete guih;
@@ -140,30 +167,38 @@ void Scene::DrawScene() {
 		shaders[MODELS]->Update(players.at(i)->GetCamera());
 		this->frameBuffer->BindFrameBuffer();
 
-		for (int j = 0; j < this->players.size(); j++) {
+		for (int j = 0; j < this->players.size(); j++) 
+		{
 			players.at(j)->TestDraw(*shaders[MODELS]);
 		}
 		for (unsigned int i = 0; i < NPCs.size(); i++)
 		{
 			NPCs.at(i)->NPCDraw(*shaders[MODELS]);
 		}
+		for (unsigned int i = 0; i < staticMeshes.size(); i++)
+		{
+			staticMeshes.at(i)->Draw(*shaders[MODELS]);
+		}
 		this->frameBuffer->UnbindFrameBuffer();
 		this->frameBuffer2->BindFrameBuffer();
 		shaders[LIGHTING]->Bind();
 
-		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(0) + "].ambient"), 1, glm::value_ptr(glm::vec3(0.0f, 0.1f, 0.0f)));
-		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(0) + "].diffuse"), 1, glm::value_ptr(glm::vec3(0.65f, 0.0f, 1.0f)));
-		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(0) + "].position"), 1, glm::value_ptr(glm::vec3(-3, 0, -3)));
-		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(0) + "].specular"), 1, glm::value_ptr(glm::vec3(0.5f, 0.0f, 0.0f)));
-		glUniform1f(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(0) + "].constant"), 1.0f);
-		glUniform1f(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(0) + "].linear"), 0.045f);
-		glUniform1f(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(0) + "].quadratic"), 0.0075);
+		for (int i = 0; i < pointLights.size(); i++)
+		{
+			glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(i) + "].ambient"), 1, glm::value_ptr(pointLights.at(i).ambient));
+			glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(i) + "].diffuse"), 1, glm::value_ptr(pointLights.at(i).diffuse));
+			glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(i) + "].position"), 1, glm::value_ptr(pointLights.at(i).position));
+			glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(i) + "].specular"), 1, glm::value_ptr(pointLights.at(i).specular));
+			glUniform1f(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(i) + "].constant"), pointLights.at(i).constant);
+			glUniform1f(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(i) + "].linear"), pointLights.at(i).linear);
+			glUniform1f(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(i) + "].quadratic"), pointLights.at(i).quadratic);
+		}
 
-		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.dir"), 1, glm::value_ptr(glm::vec3(0.5, 1, 0.5)));
-		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.ambient"), 1, glm::value_ptr(glm::vec3(0.1f, 0.1f, 0.1f)));
-		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.diffuse"), 1, glm::value_ptr(glm::vec3(0.5f, 0.5f, 0.5f)));
-		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.specular"), 1, glm::value_ptr(glm::vec3(0.5f, 0.0f, 0.0f)));
-		// IMPORTANT!!!!! projectiles do not have material and it is crashing
+		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.dir"), 1, glm::value_ptr(dirLight.dir));
+		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.ambient"), 1, glm::value_ptr(dirLight.ambient));
+		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.diffuse"), 1, glm::value_ptr(dirLight.diffuse));
+		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.specular"), 1, glm::value_ptr(dirLight.specular));
+
 		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("ViewPos"), 1, glm::value_ptr(players.at(i)->GetCamera().Position()));
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("colorTexture"), 0);
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("posTexture"), 1);
