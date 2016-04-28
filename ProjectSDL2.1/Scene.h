@@ -32,7 +32,8 @@ private:
 	{
 		PlayerFish,
 		GoldFish,
-		Bubble
+		Bubble,
+		Aquarium
 	};
 	int SCREEN_WIDTH = window::WIDTH;
 	int SCREEN_HEIGHT = window::HEIGHT / 2;
@@ -62,6 +63,7 @@ private:
 	std::vector<PointLight> pointLights;
 	std::vector<GLPlayer*> players;
 	std::vector<GLNPC*> NPCs;
+	std::vector<GLModel*> staticMeshes;
 	GLShader* shaders[NUM_SHADERS];
 	GLMesh* tempMesh;
 	GLuint quadVAO = 0;

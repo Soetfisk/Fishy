@@ -7,6 +7,7 @@ void Scene::LoadModels()
 	FSH_Loader.LoadScene("Models/realfish.FSH"); //PlayerFish
 	FSH_Loader.LoadScene("Models/Goldfish.FSH"); //GoldFish
 	FSH_Loader.LoadScene("Models/Bubble1.FSH"); //Bubble
+	FSH_Loader.LoadScene("Models/testAquarium.FSH"); //Aquarium
 	
 	for (int i = 0; i < 2; i++) {
 		this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));
@@ -14,7 +15,9 @@ void Scene::LoadModels()
 	for (int i = 0; i < 50; i++) {
 		this->NPCs.push_back(new GLNPC_GoldFish(&FSH_Loader, GoldFish));
 	}
-
+	for (int i = 0; i < 1; i++) {
+		this->staticMeshes.push_back(new GLModel(&FSH_Loader, Aquarium));
+	}
 	this->collisionHandler.AddNPC(NPCs);
 	this->collisionHandler.AddPlayer(players);
 	this->collisionHandler.AddModel(models);
@@ -30,7 +33,10 @@ Scene::Scene() {
 	
 	this->players.at(1)->GetTransform().SetPos(glm::vec3(3, 3, 3));
 	this->players.at(0)->GetTransform().SetPos(glm::vec3(0, 0, 0));
-	
+	this->staticMeshes.at(0)->GetTransform().SetPos(glm::vec3(0, 0, 0));
+
+	//this->staticMeshes.at(0)->GetTransform().SetRot(glm::vec3(4.71238898f, 0, 0));
+	//this->staticMeshes.at(0)->GetTransform().SetScale(glm::vec3(10, 10, 10));
 	shaders[MODELS] = new GLShader("test", true);
 	shaders[PASS] = new GLShader("pass");
 	shaders[TEXT] = new GLShader("text");
@@ -157,12 +163,17 @@ void Scene::DrawScene() {
 		shaders[MODELS]->Update(players.at(i)->GetCamera());
 		this->frameBuffer->BindFrameBuffer();
 
-		for (int j = 0; j < this->players.size(); j++) {
+		for (int j = 0; j < this->players.size(); j++) 
+		{
 			players.at(j)->TestDraw(*shaders[MODELS]);
 		}
 		for (unsigned int i = 0; i < NPCs.size(); i++)
 		{
 			NPCs.at(i)->NPCDraw(*shaders[MODELS]);
+		}
+		for (unsigned int i = 0; i < staticMeshes.size(); i++)
+		{
+			staticMeshes.at(i)->Draw(*shaders[MODELS]);
 		}
 		this->frameBuffer->UnbindFrameBuffer();
 		this->frameBuffer2->BindFrameBuffer();
