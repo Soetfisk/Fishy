@@ -27,6 +27,31 @@ void Scene::LoadModels(char * folder)
 {
 }
 
+void Scene::UpdatePlayerPowerUp(int player)
+{
+	this->currentPowerUp = this->players.at(player)->GetPowerUp();
+}
+
+void Scene::HandlePlayerPowerUp()
+{
+	if (this->currentPowerUp == GLPlayer::POWER_HIGH)
+	{
+		this->wavyAmount = 10;
+		this->wavyLength = 0.5f; // how long the waves are. Lower = longer waves. standard = 1
+		this->fogColor = glm::vec3(0.3,0.7,0.3);
+		this->fogStart = 1.0f;
+		this->fogEnd = 35.0f;
+	}
+	else
+	{
+		this->wavyAmount = 0.3f; // how fast the waves will go, higher = faster. Standard = 1
+		this->wavyLength = 1.0f; // how long the waves are. Lower = longer waves. standard = 1
+		this->fogColor = glm::vec3(0.1,0.1,0.8);
+		this->fogStart = 50.f;
+		this->fogEnd = 210.f;
+	}
+}
+
 Scene::Scene() {
 	
 	LoadModels();
@@ -98,6 +123,8 @@ Scene::Scene() {
 	this->fogStart = 50.f;
 	this->fogEnd = 210.f;
 	this->fogColor = glm::vec3(0.1, 0.1, 0.8);
+	//player
+	this->currentPowerUp = GLPlayer::POWER_NEUTRAL;
 
 }
 
@@ -168,10 +195,14 @@ void Scene::LoadScene() {
 
 //Calls the models.draw
 void Scene::DrawScene() {
-
 	guih->Draw(*shaders[TEXT]);
 
 	for (int i = 0; i < this->players.size(); i++) {
+		if (i == 0)
+			this->currentPowerUp = GLPlayer::POWER_HIGH;
+		else
+			this->currentPowerUp = GLPlayer::POWER_NEUTRAL;
+		this->HandlePlayerPowerUp();
 		//Set viewport
 		glViewport(0, 0, window::WIDTH, window::HEIGHT/ 2);
 
@@ -248,10 +279,10 @@ void Scene::DrawScene() {
 		this->RenderQuad();
 		this->frameBuffer4->UnbindFrameBuffer();
 
-		this->count += this->wavyAmount * this->deltaTime;
+		this->count[i] += this->wavyAmount * this->deltaTime;
 		this->frameBuffer5->BindFrameBuffer();
 		shaders[WAVY]->Bind();
-		shaders[WAVY]->Uniform1f("offset", count);
+		shaders[WAVY]->Uniform1f("offset", count[i]);
 		shaders[WAVY]->Uniform1f("waveLength", this->wavyLength);
 		this->frameBuffer4->BindTexturesToProgram(shaders[WAVY]->GetUnifromLocation("texture"), 0);
 		this->RenderQuad();

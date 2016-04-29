@@ -31,11 +31,12 @@ public:
 
 	enum PowerUps
 	{
-		NEUTRAL,
-		BUBBLESHOTGUN,
-		BUBBLEBIG,
-		BUBBLEFAST,
-		BUBBLESTRONG,
+		POWER_NEUTRAL,
+		POWER_BUBBLESHOTGUN,
+		POWER_BUBBLEBIG,
+		POWER_BUBBLEFAST,
+		POWER_BUBBLESTRONG,
+		POWER_HIGH,
 
 		NUM_POWERUPS
 	};
@@ -47,9 +48,6 @@ public:
 	~GLPlayer();
 	void Update(Events state, glm::vec3 movementVec);
 	GLCamera GetCamera();
-	glm::vec3& getVelocity() {
-		return m_velocity;
-	}
 
 	void PlayerEating(float deltaTime);
 	void TestDraw(GLShader& shader);
@@ -57,6 +55,12 @@ public:
 	std::vector<GLProjectile*> GetProjectiles();
 	glm::vec3 GetVelocity();
 	int point = 0;
+	GLPlayer::PowerUps GetPowerUp();
+	GLPlayer::PowerUps SetPowerUp(GLPlayer::PowerUps power);
+
+	glm::vec3& getVelocity() {
+		return m_velocity;
+	}
 private:
 	const int DEADZONE = 8000;
 	float MOVEMENT_FRICTION = 2.0f;
@@ -89,6 +93,8 @@ private:
 
 	float rotateSpeed = 2;
 	float moveSpeed = 2;
+
+	PowerUps currentPowerUp = POWER_NEUTRAL;
 
 	void AddController(int id);
 	void RemoveController(int id);

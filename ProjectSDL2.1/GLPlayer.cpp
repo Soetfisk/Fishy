@@ -124,6 +124,16 @@ glm::vec3 GLPlayer::GetVelocity()
 	return this->m_velocity;
 }
 
+GLPlayer::PowerUps GLPlayer::GetPowerUp()
+{
+	return this->currentPowerUp;
+}
+
+GLPlayer::PowerUps GLPlayer::SetPowerUp(GLPlayer::PowerUps power)
+{
+	return this->currentPowerUp = power;
+}
+
 //adds a controller too the player
 void GLPlayer::AddController(int id)
 {
