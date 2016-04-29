@@ -5,6 +5,7 @@
 #include "GLPlayer.h"
 #include "GLNPC.h"
 #include "GLNPC_GoldFish.h"
+#include "GLNPC_BlueTang.h"
 #include "GLShader.h"
 #include "FrameBuffer.h"
 #include "GLModel.h"
@@ -32,6 +33,7 @@ private:
 	{
 		PlayerFish,
 		GoldFish,
+		BlueTang,
 		Bubble,
 		Aquarium
 	};

@@ -1,19 +1,21 @@
-#include "GLNPC_GoldFish.h"
+#include "GLNPC_BlueTang.h"
 
 
 
-GLNPC_GoldFish::GLNPC_GoldFish(FishBox * FSH_Loader, unsigned int modelID) : GLNPC(FSH_Loader, modelID)
+GLNPC_BlueTang::GLNPC_BlueTang(FishBox * FSH_Loader, unsigned int modelID) : GLNPC(FSH_Loader, modelID)
 {
 	this->currentState = NPC_MOVE;
 	transform->SetPos(glm::vec3(RNG::range(-20, 20), RNG::range(-2, 2), RNG::range(-20, 20)));
+	glm::vec3 scale = glm::vec3(RNG::range(1.1f,3.0f));
+	transform->SetScale(scale);
 
 	this->TimeUntilChange = RNG::range(0.2, 3.0f);
 	this->scaleChange = RNG::range(-0.02f, 0.02f);
-	this->forwardSpeed = RNG::range(0.0f, 3.3f); 
+	this->forwardSpeed = FishSpeedMultiplier * RNG::range(0.0f, 3.3f);
 	this->rotationChange = glm::vec3(0, RNG::range(-1.0f, 1.0f), 0);
 }
 
-void GLNPC_GoldFish::NPCUpdate(float deltaTime)
+void GLNPC_BlueTang::NPCUpdate(float deltaTime)
 {
 	if (currentState != NPC_INACTIVE)
 	{
@@ -21,7 +23,7 @@ void GLNPC_GoldFish::NPCUpdate(float deltaTime)
 		if (TimeUntilChange < 0)
 		{
 			this->TimeUntilChange = RNG::range(0.2, 3.0f);
-			this->forwardSpeed = RNG::range(0.5f, 6.3f);
+			this->forwardSpeed = FishSpeedMultiplier * RNG::range(0.5f, 6.3f);
 			this->rotationChange = glm::vec3(RNG::range(-0.1f, 0.1f), RNG::range(-1.0f, 1.0f), 0);
 		}
 
@@ -85,7 +87,7 @@ void GLNPC_GoldFish::NPCUpdate(float deltaTime)
 	}
 }
 
-void GLNPC_GoldFish::NPCDraw(GLShader & shader)
+void GLNPC_BlueTang::NPCDraw(GLShader & shader)
 {
 	if (currentState != NPC_INACTIVE)
 	{
@@ -93,7 +95,7 @@ void GLNPC_GoldFish::NPCDraw(GLShader & shader)
 	}
 }
 
-void GLNPC_GoldFish::gettingEaten(float deltaTime, GLTransform playerTransform)
+void GLNPC_BlueTang::gettingEaten(float deltaTime, GLTransform playerTransform)
 {
 	if (this->currentState != NPC_INACTIVE)
 	{
@@ -105,12 +107,12 @@ void GLNPC_GoldFish::gettingEaten(float deltaTime, GLTransform playerTransform)
 	}
 }
 
-void GLNPC_GoldFish::NPCKill()
+void GLNPC_BlueTang::NPCKill()
 {
 	this->currentState = NPC_INACTIVE;
 }
 
-void GLNPC_GoldFish::initiateFleeingState(glm::vec3 playerForwardVector)
+void GLNPC_BlueTang::initiateFleeingState(glm::vec3 playerForwardVector)
 {
 	if (this->currentState != NPC_BEINGEATEN && this->currentState != NPC_INACTIVE)
 	{
@@ -120,7 +122,7 @@ void GLNPC_GoldFish::initiateFleeingState(glm::vec3 playerForwardVector)
 	}
 }
 
-int GLNPC_GoldFish::GetCurrentState()
+int GLNPC_BlueTang::GetCurrentState()
 {
 	return this->currentState;
 }
