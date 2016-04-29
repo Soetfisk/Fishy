@@ -18,6 +18,8 @@ void Scene::LoadModels()
 	for (int i = 0; i < 1; i++) {
 		this->staticMeshes.push_back(new GLModel(&FSH_Loader, Aquarium));
 	}
+	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
+	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
 	this->collisionHandler.AddNPC(NPCs);
 	this->collisionHandler.AddPlayer(players);
 	this->collisionHandler.AddModel(models);
