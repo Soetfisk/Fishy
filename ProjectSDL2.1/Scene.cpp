@@ -95,8 +95,8 @@ Scene::Scene() {
 	this->wavyAmount = 0.3f; // how fast the waves will go, higher = faster. Standard = 1
 	this->wavyLength = 1.0f; // how long the waves are. Lower = longer waves. standard = 1
 	//fog variables
-	this->fogStart = 1.f;
-	this->fogEnd = 200.f;
+	this->fogStart = 50.f;
+	this->fogEnd = 210.f;
 	this->fogColor = glm::vec3(0.1, 0.1, 0.8);
 
 }
