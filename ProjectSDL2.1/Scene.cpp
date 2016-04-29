@@ -29,11 +29,13 @@ void Scene::LoadModels(char * folder)
 {
 }
 
+// update currentPowerup variable with value from player i
 void Scene::UpdatePlayerPowerUp(int player)
 {
 	this->currentPowerUp = this->players.at(player)->GetPowerUp();
 }
 
+// do stuff with curentPowerup variable
 void Scene::HandlePlayerPowerUp()
 {
 	if (this->currentPowerUp == GLPlayer::POWER_HIGH)
@@ -200,10 +202,8 @@ void Scene::DrawScene() {
 	guih->Draw(*shaders[TEXT]);
 
 	for (int i = 0; i < this->players.size(); i++) {
-		if (i == 0)
-			this->currentPowerUp = GLPlayer::POWER_HIGH;
-		else
-			this->currentPowerUp = GLPlayer::POWER_NEUTRAL;
+		// handle player powerup
+		this->UpdatePlayerPowerUp(i);
 		this->HandlePlayerPowerUp();
 		//Set viewport
 		glViewport(0, 0, window::WIDTH, window::HEIGHT/ 2);
