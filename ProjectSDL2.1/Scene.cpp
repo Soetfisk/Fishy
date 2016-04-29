@@ -4,10 +4,10 @@
 
 void Scene::LoadModels()
 {
-	FSH_Loader.LoadScene("Models/realfish.FSH"); //PlayerFish
+	FSH_Loader.LoadScene("Models/fishy.FSH"); //PlayerFish
 	FSH_Loader.LoadScene("Models/Goldfish.FSH"); //GoldFish
-	FSH_Loader.LoadScene("Models/Bubble1.FSH"); //Bubble
-	FSH_Loader.LoadScene("Models/testAquarium.FSH"); //Aquarium
+	FSH_Loader.LoadScene("Models/Bubble2.FSH"); //Bubble
+	FSH_Loader.LoadScene("Models/tempAquarium.FSH"); //Aquarium
 	
 	for (int i = 0; i < 2; i++) {
 		this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));
@@ -34,7 +34,7 @@ Scene::Scene() {
 	LoadModels();
 	
 	this->players.at(1)->GetTransform().SetPos(glm::vec3(3, 3, 3));
-	this->players.at(0)->GetTransform().SetPos(glm::vec3(0, 0, 0));
+	//this->players.at(0)->GetTransform().SetPos(glm::vec3(0, 0, 0));
 	this->staticMeshes.at(0)->GetTransform().SetPos(glm::vec3(0, 0, 0));
 
 	//this->staticMeshes.at(0)->GetTransform().SetRot(glm::vec3(4.71238898f, 0, 0));
@@ -89,6 +89,18 @@ Scene::Scene() {
 	dirLight.dir = glm::vec3(0.01, 1, 0.01);
 
 	this->deltaTime = 0;
+	// border shader variables
+	this->borderThreshold1 = 0.9f; // variable one must be the bigger otherwise the second will just overwrite it
+	this->borderThreshold2 = 0.9f; // values should be between 0-1
+	this->borderColor1 = glm::vec3(0, 0, 0);
+	// wavy variables
+	this->wavyAmount = 0.3f; // how fast the waves will go, higher = faster. Standard = 1
+	this->wavyLength = 1.0f; // how long the waves are. Lower = longer waves. standard = 1
+	//fog variables
+	this->fogStart = 50.f;
+	this->fogEnd = 210.f;
+	this->fogColor = glm::vec3(0.1, 0.1, 0.8);
+
 }
 
 
@@ -202,6 +214,10 @@ void Scene::DrawScene() {
 		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.specular"), 1, glm::value_ptr(dirLight.specular));
 
 		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("ViewPos"), 1, glm::value_ptr(players.at(i)->GetCamera().Position()));
+
+		shaders[LIGHTING]->Uniform1f("fogStartFloat",this->fogStart);
+		shaders[LIGHTING]->Uniform1f("fogEndFloat", this->fogEnd);
+		shaders[LIGHTING]->UniformVec3("fogColorVector",this->fogColor);
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("colorTexture"), 0);
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("posTexture"), 1);
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("normalTexture"), 2);
@@ -213,12 +229,13 @@ void Scene::DrawScene() {
 		this->RenderQuad();
 		this->frameBuffer2->UnbindFrameBuffer();
 		
-		this->count += 0.5f * this->deltaTime;
 
 		this->frameBuffer3->BindFrameBuffer();
 		shaders[BORDER]->Bind();
 		shaders[BORDER]->Uniform1f("width", window::WIDTH);
 		shaders[BORDER]->Uniform1f("height", window::HEIGHT / 2);
+		shaders[BORDER]->Uniform1f("thresholdFloat",this->borderThreshold1);
+		shaders[BORDER]->UniformVec3("borderColor",this->borderColor1);
 		this->frameBuffer2->BindTexturesToProgram(shaders[BORDER]->GetUnifromLocation("texture"), 0);
 		this->RenderQuad();
 		this->frameBuffer3->UnbindFrameBuffer();
@@ -227,20 +244,24 @@ void Scene::DrawScene() {
 		shaders[BORDER]->Bind();
 		shaders[BORDER]->Uniform1f("width", window::WIDTH);
 		shaders[BORDER]->Uniform1f("height", window::HEIGHT / 2);
+		shaders[BORDER]->Uniform1f("thresholdFloat", this->borderThreshold2);
+		shaders[BORDER]->UniformVec3("borderColor", this->borderColor1);
 		this->frameBuffer3->BindTexturesToProgram(shaders[BORDER]->GetUnifromLocation("texture"), 0);
 		this->RenderQuad();
 		this->frameBuffer4->UnbindFrameBuffer();
 
+		this->count += this->wavyAmount * this->deltaTime;
 		this->frameBuffer5->BindFrameBuffer();
 		shaders[WAVY]->Bind();
 		shaders[WAVY]->Uniform1f("offset", count);
-		this->frameBuffer2->BindTexturesToProgram(shaders[WAVY]->GetUnifromLocation("texture"), 0);
+		shaders[WAVY]->Uniform1f("waveLength", this->wavyLength);
+		this->frameBuffer4->BindTexturesToProgram(shaders[WAVY]->GetUnifromLocation("texture"), 0);
 		this->RenderQuad();
 		this->frameBuffer5->UnbindFrameBuffer();
 		
 
 		shaders[PASS]->Bind();
-		this->frameBuffer2->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
+		this->frameBuffer5->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
 		glViewport(0, window::HEIGHT - (window::HEIGHT / (i + 1)), window::WIDTH, window::HEIGHT / 2);
 		this->RenderQuad();
 	}
