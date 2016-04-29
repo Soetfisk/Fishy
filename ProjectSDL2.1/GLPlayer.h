@@ -58,7 +58,7 @@ public:
 	glm::vec3 GetVelocity();
 	int point = 0;
 private:
-	const int DEADZONE = 8000;
+	const int DEADZONE = 20;
 	float MOVEMENT_FRICTION = 2.0f;
 	const int MAX_SPEED = 100;	
 	const float MIN_SPEED = 0.1f;

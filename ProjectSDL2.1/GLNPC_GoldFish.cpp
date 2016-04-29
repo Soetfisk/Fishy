@@ -5,7 +5,7 @@
 GLNPC_GoldFish::GLNPC_GoldFish(FishBox * FSH_Loader, unsigned int modelID) : GLNPC(FSH_Loader, modelID)
 {
 	this->currentState = NPC_MOVE;
-	transform->SetPos(glm::vec3(RNG::range(-20, 20), RNG::range(-2, 2), RNG::range(-20, 20)));
+	transform->SetPos(glm::vec3(RNG::range(-DEADZONEX, DEADZONEX), RNG::range(-DEADZONEY, DEADZONEY), RNG::range(-DEADZONEZ, DEADZONEZ)));
 
 	this->TimeUntilChange = RNG::range(0.2, 3.0f);
 	this->scaleChange = RNG::range(-0.02f, 0.02f);
@@ -22,7 +22,7 @@ void GLNPC_GoldFish::NPCUpdate(float deltaTime)
 		{
 			this->TimeUntilChange = RNG::range(0.2, 3.0f);
 			this->forwardSpeed = RNG::range(0.5f, 6.3f);
-			this->rotationChange = glm::vec3(RNG::range(-0.1f, 0.1f), RNG::range(-1.0f, 1.0f), 0);
+			this->rotationChange = glm::vec3(RNG::range(-0.1f, 0.1f), RNG::range(-0.8f, 0.8f), 0);
 		}
 
 
@@ -49,39 +49,10 @@ void GLNPC_GoldFish::NPCUpdate(float deltaTime)
 		else if (currentState == NPC_BEINGEATEN)
 		{
 			;
-
 		}
-
-		//temp
-		glm::vec3 pos = transform->GetPos();
-		if (pos.x < -this->DEADZONEX)
-		{
-			pos.x = -DEADZONEX;
-		}
-		else if (pos.x >this->DEADZONEX)
-		{
-			pos.x = DEADZONEX;
-		}
-
-		if (pos.y < -this->DEADZONEY)
-		{
-			pos.y = -DEADZONEY;
-		}
-		else if (pos.y >this->DEADZONEY)
-		{
-			pos.y = DEADZONEY;
-		}
-
-		if (pos.z < -this->DEADZONEZ)
-		{
-			pos.z = -DEADZONEZ;
-		}
-		else if (pos.y >this->DEADZONEZ)
-		{
-			pos.z = DEADZONEZ;
-		}
-
-		transform->SetPos(pos);
+		checkboarderCollision();
+		
+		
 	}
 }
 
@@ -118,6 +89,89 @@ void GLNPC_GoldFish::initiateFleeingState(glm::vec3 playerForwardVector)
 		//this->transform->SetRot(playerForwardVector);
 		fleeingTimer = RNG::range(3, 10);
 	}
+}
+
+void GLNPC_GoldFish::checkboarderCollision()
+{
+	glm::vec3 pos = transform->GetPos();
+	glm::vec3 rot = transform->GetRot();
+
+	if (rot.x>1.0f)
+	{
+		transform->SetRot(glm::vec3(1.0f, rot.y, rot.z));
+		this->rotationChange = glm::vec3(RNG::range(-0.3f, -0.2f), RNG::range(-0.8f, 0.8f), 0);
+
+	}
+
+	else if (rot.x < -1.0f)
+	{
+		transform->SetRot(glm::vec3(-1.0f, rot.y, rot.z));
+		this->rotationChange = glm::vec3(RNG::range(0.1f, 0.3f), RNG::range(-0.8f, 0.8f), 0);
+	}
+	if (pos.x < -this->DEADZONEX)
+	{
+		pos.x = -DEADZONEX;
+		if (rot.y >= 0)
+		{
+			this->rotationChange = glm::vec3(RNG::range(-0.1f, 0.1f), RNG::range(1.5f, 2.0f), 0);
+		}
+		else
+		{
+			this->rotationChange = glm::vec3(RNG::range(-0.1f, 0.1f), RNG::range(-2.0f, -1.5f), 0);
+		}
+	}
+	else if (pos.x >this->DEADZONEX)
+	{
+		pos.x = DEADZONEX;
+		if (rot.y >= 0)
+		{
+			this->rotationChange = glm::vec3(RNG::range(-0.1f, 0.1f), RNG::range(1.5f, 2.0f), 0);
+		}
+		else
+		{
+			this->rotationChange = glm::vec3(RNG::range(-0.1f, 0.1f), RNG::range(-2.0f, -1.5f), 0);
+		}
+	}
+
+	if (pos.y < -this->DEADZONEY)
+	{
+		pos.y = -DEADZONEY;
+		this->rotationChange = glm::vec3(RNG::range(-0.3f, -0.2f), RNG::range(-0.8f, 0.8f), 0);
+	}
+	else if (pos.y >this->DEADZONEY)
+	{
+		pos.y = DEADZONEY;
+		this->rotationChange = glm::vec3(RNG::range(0.2f, 0.3f), RNG::range(-0.8f, 0.8f), 0);
+	}
+
+	if (pos.z < -this->DEADZONEZ)
+	{
+		pos.z = -DEADZONEZ;
+
+		if (rot.y >= 0)
+		{
+			this->rotationChange = glm::vec3(RNG::range(-0.1f, 0.1f), RNG::range(1.5f, 2.0f), 0);
+		}
+		else
+		{
+			this->rotationChange = glm::vec3(RNG::range(-0.1f, 0.1f), RNG::range(-2.0f, -1.0f), 0);
+		}
+	}
+	else if (pos.z >this->DEADZONEZ)
+	{
+		pos.z = DEADZONEZ;
+		
+		if (rot.y >= 0)
+		{
+			this->rotationChange = glm::vec3(RNG::range(-0.1f, 0.1f), RNG::range(1.5f, 2.0f), 0);
+		}
+		else
+		{
+			this->rotationChange = glm::vec3(RNG::range(-0.1f, 0.1f), RNG::range(-2.0f, -1.5f), 0);
+		}
+	}
+
+	transform->SetPos(pos);
 }
 
 int GLNPC_GoldFish::GetCurrentState()

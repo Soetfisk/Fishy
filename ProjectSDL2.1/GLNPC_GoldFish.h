@@ -6,7 +6,7 @@ class GLNPC_GoldFish : public GLNPC
 {
 private:
 
-	const int DEADZONEX = 200, DEADZONEY = 200, DEADZONEZ = 200;
+	const int DEADZONEX = 125, DEADZONEY = 48, DEADZONEZ = 86;
 	unsigned int currentState;
 	float fleeingTimer, TimeUntilChange, scaleChange, forwardSpeed;
 	glm::vec3 rotationChange;
@@ -21,5 +21,6 @@ public:
 	void gettingEaten(float deltaTime, GLTransform playerTransform);
 	void NPCKill();
 	void initiateFleeingState(glm::vec3 playerForwardVector);
+	void checkboarderCollision();
 	int GetCurrentState();
 };
