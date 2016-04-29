@@ -67,6 +67,21 @@ std::vector<GLProjectile*>& GLProjectileHandler::GetProjectiles()
 	return this->projectiles;
 }
 
+std::vector<GLProjectile*> GLProjectileHandler::GetActiveProjectiles()
+{
+	std::vector<GLProjectile*> result;
+
+	for (int i = 0; i < projectiles.size(); i++)
+	{
+		if (projectiles.at(i)->isActive())
+		{
+			result.push_back(projectiles.at(i));
+		}
+	}
+
+	return result;
+}
+
 GLProjectile* GLProjectileHandler::GetInactiveProjectile()
 {
 	GLProjectile* projectilePtr = nullptr;

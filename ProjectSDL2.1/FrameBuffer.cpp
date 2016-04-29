@@ -59,7 +59,7 @@ void FrameBuffer::CreateFrameBuffer(int textureAmount, int screenWidth, int scre
 	}
 
 	// Set the list of draw buffers.
-	GLenum DrawBuffers[NUM_TEXTURES] = { GL_COLOR_ATTACHMENT0,GL_COLOR_ATTACHMENT1,GL_COLOR_ATTACHMENT2,GL_COLOR_ATTACHMENT3 };
+	GLenum DrawBuffers[NUM_TEXTURES] = { GL_COLOR_ATTACHMENT0,GL_COLOR_ATTACHMENT1,GL_COLOR_ATTACHMENT2,GL_COLOR_ATTACHMENT3, GL_COLOR_ATTACHMENT4, GL_COLOR_ATTACHMENT5};
 	glDrawBuffers(NUM_TEXTURES, DrawBuffers); // "NUM_TEXTURES" is the size of DrawBuffers
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
