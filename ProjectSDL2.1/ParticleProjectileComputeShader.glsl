@@ -3,6 +3,11 @@
 #extension GL_ARB_compute_shader : enable
 #extension GL_ARB_shader_storage_buffer_object : enable
 
+//struct Particle{
+//	mat4 transformMatrix;
+//	vec4 position;
+//	vec4 velocities;
+//};
 struct Particle{
 	mat4 transformMatrix;
 	vec4 position;

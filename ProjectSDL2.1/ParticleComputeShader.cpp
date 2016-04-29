@@ -31,11 +31,11 @@ void ParticleComputeShader::Initialize(EmitterType type, int nrMaxParticles, glm
 
 	glGenBuffers(1, &this->transSSbo);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, this->transSSbo);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, nrMaxParticles * sizeof(posParticleStruct), NULL, GL_STATIC_DRAW);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, nrMaxParticles * sizeof(ParticleComputeStruct), NULL, GL_STATIC_DRAW);
 
 	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT;
 
-	velsTest = (struct posParticleStruct*) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, nrMaxParticles * sizeof(posParticleStruct), bufMask);
+	particleData = (struct ParticleComputeStruct*) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, nrMaxParticles * sizeof(ParticleComputeStruct), bufMask);
 
 
 
@@ -90,7 +90,7 @@ void ParticleComputeShader::Update(const float & deltaTime, int nrActiveParticle
 	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 
 	for (int i = 0; i < 2; i++) {
-		 if (velsTest[i].position.x != 0) {
+		 if (particleData[i].position.x != 0) {
 			 int k = 0;
 		 }
 	}
