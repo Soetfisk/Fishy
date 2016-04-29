@@ -252,8 +252,9 @@ void GLPlayer::CalcVelocity(float& deltaTime)
 	{
 		m_velocity += forward * (float)(lastForward / (MAX_INPUT));
 	}
+	m_velocity.x = (glm::abs(m_velocity.x) < MIN_SPEED) ? 0.0f : m_velocity.x;
 	m_velocity.y = (glm::abs(m_velocity.y) < MIN_SPEED) ? 0.0f : m_velocity.y;
-	m_velocity.z = (glm::abs(m_velocity.z) < MIN_SPEED) ? 0.0f : m_velocity.z;*/
+	m_velocity.z = (glm::abs(m_velocity.z) < MIN_SPEED) ? 0.0f : m_velocity.z;
 }
 
 void GLPlayer::HandleDash(float & deltaTime)
