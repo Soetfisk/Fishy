@@ -88,12 +88,12 @@ Scene::Scene() {
 
 	this->deltaTime = 0;
 	// border shader variables
-	this->borderThreshold1 = 0.4f; // variable one must be the bigger otherwise the second will just overwrite it
+	this->borderThreshold1 = 0.9f; // variable one must be the bigger otherwise the second will just overwrite it
 	this->borderThreshold2 = 0.9f; // values should be between 0-1
 	this->borderColor1 = glm::vec3(0, 0, 0);
 	// wavy variables
-	this->wavyAmount = 1.0f; // how fast the waves will go, higher = faster. Standard = 1
-	this->wavyLength = 5.0f; // how long the waves are. Lower = longer waves. standard = 1
+	this->wavyAmount = 0.3f; // how fast the waves will go, higher = faster. Standard = 1
+	this->wavyLength = 1.0f; // how long the waves are. Lower = longer waves. standard = 1
 	//fog variables
 	this->fogStart = 1.f;
 	this->fogEnd = 200.f;
