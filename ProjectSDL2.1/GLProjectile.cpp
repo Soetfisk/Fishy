@@ -34,12 +34,13 @@ GLProjectile::GLProjectile(FishBox* FSH_Loader, char* filePath, int projectileAc
 	currentState = INACTIVE;
 }
 
-GLProjectile::GLProjectile(FishBox* FSH_Loader, unsigned int modelID, int projectileActiveTime, float projectileSpeed, float projectileStrength) : GLModel(FSH_Loader, modelID)
+GLProjectile::GLProjectile(FishBox* FSH_Loader, unsigned int modelID, int projectileActiveTime, float projectileSpeed, float projectileStrength, float projectileSize) : GLModel(FSH_Loader, modelID)
 {
 	maxActiveTime = projectileActiveTime;
 	timeActive = 0.0f;
 	this->speed = projectileSpeed;
 	strength = projectileStrength;
+	transform->m_scale = glm::vec3(projectileSize);
 	velocity = glm::vec3();
 	forward = glm::vec3();
 	forwardVel = glm::vec3();
@@ -75,11 +76,7 @@ void GLProjectile::TestUpdate(float& dt)
 		if (timeActive >= maxActiveTime)			// Check if maxActiveTime was reached
 			currentState = INACTIVE;
 		else
-		{
 			transform->m_pos += forward * speed * dt;	// Move Projectile forward
-			//std::cout << forward.x << " " << forward.y << " " << forward.z << std::endl;
-		}
-	
 		break;
 	case INACTIVE:
 		break;

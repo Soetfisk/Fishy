@@ -13,9 +13,10 @@ GLProjectileHandler::GLProjectileHandler(FishBox* FSH_Loader, unsigned int model
 	this->projectileActiveTime = projectileActiveTime;
 	this->projectileSpeed = projectileSpeed;
 	this->projectileStrength = 10;
+	this->projectileSize = 1.0f;
 	for (int i = 0; i < nrOfProjectiles; i++)
-		projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed, projectileStrength));
-	currentState = SHOTGUN;
+		projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed, projectileStrength, projectileSize));
+	ChangeStateTo(BIG);
 }
 
 GLProjectileHandler::~GLProjectileHandler()
@@ -46,11 +47,30 @@ void GLProjectileHandler::Shoot(glm::vec3 forward, glm::vec3 pos, glm::vec3 rot,
 	default:
 		break;
 	}
-	
 }
 
 void GLProjectileHandler::ChangeStateTo(ProjectilePowerUpState state)
 {
+	switch (state)
+	{
+	case REGULAR:
+		projectileSize = 1.0f;
+		break;
+	case SHOTGUN:
+		
+		break;
+	case BIG:
+		projectileSize = BIG_PROJECTILE_SIZE;
+		break;
+	case FAST:
+		
+		break;
+	case STRONG:
+		
+		break;
+	default:
+		break;
+	}
 	currentState = state;
 }
 
@@ -107,23 +127,21 @@ void GLProjectileHandler::RegularShoot(glm::vec3 forward, glm::vec3 pos, glm::ve
 	if (projectilePtr != nullptr)
 		projectilePtr->Shoot(pos, forward, velocity, rot);
 	else
-		projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed));
+		projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed, projectileSize));
 }
 
 void GLProjectileHandler::ShotgunShoot(glm::vec3 forward, glm::vec3 pos, glm::vec3 rot, glm::vec3 velocity, glm::vec3 right, glm::vec3 up)
 {
-
 	GLProjectile* projectilePtr = GetInactiveProjectile();
 	if (projectilePtr == nullptr)
 	{
-		projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed, projectileStrength));
+		projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed, projectileStrength, projectileSize));
 		projectilePtr = projectiles.back();
 	}
 
-	glm::vec3 offSet = projectilePtr->GetBoundingBox().halfDimension;
 	glm::vec3 projRight = right;
 	glm::vec3 projUp = up;
-	float size = glm::length(offSet) * 1.0f;
+	float size = glm::length(projectilePtr->GetBoundingBox().halfDimension) * SHOTGUN_OFFSET;
 
 	glm::vec3 tempRight;
 	glm::vec3 tempUp;
@@ -149,7 +167,7 @@ void GLProjectileHandler::ShotgunShoot(glm::vec3 forward, glm::vec3 pos, glm::ve
 				projectilePtr->Shoot(pos + (tempRight + tempUp), forward, velocity, rot);
 			else
 			{
-				projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed, projectileStrength));
+				projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed, projectileStrength, projectileSize));
 				projectiles.back()->Shoot(pos + (tempRight + tempUp), forward, velocity, rot);
 			}	
 		}
