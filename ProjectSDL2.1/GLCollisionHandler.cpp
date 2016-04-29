@@ -10,7 +10,7 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 	{
 		distance = players.at(i)->GetTransform().GetPos() - players.at(1 - i)->GetTransform().GetPos();
 		distSqrd = glm::dot(distance,distance);
-		if (distSqrd < 50)
+		/*if (distSqrd < 50)
 		{
 			glm::vec3 pos = players.at(i)->GetTransform().GetPos();
 			glm::vec3 newVelocity(-1);
@@ -40,7 +40,7 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 			{
 				this->players.at(i)->HandleCollision(GLPlayer::MOVING, deltaTime, newVelocity);
 			}
-		}
+		}*/
 
 		for (int j = 0; j < players.at(i)->GetProjectiles().size(); j++)
 		{

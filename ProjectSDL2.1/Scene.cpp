@@ -18,6 +18,8 @@ void Scene::LoadModels()
 	for (int i = 0; i < 1; i++) {
 		this->staticMeshes.push_back(new GLModel(&FSH_Loader, Aquarium));
 	}
+	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
+	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
 	this->collisionHandler.AddNPC(NPCs);
 	this->collisionHandler.AddPlayer(players);
 	this->collisionHandler.AddModel(models);
@@ -114,6 +116,10 @@ Scene::~Scene(){
 	for (int i = 0; i < NPCs.size(); i++)
 	{
 		delete NPCs.at(i);
+	}
+	for (int i = 0; i < staticMeshes.size(); i++)
+	{
+		delete staticMeshes.at(i);
 	}
 
 	delete guih;
