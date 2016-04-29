@@ -4,10 +4,10 @@
 
 void Scene::LoadModels()
 {
-	FSH_Loader.LoadScene("Models/realfish.FSH"); //PlayerFish
+	FSH_Loader.LoadScene("Models/fishy.FSH"); //PlayerFish
 	FSH_Loader.LoadScene("Models/Goldfish.FSH"); //GoldFish
-	FSH_Loader.LoadScene("Models/Bubble1.FSH"); //Bubble
-	FSH_Loader.LoadScene("Models/testAquarium.FSH"); //Aquarium
+	FSH_Loader.LoadScene("Models/Bubble2.FSH"); //Bubble
+	FSH_Loader.LoadScene("Models/tempAquarium.FSH"); //Aquarium
 	
 	for (int i = 0; i < 2; i++) {
 		this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));
@@ -32,7 +32,7 @@ Scene::Scene() {
 	LoadModels();
 	
 	this->players.at(1)->GetTransform().SetPos(glm::vec3(3, 3, 3));
-	this->players.at(0)->GetTransform().SetPos(glm::vec3(0, 0, 0));
+	//this->players.at(0)->GetTransform().SetPos(glm::vec3(0, 0, 0));
 	this->staticMeshes.at(0)->GetTransform().SetPos(glm::vec3(0, 0, 0));
 
 	//this->staticMeshes.at(0)->GetTransform().SetRot(glm::vec3(4.71238898f, 0, 0));
@@ -126,6 +126,10 @@ Scene::~Scene(){
 	for (int i = 0; i < NPCs.size(); i++)
 	{
 		delete NPCs.at(i);
+	}
+	for (int i = 0; i < staticMeshes.size(); i++)
+	{
+		delete staticMeshes.at(i);
 	}
 
 	delete guih;
