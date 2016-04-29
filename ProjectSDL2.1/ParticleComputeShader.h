@@ -6,6 +6,16 @@ struct ParticleComputeStruct {
 	glm::vec4 velocity;
 };
 
+struct ParticleRenderingUpdateData {
+	glm::mat4* transformMatrix;
+	glm::vec4* position;
+	glm::vec4* velocity;
+};
+
+struct ParticleTestPos {
+	float x, y, z, w;
+};
+
 class ParticleComputeShader
 {
 private:
@@ -13,6 +23,7 @@ private:
 	GLuint compute_program, compute_shader;
 	glm::vec4* testPos;
 	ParticleComputeStruct* particleData;
+	ParticleTestPos* ParticleTestPos1;
 
 	GLuint CreateShader(const std::string& text, GLenum shaderType);
 	void CheckShaderError(GLuint shader, GLuint flag, bool isProgram);
@@ -21,10 +32,10 @@ public:
 	ParticleComputeShader();
 	~ParticleComputeShader();
 
-	void Initialize(EmitterType type, int nrMaxParticles, glm::mat4*& pTransformMatrices, glm::vec4* pVelocities , glm::vec4*& pos);
+	void Initialize(EmitterType type, int nrMaxParticles, ParticleRenderingUpdateData data);
 	void InitializeProjectileShader();
 
-	void Update(const float & deltaTime, int nrActiveParticles);
+	void Update(const float & deltaTime, int nrActiveParticles, ParticleRenderingUpdateData &data);
 };
 
 //g321

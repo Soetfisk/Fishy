@@ -12,7 +12,7 @@ private:
 
 	//Particle Data
 	glm::mat4* p_transMat;
-	glm::vec4** p_pos;
+	glm::vec4* p_pos;
 	glm::vec4* p_col;
 	glm::vec4* p_startCol;
 	glm::vec4* p_endCol;
@@ -21,7 +21,7 @@ private:
 	glm::vec4* p_time;
 	bool* p_alive;
 	
-	ParticleComputeStruct *particleComputePass;
+	ParticleRenderingUpdateData data;
 
 	ParticleComputeShader* emitterComputeShader;
 	GLuint transformationLocation;

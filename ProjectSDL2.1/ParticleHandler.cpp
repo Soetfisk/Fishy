@@ -16,8 +16,9 @@ ParticleHandler::~ParticleHandler(){
 void ParticleHandler::UpdateParticles(const float& deltaTime, GLShader* shader, GLCamera& camera) {
 
 	for (int i = 0; i < this->emiters.size(); i++) {
-		this->emiters.at(i)->ComputeUpdate(deltaTime);
 		this->emiters.at(i)->UpdateEmitter(deltaTime);
+		this->emiters.at(i)->ComputeUpdate(deltaTime);
+		
 	}
 
 	shader->Bind();

@@ -11,8 +11,8 @@ ParticleComputeShader::~ParticleComputeShader()
 {
 }
 
-void ParticleComputeShader::Initialize(EmitterType type, int nrMaxParticles, glm::mat4*& pTransformMatrices, glm::vec4* pVelocitiesS, glm::vec4*& pos) {
-	
+void ParticleComputeShader::Initialize(EmitterType type, int nrMaxParticles, ParticleRenderingUpdateData data) {
+
 	//glGenBuffers(1, &this->transSSbo);
 	//glBindBuffer(GL_SHADER_STORAGE_BUFFER, this->transSSbo);
 	//glBufferData(GL_SHADER_STORAGE_BUFFER, nrMaxParticles * sizeof(posParticleStruct), NULL, GL_STATIC_DRAW);
@@ -29,25 +29,62 @@ void ParticleComputeShader::Initialize(EmitterType type, int nrMaxParticles, glm
 
 
 
+	//glGenBuffers(1, &this->transSSbo);
+	//glBindBuffer(GL_SHADER_STORAGE_BUFFER, this->transSSbo);
+	//glBufferData(GL_SHADER_STORAGE_BUFFER, nrMaxParticles * sizeof(struct ParticleComputeStruct), NULL, GL_STATIC_DRAW);
+
+	//GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT;
+
+	//particleData = (struct ParticleComputeStruct*) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, nrMaxParticles * sizeof(struct ParticleComputeStruct), bufMask);
+
+	//for (int i = 0; i < nrMaxParticles; i++) {
+	//	this->particleData[i].position = glm::vec4(0);
+	//	this->particleData[i].velocity = glm::vec4(0);
+	//	this->particleData[i].transformMatrix = glm::mat4(0);
+	//}
+
+	////for (int i = 0; i < nrMaxParticles; i++) {
+	////	this->particleData[i].position = data.position[i];// p_pos[i];
+	////	this->particleData[i].velocity = data.velocity[i];
+	////	this->particleData[i].transformMatrix = data.transformMatrix[i];
+	////}
+
+
+	//glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+
+	//glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 6, this->transSSbo);
+
 	glGenBuffers(1, &this->transSSbo);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, this->transSSbo);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, nrMaxParticles * sizeof(ParticleComputeStruct), NULL, GL_STATIC_DRAW);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, nrMaxParticles * sizeof(ParticleTestPos), NULL, GL_STATIC_DRAW);
 
 	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT;
 
-	particleData = (struct ParticleComputeStruct*) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, nrMaxParticles * sizeof(ParticleComputeStruct), bufMask);
+	ParticleTestPos1 = (struct ParticleTestPos*) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, nrMaxParticles * sizeof(ParticleTestPos), bufMask);
 
+	for (int i = 0; i < 2; i++) {
+		ParticleTestPos1[i].x = 0;
+		ParticleTestPos1[i].y = 0;
+		ParticleTestPos1[i].z = 0;
+		ParticleTestPos1[i].w = 1;
+	}
+
+	//for (int i = 0; i < nrMaxParticles; i++) {
+	//	this->particleData[i].position = data.position[i];// p_pos[i];
+	//	this->particleData[i].velocity = data.velocity[i];
+	//	this->particleData[i].transformMatrix = data.transformMatrix[i];
+	//}
 
 
 	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 6, this->transSSbo);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 5, this->transSSbo);
 
 
 	compute_program = glCreateProgram();
 
 	compute_shader = CreateShader(LoadShader("ParticleProjectileComputeShader.glsl"), GL_COMPUTE_SHADER);
-
+	
 	glCompileShader(compute_shader);
 
 	int rvalue;
@@ -61,12 +98,6 @@ void ParticleComputeShader::Initialize(EmitterType type, int nrMaxParticles, glm
 	CheckShaderError(compute_program, GL_LINK_STATUS, true);
 
 
-
-
-	glUseProgram(this->compute_program);
-	glDispatchCompute(2, 1, 1);
-	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
-	
 
 	switch (type)
 	{
@@ -84,18 +115,24 @@ void ParticleComputeShader::Initialize(EmitterType type, int nrMaxParticles, glm
 	}
 }
 
-void ParticleComputeShader::Update(const float & deltaTime, int nrActiveParticles) {
+void ParticleComputeShader::Update(const float & deltaTime, int nrActiveParticles, ParticleRenderingUpdateData&data) {
 	glUseProgram(this->compute_program);
 	glDispatchCompute(nrActiveParticles, 1, 1);
 	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 
-	for (int i = 0; i < 2; i++) {
-		 if (particleData[i].position.x != 0) {
-			 int k = 0;
-		 }
-	}
+	std::cout << ParticleTestPos1[0].x << std::endl;
 
-	
+	//for (int i = 0; i < nrActiveParticles; i++) {
+	//	if (particleData[i].position.x > 1) {
+	//		int k = 0;
+	//	}
+	//}
+
+	//for (int i = 0; i < nrActiveParticles; i++) {
+	//	data.position[i] = particleData[i].position;
+	//	data.velocity[i] = particleData[i].velocity;
+	//	data.transformMatrix[i] = particleData[i].transformMatrix;
+	//}
 
 }
 

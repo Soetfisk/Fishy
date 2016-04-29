@@ -34,7 +34,7 @@ void ParticleEmitter::InstantiateSpaces() {
 
 
 	this->p_transMat = new glm::mat4[this->nrMaxParticles];
-	this->p_pos = new glm::vec4*[this->nrMaxParticles];
+	this->p_pos = new glm::vec4[this->nrMaxParticles];
 	this->p_col = new glm::vec4[this->nrMaxParticles];
 	this->p_startCol = new glm::vec4[this->nrMaxParticles];
 	this->p_endCol = new glm::vec4[this->nrMaxParticles];
@@ -44,33 +44,19 @@ void ParticleEmitter::InstantiateSpaces() {
 	this->p_alive = new bool[this->nrMaxParticles];
 
 
-	this->p_pos[0] = new glm::vec4(0, 0, 3, 1);
+	this->p_pos[0] =  glm::vec4(0, 0, 3, 1);
 	//Pos should be instantiated at emitters position, p_pos[i] = emitter.pos
 	this->p_transMat[0] = glm::mat4(1);
 
-	this->p_pos[1] =new glm::vec4(0, 2, 3, 1);
+	this->p_pos[1] = glm::vec4(0, 2, 3, 1);
 	//Pos should be instantiated at emitters position, p_pos[i] = emitter.pos
 	this->p_transMat[1] = glm::mat4(1);
 
-	
-	this->particleComputePass = new ParticleComputeStruct[this->nrMaxParticles];
+	data.position = p_pos;
+	data.transformMatrix = p_transMat;
+	data.velocity = p_vel;
 
-	for (int i = 0; i < this->nrMaxParticles; i++) {
-		//this->particleComputePass[i].transformMatrix = *&p_transMat[i];
-		//glm::mat4 tempestShit1 = particleComputePass[i].transformMatrix;
-		//glm::mat4 tempestShit2 = p_transMat[i];
-		//int k = 0;
-	}
-
-	//glm::mat4 tempShit = this->p_transMat[0];
-	//particleComputePass[0].transformMatrix = glm::mat4(2);
-
-	//tempShit = this->p_transMat[0];
-
-	
-
-	this->nrActiveParticles = 2;
-
+	nrActiveParticles = 2;
 }
 
 
@@ -122,7 +108,7 @@ void ParticleEmitter::InstantiateEmitter() {
 	InstantiateSpaces();
 
 	this->emitterComputeShader = new ParticleComputeShader();
-	this->emitterComputeShader->Initialize(this->type, this->nrMaxParticles,  this->p_transMat, this->particleVelocities, *this->p_pos);
+	this->emitterComputeShader->Initialize(this->type, this->nrMaxParticles, this->data);
 
 }
 
@@ -190,7 +176,7 @@ void ParticleEmitter::InstantiateProjectileEmitter() {
 
 
 void ParticleEmitter::ComputeUpdate(const float&deltaTime) {
-	this->emitterComputeShader->Update(deltaTime, this->nrActiveParticles);
+	this->emitterComputeShader->Update(deltaTime, this->nrActiveParticles,data);
 }
 
 void ParticleEmitter::UpdateEmitter(const float& deltaTime) {
