@@ -91,10 +91,9 @@ glm::vec3 GLModel::GetForward()
 {
 	glm::vec3 front;
 	front.x = cos(this->transform->m_rot.x) * sin(this->transform->m_rot.y);
-	front.y = sin(this->transform->m_rot.x);
+	front.y = -sin(this->transform->m_rot.x);
 	front.z = cos(this->transform->m_rot.x) * cos(this->transform->m_rot.y);
 	return glm::normalize(front);
-	//return glm::vec3(0, 0, 1);
 }
 
 glm::vec3 GLModel::GetRight()
@@ -104,6 +103,12 @@ glm::vec3 GLModel::GetRight()
 	right.y = 0;
 	right.z = cos(this->transform->m_rot.y - 3.14f / 2.0f);
 	return glm::normalize(right);
+}
+
+glm::vec3 GLModel::GetUp()
+{
+	glm::vec3 up = glm::cross(GetForward(), GetRight());
+	return glm::normalize(up);
 }
 
 AABB GLModel::GetBoundingBox()

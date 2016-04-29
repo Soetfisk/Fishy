@@ -38,7 +38,7 @@ GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID) : GLModel(FSH_Loa
 GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int projectileModelID) : GLModel(FSH_Loader, modelID)
 {
 	this->m_camera;
-	this->m_projectileHandler = new GLProjectileHandler(FSH_Loader, projectileModelID, 1, 20, 20.0f);
+	this->m_projectileHandler = new GLProjectileHandler(FSH_Loader, projectileModelID, 1, 2, 20.0f);
 	this->m_velocity = glm::vec3(0);
 
 	this->dashCurrentDuration = 0.0f;
@@ -205,9 +205,7 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 
 void GLPlayer::PlayerShoot()
 {
-	glm::vec3 forward = this->GetForward();
-	//std::cout << "PlayerForward:\t\t" << forward.x << "\t" << forward.y << "\t" << forward.z << std::endl;
-	this->m_projectileHandler->Shoot(forward, transform->m_pos, transform->m_rot, m_velocity);
+	this->m_projectileHandler->Shoot(GetForward(), transform->m_pos, transform->m_rot, m_velocity, GetRight(), GetUp());
 }
 void GLPlayer::PlayerDash()
 {
@@ -247,9 +245,9 @@ void GLPlayer::CalcVelocity(float& deltaTime)
 	}
 
 	m_velocity += forward * (float)(lastForward / (MAX_INPUT));
-	m_velocity.x = (glm::abs(m_velocity.x) < MIN_SPEED) ? 0.0f : m_velocity.x;
+	/*m_velocity.x = (glm::abs(m_velocity.x) < MIN_SPEED) ? 0.0f : m_velocity.x;
 	m_velocity.y = (glm::abs(m_velocity.y) < MIN_SPEED) ? 0.0f : m_velocity.y;
-	m_velocity.z = (glm::abs(m_velocity.z) < MIN_SPEED) ? 0.0f : m_velocity.z;
+	m_velocity.z = (glm::abs(m_velocity.z) < MIN_SPEED) ? 0.0f : m_velocity.z;*/
 }
 
 void GLPlayer::HandleDash(float & deltaTime)

@@ -24,7 +24,7 @@ GLProjectileHandler::~GLProjectileHandler()
 		delete projectiles.at(i);
 }
 
-void GLProjectileHandler::Shoot(glm::vec3 forward, glm::vec3 pos, glm::vec3 rot, glm::vec3 velocity)
+void GLProjectileHandler::Shoot(glm::vec3 forward, glm::vec3 pos, glm::vec3 rot, glm::vec3 velocity, glm::vec3 right, glm::vec3 up)
 {
 	switch (currentState)
 	{
@@ -32,7 +32,7 @@ void GLProjectileHandler::Shoot(glm::vec3 forward, glm::vec3 pos, glm::vec3 rot,
 		RegularShoot(forward, pos, rot, velocity);
 		break;
 	case SHOTGUN:
-		ShotgunShoot(forward, pos, rot, velocity);
+		ShotgunShoot(forward, pos, rot, velocity, right, up);
 		break;
 	case BIG:
 		RegularShoot(forward, pos, rot, velocity);
@@ -47,6 +47,11 @@ void GLProjectileHandler::Shoot(glm::vec3 forward, glm::vec3 pos, glm::vec3 rot,
 		break;
 	}
 	
+}
+
+void GLProjectileHandler::ChangeStateTo(ProjectilePowerUpState state)
+{
+	currentState = state;
 }
 
 void GLProjectileHandler::Update(float& dt)
@@ -73,7 +78,7 @@ std::vector<GLProjectile*> GLProjectileHandler::GetActiveProjectiles()
 
 	for (int i = 0; i < projectiles.size(); i++)
 	{
-		if (projectiles.at(i)->isActive())
+		if (projectiles.at(i)->IsActive())
 		{
 			result.push_back(projectiles.at(i));
 		}
@@ -105,50 +110,48 @@ void GLProjectileHandler::RegularShoot(glm::vec3 forward, glm::vec3 pos, glm::ve
 		projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed));
 }
 
-void GLProjectileHandler::ShotgunShoot(glm::vec3 forward, glm::vec3 pos, glm::vec3 rot, glm::vec3 velocity)
+void GLProjectileHandler::ShotgunShoot(glm::vec3 forward, glm::vec3 pos, glm::vec3 rot, glm::vec3 velocity, glm::vec3 right, glm::vec3 up)
 {
 
 	GLProjectile* projectilePtr = GetInactiveProjectile();
-	if(projectilePtr != nullptr)
-		projectilePtr->Shoot(pos, forward, velocity, rot);
-	else
+	if (projectilePtr == nullptr)
 	{
 		projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed, projectileStrength));
-		projectiles.back()->Shoot(pos, forward, velocity, rot);
 		projectilePtr = projectiles.back();
 	}
+
 	glm::vec3 offSet = projectilePtr->GetBoundingBox().halfDimension;
-	glm::vec3 projRight = projectilePtr->GetRight();
+	glm::vec3 projRight = right;
+	glm::vec3 projUp = up;
 	float size = glm::length(offSet) * 1.0f;
 
 	glm::vec3 tempRight;
-	for (float x = -1; x < 2; x++) {
-		for (float y = -1; y < 2; y++) {
-			if (x != 0 && y != 0) {
-				tempRight = glm::vec3(projRight.x * x, projRight.y * y, projRight.z);
-				projectilePtr = GetInactiveProjectile();
-				if (projectilePtr != nullptr)
-					projectilePtr->Shoot(pos + (tempRight*size), forward, velocity, rot);
-				else
-					projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed, projectileStrength));
-				projectiles.back()->Shoot(pos + (tempRight*size), forward, velocity, rot);
-			}
+	glm::vec3 tempUp;
 
+	for (float x = -1; x < 2; x++)
+	{
+		for (float y = -1; y < 2; y++)
+		{
+			tempRight = glm::vec3(projRight.x, projRight.y, projRight.z);
+			tempUp = glm::vec3(projUp.x, projUp.y, projUp.z);
 			
+			if (x != 0)
+				tempRight *= size * x;
+			else
+				tempRight *= 0;
+			if (y != 0)
+				tempUp *= size * y;
+			else
+				tempUp *= 0;
+		
+			projectilePtr = GetInactiveProjectile();
+			if (projectilePtr != nullptr)
+				projectilePtr->Shoot(pos + (tempRight + tempUp), forward, velocity, rot);
+			else
+			{
+				projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed, projectileStrength));
+				projectiles.back()->Shoot(pos + (tempRight + tempUp), forward, velocity, rot);
+			}	
 		}
 	}
-
-	for (float i = -1; i < 2; i+=2) {
-		projectilePtr = GetInactiveProjectile();
-		if (projectilePtr != nullptr)
-			projectilePtr->Shoot(pos + (projRight*i*size) , forward, velocity, rot);
-		else
-			projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed, projectileStrength));
-			projectiles.back()->Shoot(pos + (projRight*i*size), forward, velocity, rot);
-	}
-
-	
-
-	
-
 }
