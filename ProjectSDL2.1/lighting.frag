@@ -36,21 +36,15 @@ uniform sampler2D distTexture;
 uniform sampler2D ambientTexture;
 uniform sampler2D specularTexture;
 uniform vec3 ViewPos;
+uniform float fogEndFloat;
+uniform float fogStartFloat;
+uniform vec3 fogColorVector;
 
 vec3 CalcDirLight(Light light, vec3 normal, vec3 viewDir, vec3 FragPos);
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir); 
 
 void main()
 {
-	PointLight l;
-	l.position = vec3(3, 0, 3);
-	l.constant = 1.0f;
-	l.linear =  0.14f;
-	l.quadratic = 0.07;
-	l.ambient = vec3(0.25f, 0.15, 0.04);
-	l.diffuse = vec3(1.0f, 0.58, 0.16);
-	l.specular = vec3(0.5f, 0.0f, 0.0f);
-
 	vec3 Output = vec3(0);
 
 	vec3 FragPos = texture(posTexture, frag_uv).rgb;
@@ -64,14 +58,11 @@ void main()
 		Output += CalcPointLight(pointLights[i], Normal, FragPos, viewDir);
 
 	float fogFactor = 0;
-	float fogEnd = 100;
-	float fogStart = 30;
-	vec3 fogColor = vec3(0.1,0.1,0.1);
 	//68
-	fogFactor = (fogEnd-texture(distTexture, frag_uv).r) / (fogEnd - fogStart);
+	fogFactor = (fogEndFloat-texture(distTexture, frag_uv).r) / (fogEndFloat - fogStartFloat);
 	fogFactor = clamp(fogFactor,0.0,1.0);
 
-	Output = clamp(mix(fogColor, Output, fogFactor),0.0,1.0);
+	Output = clamp(mix(fogColorVector, Output, fogFactor),0.0,1.0);
 
 	color = vec4(Output, 1);
 }
