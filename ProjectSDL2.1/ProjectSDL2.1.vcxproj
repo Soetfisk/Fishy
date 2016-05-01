@@ -38,6 +38,9 @@
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="obj_loader.cpp" />
+    <ClCompile Include="ParticleComputeShader.cpp" />
+    <ClCompile Include="ParticleEmitter.cpp" />
+    <ClCompile Include="ParticleHandler.cpp" />
     <ClCompile Include="Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -64,6 +67,9 @@
     <ClInclude Include="GLWindow.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="obj_loader.h" />
+    <ClInclude Include="ParticleComputeShader.h" />
+    <ClInclude Include="ParticleEmitter.h" />
+    <ClInclude Include="ParticleHandler.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SphereBS.h" />
   </ItemGroup>
@@ -71,6 +77,10 @@
     <None Include="blueFilter.glsl" />
     <None Include="lighting.frag" />
     <None Include="lighting.vert" />
+    <None Include="Particle.frag" />
+    <None Include="Particle.geom" />
+    <None Include="Particle.vert" />
+    <None Include="ParticleProjectileComputeShader.glsl" />
     <None Include="pass.frag" />
     <None Include="pass.vert" />
     <None Include="post.frag" />
