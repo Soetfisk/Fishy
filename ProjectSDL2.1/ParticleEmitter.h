@@ -1,7 +1,6 @@
 #ifndef PARTICLEEMITTER
 #define PARTICLEEMITTER
 #include "GLUtil.h"
-#include "Particle.h"
 #include "ParticleComputeShader.h"
 
 

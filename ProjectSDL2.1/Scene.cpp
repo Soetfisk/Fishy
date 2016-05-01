@@ -92,6 +92,9 @@ Scene::Scene() {
 	dirLight.specular = glm::vec3(0.25, 0.61, 1);
 	dirLight.dir = glm::vec3(0.01, 1, 0.01);
 
+
+	//particleHandler = new ParticleHandler()
+
 	this->deltaTime = 0;
 	// border shader variables
 	this->borderThreshold1 = 0.9f; // variable one must be the bigger otherwise the second will just overwrite it

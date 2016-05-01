@@ -23,6 +23,15 @@
 //FSH includes
 #include <FishBox.h>
 
+//Particle
+enum EmitterType
+{
+	PROJECTILE,
+	PLAYERFOLLOW,
+	STATICSTREAM,
+	EMITERTYPENR
+};
+
 //Structs
 
 //WINDOW

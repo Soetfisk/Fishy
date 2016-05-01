@@ -15,6 +15,7 @@
 #include "GUI.h"
 #include "GLGUIHandler.h"
 #include "GLCollisionHandler.h"
+#include "ParticleHandler.h"
 
 class Scene {
 private:
@@ -86,6 +87,7 @@ private:
 	GUI* guiTest;
 	glm::mat4 projection;
 	GLGUIHandler* guih;
+	ParticleHandler* particleHandler;
 
 private:
 	void LoadModels();
