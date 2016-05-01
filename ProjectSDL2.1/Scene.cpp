@@ -49,6 +49,7 @@ Scene::Scene() {
 	shaders[WAVY] = new GLShader("wavy");
 	shaders[BORDER] = new GLShader("post");
 	shaders[LIGHTING] = new GLShader("lighting");
+	shaders[PARTICLE] = new GLShader("Particle", true);
 
 	guih = new GLGUIHandler(*shaders[TEXT]);
 
@@ -93,7 +94,8 @@ Scene::Scene() {
 	dirLight.dir = glm::vec3(0.01, 1, 0.01);
 
 
-	//particleHandler = new ParticleHandler()
+	particleHandler = new ParticleHandler(shaders[PARTICLE]);
+	particleHandler->AddEmiter(EmitterType::PROJECTILE, glm::vec4(0, 1, 3, 1));
 
 	this->deltaTime = 0;
 	// border shader variables
@@ -142,14 +144,15 @@ Scene::~Scene(){
 	}
 
 	delete guih;
+	delete this->particleHandler;
 }
 
 void Scene::Update(float& deltaTime) {
 	this->deltaTime = deltaTime;
 
 	guih->Update(deltaTime);
-
 	this->collisionHandler.CheckCollisions(deltaTime);
+	this->particleHandler->UpdateParticles(deltaTime);
 
 	for (int i = 0; i < this->players.size(); i++) {
 		this->players.at(i)->Update(GLPlayer::NOTHING ,glm::vec3(deltaTime));
@@ -200,6 +203,9 @@ void Scene::DrawScene() {
 		{
 			staticMeshes.at(i)->Draw(*shaders[MODELS]);
 		}
+
+		this->particleHandler->DrawParticles(shaders[PARTICLE], players.at(i)->GetCamera());
+
 		this->frameBuffer->UnbindFrameBuffer();
 		this->frameBuffer2->BindFrameBuffer();
 		shaders[LIGHTING]->Bind();

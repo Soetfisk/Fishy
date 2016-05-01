@@ -28,6 +28,7 @@ private:
 		TEXT,
 		WAVY,
 		BORDER,
+		PARTICLE,
 		NUM_SHADERS
 	};
 	enum

@@ -12,7 +12,8 @@ public:
 	ParticleHandler(GLShader* renderShader);
 	~ParticleHandler();
 
-	void UpdateParticles(const float& deltaTime, GLShader* shader, GLCamera& camera);
+	void UpdateParticles(const float& deltaTime);
+	void DrawParticles(GLShader* shader, GLCamera& camera);
 	void AddEmiter(EmitterType type, glm::mat4*& transformMatrix);
 	void AddEmiter(EmitterType type, glm::vec4 position);
 
