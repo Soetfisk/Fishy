@@ -12,6 +12,8 @@ private:
 	//Particle Data
 	glm::mat4* p_transMat;
 	glm::vec4* p_pos;
+	glm::vec4* p_scale;
+	glm::vec4* p_rot;
 	glm::vec4* p_vel;
 	glm::vec4* p_acc;
 	float* p_ctime;
@@ -37,6 +39,8 @@ private:
 	int nrActiveParticles;
 	int nrMaxParticles;
 	float spawnTimer;
+	float emiterAwakeTime;
+	float emiterTimeSinceLastParticle;
 
 	void swapData(int fromID, int destinationID);
 	void deactivateParticleAt(int ID);

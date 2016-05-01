@@ -14,9 +14,10 @@ ParticleHandler::~ParticleHandler(){
 }
 
 void ParticleHandler::DrawParticles(GLShader* shader, GLCamera& camera) {
-	shader->Bind();
-	shader->Update(camera);
+	
 	for (int i = 0; i < this->emiters.size(); i++) {
+		shader->Bind();
+		shader->Update(camera);
 		this->emiters.at(i)->Draw();
 		//this->emiters.at(i).Update(deltaTime);
 	}

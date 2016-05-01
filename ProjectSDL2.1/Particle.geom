@@ -16,7 +16,7 @@ out vec2 Vertex_UV;
 void main(){
 	
 	for(int i = 0; i<4;i++){
-		vec4 eyePos  =ViewMatrix *  gl_in[0].gl_Position;
+		vec4 eyePos  =ViewMatrix *  gl_in[0].gl_Position ;
 		eyePos.xy += corners[i] - vec2(.5);
 		gl_Position = ProjectionMatrix * eyePos;
 		Vertex_UV = corners[i];

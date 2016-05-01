@@ -14,12 +14,6 @@ ParticleEmitter::ParticleEmitter(EmitterType type, glm::vec4 position, GLuint tr
 	this->type = type;
 	this->transformationLocation = transformMatrixLocation;
 	this->positionEmitter = position;
-
-
-
-	
-
-	
 	InstantiateEmitter();
 	
 	InstantiateRenderShader();
@@ -30,10 +24,12 @@ ParticleEmitter::ParticleEmitter(EmitterType type, glm::vec4 position, GLuint tr
 
 void ParticleEmitter::spawnParticle()
 {
+	glm::vec4 ranStuff = (glm::vec4(rand() % 10, rand() % 10, rand() % 10, 0)*.1f);
 	this->p_transMat[nrActiveParticles] = glm::mat4(1);
-	this->p_pos[nrActiveParticles] = this->positionEmitter + glm::vec4(0, nrActiveParticles * 2, 0, 0);;
-		
-	this->p_vel[nrActiveParticles] = this->particleStartVelocity;
+	this->p_pos[nrActiveParticles] = this->positionEmitter + ranStuff;
+	this->p_scale[nrActiveParticles] = glm::vec4(1);
+	this->p_rot[nrActiveParticles] = glm::vec4(1);
+	this->p_vel[nrActiveParticles] = this->particleStartVelocity + ranStuff;
 	this->p_acc[nrActiveParticles] = this->particleStartAcceleration;
 	this->p_ctime[nrActiveParticles] = 0;
 	this->p_ltime[nrActiveParticles] = this->particleStartLifeTime;
@@ -48,6 +44,8 @@ void ParticleEmitter::InstantiateSpaces() {
 
 	this->p_transMat = new glm::mat4[this->nrMaxParticles];
 	this->p_pos = new glm::vec4[this->nrMaxParticles];
+	this->p_scale = new glm::vec4[this->nrMaxParticles];
+	this->p_rot = new glm::vec4[this->nrMaxParticles];
 	this->p_vel = new glm::vec4[this->nrMaxParticles];
 	this->p_acc = new glm::vec4[this->nrMaxParticles];
 	this->p_ctime = new float[this->nrMaxParticles];
@@ -56,24 +54,13 @@ void ParticleEmitter::InstantiateSpaces() {
 
 	nrActiveParticles = 0;
 
-	for (int i = 0; i < this->nrMaxParticles; i++) {
-		spawnParticle();
-	}
-
-	
-
-	
-	//spawnParticle();
-
-	//this->p_pos[0] =  glm::vec4(0, 0, 3, 1);
-	////Pos should be instantiated at emitters position, p_pos[i] = emitter.pos
-	//this->p_transMat[0] = glm::mat4(1);
-
-	//this->p_pos[1] = glm::vec4(0, 2, 3, 1);
-	////Pos should be instantiated at emitters position, p_pos[i] = emitter.pos
-	//this->p_transMat[1] = glm::mat4(1);
+	//for (int i = 0; i < this->nrMaxParticles; i++) {
+	//	spawnParticle();
+	//}
 
 	data.position = p_pos;
+	data.rotation = p_rot;
+	data.scaling = p_scale;
 	data.transformMatrix = p_transMat;
 	data.velocity = p_vel;
 
@@ -87,6 +74,8 @@ ParticleEmitter::~ParticleEmitter()
 	delete emitterComputeShader;
 	delete[]this->p_transMat;
 	delete[]this->p_pos;
+	delete[]this->p_scale;
+	delete[]this->p_rot;
 	delete[]this->p_vel;
 	delete[]this->p_acc;
 	delete[] this->p_ctime;
@@ -99,20 +88,11 @@ ParticleEmitter::~ParticleEmitter()
 
 }
 
-//void ParticleEmitter::deleteParticleAtID(unsigned int ID) {
-//
-//	delete particles[ID].p_transMat;
-//	delete particles[ID].p_pos;
-//	delete particles[ID].p_col;
-//	delete particles[ID].p_startCol;
-//	delete particles[ID].p_endCol;
-//	delete particles[ID].p_vel;
-//	delete particles[ID].p_acc;
-//	delete particles[ID].p_time;
-//	delete particles[ID].p_alive;
-//}
 
 void ParticleEmitter::InstantiateEmitter() {
+	
+	this->emiterAwakeTime = 0.f;
+	this->emiterTimeSinceLastParticle = 0.f;
 
 	switch (this->type)
 	{
@@ -124,6 +104,8 @@ void ParticleEmitter::InstantiateEmitter() {
 		break;
 	}
 
+	
+	
 	InstantiateSpaces();
 
 	this->emitterComputeShader = new ParticleComputeShader();
@@ -187,11 +169,11 @@ void ParticleEmitter::InstantiateRenderShader() {
 void ParticleEmitter::InstantiateProjectileEmitter() {
 	this->directionFromObject = glm::vec3(0, 0, -1);
 	this->distanceFromObject = 2;
-	this->nrMaxParticles = 50;
+	this->nrMaxParticles = 100;
 	this->spawnTimer = .1f;
-	this->particleStartVelocity = glm::vec4(0, 0, 1, 1);
-	this->particleStartAcceleration = glm::vec4(0, 0, .1f, 0);
-	this->particleStartLifeTime = 2.0f;
+	this->particleStartVelocity = glm::vec4(1, 0, 0, 1);
+	this->particleStartAcceleration = glm::vec4(.1, 0, 0, 0);
+	this->particleStartLifeTime = 6.f;
 
 
 	//this->nrActiveParticles = 0;
@@ -220,11 +202,6 @@ void ParticleEmitter::updateCompute(const float &deltaTime) {
 }
 
 void ParticleEmitter::updateParticles(const float& deltaTime) {
-	if (this->nrActiveParticles == 0) {
-		for (int i = 0; i < this->nrMaxParticles; i++) {
-			spawnParticle();
-		}
-	}
 
 	for (int i = 0; i < this->nrActiveParticles; i++) {
 		this->p_ctime[i] += deltaTime;
@@ -233,6 +210,17 @@ void ParticleEmitter::updateParticles(const float& deltaTime) {
 			
 		}
 	}
+
+	this->emiterTimeSinceLastParticle += deltaTime;
+
+	if (this->emiterTimeSinceLastParticle >= this->spawnTimer) {
+		if (this->nrActiveParticles < this->nrMaxParticles) {
+			spawnParticle();
+			this->emiterTimeSinceLastParticle = 0.f;
+		}
+		
+	}
+
 }
 
 void ParticleEmitter::deactivateParticleAt(int ID) {
