@@ -17,7 +17,7 @@ void main(){
 	
 	for(int i = 0; i<4;i++){
 		vec4 eyePos  =ViewMatrix *  gl_in[0].gl_Position ;
-		eyePos.xy += corners[i] - vec2(.5);
+		eyePos.xy += (corners[i] - vec2(.5))*.5;
 		gl_Position = ProjectionMatrix * eyePos;
 		Vertex_UV = corners[i];
 		//gl_Position = ProjectionMatrix* v_transMatrix[0] * eyePos;
