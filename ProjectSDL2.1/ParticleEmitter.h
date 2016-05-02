@@ -8,15 +8,24 @@
 class ParticleEmitter
 {
 private:
+
+	enum ParticleVB
+	{
+		POSITION_VB,
+		SIZE_VB,
+
+		NUM_BUFFERS
+	};
+
 	EmitterType type;
 
 	//Particle Data
 	glm::mat4* p_transMat;
 	glm::vec4* p_pos;
-	glm::vec4* p_scale;
 	glm::vec4* p_rot;
 	glm::vec4* p_vel;
 	glm::vec4* p_acc;
+	float* p_scale;
 	float* p_ctime;
 	float* p_ltime;
 	bool* p_alive;
@@ -28,7 +37,9 @@ private:
 
 	glm::vec4 positionEmitter;
 	GLuint pe_VertexArrayObject;
-	GLuint pe_posBuf, pe_transBuf;
+	GLuint pe_VertexArrayBuffers[NUM_BUFFERS];
+
+	GLuint pe_posBuf, pe_scaleBuf;
 
 
 	float distanceFromObject;
@@ -36,12 +47,14 @@ private:
 	glm::vec4 particleStartVelocity;
 	glm::vec4 particleStartAcceleration;
 	float particleStartLifeTime;
+	float particleScale;
 
 	int nrActiveParticles;
 	int nrMaxParticles;
 	float spawnTimer;
 	float emiterAwakeTime;
 	float emiterTimeSinceLastParticle;
+	
 	
 
 	void swapData(int fromID, int destinationID);

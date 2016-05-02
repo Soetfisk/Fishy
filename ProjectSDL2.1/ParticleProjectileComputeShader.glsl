@@ -4,11 +4,11 @@
 #extension GL_ARB_shader_storage_buffer_object : enable
 
 struct Particle{
-	mat4 transformMatrix;
 	vec4 position;
-	vec4 scaling;
-	vec4 rotation;
-	vec4 velocities;
+	vec4 velocity;
+	vec4 acceleration;
+	float scale;
+	bool alive;
 };
 
 
@@ -22,43 +22,30 @@ uniform float DT;
 
 layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
 
-vec3 Bounce(vec3 vin, vec3 n){
-	vec3 vout = reflect(vin, n);
-	return vout;
-}
-
-vec3 BounceSphere(vec3 p, vec3 v, vec4 s){
-	vec3 n = normalize(p-s.xyz);
-	return Bounce(v, n);
-}
-
-bool IsInsideSphere(vec3 p, vec4 s){
-	float r = length(p-s.xyz);
-	return (r<s.w);
-}
-
 void main(){
-	const vec4 SPHERE = vec4( -100., -800., 0., 600. ); // x, y, z, r 
+	
+	if(alive == true){
+		const vec4 SPHERE = vec4( -100., -800., 0., 600. ); // x, y, z, r 
 
-	const vec3 G = vec3(0.f,-9.8f,0.f);
+		const vec3 G = vec3(0.f,-9.8f,0.f);
 	
 
-	uint gid = gl_GlobalInvocationID.x;
-	vec3 p = particles[gid].position.xyz;
-	vec3 v = particles[gid].velocities.xyz;
+		uint gid = gl_GlobalInvocationID.x;
+		vec3 p = particles[gid].position.xyz;
+		vec3 v = particles[gid].velocity.xyz;
 
-	vec3 pp = p + (v*DT) + .5*DT*DT*G;
-	vec3 vp = v+ G*DT;
+		vec3 pp = p + (v*DT) + .5*DT*DT*G;
+		vec3 vp = v+ G*DT;
 
+
+		particles[gid].position.xyz = pp;
+		particles[gid].velocity.xyz = vp;
+	}
+	else{
+		particles[gid].position = particles[gid].position;
+		particles[gid].velocity = particles[gid].velocity;
+	}
 	
-	////if(IsInsideSphere(pp, SPHERE)){
-	//	vp = BounceSphere(p, v, SPHERE);
-	//	pp = p + (v*DT) + .5*DT*DT*G;
-	////}
-
-
-	particles[gid].position.xyz = pp;
-	particles[gid].velocities.xyz = vp;
 
 }
 

@@ -6,6 +6,12 @@
 class ParticleHandler
 {
 private:
+
+	enum ParticleTextureType {
+		TEX_PROJECTILE,
+		NUMTEXTURES
+	};
+
 	std::vector<ParticleEmitter*> emiters;
 	GLuint transformationLocation;
 	FishBox *FSH_LoaderReference;

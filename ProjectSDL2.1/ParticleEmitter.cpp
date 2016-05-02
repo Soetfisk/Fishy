@@ -39,8 +39,8 @@ void ParticleEmitter::spawnParticle()
 {
 	glm::vec4 ranStuff = (glm::vec4(rand() % 10, rand() % 10, rand() % 10, 0)*.1f);
 	this->p_transMat[nrActiveParticles] = glm::mat4(1);
-	this->p_pos[nrActiveParticles] = this->positionEmitter + ranStuff;
-	this->p_scale[nrActiveParticles] = glm::vec4(1);
+	this->p_pos[nrActiveParticles] = this->positionEmitter; //+ ranStuff;
+	this->p_scale[nrActiveParticles] = this->particleScale;
 	this->p_rot[nrActiveParticles] = glm::vec4(1);
 	this->p_vel[nrActiveParticles] = this->particleStartVelocity + ranStuff;
 	this->p_acc[nrActiveParticles] = this->particleStartAcceleration;
@@ -57,10 +57,11 @@ void ParticleEmitter::InstantiateSpaces() {
 
 	this->p_transMat = new glm::mat4[this->nrMaxParticles];
 	this->p_pos = new glm::vec4[this->nrMaxParticles];
-	this->p_scale = new glm::vec4[this->nrMaxParticles];
+	
 	this->p_rot = new glm::vec4[this->nrMaxParticles];
 	this->p_vel = new glm::vec4[this->nrMaxParticles];
 	this->p_acc = new glm::vec4[this->nrMaxParticles];
+	this->p_scale = new float[this->nrMaxParticles];
 	this->p_ctime = new float[this->nrMaxParticles];
 	this->p_ltime = new float[this->nrMaxParticles];
 	this->p_alive = new bool[this->nrMaxParticles];
@@ -72,13 +73,11 @@ void ParticleEmitter::InstantiateSpaces() {
 	//}
 
 	data.position = p_pos;
-	data.rotation = p_rot;
-	data.scaling = p_scale;
-	data.transformMatrix = p_transMat;
 	data.velocity = p_vel;
+	data.scale = p_scale;
+	data.acceleration = p_acc;
+	data.alive = p_alive;
 
-	FishBox* box = new FishBox();
-	FSHData::texture *texture = box->loadTexure("BubbleTest.png");
 }
 
 
@@ -129,34 +128,61 @@ void ParticleEmitter::InstantiateEmitter() {
 
 void ParticleEmitter::InstantiateRenderShader() {
 
+
+
+
+
 	glGenVertexArrays(1, &this->pe_VertexArrayObject);
 	glBindVertexArray(this->pe_VertexArrayObject);
-
-	glGenBuffers(1, &pe_posBuf);
-	glBindBuffer(GL_ARRAY_BUFFER, pe_posBuf);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 4 * this->nrMaxParticles, nullptr, GL_STREAM_DRAW);
 	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
 
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, (4)*sizeof(float), (void *)((0)*sizeof(float)));
+	glGenBuffers(NUM_BUFFERS, pe_VertexArrayBuffers);
+	glBindBuffer(GL_ARRAY_BUFFER, pe_VertexArrayBuffers[POSITION_VB]);
+	glBufferData(GL_ARRAY_BUFFER, this->nrMaxParticles * (sizeof(float) * 4), p_pos, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, pe_VertexArrayBuffers[SIZE_VB]);
+	glBufferData(GL_ARRAY_BUFFER, this->nrMaxParticles * sizeof(float), p_scale, GL_STATIC_DRAW);
+	glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glBindVertexArray(0);
+
+	//glGenBuffers(1, &pe_posBuf);
+	//glBindBuffer(GL_ARRAY_BUFFER, pe_posBuf);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 4 * this->nrMaxParticles, nullptr, GL_STREAM_DRAW);
+	//glEnableVertexAttribArray(0);
+
+	//glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, (4)*sizeof(float), (void *)((0)*sizeof(float)));
+
+	//glGenBuffers(1, &pe_scaleBuf);
+	//glBindBuffer(GL_ARRAY_BUFFER, pe_scaleBuf);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * this->nrMaxParticles, nullptr, GL_STREAM_DRAW);
+	//glEnableVertexAttribArray(0);
+
+	//glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, sizeof(float), (void *)((0)*sizeof(float)));
 
 
-	glGenBuffers(1, &pe_transBuf);
-	glBindBuffer(GL_ARRAY_BUFFER, pe_transBuf);
-	int m_location = 1;
-	for (unsigned int i = 0; i < 4; i++) {
-		GLuint index = m_location + i;
-		GLsizei stride = sizeof(glm::mat4);
-		GLsizei offset = (sizeof(GLfloat)*i * 4);
+	//glBindVertexArray(0);
+	//glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-		glEnableVertexAttribArray(index);
+	//glGenBuffers(1, &pe_transBuf);
+	//glBindBuffer(GL_ARRAY_BUFFER, pe_transBuf);
+	//int m_location = 1;
+	//for (unsigned int i = 0; i < 4; i++) {
+	//	GLuint index = m_location + i;
+	//	GLsizei stride = sizeof(glm::mat4);
+	//	GLsizei offset = (sizeof(GLfloat)*i * 4);
 
-		glVertexAttribPointer(index,
-			4, GL_FLOAT, GL_FALSE,
-			stride,
-			(const GLvoid*)offset);
+	//	glEnableVertexAttribArray(index);
 
-		//glVertexAttribDivisor(index, 0);
-	}
+	//	glVertexAttribPointer(index,
+	//		4, GL_FLOAT, GL_FALSE,
+	//		stride,
+	//		(const GLvoid*)offset);
+
+	//	//glVertexAttribDivisor(index, 0);
+	//}
 
 	//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 16 * this->nrMaxParticles, nullptr, GL_STREAM_DRAW);
 	//glEnableVertexAttribArray(1);
@@ -165,8 +191,6 @@ void ParticleEmitter::InstantiateRenderShader() {
 
 
 
-	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 
 	//glGenBuffers(1, &pe_VertexArrayBuffer);
@@ -188,6 +212,7 @@ void ParticleEmitter::InstantiateProjectileEmitter() {
 	this->particleStartVelocity = glm::vec4(1, 0, 0, 1);
 	this->particleStartAcceleration = glm::vec4(.1, 0, 0, 0);
 	this->particleStartLifeTime = 6.f;
+	this->particleScale = .1f;
 
 
 	//this->nrActiveParticles = 0;
@@ -197,13 +222,22 @@ void ParticleEmitter::InstantiateProjectileEmitter() {
 
 void ParticleEmitter::updateDrawData() {
 	if (this->nrActiveParticles > 0) {
-		glBindBuffer(GL_ARRAY_BUFFER, this->pe_posBuf);
-		float* ptr = (float*)(this->p_pos);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, this->nrActiveParticles * sizeof(float) * 4, ptr);
 
-		glBindBuffer(GL_ARRAY_BUFFER, this->pe_transBuf);
+		glBindBuffer(GL_ARRAY_BUFFER, pe_VertexArrayBuffers[POSITION_VB]);
+		glBufferData(GL_ARRAY_BUFFER, this->nrMaxParticles * (sizeof(float) * 4), p_pos, GL_STATIC_DRAW);
+		//glBindBuffer(GL_ARRAY_BUFFER, this->pe_posBuf);
+		//float* ptr = (float*)(this->p_pos);
+		//glBufferSubData(GL_ARRAY_BUFFER, 0, this->nrActiveParticles * sizeof(float) * 4, ptr);
 
-		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4)*this->nrActiveParticles, &this->p_transMat[0][0], GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, pe_VertexArrayBuffers[SIZE_VB]);
+		glBufferData(GL_ARRAY_BUFFER, this->nrMaxParticles * sizeof(float), p_scale, GL_STATIC_DRAW);
+		//glBindBuffer(GL_ARRAY_BUFFER, this->pe_scaleBuf);
+		//ptr = (float*)(this->p_scale);
+		//glBufferSubData(GL_ARRAY_BUFFER, 0, this->nrActiveParticles * sizeof(float), ptr);
+
+		//glBindBuffer(GL_ARRAY_BUFFER, this->pe_transBuf);
+
+		//glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4)*this->nrActiveParticles, &this->p_transMat[0][0], GL_STATIC_DRAW);
 		//ptr = (float*)(this->p_transMat);
 		//glBufferSubData(GL_ARRAY_BUFFER, 0, this->nrActiveParticles * sizeof(float) * 16, ptr);
 
@@ -231,6 +265,7 @@ void ParticleEmitter::updateParticles(const float& deltaTime) {
 		if (this->nrActiveParticles < this->nrMaxParticles) {
 			spawnParticle();
 			this->emiterTimeSinceLastParticle = 0.f;
+			
 		}
 		
 	}
@@ -279,8 +314,9 @@ void ParticleEmitter::UpdateEmitter(const float& deltaTime) {
 void ParticleEmitter::Draw(GLShader* shader) {
 
 	GLuint INDEX = shader->GetUnifromLocation("particle_tex");
+	GLuint testing = GL_TEXTURE0 + 0;
 	glActiveTexture(GL_TEXTURE0+0);
-	glUniform1i(shader->GetUnifromLocation("particle_tex"), GL_TEXTURE0+0);
+	glUniform1i(shader->GetUnifromLocation("particle_tex"), 0);
 	glBindTexture(GL_TEXTURE_2D, this->textureID);
 	glBindVertexArray(this->pe_VertexArrayObject);
 

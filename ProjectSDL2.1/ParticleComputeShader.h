@@ -1,19 +1,20 @@
 #include "GLUtil.h"
 
 struct ParticleComputeStruct {
-	glm::mat4 transformMatrix;
 	glm::vec4 position;
-	glm::vec4 scaling;
-	glm::vec4 rotation;
 	glm::vec4 velocity;
+	glm::vec4 acceleration;
+	float scale;
+	bool alive;
+
 };
 
 struct ParticleRenderingUpdateData {
-	glm::mat4* transformMatrix;
 	glm::vec4* position;
-	glm::vec4* scaling;
-	glm::vec4* rotation;
 	glm::vec4* velocity;
+	glm::vec4* acceleration;
+	float* scale;
+	bool *alive;
 };
 
 struct ParticleTestPos {
