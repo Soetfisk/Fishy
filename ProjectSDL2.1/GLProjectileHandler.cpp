@@ -6,7 +6,7 @@ GLProjectileHandler::GLProjectileHandler()
 	projectileSpeed = 0.0f;
 }
 
-GLProjectileHandler::GLProjectileHandler(FishBox* FSH_Loader, unsigned int modelID, int nrOfProjectiles, int projectileActiveTime, float projectileSpeed)
+GLProjectileHandler::GLProjectileHandler(FishBox* FSH_Loader, unsigned int modelID, int nrOfProjectiles, int projectileActiveTime, float projectileSpeed, float cooldown)
 {
 	this->FSH_Loader = FSH_Loader;
 	this->modelID = modelID;
@@ -14,6 +14,9 @@ GLProjectileHandler::GLProjectileHandler(FishBox* FSH_Loader, unsigned int model
 	this->projectileSpeed = projectileSpeed;
 	this->projectileStrength = 10.0f;
 	this->projectileSize = 1.0f;
+	this->cooldownDuration = cooldown;
+	this->cooldownCounter = 0.0f;
+	this->cooldown = false;
 	for (int i = 0; i < nrOfProjectiles; i++)
 		projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed, projectileStrength, projectileSize));
 	currentState = REGULAR;
@@ -27,25 +30,29 @@ GLProjectileHandler::~GLProjectileHandler()
 
 void GLProjectileHandler::Shoot(glm::vec3 forward, glm::vec3 pos, glm::vec3 rot, glm::vec3 velocity, glm::vec3 right, glm::vec3 up)
 {
-	switch (currentState)
+	if (!cooldown)
 	{
-	case REGULAR:
-		RegularShoot(forward, pos, rot, velocity);
-		break;
-	case SHOTGUN:
-		ShotgunShoot(forward, pos, rot, velocity, right, up);
-		break;
-	case BIG:
-		RegularShoot(forward, pos, rot, velocity);
-		break;
-	case FAST:
-		RegularShoot(forward, pos, rot, velocity);
-		break;
-	case STRONG:
-		RegularShoot(forward, pos, rot, velocity);
-		break;
-	default:
-		break;
+		switch (currentState)
+		{
+		case REGULAR:
+			RegularShoot(forward, pos, rot, velocity);
+			break;
+		case SHOTGUN:
+			ShotgunShoot(forward, pos, rot, velocity, right, up);
+			break;
+		case BIG:
+			RegularShoot(forward, pos, rot, velocity);
+			break;
+		case FAST:
+			RegularShoot(forward, pos, rot, velocity);
+			break;
+		case STRONG:
+			RegularShoot(forward, pos, rot, velocity);
+			break;
+		default:
+			break;
+		}
+		cooldown = true;
 	}
 }
 
@@ -79,6 +86,15 @@ void GLProjectileHandler::Update(float& dt)
 	GLProjectile* temp = nullptr;
 	for (int i = 0; i < projectiles.size(); i++)
 		projectiles.at(i)->TestUpdate(dt);
+	if (cooldown)
+	{
+		cooldownCounter += dt;
+		if (cooldownCounter >= cooldownDuration)
+		{
+			cooldown = false;
+			cooldownCounter = 0.0f;
+		}
+	}
 }
 
 void GLProjectileHandler::Draw(GLShader& shader)
