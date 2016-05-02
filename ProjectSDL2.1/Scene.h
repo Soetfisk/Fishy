@@ -78,7 +78,7 @@ private:
 	FrameBuffer* frameBuffer4;
 	FrameBuffer* frameBuffer5;
 	GLProjectile* testProj;
-	float count = 0;
+	float count[2] = {0,0};
 	FilterComputeShader* filterComputeShader;
 	float deltaTime;
 	GLCollisionHandler collisionHandler;
@@ -90,6 +90,8 @@ private:
 private:
 	void LoadModels();
 	void LoadModels(char* folder);
+	void UpdatePlayerPowerUp(int player);
+	void HandlePlayerPowerUp();
 	// variables for border shader
 	float borderThreshold1, borderThreshold2;
 	glm::vec3 borderColor1;
@@ -99,6 +101,8 @@ private:
 	//fog
 	float fogStart, fogEnd;
 	glm::vec3 fogColor;
+	// Player
+	GLPlayer::PowerUps currentPowerUp;
 public:
 	Scene();
 	~Scene();
