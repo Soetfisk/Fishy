@@ -1,6 +1,15 @@
 #include "GLMeshBS.h"
 
-GLMeshBS::GLMeshBS(FSHData::mesh * meshData, FSHData::vertexData * vertices, unsigned int * indices, FSHData::material * material, FSHData::texture * texture, FSHData::blendShape * blendShapes, unsigned int blendShapeCount)
+GLMeshBS::GLMeshBS
+(
+	FSHData::mesh * meshData, 
+	FSHData::vertexData * vertices, 
+	unsigned int * indices, 
+	FSHData::material * material, 
+	FSHData::texture * texture, 
+	FSHData::blendShape * blendShapes, 
+	unsigned int blendShapeCount
+)
 {
 	this->m_drawCount = meshData->indexCount;
 	this->material = material;

@@ -16,6 +16,9 @@
 #include "GLGUIHandler.h"
 #include "GLCollisionHandler.h"
 
+#define mSTATIC *shaders[MODELS]
+#define mANIMATED *shaders[BLEND_SHAPE]
+
 class Scene {
 private:
 	enum ShaderType {
@@ -87,6 +90,8 @@ private:
 	GUI* guiTest;
 	glm::mat4 projection;
 	GLGUIHandler* guih;
+
+
 
 private:
 	void LoadModels();
