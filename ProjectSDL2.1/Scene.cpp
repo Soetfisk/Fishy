@@ -66,7 +66,7 @@ Scene::Scene() {
 	LoadModels();
 	
 	this->players.at(1)->GetTransform().SetPos(glm::vec3(3, 3, 3));
-	//this->players.at(0)->GetTransform().SetPos(glm::vec3(0, 0, 0));
+	this->players.at(0)->GetTransform().SetPos(glm::vec3(0, 0, 0));
 	this->staticMeshes.at(0)->GetTransform().SetPos(glm::vec3(0, 0, 0));
 
 	//this->staticMeshes.at(0)->GetTransform().SetRot(glm::vec3(4.71238898f, 0, 0));
