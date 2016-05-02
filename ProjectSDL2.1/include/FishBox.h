@@ -128,10 +128,12 @@ private: //variables
 	mesh meshHEADER;
 	unsigned int* indices = nullptr;
 	vertexData * vertices = nullptr;
+	blendShape * blendShapes = nullptr;
 
 private: //functions
 	void loadVertexData();
 	void loadIndices();
+	void loadBlendshapes();
 
 public: //functiuons
 	FSHMesh(void);
@@ -144,7 +146,7 @@ public: //functiuons
 	unsigned int getVertexCount();
 	unsigned int getIndexCount();
 
-
+	
 	//getUVs();
 	//getMaterial();
 	//getTexture();
