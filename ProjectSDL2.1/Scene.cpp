@@ -27,6 +27,7 @@ void Scene::LoadModels()
 	this->collisionHandler.AddNPC(NPCs);
 	this->collisionHandler.AddPlayer(players);
 	this->collisionHandler.AddModel(models);
+	// DEPDPEPDPEDP
 }
 
 void Scene::LoadModels(char * folder)
@@ -416,6 +417,9 @@ void Scene::HandleEvenet(SDL_Event* e) {
 				break;
 			case SDL_SCANCODE_J:
 				players.at(0)->SetPowerUp(GLPlayer::POWER_NEUTRAL);
+				break;
+			case SDL_SCANCODE_Y:
+				players.at(0)->SetPowerUp(GLPlayer::POWER_BUBBLESHOTGUN);
 				break;
 			default:
 				break;
