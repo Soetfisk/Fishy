@@ -7,7 +7,7 @@ ParticleHandler::ParticleHandler(GLShader* renderShader, FishBox *FSH_LoaderRefe
 	this->FSH_LoaderReference = FSH_LoaderReference;
 
 	this->textures = new FSHData::texture*[1];
-	this->textures[0] = this->FSH_LoaderReference->loadTexure("res/Fishy.FST");
+	this->textures[0] = this->FSH_LoaderReference->loadTexure("res/BubbleTest.png");
 }
 
 
