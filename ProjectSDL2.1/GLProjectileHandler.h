@@ -29,7 +29,7 @@ public:
 
 private:
 	const float SHOTGUN_OFFSET = 1.0f;
-	const float BIG_PROJECTILE_SIZE = 2.0f;
+	const float BIG_PROJECTILE_SIZE = 40.0f;
 
 	FishBox* FSH_Loader; 
 	unsigned int modelID;

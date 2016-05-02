@@ -60,7 +60,7 @@ void GLProjectileHandler::ChangeStateTo(ProjectilePowerUpState state)
 		projectileSize = 1.0f;
 		break;
 	case BIG:
-		projectileSize = (float)BIG_PROJECTILE_SIZE;
+		projectileSize = BIG_PROJECTILE_SIZE;
 		break;
 	case FAST:
 		projectileSize = 1.0f;
@@ -131,6 +131,8 @@ void GLProjectileHandler::RegularShoot(glm::vec3 forward, glm::vec3 pos, glm::ve
 	}
 
 	projectilePtr->SetScale(projectileSize);
+	float size = glm::length(projectilePtr->GetBoundingBox().halfDimension) * SHOTGUN_OFFSET;
+	pos = pos + forward * size;
 	projectilePtr->Shoot(pos, forward, velocity, rot);
 }
 
@@ -143,10 +145,11 @@ void GLProjectileHandler::ShotgunShoot(glm::vec3 forward, glm::vec3 pos, glm::ve
 		projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed, projectileStrength, projectileSize));
 		projectilePtr = projectiles.back();
 	}
-
+	projectilePtr->SetScale(projectileSize);
 	float size = glm::length(projectilePtr->GetBoundingBox().halfDimension) * SHOTGUN_OFFSET;
 	glm::vec3 tempRight;
 	glm::vec3 tempUp;
+	pos = pos + forward * size;
 
 	for (float x = -1; x < 2; x++)
 	{
