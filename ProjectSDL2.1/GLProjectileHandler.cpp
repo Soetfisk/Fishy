@@ -19,7 +19,7 @@ GLProjectileHandler::GLProjectileHandler(FishBox* FSH_Loader, unsigned int model
 	this->cooldown = false;
 	for (int i = 0; i < nrOfProjectiles; i++)
 		projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed, projectileStrength, projectileSize));
-	ChangeStateTo(SHOTGUN);
+	currentState = REGULAR;
 }
 
 GLProjectileHandler::~GLProjectileHandler()

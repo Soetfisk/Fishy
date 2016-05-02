@@ -27,6 +27,7 @@ void Scene::LoadModels()
 	this->collisionHandler.AddNPC(NPCs);
 	this->collisionHandler.AddPlayer(players);
 	this->collisionHandler.AddModel(models);
+	// DEPDPEPDPEDP
 }
 
 void Scene::LoadModels(char * folder)
@@ -65,7 +66,7 @@ Scene::Scene() {
 	LoadModels();
 	
 	this->players.at(1)->GetTransform().SetPos(glm::vec3(3, 3, 3));
-	//this->players.at(0)->GetTransform().SetPos(glm::vec3(0, 0, 0));
+	this->players.at(0)->GetTransform().SetPos(glm::vec3(0, 0, 0));
 	this->staticMeshes.at(0)->GetTransform().SetPos(glm::vec3(0, 0, 0));
 
 	//this->staticMeshes.at(0)->GetTransform().SetRot(glm::vec3(4.71238898f, 0, 0));
@@ -416,6 +417,9 @@ void Scene::HandleEvenet(SDL_Event* e) {
 				break;
 			case SDL_SCANCODE_J:
 				players.at(0)->SetPowerUp(GLPlayer::POWER_NEUTRAL);
+				break;
+			case SDL_SCANCODE_Y:
+				players.at(0)->SetPowerUp(GLPlayer::POWER_BUBBLESHOTGUN);
 				break;
 			default:
 				break;

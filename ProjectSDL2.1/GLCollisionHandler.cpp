@@ -5,42 +5,66 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 {
 	glm::vec3 distance;
 	float distSqrd;
-
+	AABB wall(glm::vec3(0), glm::vec3(125, 48, 86));
 	for (int i = 0; i < players.size(); i++)
 	{
 		distance = players.at(i)->GetTransform().GetPos() - players.at(1 - i)->GetTransform().GetPos();
 		distSqrd = glm::dot(distance,distance);
-		/*if (distSqrd < 50)
+		if (distSqrd < 50)
 		{
-			glm::vec3 pos = players.at(i)->GetTransform().GetPos();
-			glm::vec3 newVelocity(-1);
-
-			pos.x += (players.at(i)->GetVelocity().x * deltaTime);
-
-			if (players.at(1 - i)->GetBoundingBox().containsAABB(AABB(pos, players.at(i)->GetBoundingBox().halfDimension)))
+			if (players.at(i)->GetBoundingBox().containsAABB(players.at(1-i)->GetBoundingBox()))
 			{
-				newVelocity.x = 0;
+				glm::vec3 dir = players.at(i)->GetBoundingBox().center - players.at(1 - i)->GetBoundingBox().center;
+				float center_dist = glm::dot(dir, dir);
+				glm::vec3 min_dist = players.at(i)->GetBoundingBox().halfDimension + players.at(1 - i)->GetBoundingBox().halfDimension;
+				if (center_dist < min_dist.x*min_dist.x)
+				{
+					players.at(i)->GetTransform().m_pos.x += glm::normalize(dir).x * (min_dist.x - sqrt(center_dist));
+				}
+				if (center_dist < min_dist.y*min_dist.y)
+				{
+					players.at(i)->GetTransform().m_pos.y += glm::normalize(dir).y * (min_dist.y - sqrt(center_dist));
+				}
+				if (center_dist < min_dist.z*min_dist.z)
+				{
+					players.at(i)->GetTransform().m_pos.z += glm::normalize(dir).z * (min_dist.z - sqrt(center_dist));
+				}
 			}
-			pos = players.at(i)->GetTransform().GetPos();
-			pos.y += (players.at(i)->GetVelocity().y * deltaTime);
+		}
 
-			if (players.at(1 - i)->GetBoundingBox().containsAABB(AABB(pos, players.at(i)->GetBoundingBox().halfDimension)))
+		if (!players.at(i)->GetBoundingBox().containsAABB(wall))
+		{
+			
+			glm::vec3 dir = players.at(i)->GetBoundingBox().center - wall.center;
+			float center_dist = glm::dot(dir, dir);
+			glm::vec3 min_dist = players.at(i)->GetBoundingBox().halfDimension + wall.halfDimension;
+			glm::vec3 normal(0);
+			if (dir.x < -min_dist.x && players.at(i)->getVelocity().x < 0)
 			{
-				newVelocity.y = 0;
+				normal += glm::vec3(1, 0, 0);
 			}
-			pos = players.at(i)->GetTransform().GetPos();
-			pos.z += (players.at(i)->GetVelocity().z * deltaTime);
-
-			if (players.at(1 - i)->GetBoundingBox().containsAABB(AABB(pos, players.at(i)->GetBoundingBox().halfDimension)))
+			else if (dir.x > min_dist.x && players.at(i)->getVelocity().x > 0)
 			{
-				newVelocity.z = 0;
+				normal += glm::vec3(-1, 0, 0);
 			}
-
-			if (newVelocity != glm::vec3(-1))
+			if (dir.y < -min_dist.y && players.at(i)->getVelocity().y < 0)
 			{
-				this->players.at(i)->HandleCollision(GLPlayer::MOVING, deltaTime, newVelocity);
+				normal += glm::vec3(0, 1, 0);
 			}
-		}*/
+			if (dir.y > min_dist.y && players.at(i)->getVelocity().y > 0)
+			{
+				normal += glm::vec3(0, -1, 0);
+			}
+			if (dir.z < -min_dist.z && players.at(i)->getVelocity().z < 0)
+			{
+				normal += glm::vec3(0, 0, 1);
+			}
+			if (dir.z > min_dist.z && players.at(i)->getVelocity().z > 0)
+			{
+				normal += glm::vec3(0, 0, -1);
+			}
+			players.at(i)->getVelocity() -= normal * glm::dot(players.at(i)->GetVelocity(), normal);
+		}
 
 		for (int j = 0; j < players.at(i)->GetProjectiles().size(); j++)
 		{
