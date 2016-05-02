@@ -303,6 +303,8 @@ void GLPlayer::HandlePowerUps()
 {
 	if (this->currentPowerUp == GLPlayer::POWER_BUBBLESHOTGUN)
 		this->m_projectileHandler->ChangeStateTo(ProjectilePowerUpState::SHOTGUN);
+	else if (this->currentPowerUp == GLPlayer::POWER_BUBBLEBIG)
+		this->m_projectileHandler->ChangeStateTo(ProjectilePowerUpState::BIG);
 	else
 		this->m_projectileHandler->ChangeStateTo(ProjectilePowerUpState::REGULAR);
 }
