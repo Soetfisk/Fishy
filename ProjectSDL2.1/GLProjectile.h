@@ -25,7 +25,7 @@ public:
 	void SetForward(glm::vec3 forward);	// 
 	void SetVelocity(glm::vec3 velocity);
 	void Shoot(glm::vec3 startPos, glm::vec3 forward, glm::vec3 velocity, glm::vec3 rot);
-	void Scale(glm::vec3 scale);
+	void SetScale(float scale);
 	void SetSpeed(float& speed);		// 
 	void SetStrength(float strength);
 	void Activate();					// Activates the projectile 

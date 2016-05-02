@@ -115,9 +115,9 @@ void GLProjectile::Shoot(glm::vec3 startPos, glm::vec3 forward, glm::vec3 veloci
 	currentState = ACTIVE;
 }
 
-void GLProjectile::Scale(glm::vec3 scale)
+void GLProjectile::SetScale(float scale)
 {
-	transform->m_scale = scale;
+	transform->m_scale = glm::vec3(scale);
 }
 
 void GLProjectile::SetSpeed(float& speed)
