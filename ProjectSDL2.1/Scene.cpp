@@ -411,6 +411,12 @@ void Scene::HandleEvenet(SDL_Event* e) {
 			case SDL_SCANCODE_E:
 				players.at(0)->Update(GLPlayer::PLAYER_DASH, glm::vec3(0, 0, 1));
 				break;
+			case SDL_SCANCODE_H:
+				players.at(0)->SetPowerUp(GLPlayer::POWER_HIGH);
+				break;
+			case SDL_SCANCODE_J:
+				players.at(0)->SetPowerUp(GLPlayer::POWER_NEUTRAL);
+				break;
 			default:
 				break;
 			}
