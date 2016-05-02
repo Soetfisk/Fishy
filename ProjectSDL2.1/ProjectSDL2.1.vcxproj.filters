@@ -58,6 +58,9 @@
     <ClCompile Include="GLNPC_GoldFish.cpp">
       <Filter>Source\NPCs</Filter>
     </ClCompile>
+    <ClCompile Include="GLNPC_BlueTang.cpp">
+      <Filter>Source\NPCs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AABB.h">
@@ -123,14 +126,17 @@
     <ClInclude Include="SphereBS.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\RNG.h">
-      <Filter>Shaders</Filter>
-    </ClInclude>
     <ClInclude Include="GLNPC.h">
       <Filter>Header\NPCs</Filter>
     </ClInclude>
     <ClInclude Include="GLNPC_GoldFish.h">
       <Filter>Header\NPCs</Filter>
+    </ClInclude>
+    <ClInclude Include="GLNPC_BlueTang.h">
+      <Filter>Header\NPCs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\RNG.h">
+      <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

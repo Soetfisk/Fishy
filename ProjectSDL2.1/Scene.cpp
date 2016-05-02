@@ -6,14 +6,18 @@ void Scene::LoadModels()
 {
 	FSH_Loader.LoadScene("Models/fishy.FSH"); //PlayerFish
 	FSH_Loader.LoadScene("Models/Goldfish.FSH"); //GoldFish
+	FSH_Loader.LoadScene("Models/BlueTang.FSH"); //BlueTang
 	FSH_Loader.LoadScene("Models/Bubble2.FSH"); //Bubble
 	FSH_Loader.LoadScene("Models/tempAquarium.FSH"); //Aquarium
 	
 	for (int i = 0; i < 2; i++) {
 		this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));
 	}
-	for (int i = 0; i < 50; i++) {
+	for (int i = 0; i < 30; i++) {
 		this->NPCs.push_back(new GLNPC_GoldFish(&FSH_Loader, GoldFish));
+	}
+	for (int i = 0; i < 10; i++) {
+		this->NPCs.push_back(new GLNPC_BlueTang(&FSH_Loader, BlueTang));
 	}
 	for (int i = 0; i < 1; i++) {
 		this->staticMeshes.push_back(new GLModel(&FSH_Loader, Aquarium));
@@ -27,6 +31,33 @@ void Scene::LoadModels()
 
 void Scene::LoadModels(char * folder)
 {
+}
+
+// update currentPowerup variable with value from player i
+void Scene::UpdatePlayerPowerUp(int player)
+{
+	this->currentPowerUp = this->players.at(player)->GetPowerUp();
+}
+
+// do stuff with curentPowerup variable
+void Scene::HandlePlayerPowerUp()
+{
+	if (this->currentPowerUp == GLPlayer::POWER_HIGH)
+	{
+		this->wavyAmount = 10;
+		this->wavyLength = 0.5f; // how long the waves are. Lower = longer waves. standard = 1
+		this->fogColor = glm::vec3(0.3,0.7,0.3);
+		this->fogStart = 1.0f;
+		this->fogEnd = 35.0f;
+	}
+	else
+	{
+		this->wavyAmount = 0.3f; // how fast the waves will go, higher = faster. Standard = 1
+		this->wavyLength = 1.0f; // how long the waves are. Lower = longer waves. standard = 1
+		this->fogColor = glm::vec3(0.1,0.1,0.8);
+		this->fogStart = 50.f;
+		this->fogEnd = 210.f;
+	}
 }
 
 Scene::Scene() {
@@ -100,6 +131,8 @@ Scene::Scene() {
 	this->fogStart = 50.f;
 	this->fogEnd = 210.f;
 	this->fogColor = glm::vec3(0.1, 0.1, 0.8);
+	//player
+	this->currentPowerUp = GLPlayer::POWER_NEUTRAL;
 
 }
 
@@ -170,10 +203,12 @@ void Scene::LoadScene() {
 
 //Calls the models.draw
 void Scene::DrawScene() {
-
 	guih->Draw(*shaders[TEXT]);
 
 	for (int i = 0; i < this->players.size(); i++) {
+		// handle player powerup
+		this->UpdatePlayerPowerUp(i);
+		this->HandlePlayerPowerUp();
 		//Set viewport
 		glViewport(0, 0, window::WIDTH, window::HEIGHT/ 2);
 
@@ -250,10 +285,10 @@ void Scene::DrawScene() {
 		this->RenderQuad();
 		this->frameBuffer4->UnbindFrameBuffer();
 
-		this->count += this->wavyAmount * this->deltaTime;
+		this->count[i] += this->wavyAmount * this->deltaTime;
 		this->frameBuffer5->BindFrameBuffer();
 		shaders[WAVY]->Bind();
-		shaders[WAVY]->Uniform1f("offset", count);
+		shaders[WAVY]->Uniform1f("offset", count[i]);
 		shaders[WAVY]->Uniform1f("waveLength", this->wavyLength);
 		this->frameBuffer4->BindTexturesToProgram(shaders[WAVY]->GetUnifromLocation("texture"), 0);
 		this->RenderQuad();
@@ -375,6 +410,12 @@ void Scene::HandleEvenet(SDL_Event* e) {
 				break;
 			case SDL_SCANCODE_E:
 				players.at(0)->Update(GLPlayer::PLAYER_DASH, glm::vec3(0, 0, 1));
+				break;
+			case SDL_SCANCODE_H:
+				players.at(0)->SetPowerUp(GLPlayer::POWER_HIGH);
+				break;
+			case SDL_SCANCODE_J:
+				players.at(0)->SetPowerUp(GLPlayer::POWER_NEUTRAL);
 				break;
 			default:
 				break;
