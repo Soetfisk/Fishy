@@ -35,7 +35,7 @@
 
 
 //#include "GLUtil.h"
-//#include "SOIL.h"
+#include "SOIL.h"
 
 namespace FSHData
 {
@@ -144,6 +144,7 @@ public: //functiuons
 	unsigned int getVertexCount();
 	unsigned int getIndexCount();
 
+
 	//getUVs();
 	//getMaterial();
 	//getTexture();
@@ -196,18 +197,21 @@ private:
 
 private: //varaibles
 	std::vector<FSHScene> SceneList;
+	std::vector<texture*> extraTextures;
 public: //variables
 
 
 public: //functions 
 	FishBox(void);
 	FishBox::~FishBox();
+	void clean();
 
 	void release();
 	void Test();
 	int GetModelCount();
 	void LoadScene(char * filePath);
 
+	//scene handling
 	void MeshData(unsigned int model, unsigned int mesh, vertexData *&vertexData, unsigned int *&indexData);
 	FSHData::mesh * MeshData(unsigned int model, unsigned int mesh);
 	FSHData::vertexData * VertexData(unsigned int model, unsigned int mesh);
@@ -215,6 +219,9 @@ public: //functions
 	unsigned int ModelMeshCount(unsigned int model);
 	FSHData::material * meshMaterial(unsigned int model, unsigned int mesh);
 	texture* meshTexture(unsigned int model, unsigned int mesh);
+	
+	//extra functions
+	texture * loadTexure(char* filepath);
 };
 #ifdef _DEBUG 
 #ifndef DBG_NEW
