@@ -1,18 +1,10 @@
 #include "GLModel.h"
-#include "obj_loader.h"
+
 
 
 GLModel::GLModel()
 {
-	//Test
-	transform = new GLTransform();
-	meshes.push_back(objLoadFromFile("./res/OBJ/box2.obj"));
-	meshes.push_back(objLoadFromFile("./res/OBJ/box2.obj"));
 
-	meshes[0]->GetTransform().m_pos = glm::vec3(0, 0, 0.8);
-	meshes[1]->GetTransform().m_pos = glm::vec3(0, 0, 0);
-
-	meshes[0]->GetTransform().m_scale = glm::vec3(0.8);
 }
 
 GLModel::GLModel(FishBox* FSH_Loader, char* filePath) //DEPRICATED USE AT OWN RISK

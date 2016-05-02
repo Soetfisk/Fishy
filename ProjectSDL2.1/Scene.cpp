@@ -1,5 +1,4 @@
 #include "Scene.h"
-#include "obj_loader.h"
 
 
 void Scene::LoadModels()
@@ -76,6 +75,7 @@ Scene::Scene() {
 	shaders[WAVY] = new GLShader("wavy");
 	shaders[BORDER] = new GLShader("post");
 	shaders[LIGHTING] = new GLShader("lighting");
+	shaders[BLEND_SHAPE] = new GLShader("blend_shape", true);
 
 	guih = new GLGUIHandler(*shaders[TEXT]);
 
