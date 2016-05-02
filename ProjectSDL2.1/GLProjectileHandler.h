@@ -9,7 +9,8 @@ enum ProjectilePowerUpState
 	BIG,
 	FAST,
 	STRONG,
-	NUM_STATES
+
+	NUM_PROJPOWERUPSTATES
 };
 
 class GLProjectileHandler
@@ -27,11 +28,15 @@ public:
 	std::vector<GLProjectile*> GetActiveProjectiles();
 
 private:
+	const float SHOTGUN_OFFSET = 1.0f;
+	const float BIG_PROJECTILE_SIZE = 2.0f;
+
 	FishBox* FSH_Loader; 
 	unsigned int modelID;
 	int projectileActiveTime;																								
 	float projectileSpeed;
 	float projectileStrength;
+	float projectileSize;
 	ProjectilePowerUpState currentState;
 	
 	std::vector<GLProjectile*>	projectiles;																			
