@@ -67,7 +67,7 @@ void GLProjectileHandler::ChangeStateTo(ProjectilePowerUpState state)
 		projectileSize = 1.0f;
 		break;
 	case BIG:
-		projectileSize = BIG_PROJECTILE_SIZE;
+ 		projectileSize = BIG_PROJECTILE_SIZE;
 		break;
 	case FAST:
 		projectileSize = 1.0f;
