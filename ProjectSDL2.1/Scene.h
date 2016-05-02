@@ -27,6 +27,7 @@ private:
 		TEXT,
 		WAVY,
 		BORDER,
+		BLEND_SHAPE,
 		NUM_SHADERS
 	};
 	enum

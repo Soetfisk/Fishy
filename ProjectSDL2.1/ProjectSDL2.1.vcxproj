@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GLMeshBS.cpp" />
     <ClCompile Include="GLNPC_BlueTang.cpp" />
     <ClCompile Include="FilterComputeShader.cpp" />
     <ClCompile Include="GLGUIHandler.cpp" />
@@ -41,6 +42,7 @@
     <ClCompile Include="Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GLMeshBS.h" />
     <ClInclude Include="GLNPC_BlueTang.h" />
     <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\RNG.h" />
     <ClInclude Include="AABB.h" />
@@ -63,7 +65,6 @@
     <ClInclude Include="GLUtil.h" />
     <ClInclude Include="GLWindow.h" />
     <ClInclude Include="GUI.h" />
-    <ClInclude Include="obj_loader.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SphereBS.h" />
   </ItemGroup>
@@ -71,6 +72,7 @@
     <None Include="blueFilter.glsl" />
     <None Include="lighting.frag" />
     <None Include="lighting.vert" />
+    <None Include="blend_shape.vert" />
     <None Include="pass.frag" />
     <None Include="pass.vert" />
     <None Include="post.frag" />
