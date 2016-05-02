@@ -29,6 +29,17 @@ public:
 		NUM_PLAYERSTATES
 	};
 
+	enum PowerUps
+	{
+		NEUTRAL,
+		BUBBLESHOTGUN,
+		BUBBLEBIG,
+		BUBBLEFAST,
+		BUBBLESTRONG,
+
+		NUM_POWERUPS
+	};
+
 	GLPlayer();
 	GLPlayer(FishBox * FSH_Loader, char* filePath);
 	GLPlayer(FishBox * FSH_Loader, unsigned int modelID);
@@ -47,11 +58,11 @@ public:
 	glm::vec3 GetVelocity();
 	int point = 0;
 private:
-	const int DEADZONE = 8000;
+	const int DEADZONE = 20;
 	float MOVEMENT_FRICTION = 2.0f;
-	const int MAX_SPEED = 10;	
-	const float MIN_SPEED = 0.5f;
-	const int MAX_DASHSPEED = 20;				
+	const int MAX_SPEED = 100;	
+	const float MIN_SPEED = 0.1f;
+	const int MAX_DASHSPEED = 200;				
 	const float DASH_DURATION = 0.3f;			// Dash duration in sec
 	const float DASH_COOLDOWN = 1.0f;			// Dash cooldown in sec
 	const float DASH_SCALE = 1.2f;				// 

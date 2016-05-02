@@ -5,6 +5,7 @@
 #include "GLPlayer.h"
 #include "GLNPC.h"
 #include "GLNPC_GoldFish.h"
+#include "GLNPC_BlueTang.h"
 #include "GLShader.h"
 #include "FrameBuffer.h"
 #include "GLModel.h"
@@ -32,6 +33,7 @@ private:
 	{
 		PlayerFish,
 		GoldFish,
+		BlueTang,
 		Bubble,
 		Aquarium
 	};
@@ -88,6 +90,15 @@ private:
 private:
 	void LoadModels();
 	void LoadModels(char* folder);
+	// variables for border shader
+	float borderThreshold1, borderThreshold2;
+	glm::vec3 borderColor1;
+	// wavy
+	float wavyAmount;
+	float wavyLength;
+	//fog
+	float fogStart, fogEnd;
+	glm::vec3 fogColor;
 public:
 	Scene();
 	~Scene();

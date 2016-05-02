@@ -8,6 +8,8 @@ uniform sampler2D texture;
 uniform sampler2D texture2;
 uniform float width;
 uniform float height;
+uniform float thresholdFloat;
+uniform vec3 borderColor;
 
 // Returns 0 if the value is below the threshold otherwise 1
 float threshold(in float thr1, in float val)
@@ -56,7 +58,7 @@ float isEdge(in vec2 uv)
 			abs(pix[0]-pix[8])+
 			abs(pix[2]-pix[6]));
 
-	return threshold(0.4,delta); // if the average color difference is too big we found an edge
+	return threshold(thresholdFloat,delta); // if the average color difference is too big we found an edge
 }
 
 void main()
@@ -65,7 +67,7 @@ void main()
 
 	if(isEdge(frag_uv) > 0)
 	{
-		color = vec3(0,0,0);
+		color = borderColor;
 	}
 	else
 	{
