@@ -79,6 +79,10 @@ void GLNPC_BlueTang::gettingEaten(float deltaTime, GLTransform playerTransform)
 void GLNPC_BlueTang::NPCKill()
 {
 	this->currentState = NPC_INACTIVE;
+	if (this->isPowerUp == true)
+	{
+		printf("i wanna be the very fish, that no one ever was");
+	}
 }
 
 void GLNPC_BlueTang::initiateFleeingState(glm::vec3 playerForwardVector)
@@ -177,4 +181,16 @@ void GLNPC_BlueTang::checkboarderCollision()
 int GLNPC_BlueTang::GetCurrentState()
 {
 	return this->currentState;
+}
+
+void GLNPC_BlueTang::SetCurrentState()
+{
+	currentState = NPC_BEINGEATEN;
+}
+
+
+
+bool GLNPC_BlueTang::GetIsPowerUp()
+{
+	return isPowerUp;
 }

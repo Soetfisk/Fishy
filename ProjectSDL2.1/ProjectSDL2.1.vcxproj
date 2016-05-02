@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\GLNPC_PowerUpHandler.cpp" />
     <ClCompile Include="GLNPC_BlueTang.cpp" />
     <ClCompile Include="FilterComputeShader.cpp" />
     <ClCompile Include="GLGUIHandler.cpp" />
@@ -41,6 +42,7 @@
     <ClCompile Include="Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\GLNPC_PowerUpHandler.h" />
     <ClInclude Include="GLNPC_BlueTang.h" />
     <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\RNG.h" />
     <ClInclude Include="AABB.h" />

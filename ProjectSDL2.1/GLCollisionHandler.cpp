@@ -1,6 +1,13 @@
 #include "GLCollisionHandler.h"
 
 
+
+
+GLCollisionHandler::~GLCollisionHandler()
+{
+	delete PowerUpHandler;
+}
+
 void GLCollisionHandler::CheckCollisions(float deltaTime)
 {
 	glm::vec3 distance;
@@ -69,6 +76,10 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 						if (NPCs.at(j)->GetTransform().GetScale().y < 0.2)
 						{
 							NPCs.at(j)->NPCKill();
+							if (NPCs.at(j)->GetIsPowerUp()==true)
+							{
+								PowerUpHandler->RemovePowerUpFish(NPCs.at(j));
+							}
 						}
 					}
 					
@@ -154,4 +165,9 @@ void GLCollisionHandler::RemoveModel(GLModel * model)
 			this->models.erase(models.begin() + i);
 		}
 	}
+}
+
+void GLCollisionHandler::InitiatePowerUpHandler()
+{
+	this->PowerUpHandler = new NpcPowerUpHandler(this->NPCs);
 }

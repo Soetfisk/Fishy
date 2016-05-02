@@ -2,6 +2,7 @@
 
 #include "GLModel.h" 
 #include "RNG.h"
+//#include "GLNPC_PowerUpHandler.h"
 
 enum NPCStates
 {
@@ -16,12 +17,10 @@ enum NPCStates
 
 class GLNPC : public GLModel
 {
-
-
-
+	
 public:
-	//GLNPC(void);
-	//GLNPC(FishBox& FSH_Loader, char* filePath);
+	bool isPowerUp = false;
+
 	GLNPC(FishBox* FSH_Loader, unsigned int modelID);
 	virtual void NPCUpdate(float deltaTime) = 0;
 	virtual void NPCDraw(GLShader& shader) = 0;
@@ -29,4 +28,7 @@ public:
 	virtual void NPCKill() = 0;
 	virtual void initiateFleeingState(glm::vec3 playerForwardVector) = 0;
 	virtual int GetCurrentState() = 0;
+	virtual void SetCurrentState() = 0;
+
+	virtual bool GetIsPowerUp() =0;
 };

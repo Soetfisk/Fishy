@@ -3,12 +3,13 @@
 #include "GLModel.h"
 #include "GLNPC.h"
 #include "GLPlayer.h"
+#include "GLNPC_PowerUpHandler.h"
 
 class GLCollisionHandler
 {
 public:
 	GLCollisionHandler() {};
-	~GLCollisionHandler() {};
+	~GLCollisionHandler();
 
 	void CheckCollisions(float deltaTime);
 
@@ -24,9 +25,12 @@ public:
 	void AddModel(std::vector<GLModel*> models);
 	void RemoveModel(GLModel* model);
 
+	void InitiatePowerUpHandler();
+
 private:
 	std::vector<GLPlayer*> players;
 	std::vector<GLNPC*> NPCs;
 	std::vector<GLModel*> models;
+	NpcPowerUpHandler* PowerUpHandler;
 };
 

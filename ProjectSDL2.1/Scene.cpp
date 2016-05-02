@@ -13,7 +13,7 @@ void Scene::LoadModels()
 	for (int i = 0; i < 2; i++) {
 		this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));
 	}
-	for (int i = 0; i < 30; i++) {
+	for (int i = 0; i < 0; i++) {
 		this->NPCs.push_back(new GLNPC_GoldFish(&FSH_Loader, GoldFish));
 	}
 	for (int i = 0; i < 10; i++) {
@@ -27,6 +27,8 @@ void Scene::LoadModels()
 	this->collisionHandler.AddNPC(NPCs);
 	this->collisionHandler.AddPlayer(players);
 	this->collisionHandler.AddModel(models);
+	this->collisionHandler.InitiatePowerUpHandler();
+
 }
 
 void Scene::LoadModels(char * folder)

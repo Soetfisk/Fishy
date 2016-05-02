@@ -23,4 +23,6 @@ public:
 	void initiateFleeingState(glm::vec3 playerForwardVector);
 	void checkboarderCollision();
 	int GetCurrentState();
+	void SetCurrentState();
+	bool GetIsPowerUp();
 };

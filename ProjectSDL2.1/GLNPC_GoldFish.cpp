@@ -79,6 +79,10 @@ void GLNPC_GoldFish::gettingEaten(float deltaTime, GLTransform playerTransform)
 void GLNPC_GoldFish::NPCKill()
 {
 	this->currentState = NPC_INACTIVE;
+	if (this->isPowerUp == true)
+	{
+		printf("i wanna be the very fish, that no one ever was");
+	}
 }
 
 void GLNPC_GoldFish::initiateFleeingState(glm::vec3 playerForwardVector)
@@ -177,4 +181,14 @@ void GLNPC_GoldFish::checkboarderCollision()
 int GLNPC_GoldFish::GetCurrentState()
 {
 	return this->currentState;
+}
+
+void GLNPC_GoldFish::SetCurrentState()
+{
+	currentState = NPC_BEINGEATEN;
+}
+
+bool GLNPC_GoldFish::GetIsPowerUp()
+{
+	return this->isPowerUp;
 }
