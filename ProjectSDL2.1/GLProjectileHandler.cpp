@@ -2,8 +2,8 @@
 
 GLProjectileHandler::GLProjectileHandler()
 {
-	projectileActiveTime = 0;
-	projectileSpeed = 0;
+	projectileActiveTime = 0.0f;
+	projectileSpeed = 0.0f;
 }
 
 GLProjectileHandler::GLProjectileHandler(FishBox* FSH_Loader, unsigned int modelID, int nrOfProjectiles, int projectileActiveTime, float projectileSpeed)
@@ -12,7 +12,7 @@ GLProjectileHandler::GLProjectileHandler(FishBox* FSH_Loader, unsigned int model
 	this->modelID = modelID;
 	this->projectileActiveTime = projectileActiveTime;
 	this->projectileSpeed = projectileSpeed;
-	this->projectileStrength = 10;
+	this->projectileStrength = 10.0f;
 	this->projectileSize = 1.0f;
 	for (int i = 0; i < nrOfProjectiles; i++)
 		projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed, projectileStrength, projectileSize));
@@ -60,7 +60,7 @@ void GLProjectileHandler::ChangeStateTo(ProjectilePowerUpState state)
 		projectileSize = 1.0f;
 		break;
 	case BIG:
-		projectileSize = BIG_PROJECTILE_SIZE;
+		projectileSize = (float)BIG_PROJECTILE_SIZE;
 		break;
 	case FAST:
 		projectileSize = 1.0f;
@@ -158,11 +158,11 @@ void GLProjectileHandler::ShotgunShoot(glm::vec3 forward, glm::vec3 pos, glm::ve
 			if (x != 0)
 				tempRight *= size * x;	// Add offset in X
 			else
-				tempRight *= 0;			// Remove offset in X
+				tempRight *= 0.0f;			// Remove offset in X
 			if (y != 0)
 				tempUp *= size * y;		// Add offset in Y
 			else
-				tempUp *= 0;			// Remove offset in Y;
+				tempUp *= 0.0f;			// Remove offset in Y;
 			
 			// Get a inactive projectile
 			projectilePtr = GetInactiveProjectile();
