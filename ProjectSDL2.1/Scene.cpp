@@ -6,14 +6,18 @@ void Scene::LoadModels()
 {
 	FSH_Loader.LoadScene("Models/fishy.FSH"); //PlayerFish
 	FSH_Loader.LoadScene("Models/Goldfish.FSH"); //GoldFish
+	FSH_Loader.LoadScene("Models/BlueTang.FSH"); //BlueTang
 	FSH_Loader.LoadScene("Models/Bubble2.FSH"); //Bubble
 	FSH_Loader.LoadScene("Models/tempAquarium.FSH"); //Aquarium
 	
 	for (int i = 0; i < 2; i++) {
 		this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));
 	}
-	for (int i = 0; i < 50; i++) {
+	for (int i = 0; i < 30; i++) {
 		this->NPCs.push_back(new GLNPC_GoldFish(&FSH_Loader, GoldFish));
+	}
+	for (int i = 0; i < 10; i++) {
+		this->NPCs.push_back(new GLNPC_BlueTang(&FSH_Loader, BlueTang));
 	}
 	for (int i = 0; i < 1; i++) {
 		this->staticMeshes.push_back(new GLModel(&FSH_Loader, Aquarium));
