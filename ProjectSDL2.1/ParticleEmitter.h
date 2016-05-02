@@ -2,7 +2,8 @@
 #define PARTICLEEMITTER
 #include "GLUtil.h"
 #include "ParticleComputeShader.h"
-
+#include "GLShader.h"
+#include "GLtexture.h"
 
 class ParticleEmitter
 {
@@ -41,6 +42,7 @@ private:
 	float spawnTimer;
 	float emiterAwakeTime;
 	float emiterTimeSinceLastParticle;
+	
 
 	void swapData(int fromID, int destinationID);
 	void deactivateParticleAt(int ID);
@@ -55,13 +57,17 @@ private:
 	void InstantiateRenderShader();
 	void InstantiateSpaces();
 
+	void setTexture();
+	FSHData::texture* texture;
+	GLuint textureID;
+	GLTexture* tempTexture;
 	
 public:
 	ParticleEmitter(EmitterType type, glm::mat4*&  transformMatrix, GLuint transformMatrixLocation);
-	ParticleEmitter(EmitterType type, glm::vec4 position, GLuint transformMatrixLocation);
+	ParticleEmitter(EmitterType type, glm::vec4 position, GLuint transformMatrixLocation, FSHData::texture* texture);
 	~ParticleEmitter();
 	void UpdateEmitter(const float& deltaTime);
-	void Draw();
+	void Draw(GLShader* shader);
 	
 };
 

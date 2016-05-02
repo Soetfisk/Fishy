@@ -10,14 +10,27 @@ ParticleEmitter::ParticleEmitter(EmitterType type, glm::mat4*& transformMatrix, 
 	InstantiateEmitter();
 }
 
-ParticleEmitter::ParticleEmitter(EmitterType type, glm::vec4 position, GLuint transformMatrixLocation) {
+ParticleEmitter::ParticleEmitter(EmitterType type, glm::vec4 position, GLuint transformMatrixLocation, FSHData::texture* texture) {
 	this->type = type;
 	this->transformationLocation = transformMatrixLocation;
 	this->positionEmitter = position;
+	this->texture = texture;
+	setTexture();
 	InstantiateEmitter();
 	
 	InstantiateRenderShader();
 	
+}
+
+void ParticleEmitter::setTexture() {
+	glGenTextures(1, &this->textureID);
+
+	glBindTexture(GL_TEXTURE_2D, textureID);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->texture->width, this->texture->height,0, GL_BGR, GL_UNSIGNED_BYTE, this->texture->textureData);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 }
 
 
@@ -64,7 +77,8 @@ void ParticleEmitter::InstantiateSpaces() {
 	data.transformMatrix = p_transMat;
 	data.velocity = p_vel;
 
-	
+	FishBox* box = new FishBox();
+	FSHData::texture *texture = box->loadTexure("BubbleTest.png");
 }
 
 
@@ -262,9 +276,12 @@ void ParticleEmitter::UpdateEmitter(const float& deltaTime) {
 	
 }
 
-void ParticleEmitter::Draw() {
+void ParticleEmitter::Draw(GLShader* shader) {
 
-	
+	GLuint INDEX = shader->GetUnifromLocation("particle_tex");
+	glActiveTexture(GL_TEXTURE0+0);
+	glUniform1i(shader->GetUnifromLocation("particle_tex"), GL_TEXTURE0+0);
+	glBindTexture(GL_TEXTURE_2D, this->textureID);
 	glBindVertexArray(this->pe_VertexArrayObject);
 
 	glDrawArrays(GL_POINTS, 0, this->nrActiveParticles);

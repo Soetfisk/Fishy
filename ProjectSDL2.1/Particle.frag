@@ -3,11 +3,11 @@
 
 out vec4 color;
 
-uniform sampler2D tex;
+uniform sampler2D particle_tex;
 in vec2 Vertex_UV;
 
 void main(){
-	//vec3 t = texture(tex, Vertex_UV).rgb;
-	color  = vec4(255,0,0, 255.0f);
+	vec3 t = texture2D(particle_tex, Vertex_UV).rgb;
+	color  = vec4(t, 1);
 
 }

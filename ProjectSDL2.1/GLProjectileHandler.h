@@ -33,6 +33,8 @@ private:
 	float projectileSpeed;
 	float projectileStrength;
 	ProjectilePowerUpState currentState;
+
+
 	
 	std::vector<GLProjectile*>	projectiles;																			
 	GLProjectile* GetInactiveProjectile();

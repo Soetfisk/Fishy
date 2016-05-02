@@ -2,8 +2,12 @@
 
 
 
-ParticleHandler::ParticleHandler(GLShader* renderShader){
+ParticleHandler::ParticleHandler(GLShader* renderShader, FishBox *FSH_LoaderReference){
 	this->transformationLocation = renderShader->GetUnifromLocation("TransformMatrix");
+	this->FSH_LoaderReference = FSH_LoaderReference;
+
+	this->textures = new FSHData::texture*[1];
+	this->textures[0] = this->FSH_LoaderReference->loadTexure("res/Fishy.FST");
 }
 
 
@@ -18,7 +22,7 @@ void ParticleHandler::DrawParticles(GLShader* shader, GLCamera& camera) {
 	for (int i = 0; i < this->emiters.size(); i++) {
 		shader->Bind();
 		shader->Update(camera);
-		this->emiters.at(i)->Draw();
+		this->emiters.at(i)->Draw(shader);
 		//this->emiters.at(i).Update(deltaTime);
 	}
 }
@@ -38,5 +42,5 @@ void ParticleHandler::AddEmiter(EmitterType type, glm::mat4*& transformMatrix) {
 }
 
 void ParticleHandler::AddEmiter(EmitterType type, glm::vec4 position) {
-	this->emiters.push_back(new ParticleEmitter(type, position, this->transformationLocation));
+	this->emiters.push_back(new ParticleEmitter(type, position, this->transformationLocation, this->textures[0]));
 }

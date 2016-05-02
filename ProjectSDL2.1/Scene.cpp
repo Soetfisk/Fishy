@@ -94,7 +94,7 @@ Scene::Scene() {
 	dirLight.dir = glm::vec3(0.01, 1, 0.01);
 
 
-	particleHandler = new ParticleHandler(shaders[PARTICLE]);
+	particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
 	particleHandler->AddEmiter(EmitterType::PROJECTILE, glm::vec4(0, 1, 3, 1));
 	//particleHandler->AddEmiter(EmitterType::PROJECTILE, glm::vec4(0, 5, 3, 1));
 	//particleHandler->AddEmiter(EmitterType::PROJECTILE, glm::vec4(0, 7, 3, 1));
@@ -223,6 +223,7 @@ void Scene::DrawScene() {
 			glUniform1f(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(i) + "].linear"), pointLights.at(i).linear);
 			glUniform1f(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(i) + "].quadratic"), pointLights.at(i).quadratic);
 		}
+		
 
 		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.dir"), 1, glm::value_ptr(dirLight.dir));
 		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.ambient"), 1, glm::value_ptr(dirLight.ambient));
@@ -277,7 +278,7 @@ void Scene::DrawScene() {
 		
 
 		shaders[PASS]->Bind();
-		this->frameBuffer5->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
+		this->frameBuffer2->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
 		glViewport(0, window::HEIGHT - (window::HEIGHT / (i + 1)), window::WIDTH, window::HEIGHT / 2);
 		this->RenderQuad();
 	}
