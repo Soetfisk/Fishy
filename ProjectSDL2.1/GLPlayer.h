@@ -56,7 +56,7 @@ public:
 	glm::vec3 GetVelocity();
 	int point = 0;
 	GLPlayer::PowerUps GetPowerUp();
-	GLPlayer::PowerUps SetPowerUp(GLPlayer::PowerUps power);
+	void SetPowerUp(GLPlayer::PowerUps power);
 
 	glm::vec3& getVelocity() {
 		return m_velocity;
@@ -105,5 +105,7 @@ private:
 
 	void CalcVelocity(float& deltaTime);
 	void HandleDash(float& deltaTime);
+
+	void HandlePowerUps();
 };
 

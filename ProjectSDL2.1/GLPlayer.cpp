@@ -129,9 +129,10 @@ GLPlayer::PowerUps GLPlayer::GetPowerUp()
 	return this->currentPowerUp;
 }
 
-GLPlayer::PowerUps GLPlayer::SetPowerUp(GLPlayer::PowerUps power)
+void GLPlayer::SetPowerUp(GLPlayer::PowerUps power)
 {
-	return this->currentPowerUp = power;
+	this->currentPowerUp = power;
+	this->HandlePowerUps();
 }
 
 //adds a controller too the player
@@ -296,6 +297,16 @@ void GLPlayer::HandleDash(float & deltaTime)
 			lastForward = 0.0f;
 		}
 	}
+}
+
+void GLPlayer::HandlePowerUps()
+{
+	if (this->currentPowerUp == GLPlayer::POWER_BUBBLESHOTGUN)
+		this->m_projectileHandler->ChangeStateTo(ProjectilePowerUpState::SHOTGUN);
+	else if (this->currentPowerUp == GLPlayer::POWER_BUBBLEBIG)
+		this->m_projectileHandler->ChangeStateTo(ProjectilePowerUpState::BIG);
+	else
+		this->m_projectileHandler->ChangeStateTo(ProjectilePowerUpState::REGULAR);
 }
 
 void GLPlayer::PlayerEating(float deltaTime)

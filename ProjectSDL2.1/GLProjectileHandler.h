@@ -17,7 +17,7 @@ class GLProjectileHandler
 {
 public:
 	GLProjectileHandler();
-	GLProjectileHandler(FishBox* FSH_Loader, unsigned int modelID, int nrOfProjectiles, int projectileActiveTime, float projectileSpeed);
+	GLProjectileHandler(FishBox* FSH_Loader, unsigned int modelID, int nrOfProjectiles, int projectileActiveTime, float projectileSpeed, float cooldown = 1.0f);
 	virtual ~GLProjectileHandler();
 
 	void Shoot(glm::vec3 forward, glm::vec3 pos, glm::vec3 rot, glm::vec3 velocity, glm::vec3 right, glm::vec3 up);// Take a inactive projectile and make it active or create a new projectile if there is no inactive
@@ -29,14 +29,14 @@ public:
 
 private:
 	const float SHOTGUN_OFFSET = 1.0f;
-	const float BIG_PROJECTILE_SIZE = 2.0f;
+	const float BIG_PROJECTILE_SIZE = 3.0f;
 
 	FishBox* FSH_Loader; 
 	unsigned int modelID;
 	int projectileActiveTime;																								
-	float projectileSpeed;
-	float projectileStrength;
-	float projectileSize;
+	float projectileSpeed, projectileStrength, projectileSize;
+	float cooldownDuration, cooldownCounter;
+	bool cooldown;
 	ProjectilePowerUpState currentState;
 	
 	std::vector<GLProjectile*>	projectiles;																			
