@@ -5,7 +5,15 @@
 class GLMeshBS : public GLMesh
 {
 public:
-	GLMeshBS(FSHData::mesh * meshData, FSHData::vertexData * vertices, unsigned int * indices, FSHData::material* material, FSHData::texture * texture, FSHData::blendShape * blendShapes, unsigned int blendShapeCount);
+	GLMeshBS
+		(
+		FSHData::mesh * meshData,
+		FSHData::vertexData * vertices,
+		unsigned int * indices,
+		FSHData::material* material,
+		FSHData::texture * texture, 
+		FSHData::blendShape * blendShapes
+		);
 
 private:
 	enum
@@ -17,5 +25,5 @@ private:
 	};
 
 	unsigned int blendShapeCount;
-	GLuint * vertexBuffer;
+	GLuint vertexBuffer[NO_OF_VBO];
 };

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GLMesh.h"
+#include "GLMeshBS.h"
 #include "GLShader.h"
 #include "AABB.h"
 

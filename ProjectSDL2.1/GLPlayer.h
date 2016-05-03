@@ -40,6 +40,18 @@ public:
 
 		NUM_POWERUPS
 	};
+	enum Animations
+	{
+		AONE,
+		ATWO,
+		ATHREE,
+		AFOUR,
+		AFIVE,
+		ASIX,
+		ASEVEN,
+
+		NUM_ANIMATION
+	};
 
 	GLPlayer();
 	GLPlayer(FishBox * FSH_Loader, char* filePath);
@@ -58,9 +70,9 @@ public:
 	GLPlayer::PowerUps GetPowerUp();
 	GLPlayer::PowerUps SetPowerUp(GLPlayer::PowerUps power);
 
-	glm::vec3& getVelocity() {
-		return m_velocity;
-	}
+	float * GetBlendWeights() { return blendWeights; }
+	unsigned int GetBlendShapeCount() { return NUM_ANIMATION; }
+	glm::vec3& getVelocity() { return m_velocity; }
 private:
 	const int DEADZONE = 20;
 	float MOVEMENT_FRICTION = 2.0f;
@@ -86,6 +98,8 @@ private:
 	bool isDashing;
 	bool dashOnCooldown;
 
+	float * blendWeights;
+
 	SDL_GameController *pad;
 	int instanceID;
 	GLCamera m_camera;
@@ -105,5 +119,6 @@ private:
 
 	void CalcVelocity(float& deltaTime);
 	void HandleDash(float& deltaTime);
+
 };
 
