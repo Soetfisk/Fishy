@@ -274,7 +274,6 @@ void GLPlayer::HandleDash(float & deltaTime)
 	{
 		m_camera.AddDistance(MOVE_CAM_DISTANCE * deltaTime);
 		dashCurrentDuration += deltaTime;
-		this->PlayerMove(0, 0, (MAX_INPUT - MAX_INPUT * dashCurrentDuration / dashDuration));
 		if (dashCurrentDuration >= DASH_DURATION)
 		{
 			isDashing = false;

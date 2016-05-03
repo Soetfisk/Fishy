@@ -1,6 +1,5 @@
 #include "GLCollisionHandler.h"
 
-
 void GLCollisionHandler::CheckCollisions(float deltaTime)
 {
 	glm::vec3 distance;
@@ -85,18 +84,11 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 
 				if (NPCs.at(j)->GetBoundingBox().containsAABB(players.at(i)->GetBoundingBox()))
 				{
-					if (NPCs.at(j)->GetCurrentState()!=NPC_INACTIVE)
+					if (NPCs.at(j)->GetCurrentState()!=NPC_INACTIVE && NPCs.at(j)->GetCurrentState() != NPC_BEINGEATEN)
 					{
 						NPCs.at(j)->gettingEaten(deltaTime, players.at(i)->GetTransform());
 						players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(0));
-
-						if (NPCs.at(j)->GetTransform().GetScale().y < 0.2)
-						{
-							NPCs.at(j)->NPCKill();
-						}
 					}
-					
-
 				}
 				else if (NpcSeenSpace.containsAABB(players.at(i)->GetBoundingBox()))
 				{
