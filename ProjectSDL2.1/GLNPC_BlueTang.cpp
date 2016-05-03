@@ -49,8 +49,12 @@ void GLNPC_BlueTang::NPCUpdate(float deltaTime)
 		}
 		else if (currentState == NPC_BEINGEATEN)
 		{
-			;
-
+			glm::vec3 reduce = this->transform->GetScale() - deltaTime / 2;
+			this->transform->SetScale(reduce);
+			if (GetTransform().GetScale().y < 0.2)
+			{
+				NPCKill();
+			}
 		}
 		checkboarderCollision();
 	}
@@ -68,8 +72,7 @@ void GLNPC_BlueTang::gettingEaten(float deltaTime, GLTransform playerTransform)
 {
 	if (this->currentState != NPC_INACTIVE)
 	{
-		glm::vec3 reduce = this->transform->GetScale() - deltaTime / 2;
-		this->transform->SetScale(reduce);
+		
 		this->transform->SetPos(playerTransform.GetPos());
 		this->currentState = NPC_BEINGEATEN;
 
