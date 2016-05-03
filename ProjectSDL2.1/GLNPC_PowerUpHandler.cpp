@@ -2,58 +2,32 @@
 
 void NpcPowerUpHandler::initiatePowerFishes()
 {
-	AddPowerUpFish();
-
-	//unsigned int randomNumber1 = RNG::range(0, NPCs.size()-1);
-	//unsigned int randomNumber2 = RNG::range(0, NPCs.size()-1);
-
-	//if (NPCs.size() >= 3)
-	//{
-	//	/*unsigned int randomNumber1 = NPCs.size()-1;
-	//	unsigned int randomNumber2 = NPCs.size()-1;*/
-
-	//	if (randomNumber2 == randomNumber1)
-	//	{
-	//		if (randomNumber2 < (NPCs.size() / 2))
-	//		{
-	//			randomNumber2++;
-	//		}
-	//		else
-	//		{
-	//			randomNumber2--;
-	//		}
-	//	}
-
-	//	//printf("%d, %d", randomNumber1, randomNumber2);
-	//	NPCs.at(randomNumber1)->isPowerUp = true;
-	//	NPCs.at(randomNumber1)->SetCurrentState();
-	//	PowerNPCs.push_back(NPCs.at(randomNumber1));
-
-	//	NPCs.at(randomNumber2)->isPowerUp = true;
-	//	NPCs.at(randomNumber2)->SetCurrentState();
-	//	PowerNPCs.push_back(NPCs.at(randomNumber2));
-	//}
-
-}
-
-void NpcPowerUpHandler::AddPowerUpFish()
-{
-	if (NPCs.size() >= 3)
+	for (unsigned int FishIndex = 0; FishIndex < NPCs.size(); FishIndex++)
 	{
+		AvailableFishes.push_back(FishIndex);
+	}
 
-		//RNG::Pick(0, NPCs.size(), powerFishIndexes);
-		unsigned int randomNumber=RNG::Pick(0, 3, powerFishIndexes);
-
-
-
-		NPCs.at(randomNumber)->isPowerUp = true;
-		NPCs.at(randomNumber)->SetCurrentState();
-		PowerNPCs.push_back(NPCs.at(randomNumber));
-
+	assert(amountOfPowerUpFishes < NPCs.size());
+	for (size_t i = 0; i < amountOfPowerUpFishes; i++)
+	{
+		MakePowerUpFish();
+	}
 	
 
 
+}
 
+void NpcPowerUpHandler::MakePowerUpFish()
+{
+	if (AvailableFishes.size()>0)
+	{
+		unsigned int Index = RNG::PickIndexVector(&AvailableFishes);
+		unsigned int Fish = AvailableFishes.at(Index); 
+		AvailableFishes.erase(AvailableFishes.begin() + Index);
+		NPCs.at(Fish)->isPowerUp = true;
+		NPCs.at(Fish)->SetCurrentState();
+
+		PowerNPCs.push_back(NPCs.at(Fish));
 	}
 }
 
@@ -63,18 +37,49 @@ NpcPowerUpHandler::NpcPowerUpHandler(std::vector<GLNPC*> NPCList)
 	initiatePowerFishes();
 }
 
-void NpcPowerUpHandler::RemovePowerUpFish(GLNPC* RemoveThisFish)
+void NpcPowerUpHandler::RemovePowerUpFish(GLNPC* RemoveThisFish, unsigned int Fishindex)
 {
 	for (unsigned int  i = 0; i < PowerNPCs.size(); i++)
 	{
 		if (PowerNPCs.at(i) == RemoveThisFish)
 		{
-			PowerNPCs.erase(PowerNPCs.begin()+i);
-			AddPowerUpFish();
+			PowerNPCs.erase(PowerNPCs.begin() + i);
+			MakePowerUpFish();
 			break;
+			
 		}
+		
 	}
 
+}
+
+void NpcPowerUpHandler::RemoveAvailableFish(unsigned int Fishindex)
+{
+	for (unsigned int i = 0; i < AvailableFishes.size(); i++)
+	{
+		if (AvailableFishes.at(i) == Fishindex)
+		{
+			AvailableFishes.erase(AvailableFishes.begin() + i);
+		}
+	}
+}
+
+
+
+void NpcPowerUpHandler::MovePowerUpToAnotherFish(GLNPC* RemoveThisFish, unsigned int Fishindex)
+{
+	for (unsigned int i = 0; i < PowerNPCs.size(); i++)
+	{
+		if (PowerNPCs.at(i) == RemoveThisFish)
+		{
+			PowerNPCs.at(i)->isPowerUp = false;
+			PowerNPCs.erase(PowerNPCs.begin() + i);
+			AvailableFishes.push_back(Fishindex);
+			MakePowerUpFish();
+			break;
+		}
+
+	}
 }
 
 NpcPowerUpHandler::~NpcPowerUpHandler()

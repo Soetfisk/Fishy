@@ -6,7 +6,7 @@ GLNPC_BlueTang::GLNPC_BlueTang(FishBox * FSH_Loader, unsigned int modelID) : GLN
 {
 	this->currentState = NPC_MOVE;
 	transform->SetPos(glm::vec3(RNG::range(-DEADZONEX, DEADZONEX), RNG::range(-DEADZONEY, DEADZONEY), RNG::range(-DEADZONEZ, DEADZONEZ)));
-	glm::vec3 scale = glm::vec3(RNG::range(1.1f,3.0f));
+	glm::vec3 scale = glm::vec3(RNG::range(3.1f,10.0f));
 	transform->SetScale(scale);
 
 	this->TimeUntilChange = RNG::range(0.2, 3.0f);
@@ -81,7 +81,7 @@ void GLNPC_BlueTang::NPCKill()
 	this->currentState = NPC_INACTIVE;
 	if (this->isPowerUp == true)
 	{
-		printf("i wanna be the very fish, that no one ever was");
+		;//printf("i wanna be the very fish, that no one ever was");
 	}
 }
 

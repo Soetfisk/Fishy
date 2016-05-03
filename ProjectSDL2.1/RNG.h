@@ -43,9 +43,9 @@ namespace RNG {
 		bool add;
 
 	
-		printf("%d",NumbersToIgnore.size());
+		printf("Number of ignores = %d \n\n",NumbersToIgnore.size());
 		
-		for (unsigned int i = minIndex; i <= maxIndex; i++)
+		for (unsigned int i = minIndex; i < maxIndex; i++)
 		{
 			add=true;
 
@@ -61,19 +61,29 @@ namespace RNG {
 			}
 				
 		}
-
+		printf("tempList\n");
 		for (size_t i = 0; i < temp.size(); i++)
 		{
 			printf("%d\n", temp.at(i));
 		}
-
+		
 		unsigned int result = rand() % temp.size();
 		result= temp.at(result);
-
-		//delete temp;
+		printf("\n\nResult= %d\n\n", result);
 
 		return result;
 		
+
+	}
+
+
+	inline unsigned int PickIndexVector(std::vector<unsigned int>* vector)
+	{
+		
+		unsigned int result = rand() % vector->size();
+
+		return result;
+
 
 	}
 #pragma endregion	

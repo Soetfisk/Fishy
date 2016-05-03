@@ -16,7 +16,7 @@ void Scene::LoadModels()
 	for (int i = 0; i < 0; i++) {
 		this->NPCs.push_back(new GLNPC_GoldFish(&FSH_Loader, GoldFish));
 	}
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 5; i++) {
 		this->NPCs.push_back(new GLNPC_BlueTang(&FSH_Loader, BlueTang));
 	}
 	for (int i = 0; i < 1; i++) {

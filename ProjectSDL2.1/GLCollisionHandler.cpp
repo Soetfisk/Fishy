@@ -58,7 +58,7 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 			}
 		}
 
-		for (int j = 0; j < this->NPCs.size(); j++) {
+		for (unsigned int j = 0; j < this->NPCs.size(); j++) {
 
  			distance = players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos();
 			distSqrd = glm::dot(distance, distance);
@@ -76,9 +76,14 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 						if (NPCs.at(j)->GetTransform().GetScale().y < 0.2)
 						{
 							NPCs.at(j)->NPCKill();
+							
 							if (NPCs.at(j)->GetIsPowerUp()==true)
 							{
-								PowerUpHandler->RemovePowerUpFish(NPCs.at(j));
+								PowerUpHandler->RemovePowerUpFish(NPCs.at(j),j);
+							}
+							else
+							{
+								PowerUpHandler->RemoveAvailableFish(j);
 							}
 						}
 					}

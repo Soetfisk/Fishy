@@ -81,7 +81,7 @@ void GLNPC_GoldFish::NPCKill()
 	this->currentState = NPC_INACTIVE;
 	if (this->isPowerUp == true)
 	{
-		printf("i wanna be the very fish, that no one ever was");
+		//printf("i wanna be the very fish, that no one ever was");
 	}
 }
 
