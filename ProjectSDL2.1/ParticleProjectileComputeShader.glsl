@@ -4,11 +4,9 @@
 #extension GL_ARB_shader_storage_buffer_object : enable
 
 struct Particle{
-	mat4 transformMatrix;
 	vec4 position;
-	vec4 scaling;
-	vec4 rotation;
 	vec4 velocities;
+	float scaling;
 };
 
 

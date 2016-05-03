@@ -66,10 +66,8 @@ void ParticleComputeShader::Initialize(EmitterType type, int nrMaxParticles, Par
 void ParticleComputeShader::Update(const float & deltaTime, int nrActiveParticles, ParticleRenderingUpdateData&data) {
 	
 	for (int i = 0; i < nrActiveParticles; i++) {
-		particleData[i].transformMatrix = data.transformMatrix[i];
 		particleData[i].position = data.position[i];
 		particleData[i].scaling = data.scaling[i];
-		particleData[i].rotation = data.rotation[i];
 		particleData[i].velocity = data.velocity[i];
 	}
 
@@ -86,9 +84,7 @@ void ParticleComputeShader::Update(const float & deltaTime, int nrActiveParticle
 	//Copying data
 	for (int i = 0; i < nrActiveParticles; i++) {
 		data.position[i] = particleData[i].position;
-		data.transformMatrix[i] = particleData[i].transformMatrix;
 		data.scaling[i] = particleData[i].scaling;
-		data.rotation[i] = particleData[i].rotation;
 		data.velocity[i] = particleData[i].velocity;
 	}
 
