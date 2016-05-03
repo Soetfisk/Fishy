@@ -5,9 +5,13 @@
 #include "GLShader.h"
 #include "GLtexture.h"
 
+
+
 class ParticleEmitter
 {
 private:
+
+
 
 	enum ParticleVB
 	{
@@ -37,6 +41,7 @@ private:
 
 	glm::vec4 positionEmitter;
 	GLuint pe_VertexArrayObject;
+	GLuint pe_particleBuffer;
 	GLuint pe_VertexArrayBuffers[NUM_BUFFERS];
 
 	GLuint pe_posBuf, pe_scaleBuf;
@@ -57,7 +62,7 @@ private:
 
 
 
-	void swapData(int fromID, int destinationID);
+	void swapData(int ID);
 	void deactivateParticleAt(int ID);
 	void spawnParticle();
 	void updateParticles(const float& deltaTime);

@@ -23,7 +23,6 @@ void ParticleHandler::DrawParticles(GLShader* shader, GLCamera& camera) {
 		shader->Bind();
 		shader->Update(camera);
 		this->emiters.at(i)->Draw(shader);
-		//this->emiters.at(i).Update(deltaTime);
 	}
 }
 

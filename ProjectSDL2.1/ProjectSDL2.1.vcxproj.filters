@@ -192,6 +192,7 @@
     <None Include="Particle.geom" />
     <None Include="Particle.vert" />
     <None Include="ParticleProjectileComputeShader.glsl" />
+    <None Include="ParticleTestShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header">

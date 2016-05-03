@@ -81,6 +81,7 @@
     <None Include="Particle.geom" />
     <None Include="Particle.vert" />
     <None Include="ParticleProjectileComputeShader.glsl" />
+    <None Include="ParticleTestShader.glsl" />
     <None Include="pass.frag" />
     <None Include="pass.vert" />
     <None Include="post.frag" />

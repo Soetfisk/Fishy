@@ -38,7 +38,7 @@ bool IsInsideSphere(vec3 p, vec4 s){
 void main(){
 	const vec4 SPHERE = vec4( -100., -800., 0., 600. ); // x, y, z, r 
 
-	const vec3 G = vec3(0.f,-9.8f,0.f);
+	const vec3 G = vec3(0.f,-.038f,0.f);
 	
 
 	uint gid = gl_GlobalInvocationID.x;

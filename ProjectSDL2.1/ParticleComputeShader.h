@@ -12,6 +12,14 @@ struct ParticleRenderingUpdateData {
 	float* scaling;
 };
 
+struct ParticleStruct {
+	glm::vec4 pos;
+	float scale;
+	glm::vec4 emiterPosition;
+	float lifeTime;
+	glm::vec4 velocity;
+};
+
 struct ParticleTestPos {
 	GLfloat x, y, z, w;
 };
@@ -19,7 +27,9 @@ struct ParticleTestPos {
 class ParticleComputeShader
 {
 private:
+	
 	GLuint transSSbo, velSSbo;
+	GLuint VAO_Buffer;
 	GLuint compute_program, compute_shader;
 	glm::vec4* testPos;
 	ParticleComputeStruct* particleData;
@@ -35,10 +45,10 @@ public:
 	ParticleComputeShader();
 	~ParticleComputeShader();
 
-	void Initialize(EmitterType type, int nrMaxParticles, ParticleRenderingUpdateData data);
+	void Initialize(EmitterType type, int nrMaxParticles, GLuint &ParticleSSBO);
 	void InitializeProjectileShader();
 
-	void Update(const float & deltaTime, int nrActiveParticles, ParticleRenderingUpdateData &data);
+	void Update(const float & deltaTime, int nrActiveParticles, GLuint &ParticleSSBOS);
 };
 
 //g321
