@@ -28,6 +28,7 @@ void Scene::LoadModels()
 	this->collisionHandler.AddPlayer(players);
 	this->collisionHandler.AddModel(models);
 	this->collisionHandler.InitiatePowerUpHandler();
+	// DEPDPEPDPEDP
 
 }
 
@@ -66,8 +67,10 @@ Scene::Scene() {
 	
 	LoadModels();
 	
-	this->players.at(1)->GetTransform().SetPos(glm::vec3(3, 3, 3));
-	//this->players.at(0)->GetTransform().SetPos(glm::vec3(0, 0, 0));
+	this->players.at(1)->GetTransform().SetPos(glm::vec3(100, 0, 0));
+	this->players.at(1)->GetTransform().SetRot(glm::vec3(0, -1.58, 0));
+	this->players.at(0)->GetTransform().SetPos(glm::vec3(-100, 0, 0));
+	this->players.at(0)->GetTransform().SetRot(glm::vec3(0, 1.58, 0));
 	this->staticMeshes.at(0)->GetTransform().SetPos(glm::vec3(0, 0, 0));
 
 	//this->staticMeshes.at(0)->GetTransform().SetRot(glm::vec3(4.71238898f, 0, 0));
@@ -375,6 +378,9 @@ void Scene::HandleEvenet(SDL_Event* e) {
 			case SDL_CONTROLLER_BUTTON_A:
 				players.at(e->cbutton.which + 1)->Update(GLPlayer::PLAYER_SHOOT, glm::vec3(0));
 				break;
+			case SDL_CONTROLLER_BUTTON_B:
+				players.at(e->cbutton.which + 1)->Update(GLPlayer::PLAYER_DASH, glm::vec3(0));
+				break;
 			default:
 				break;
 			}
@@ -416,8 +422,14 @@ void Scene::HandleEvenet(SDL_Event* e) {
 			case SDL_SCANCODE_H:
 				players.at(0)->SetPowerUp(GLPlayer::POWER_HIGH);
 				break;
-			case SDL_SCANCODE_J:
+			case SDL_SCANCODE_Y:
 				players.at(0)->SetPowerUp(GLPlayer::POWER_NEUTRAL);
+				break;
+			case SDL_SCANCODE_J:
+				players.at(0)->SetPowerUp(GLPlayer::POWER_BUBBLESHOTGUN);
+				break;
+			case SDL_SCANCODE_K:
+				players.at(0)->SetPowerUp(GLPlayer::POWER_BUBBLEBIG);
 				break;
 			default:
 				break;

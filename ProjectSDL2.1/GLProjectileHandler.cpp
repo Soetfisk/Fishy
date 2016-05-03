@@ -1,21 +1,26 @@
 #include "GLProjectileHandler.h"
+#include "RNG.h"
 
 GLProjectileHandler::GLProjectileHandler()
 {
-	projectileActiveTime = 0;
-	projectileSpeed = 0;
+	projectileActiveTime = 0.0f;
+	projectileSpeed = 0.0f;
 }
 
-GLProjectileHandler::GLProjectileHandler(FishBox* FSH_Loader, unsigned int modelID, int nrOfProjectiles, int projectileActiveTime, float projectileSpeed)
+GLProjectileHandler::GLProjectileHandler(FishBox* FSH_Loader, unsigned int modelID, int nrOfProjectiles, int projectileActiveTime, float projectileSpeed, float cooldown)
 {
 	this->FSH_Loader = FSH_Loader;
 	this->modelID = modelID;
 	this->projectileActiveTime = projectileActiveTime;
 	this->projectileSpeed = projectileSpeed;
-	this->projectileStrength = 10;
+	this->projectileStrength = 10.0f;
+	this->projectileSize = 1.0f;
+	this->cooldownDuration = cooldown;
+	this->cooldownCounter = 0.0f;
+	this->cooldown = false;
 	for (int i = 0; i < nrOfProjectiles; i++)
-		projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed, projectileStrength));
-	currentState = SHOTGUN;
+		projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed, projectileStrength, projectileSize));
+	currentState = REGULAR;
 }
 
 GLProjectileHandler::~GLProjectileHandler()
@@ -26,31 +31,54 @@ GLProjectileHandler::~GLProjectileHandler()
 
 void GLProjectileHandler::Shoot(glm::vec3 forward, glm::vec3 pos, glm::vec3 rot, glm::vec3 velocity, glm::vec3 right, glm::vec3 up)
 {
-	switch (currentState)
+	if (!cooldown)
 	{
-	case REGULAR:
-		RegularShoot(forward, pos, rot, velocity);
-		break;
-	case SHOTGUN:
-		ShotgunShoot(forward, pos, rot, velocity, right, up);
-		break;
-	case BIG:
-		RegularShoot(forward, pos, rot, velocity);
-		break;
-	case FAST:
-		RegularShoot(forward, pos, rot, velocity);
-		break;
-	case STRONG:
-		RegularShoot(forward, pos, rot, velocity);
-		break;
-	default:
-		break;
+		switch (currentState)
+		{
+		case REGULAR:
+			RegularShoot(forward, pos, rot, velocity);
+			break;
+		case SHOTGUN:
+			ShotgunShoot(forward, pos, rot, velocity, right, up);
+			break;
+		case BIG:
+			RegularShoot(forward, pos, rot, velocity);
+			break;
+		case FAST:
+			RegularShoot(forward, pos, rot, velocity);
+			break;
+		case STRONG:
+			RegularShoot(forward, pos, rot, velocity);
+			break;
+		default:
+			break;
+		}
+		cooldown = true;
 	}
-	
 }
 
 void GLProjectileHandler::ChangeStateTo(ProjectilePowerUpState state)
 {
+	switch (state)
+	{
+	case REGULAR:
+		projectileSize = 1.0f;
+		break;
+	case SHOTGUN:
+		projectileSize = 1.0f;
+		break;
+	case BIG:
+ 		projectileSize = BIG_PROJECTILE_SIZE;
+		break;
+	case FAST:
+		projectileSize = 1.0f;
+		break;
+	case STRONG:
+		projectileSize = 1.0f;
+		break;
+	default:
+		break;
+	}
 	currentState = state;
 }
 
@@ -59,6 +87,15 @@ void GLProjectileHandler::Update(float& dt)
 	GLProjectile* temp = nullptr;
 	for (int i = 0; i < projectiles.size(); i++)
 		projectiles.at(i)->TestUpdate(dt);
+	if (cooldown)
+	{
+		cooldownCounter += dt;
+		if (cooldownCounter >= cooldownDuration)
+		{
+			cooldown = false;
+			cooldownCounter = 0.0f;
+		}
+	}
 }
 
 void GLProjectileHandler::Draw(GLShader& shader)
@@ -104,54 +141,71 @@ GLProjectile* GLProjectileHandler::GetInactiveProjectile()
 void GLProjectileHandler::RegularShoot(glm::vec3 forward, glm::vec3 pos, glm::vec3 rot, glm::vec3 velocity)
 {
 	GLProjectile* projectilePtr = GetInactiveProjectile();
-	if (projectilePtr != nullptr)
-		projectilePtr->Shoot(pos, forward, velocity, rot);
-	else
-		projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed));
+	if (projectilePtr == nullptr)
+	{
+		projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed, projectileSize));
+		projectilePtr = projectiles.back();
+	}
+
+	projectilePtr->SetScale(projectileSize);
+	float size = glm::length(projectilePtr->GetBoundingBox().halfDimension) * SHOTGUN_OFFSET;
+	pos = pos + forward * size;
+	projectilePtr->Shoot(pos, forward, velocity, rot);
 }
 
 void GLProjectileHandler::ShotgunShoot(glm::vec3 forward, glm::vec3 pos, glm::vec3 rot, glm::vec3 velocity, glm::vec3 right, glm::vec3 up)
 {
-
+	// Get projectiles boundingBox and get the size for offsetting
 	GLProjectile* projectilePtr = GetInactiveProjectile();
 	if (projectilePtr == nullptr)
 	{
-		projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed, projectileStrength));
+		projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed, projectileStrength, projectileSize));
 		projectilePtr = projectiles.back();
 	}
-
-	glm::vec3 offSet = projectilePtr->GetBoundingBox().halfDimension;
-	glm::vec3 projRight = right;
-	glm::vec3 projUp = up;
-	float size = glm::length(offSet) * 1.0f;
-
+	projectilePtr->SetScale(projectileSize);
+	float size = glm::length(projectilePtr->GetBoundingBox().halfDimension) * SHOTGUN_OFFSET;
 	glm::vec3 tempRight;
 	glm::vec3 tempUp;
+	glm::vec3 tempForward;
+	float angle = 0.0f;
+	pos = pos + forward * size;
 
 	for (float x = -1; x < 2; x++)
 	{
 		for (float y = -1; y < 2; y++)
 		{
-			tempRight = glm::vec3(projRight.x, projRight.y, projRight.z);
-			tempUp = glm::vec3(projUp.x, projUp.y, projUp.z);
-			
-			if (x != 0)
-				tempRight *= size * x;
-			else
-				tempRight *= 0;
-			if (y != 0)
-				tempUp *= size * y;
-			else
-				tempUp *= 0;
-		
-			projectilePtr = GetInactiveProjectile();
-			if (projectilePtr != nullptr)
-				projectilePtr->Shoot(pos + (tempRight + tempUp), forward, velocity, rot);
-			else
+			tempRight = glm::vec3(right.x, right.y, right.z);
+			tempUp = glm::vec3(up.x, up.y, up.z);
+			do 
+				angle = RNG::range(0.0f, MAX_ANGLE);
+			while (angle == 0);
+			do 
 			{
-				projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed, projectileStrength));
-				projectiles.back()->Shoot(pos + (tempRight + tempUp), forward, velocity, rot);
-			}	
+				tempForward = glm::vec3(forward.x + RNG::range(-angle, angle),
+										forward.y + RNG::range(-angle, angle),
+										forward.z + RNG::range(-angle, angle));
+			} while (glm::dot(forward, tempForward) < 1);
+			glm::normalize(tempForward);
+
+			if (x != 0)
+				tempRight *= size * x;	// Add offset in X
+			else
+				tempRight *= 0.0f;		// Remove offset in X
+			if (y != 0)
+				tempUp *= size * y;		// Add offset in Y
+			else
+				tempUp *= 0.0f;			// Remove offset in Y;
+			
+			// Get a inactive projectile
+			projectilePtr = GetInactiveProjectile();
+			if (projectilePtr == nullptr) // Create projectile if needed
+			{
+				projectiles.push_back(new GLProjectile(FSH_Loader, modelID, projectileActiveTime, projectileSpeed, projectileStrength, projectileSize));
+				projectilePtr = projectiles.back();
+			}
+			// Set scale and shoot from new start pos(startPos + tempRight + tempUp)
+			projectilePtr->SetScale(projectileSize);
+			projectilePtr->Shoot(pos + tempRight + tempUp, tempForward, velocity, rot);
 		}
 	}
 }

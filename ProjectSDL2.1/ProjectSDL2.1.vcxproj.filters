@@ -138,7 +138,7 @@
     <ClInclude Include="GLNPC_BlueTang.h">
       <Filter>Header\NPCs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\RNG.h">
+    <ClInclude Include="RNG.h">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\GLNPC_PowerUpHandler.h">

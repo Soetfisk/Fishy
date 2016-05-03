@@ -44,7 +44,6 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\GLNPC_PowerUpHandler.h" />
     <ClInclude Include="GLNPC_BlueTang.h" />
-    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\RNG.h" />
     <ClInclude Include="AABB.h" />
     <ClInclude Include="FilterComputeShader.h" />
     <ClInclude Include="GLGUIHandler.h" />
@@ -66,6 +65,7 @@
     <ClInclude Include="GLWindow.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="obj_loader.h" />
+    <ClInclude Include="RNG.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SphereBS.h" />
   </ItemGroup>
