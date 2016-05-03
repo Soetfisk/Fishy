@@ -105,7 +105,7 @@ void GLPlayer::HandleCollision(PlayerStates state, float deltaTime, glm::vec3 mo
 	break;
 	case EATING:
 		this->transform->SetScale(this->transform->GetScale() + (deltaTime/4));
-		this->point += 10;
+		totalPoints += 1000;
 		break;
 	case HIT:
 		this->m_velocity += momentum;
@@ -133,6 +133,13 @@ void GLPlayer::SetPowerUp(GLPlayer::PowerUps power)
 {
 	this->currentPowerUp = power;
 	this->HandlePowerUps();
+}
+
+int GLPlayer::GetPoints()
+{
+	int points = currentPoints;
+	currentPoints = 0;
+	return points;
 }
 
 //adds a controller too the player
@@ -183,6 +190,13 @@ void GLPlayer::PlayerMove(float x, float y, float z)
 
 void GLPlayer::PlayerUpdate(float deltaTime)
 {
+	//point update
+	if (totalPoints > 0)
+	{
+		currentPoints += 10;
+		totalPoints -= 10;
+	}
+	std::cout << "Total: " << totalPoints << "Current: " << currentPoints << std::endl;
 	//player update
 	glm::vec3 v = glm::vec3((lastVertical / (MAX_INPUT)), (lastHorizontal / (MAX_INPUT)),0);
 	this->transform->m_rot += (v * rotateSpeed * deltaTime);
@@ -191,7 +205,6 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 		this->transform->m_rot.x = glm::radians(MAX_ANGLE);
 	if (this->transform->m_rot.x < -glm::radians(MAX_ANGLE))
 		this->transform->m_rot.x = -glm::radians(MAX_ANGLE);
-	std::cout << "rotating" << std::endl;
 
 	float maxAngle = 0.785398;
 
@@ -311,5 +324,5 @@ void GLPlayer::HandlePowerUps()
 
 void GLPlayer::PlayerEating(float deltaTime)
 {
-	
+	totalPoints += 1000;
 }
