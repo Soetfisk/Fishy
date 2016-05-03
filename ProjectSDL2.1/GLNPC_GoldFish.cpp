@@ -180,15 +180,6 @@ void GLNPC_GoldFish::checkboarderCollision()
 	transform->SetPos(pos);
 }
 
-int GLNPC_GoldFish::GetCurrentState()
-{
-	return this->currentState;
-}
-
-void GLNPC_GoldFish::SetCurrentState()
-{
-	currentState = NPC_BEINGEATEN;
-}
 
 bool GLNPC_GoldFish::GetIsPowerUp()
 {

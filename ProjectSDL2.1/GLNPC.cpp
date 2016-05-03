@@ -1,11 +1,17 @@
 #include "GLNPC.h"
 
-GLNPC::GLNPC(FishBox * FSH_Loader, unsigned int modelID) : GLModel(FSH_Loader,modelID)
+int GLNPC::GetCurrentState()
 {
-	//Pass;
+	return currentState;
 }
 
-//void GLNPC::SetPowerUpHandler(NpcPowerUpHandler* PowerUpHandler)
-//{
-//	this->PowerUpHandler = PowerUpHandler;
-//}
+void GLNPC::SetCurrentState()
+{
+	this->currentState = NPC_STANDSTILL;
+}
+
+GLNPC::GLNPC(FishBox * FSH_Loader, unsigned int modelID) : GLModel(FSH_Loader,modelID)
+{
+	;
+}
+

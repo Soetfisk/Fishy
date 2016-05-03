@@ -13,22 +13,20 @@ void Scene::LoadModels()
 	for (int i = 0; i < 2; i++) {
 		this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));
 	}
-	for (int i = 0; i < 0; i++) {
+	for (int i = 0; i < 20; i++) {
 		this->NPCs.push_back(new GLNPC_GoldFish(&FSH_Loader, GoldFish));
 	}
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 10; i++) {
 		this->NPCs.push_back(new GLNPC_BlueTang(&FSH_Loader, BlueTang));
 	}
-	for (int i = 0; i < 1; i++) {
-		this->staticMeshes.push_back(new GLModel(&FSH_Loader, Aquarium));
-	}
+	
+	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Aquarium));
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
 	this->collisionHandler.AddNPC(NPCs);
 	this->collisionHandler.AddPlayer(players);
 	this->collisionHandler.AddModel(models);
 	this->collisionHandler.InitiatePowerUpHandler();
-	// DEPDPEPDPEDP
 
 }
 
