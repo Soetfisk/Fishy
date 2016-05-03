@@ -190,6 +190,7 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 		this->transform->m_rot.x = glm::radians(MAX_ANGLE);
 	if (this->transform->m_rot.x < -glm::radians(MAX_ANGLE))
 		this->transform->m_rot.x = -glm::radians(MAX_ANGLE);
+	std::cout << "rotating" << std::endl;
 
 	float maxAngle = 0.785398;
 
@@ -273,7 +274,6 @@ void GLPlayer::HandleDash(float & deltaTime)
 	{
 		m_camera.AddDistance(MOVE_CAM_DISTANCE * deltaTime);
 		dashCurrentDuration += deltaTime;
-		this->PlayerMove(0, 0, (MAX_INPUT - MAX_INPUT * dashCurrentDuration / dashDuration));
 		if (dashCurrentDuration >= DASH_DURATION)
 		{
 			isDashing = false;
