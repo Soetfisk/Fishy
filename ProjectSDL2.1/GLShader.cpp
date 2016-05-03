@@ -149,7 +149,7 @@ void GLShader::UniformVec3(std::string name, glm::vec3 vector)
 	glUniform3fv(glGetUniformLocation(this->m_program, name.c_str()), 1, &vector[0]);
 }
 
-void GLShader::Uniform1i(std::string name, unsigned int number)
+void GLShader::Uniform1i(std::string name, GLuint number[10])
 {
-	glUniform1ui(glGetUniformLocation(this->m_program, name.c_str()), number);
+	glUniform1uiv(glGetUniformLocation(this->m_program, name.c_str()), 10, number);
 }
