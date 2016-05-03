@@ -7,6 +7,12 @@
 class GameMain
 {
 private:
+	enum GameState
+	{
+		GAME_GAME,
+		GAME_MENU
+	};
+	GameState gameState;
 	int prevTime;
 	int currentTime;
 	float deltaTime;
