@@ -333,7 +333,15 @@ void Scene::RenderQuad()
 
 void Scene::ResetScene()
 {
-
+	for (int i = 0; i < NPCs.size(); i++)
+	{
+		NPCs.at(i)->ResetFish();
+	}
+	guih->Reset();
+	for (int i = 0; i < players.size(); i++)
+	{
+		players.at(i)->ResetPlayer();
+	}
 }
 
 void Scene::HandleEvenet(SDL_Event* e) {
@@ -428,6 +436,9 @@ void Scene::HandleEvenet(SDL_Event* e) {
 				break;
 			case SDL_SCANCODE_K:
 				players.at(0)->SetPowerUp(GLPlayer::POWER_BUBBLEBIG);
+				break;
+			case SDL_SCANCODE_L:
+				ResetScene();
 				break;
 			default:
 				break;

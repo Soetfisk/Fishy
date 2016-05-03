@@ -29,4 +29,5 @@ public:
 	virtual void NPCKill() = 0;
 	virtual void initiateFleeingState(glm::vec3 playerForwardVector) = 0;
 	virtual int GetCurrentState() = 0;
+	virtual void ResetFish() = 0;
 };

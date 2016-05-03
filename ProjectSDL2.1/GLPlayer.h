@@ -57,6 +57,7 @@ public:
 	int point = 0;
 	GLPlayer::PowerUps GetPowerUp();
 	void SetPowerUp(GLPlayer::PowerUps power);
+	void ResetPlayer();
 
 	glm::vec3& getVelocity() {
 		return m_velocity;

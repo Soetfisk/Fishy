@@ -14,6 +14,7 @@ GLPlayer::GLPlayer() : GLModel() //NEVER USE
 	this->dashCooldownCounter = 0;
 	this->isDashing = false;
 	this->dashOnCooldown = false;
+	this->currentPowerUp = POWER_NEUTRAL;
 }
 
 GLPlayer::GLPlayer(FishBox* FSH_Loader, char* filePath) : GLModel(FSH_Loader, filePath) //DEPRICATED USE AT OWN RISK
@@ -133,6 +134,22 @@ void GLPlayer::SetPowerUp(GLPlayer::PowerUps power)
 {
 	this->currentPowerUp = power;
 	this->HandlePowerUps();
+}
+
+void GLPlayer::ResetPlayer()
+{
+	delete this->m_projectileHandler;
+	this->m_camera;
+	this->m_projectileHandler = new GLProjectileHandler();
+	this->m_velocity = glm::vec3(0);
+
+	this->dashCurrentDuration = 0.0f;
+	this->dashDuration = 0.2f;
+	this->dashCooldown = 5;
+	this->dashCooldownCounter = 0;
+	this->isDashing = false;
+	this->dashOnCooldown = false;
+	this->currentPowerUp = POWER_NEUTRAL;
 }
 
 //adds a controller too the player
