@@ -28,7 +28,7 @@ void GUI::InitCharacters()
 		std::cout << "ERROR::FREETYPE: Could not init FreeType Library\n";
 
 	// Load font
-	if (FT_New_Face(ft, "fonts/comic.ttf", 0, &face))
+	if (FT_New_Face(ft, "fonts/Starjedi.ttf", 0, &face))
 		std::cout << "ERROR::FREETYPE: Failed to load font\n";
 
 	// Set font size in width and height, 0 dynamiclly calculates the width/height based on the other, e.g. w = 0, h = 48

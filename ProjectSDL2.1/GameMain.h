@@ -3,6 +3,7 @@
 #include "GLUtil.h"
 #include "GLWindow.h"
 #include "Scene.h"
+#include "Menu.h"
 
 class GameMain
 {
@@ -14,6 +15,7 @@ private:
 	bool gameOn = true;
 	GLWindow* window;
 	Scene* scene;
+	Menu* menu;
 
 	//Private functions below
 	void SetDeltaTime();

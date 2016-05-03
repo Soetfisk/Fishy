@@ -37,6 +37,7 @@
     <ClCompile Include="GLWindow.cpp" />
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="obj_loader.cpp" />
     <ClCompile Include="Scene.cpp" />
   </ItemGroup>
@@ -62,6 +63,7 @@
     <ClInclude Include="GLUtil.h" />
     <ClInclude Include="GLWindow.h" />
     <ClInclude Include="GUI.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="obj_loader.h" />
     <ClInclude Include="RNG.h" />
     <ClInclude Include="Scene.h" />

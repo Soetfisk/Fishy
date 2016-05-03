@@ -61,6 +61,9 @@
     <ClCompile Include="GLNPC_BlueTang.cpp">
       <Filter>Source\NPCs</Filter>
     </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AABB.h">
@@ -136,6 +139,9 @@
       <Filter>Header\NPCs</Filter>
     </ClInclude>
     <ClInclude Include="RNG.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
