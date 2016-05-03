@@ -113,6 +113,7 @@ public:
 	void LoadScene();
 	void DrawScene();
 	void RenderQuad();
+	void ResetScene();
 };
 
 #endif

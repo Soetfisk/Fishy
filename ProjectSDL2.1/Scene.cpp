@@ -331,6 +331,11 @@ void Scene::RenderQuad()
 	glBindVertexArray(0);
 }
 
+void Scene::ResetScene()
+{
+
+}
+
 void Scene::HandleEvenet(SDL_Event* e) {
 
 		if (e->type == SDL_CONTROLLERDEVICEADDED)
