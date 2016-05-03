@@ -11,7 +11,7 @@ private:
 	std::vector<unsigned int> AvailableFishes; //vector of potential powerUpFishes
 	std::vector<GLNPC*> NPCs; 
 
-	unsigned int amountOfPowerUpFishes = 2;
+	unsigned int amountOfPowerUpFishes = 10;
 	void initiatePowerFishes();
 	void MakePowerUpFish();
 
