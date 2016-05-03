@@ -198,12 +198,12 @@ void ParticleEmitter::InstantiateRenderShader() {
 void ParticleEmitter::InstantiateProjectileEmitter() {
 	this->directionFromObject = glm::vec3(0, 0, -1);
 	this->distanceFromObject = 2;
-	this->nrMaxParticles = 100;
-	this->spawnTimer = .1f;
+	this->nrMaxParticles = 500;
+	this->spawnTimer = .01f;
 	this->particleStartVelocity = glm::vec4(1, 0, 0, 1);
 	this->particleStartAcceleration = glm::vec4(.1, 0, 0, 0);
-	this->particleStartLifeTime = 6.f;
-	this->particleScale = .1f;
+	this->particleStartLifeTime = 3.f;
+	this->particleScale = 2.f;
 
 
 	//this->nrActiveParticles = 0;
@@ -295,7 +295,7 @@ void ParticleEmitter::UpdateEmitter(const float& deltaTime) {
 	//Update Particle timers
 	updateParticles(deltaTime);
 
-	//updateCompute(deltaTime);
+	updateCompute(deltaTime);
 
 	updateDrawData();
 

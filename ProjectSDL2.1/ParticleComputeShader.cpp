@@ -19,7 +19,7 @@ void ParticleComputeShader::Initialize(EmitterType type, int nrMaxParticles, Par
 
 	glGenBuffers(1, &transSSbo);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, transSSbo);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, transSSbo * sizeof(ParticleComputeStruct), NULL, GL_STATIC_DRAW);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, nrMaxParticles * sizeof(ParticleComputeStruct), NULL, GL_STATIC_DRAW);
 	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT; // the invalidate makes a big difference when re-writing
 	particleData = (struct ParticleComputeStruct *) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, nrMaxParticles * sizeof(ParticleComputeStruct), bufMask);
 	//for (int i = 0; i < nrMaxParticles; i++)
@@ -74,7 +74,7 @@ void ParticleComputeShader::Update(const float & deltaTime, int nrActiveParticle
 
 	glUseProgram(compute_program);
 	glUniform1fv(glGetUniformLocation(compute_program, "DT"), 1, &deltaTime);
-	glDispatchCompute(2, 1, 1);
+	glDispatchCompute((nrActiveParticles/2)+1, 1, 1);
 	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 
 	readBuffer();

@@ -189,7 +189,7 @@ void Scene::DrawScene() {
 	for (int i = 0; i < this->players.size(); i++) {
 		//Set viewport
 		glViewport(0, 0, window::WIDTH, window::HEIGHT/ 2);
-
+		
 		shaders[MODELS]->Bind();
 		shaders[MODELS]->Update(players.at(i)->GetCamera());
 		this->frameBuffer->BindFrameBuffer();
@@ -278,8 +278,8 @@ void Scene::DrawScene() {
 		
 
 		shaders[PASS]->Bind();
-		this->frameBuffer2->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
-		glViewport(0, window::HEIGHT - (window::HEIGHT / (i + 1)), window::WIDTH, window::HEIGHT / 2);
+		this->frameBuffer5->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
+		glViewport(0, window::HEIGHT - (window::HEIGHT *(.5*(i+1))), window::WIDTH, window::HEIGHT / 2);
 		this->RenderQuad();
 	}
 

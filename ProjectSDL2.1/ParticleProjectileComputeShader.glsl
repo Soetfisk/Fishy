@@ -57,6 +57,7 @@ void main(){
 
 	particles[gid].position.xyz = pp;
 	particles[gid].velocities.xyz = vp;
+	particles[gid].scaling = particles[gid].scaling;
 
 }
 
