@@ -138,9 +138,6 @@ void GLPlayer::SetPowerUp(GLPlayer::PowerUps power)
 
 void GLPlayer::ResetPlayer()
 {
-	delete this->m_projectileHandler;
-	this->m_camera;
-	this->m_projectileHandler = new GLProjectileHandler();
 	this->m_velocity = glm::vec3(0);
 
 	this->dashCurrentDuration = 0.0f;
@@ -150,6 +147,7 @@ void GLPlayer::ResetPlayer()
 	this->isDashing = false;
 	this->dashOnCooldown = false;
 	this->currentPowerUp = POWER_NEUTRAL;
+	this->HandlePowerUps();
 }
 
 //adds a controller too the player
