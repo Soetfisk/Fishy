@@ -176,7 +176,9 @@ void GLProjectileHandler::ShotgunShoot(glm::vec3 forward, glm::vec3 pos, glm::ve
 		{
 			tempRight = glm::vec3(right.x, right.y, right.z);
 			tempUp = glm::vec3(up.x, up.y, up.z);
-			angle = RNG::range(0.0f, MAX_ANGLE);
+			do 
+				angle = RNG::range(0.0f, MAX_ANGLE);
+			while (angle == 0);
 			do 
 			{
 				tempForward = glm::vec3(forward.x + RNG::range(-angle, angle),
