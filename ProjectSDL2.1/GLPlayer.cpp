@@ -208,7 +208,6 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 		this->transform->m_rot.x = glm::radians(MAX_ANGLE);
 	if (this->transform->m_rot.x < -glm::radians(MAX_ANGLE))
 		this->transform->m_rot.x = -glm::radians(MAX_ANGLE);
-	std::cout << "rotating" << std::endl;
 
 	float maxAngle = 0.785398;
 
