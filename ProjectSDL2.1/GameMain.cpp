@@ -46,6 +46,7 @@ void GameMain::GameLoop()
 			}
 			else
 			{
+				this->menu->HandleEvenet(&e);
 				//this->scene->HandleEvenet(&e);
 			}
 		}

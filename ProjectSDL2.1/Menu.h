@@ -17,7 +17,8 @@ private:
 	{
 		TITLE,
 		START_GAME,
-		TEMP,
+		CONTROLS,
+		EXIT,
 		SELECTED,
 
 		NUM_MENU_BUTTONS
@@ -26,10 +27,15 @@ private:
 	GLShader* menuShader;
 	GUI* gui;
 	glm::mat4 projection;
+	MenuButtons selectedBttn;
 
 	GLfloat textPos[NUM_MENU_BUTTONS][2];
 	GLfloat textScale[NUM_MENU_BUTTONS];
 	glm::vec3 textColor[NUM_MENU_BUTTONS];
 	std::string text[NUM_MENU_BUTTONS];
+
+	void HandleUp();
+	void HandleDown();
+	void FixSelected();
 };
 

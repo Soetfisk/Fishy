@@ -39,7 +39,7 @@ GLGUIHandler::GLGUIHandler(GLShader& shader)
 	textEnd[PLAYER2] = " food";
 	// Just to fix start pos
 	printText[PLAYER2] = textStart[PLAYER2] + std::to_string(score[PLAYER2]) + textEnd[PLAYER2];
-	textPos[PLAYER2][0] = window::WIDTH - gui->getTextLenght(printText[PLAYER2], textScale[PLAYER2]);
+	textPos[PLAYER2][0] = window::WIDTH - gui->GetTextLenght(printText[PLAYER2], textScale[PLAYER2]);
 
 	// Time
 	time = 0;
@@ -55,14 +55,14 @@ GLGUIHandler::GLGUIHandler(GLShader& shader)
 	// Winner
 	printText[WINNER] = "WON!";
 	textScale[WINNER] = 2;
-	textPos[WINNER][0] = window::HALF_WIDTH - (gui->getTextLenght(printText[WINNER], textScale[WINNER]) * 0.5);
+	textPos[WINNER][0] = window::HALF_WIDTH - (gui->GetTextLenght(printText[WINNER], textScale[WINNER]) * 0.5);
 	textPos[WINNER][1] = window::HALF_HEIGHT - 20;
 	textColor[WINNER] = glm::vec3(0, 1, 0);
 
 	// Loser
 	printText[LOSER] = "LOST!";
 	textScale[LOSER] = 2;
-	textPos[LOSER][0] = window::HALF_WIDTH - (gui->getTextLenght(printText[LOSER], textScale[LOSER]) * 0.5);
+	textPos[LOSER][0] = window::HALF_WIDTH - (gui->GetTextLenght(printText[LOSER], textScale[LOSER]) * 0.5);
 	textPos[LOSER][1] = window::HALF_HEIGHT - 20;
 	textColor[LOSER] = glm::vec3(0, 1, 0);
 
@@ -94,13 +94,13 @@ void GLGUIHandler::Update(float dt)
 			AddScorePlayer2(1);*/
 			newSec = 0;
 			printText[TIME] = textStart[TIME] + std::to_string(time) + textEnd[TIME];
-			textPos[TIME][0] = window::HALF_WIDTH - (gui->getTextLenght(printText[TIME], textScale[TIME]) * 0.5);
+			textPos[TIME][0] = window::HALF_WIDTH - (gui->GetTextLenght(printText[TIME], textScale[TIME]) * 0.5);
 			/*if (time == 10)
 				Player2Won();*/
 
 			// Update FPS
 			printText[FPS] = textStart[FPS] + std::to_string((int)(1 / dt));
-			textPos[FPS][0] = window::WIDTH - (gui->getTextLenght(printText[FPS], textScale[FPS]));
+			textPos[FPS][0] = window::WIDTH - (gui->GetTextLenght(printText[FPS], textScale[FPS]));
 		}
 		break;
 	case OVER:
@@ -114,7 +114,7 @@ void GLGUIHandler::Update(float dt)
 
 			// Update FPS
 			printText[FPS] = textStart[FPS] + std::to_string((int)(1 / dt));
-			textPos[FPS][0] = window::WIDTH - (gui->getTextLenght(printText[FPS], textScale[FPS]));
+			textPos[FPS][0] = window::WIDTH - (gui->GetTextLenght(printText[FPS], textScale[FPS]));
 		}
 		break;
 	}
@@ -152,7 +152,7 @@ void GLGUIHandler::DecreaseScorePlayer1(int decVal)
 {
 	score[PLAYER1] -= decVal;
 	printText[PLAYER1] = textStart[PLAYER1] + std::to_string(score[PLAYER1]) + textEnd[PLAYER1];
-	textPos[PLAYER1][0] = window::WIDTH - gui->getTextLenght(printText[PLAYER1], textScale[PLAYER1]);
+	textPos[PLAYER1][0] = window::WIDTH - gui->GetTextLenght(printText[PLAYER1], textScale[PLAYER1]);
 }
 
 void GLGUIHandler::ResetScorePlayer1()
@@ -189,21 +189,21 @@ void GLGUIHandler::AddScorePlayer2(int addVal)
 {
 	score[PLAYER2] += addVal;
 	printText[PLAYER2] = textStart[PLAYER2] + std::to_string(score[PLAYER2]) + textEnd[PLAYER2];
-	textPos[PLAYER2][0] = window::WIDTH - gui->getTextLenght(printText[PLAYER2], textScale[PLAYER2]);
+	textPos[PLAYER2][0] = window::WIDTH - gui->GetTextLenght(printText[PLAYER2], textScale[PLAYER2]);
 }
 
 void GLGUIHandler::DecreaseScorePlayer2(int decVal)
 {
 	score[PLAYER2] -= decVal;
 	printText[PLAYER2] = textStart[PLAYER2] + std::to_string(score[PLAYER2]) + textEnd[PLAYER2];
-	textPos[PLAYER2][0] = window::WIDTH - gui->getTextLenght(printText[PLAYER2], textScale[PLAYER2]);
+	textPos[PLAYER2][0] = window::WIDTH - gui->GetTextLenght(printText[PLAYER2], textScale[PLAYER2]);
 }
 
 void GLGUIHandler::ResetScorePlayer2()
 {
 	score[PLAYER2] = 0;
 	printText[PLAYER2] = textStart[PLAYER2] + std::to_string(score[PLAYER2]) + textEnd[PLAYER2];
-	textPos[PLAYER2][0] = window::WIDTH - gui->getTextLenght(printText[PLAYER2], textScale[PLAYER2]);
+	textPos[PLAYER2][0] = window::WIDTH - gui->GetTextLenght(printText[PLAYER2], textScale[PLAYER2]);
 }
 
 void GLGUIHandler::ResetPlayer2()
@@ -235,7 +235,7 @@ void GLGUIHandler::ResetTime()
 	time = 0;
 	newSec = 0;
 	printText[TIME] = textStart[TIME] + std::to_string(time) + textEnd[TIME];
-	textPos[TIME][0] = (window::WIDTH * 0.5) - (gui->getTextLenght(printText[TIME], textScale[TIME]) * 0.5);
+	textPos[TIME][0] = (window::WIDTH * 0.5) - (gui->GetTextLenght(printText[TIME], textScale[TIME]) * 0.5);
 }
 
 int GLGUIHandler::GetTime()

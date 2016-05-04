@@ -1,130 +1,219 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GLCamera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GLMesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GLWindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GLPlayer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameMain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GLShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="obj_loader.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="FilterComputeShader.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="FrameBuffer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMain.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GLCamera.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GLCollisionHandler.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GLGUIHandler.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GLMesh.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="GLModel.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GLPlayer.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="GLProjectile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GLNPC.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FilterComputeShader.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="GLProjectileHandler.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GLShader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GLWindow.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="obj_loader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GLNPC.cpp">
+      <Filter>Source\NPCs</Filter>
+    </ClCompile>
+    <ClCompile Include="GLNPC_GoldFish.cpp">
+      <Filter>Source\NPCs</Filter>
+    </ClCompile>
+    <ClCompile Include="GLNPC_BlueTang.cpp">
+      <Filter>Source\NPCs</Filter>
+    </ClCompile>
+<<<<<<< HEAD
+    <ClCompile Include="Menu.cpp">
+      <Filter>Source</Filter>
+=======
+    <ClCompile Include="GLNPC_PowerUpHandler.cpp">
+      <Filter>Source\NPCs</Filter>
+>>>>>>> 2d4b8db097d62fbc33d7221ea41350a64fa6e044
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GLUtil.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GLCamera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GLMesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GLtexture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GLTransform.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GLWindow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GLPlayer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameMain.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GLShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="obj_loader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GLModel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FrameBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GLProjectile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-<<<<<<< HEAD
-    <ClInclude Include="GLProjectileHandler.h">
-=======
-    <ClInclude Include="GLNPC.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="AABB.h">
+      <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="FilterComputeShader.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\RNG.h">
->>>>>>> 75bf018ad6738f01d5fbf7164a59949d6d372cd0
-      <Filter>Header Files</Filter>
+    <ClInclude Include="FrameBuffer.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMain.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GLCamera.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GLCollisionHandler.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GLGUIHandler.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GLMesh.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GLModel.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GLPlayer.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GLProjectile.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GLProjectileHandler.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GLShader.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GLtexture.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GLTransform.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GLUtil.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GLWindow.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="obj_loader.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="SphereBS.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GLNPC.h">
+      <Filter>Header\NPCs</Filter>
+    </ClInclude>
+    <ClInclude Include="GLNPC_GoldFish.h">
+      <Filter>Header\NPCs</Filter>
+    </ClInclude>
+    <ClInclude Include="GLNPC_BlueTang.h">
+      <Filter>Header\NPCs</Filter>
+    </ClInclude>
+    <ClInclude Include="RNG.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+<<<<<<< HEAD
+    <ClInclude Include="Menu.h">
+      <Filter>Header</Filter>
+=======
+    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\GLNPC_PowerUpHandler.h">
+      <Filter>Header\NPCs</Filter>
+>>>>>>> 2d4b8db097d62fbc33d7221ea41350a64fa6e044
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="test.frag" />
-    <None Include="test.vert" />
-    <None Include="pass.frag" />
-    <None Include="pass.vert" />
     <None Include="blueFilter.glsl">
-      <Filter>Source Files</Filter>
+      <Filter>Shaders</Filter>
     </None>
+    <None Include="pass.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="pass.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="post.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="post.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="test.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="test.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="text.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="text.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="wavy.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="wavy.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="test.geom">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="lighting.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="lighting.vert">
+      <Filter>Shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header">
+      <UniqueIdentifier>{9da89d7e-13e9-485b-a3ce-aed7a3149898}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{a7cfeb63-ecd0-4116-b60e-308da26e9bad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{e8b73c92-61ec-434a-a513-1770d8b81781}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header\NPCs">
+      <UniqueIdentifier>{5002fbc4-4a56-453b-acbd-d7a222fdeda4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\NPCs">
+      <UniqueIdentifier>{3b6a892c-3bcf-4b61-bdaf-e7fd1fb1baa9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

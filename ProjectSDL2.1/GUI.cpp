@@ -123,7 +123,7 @@ void GUI::RenderText(GLShader& shader, std::string text, GLfloat x, GLfloat y, G
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-GLfloat GUI::getTextLenght(std::string& text, GLfloat& scale)
+GLfloat GUI::GetTextLenght(std::string& text, GLfloat& scale)
 {
 	GLfloat lenght = 0;
 	std::string::const_iterator c;
@@ -133,4 +133,17 @@ GLfloat GUI::getTextLenght(std::string& text, GLfloat& scale)
 		lenght += (ch.advance >> 6) * scale;
 	}
 	return lenght;
+}
+
+GLfloat GUI::GetTextHeight(std::string & text, GLfloat & scale)
+{
+	GLfloat height = 0;
+	std::string::const_iterator c;
+	for (c = text.begin(); c != text.end(); c++)
+	{
+		Character ch = characters[*c];
+		if (ch.size.y * scale > height)
+			height = ch.size.y * scale;
+	}
+	return height;
 }
