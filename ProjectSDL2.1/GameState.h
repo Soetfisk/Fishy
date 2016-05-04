@@ -1,4 +1,6 @@
-enum class GLOBAL_GameState {
+#pragma once
+
+enum GLOBAL_GameState {
 	GAME,
 	MENU
 };

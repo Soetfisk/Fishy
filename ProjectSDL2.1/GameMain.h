@@ -3,7 +3,6 @@
 #include "GLUtil.h"
 #include "GLWindow.h"
 #include "Scene.h"
-#include "GameState.h"
 #include "Menu.h"
 
 class GameMain
@@ -14,10 +13,10 @@ private:
 	int currentTime;
 	float deltaTime;
 	SDL_Event e;
-	bool gameOn = true;
-	Menu* menu;
+	bool gameOn;
 	GLWindow* window;
-	Scene* scene;
+	Scene * scene;
+	Menu * menu;
 
 	//Private functions below
 	void SetDeltaTime();
