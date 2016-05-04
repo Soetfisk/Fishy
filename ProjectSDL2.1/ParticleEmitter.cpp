@@ -28,7 +28,7 @@ ParticleEmitter::ParticleEmitter(EmitterType type, glm::vec4 position, GLuint tr
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(ParticleStruct), 0);
-	glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, sizeof(ParticleStruct), (void*)16);
+	glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, sizeof(ParticleStruct), (void*)sizeof(glm::vec4));
 	glBindVertexArray(0);
 
 	//InstantiateEmitter();
@@ -179,7 +179,7 @@ void ParticleEmitter::updateDrawData() {
 	}
 }
 void ParticleEmitter::updateCompute(const float &deltaTime) {
-	this->emitterComputeShader->Update(deltaTime, this->nrActiveParticles, this->pe_particleBuffer);
+	//this->emitterComputeShader->Update(deltaTime, this->nrActiveParticles, this->pe_particleBuffer);
 }
 
 void ParticleEmitter::updateParticles(const float& deltaTime) {

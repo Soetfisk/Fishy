@@ -30,7 +30,7 @@ void main(){
 	uint gid = gl_GlobalInvocationID.x;
 	if(particles[gid].lifeTime>0){
 		const vec3 G = vec3(0.f,-3.8f,0.f);
-	
+		
 
 	
 		vec3 p = particles[gid].position.xyz;

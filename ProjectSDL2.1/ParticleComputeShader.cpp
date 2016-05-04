@@ -27,11 +27,11 @@ void ParticleComputeShader::Initialize(EmitterType type, int nrMaxParticles, GLu
 	particles = (struct ParticleStruct *) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, nrMaxParticles * sizeof(ParticleStruct), bufMask);
 
 	for (int i = 0; i < nrMaxParticles; ++i) {
-		particles[i].pos = glm::vec4(0, 1, 3, 1);
+		particles[i].pos = glm::vec4(i, .5*i, 3, 1);
 		particles[i].scale = 1.f;
 		particles[i].lifeTime = 2;
 		particles[i].velocity = glm::vec4(1, 0, 0, 0);
-		particles[i].emiterPosition = glm::vec4(0, 1, 3, 1);
+		particles[i].emiterPosition = glm::vec4(i, .5*i, 3, 1);
 	}
 
 	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
