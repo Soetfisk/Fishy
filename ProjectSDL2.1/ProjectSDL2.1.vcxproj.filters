@@ -144,6 +144,9 @@
     <ClInclude Include="GLNPC_PowerUpHandler.h">
       <Filter>Header\NPCs</Filter>
     </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="blueFilter.glsl">
