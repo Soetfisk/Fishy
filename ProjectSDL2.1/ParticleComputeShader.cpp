@@ -15,8 +15,8 @@ ParticleComputeShader::~ParticleComputeShader()
 }
 
 void ParticleComputeShader::Initialize(EmitterType type, int nrMaxParticles, GLuint &ParticleSSBO) {
-	
-
+	int tempMaxParticle = nrMaxParticles;
+	nrMaxParticles = (nrMaxParticles*nrMaxParticles)*nrMaxParticles;
 	glGenBuffers(1, &ParticleSSBO);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ParticleSSBO);
 	glBufferData(GL_SHADER_STORAGE_BUFFER, nrMaxParticles*sizeof(ParticleStruct), NULL, GL_STATIC_DRAW);
@@ -26,12 +26,18 @@ void ParticleComputeShader::Initialize(EmitterType type, int nrMaxParticles, GLu
 	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT; // the invalidate makes a big difference when re-writing
 	particles = (struct ParticleStruct *) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, nrMaxParticles * sizeof(ParticleStruct), bufMask);
 
-	for (int i = 0; i < nrMaxParticles; ++i) {
-		particles[i].pos = glm::vec4(i, .5*i, 3, 1);
-		particles[i].scale = 1.f;
-		particles[i].lifeTime = 2;
-		particles[i].velocity = glm::vec4(1, 0, 0, 0);
-		particles[i].emiterPosition = glm::vec4(i, .5*i, 3, 1);
+	for (int x = 0; x < tempMaxParticle; x++) {
+		for (int y = 0; y < tempMaxParticle; y++) {
+			for (int z = 0; z < tempMaxParticle; z++) {
+				int index = (x*(tempMaxParticle*tempMaxParticle)) + (y*tempMaxParticle) +z;
+				particles[index].pos = glm::vec4(x, .5*y, z, 1);
+				particles[index].customVariables.x = .1f;
+				particles[index].customVariables.y = 5;
+				particles[index].velocity = glm::vec4(1, 0, 0, 0);
+				particles[index].emiterPosition = glm::vec4(x, .5*y, z, 1);
+			}
+			
+		}
 	}
 
 	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
@@ -98,7 +104,7 @@ void ParticleComputeShader::Update(const float & deltaTime, int nrActiveParticle
 
 	glUseProgram(compute_program);
 	glUniform1fv(glGetUniformLocation(compute_program, "DT"), 1, &deltaTime);
-	glDispatchCompute((nrActiveParticles/2)+1, 1, 1);
+	glDispatchCompute(10000, 1, 1);
 	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);

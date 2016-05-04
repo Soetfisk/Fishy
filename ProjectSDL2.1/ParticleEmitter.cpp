@@ -16,8 +16,8 @@ ParticleEmitter::ParticleEmitter(EmitterType type, glm::vec4 position, GLuint tr
 	this->positionEmitter = position;
 	this->texture = texture;
 	setTexture();
-	this->nrMaxParticles = 1;
-	this->nrActiveParticles = 1;
+	this->nrMaxParticles = 100;
+	this->nrActiveParticles = 100;
 
 	this->emitterComputeShader = new ParticleComputeShader();
 	this->emitterComputeShader->Initialize(this->type, this->nrMaxParticles, this->pe_particleBuffer);
@@ -28,7 +28,7 @@ ParticleEmitter::ParticleEmitter(EmitterType type, glm::vec4 position, GLuint tr
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(ParticleStruct), 0);
-	glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, sizeof(ParticleStruct), (void*)sizeof(glm::vec4));
+	glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, sizeof(ParticleStruct), (void*)(sizeof(glm::vec4)*3));
 	glBindVertexArray(0);
 
 	//InstantiateEmitter();
@@ -84,7 +84,7 @@ void ParticleEmitter::InstantiateSpaces() {
 
 	data.position = p_pos;
 	data.velocity = p_vel;
-	data.scaling = p_scale;
+	//data.customVariables = p_scale;
 
 }
 
@@ -179,7 +179,7 @@ void ParticleEmitter::updateDrawData() {
 	}
 }
 void ParticleEmitter::updateCompute(const float &deltaTime) {
-	//this->emitterComputeShader->Update(deltaTime, this->nrActiveParticles, this->pe_particleBuffer);
+	this->emitterComputeShader->Update(deltaTime, this->nrActiveParticles, this->pe_particleBuffer);
 }
 
 void ParticleEmitter::updateParticles(const float& deltaTime) {
@@ -257,7 +257,7 @@ void ParticleEmitter::Draw(GLShader* shader) {
 	glBindTexture(GL_TEXTURE_2D, this->textureID);
 	glBindVertexArray(this->pe_VertexArrayObject);
 
-	glDrawArrays(GL_POINTS, 0, this->nrMaxParticles);
+	glDrawArrays(GL_POINTS, 0, (nrMaxParticles*nrMaxParticles)*nrMaxParticles);
 
 	glBindVertexArray(0);
 	//glBindVertexArray(pe_VertexArrayObject);
