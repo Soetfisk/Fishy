@@ -15,9 +15,9 @@ private:
 	float deltaTime;
 	SDL_Event e;
 	bool gameOn = true;
+	Menu* menu;
 	GLWindow* window;
 	Scene* scene;
-	Menu* menu;
 
 	//Private functions below
 	void SetDeltaTime();

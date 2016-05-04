@@ -1,12 +1,14 @@
 #pragma once
 
 #include "GUI.h"
+#include "GameMain.h"
 
 class Menu
 {
 public:
 	Menu();
-	Menu(GUI* gui);
+	Menu(GLOBAL_GameState& state);
+	Menu(GUI* gui, GLOBAL_GameState& state);
 	virtual ~Menu();
 	void Update(float dt);
 	void Draw();
@@ -28,6 +30,7 @@ private:
 	GUI* gui;
 	glm::mat4 projection;
 	MenuButtons selectedBttn;
+	GLOBAL_GameState gameState;
 
 	GLfloat textPos[NUM_MENU_BUTTONS][2];
 	GLfloat textScale[NUM_MENU_BUTTONS];

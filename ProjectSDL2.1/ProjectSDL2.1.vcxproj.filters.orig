@@ -61,13 +61,11 @@
     <ClCompile Include="GLNPC_BlueTang.cpp">
       <Filter>Source\NPCs</Filter>
     </ClCompile>
-<<<<<<< HEAD
-    <ClCompile Include="Menu.cpp">
-      <Filter>Source</Filter>
-=======
     <ClCompile Include="GLNPC_PowerUpHandler.cpp">
       <Filter>Source\NPCs</Filter>
->>>>>>> 2d4b8db097d62fbc33d7221ea41350a64fa6e044
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -149,10 +147,15 @@
 <<<<<<< HEAD
     <ClInclude Include="Menu.h">
       <Filter>Header</Filter>
-=======
+    </ClInclude>
     <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\GLNPC_PowerUpHandler.h">
+=======
+    <ClInclude Include="GLNPC_PowerUpHandler.h">
+>>>>>>> ea35cbecc5aaa2e428a4546593e1f46512a22bc9
       <Filter>Header\NPCs</Filter>
->>>>>>> 2d4b8db097d62fbc33d7221ea41350a64fa6e044
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

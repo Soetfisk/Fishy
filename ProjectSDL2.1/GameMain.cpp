@@ -7,17 +7,24 @@ GameMain::GameMain()
 	this->currentTime = 0;
 	//window is a namespace in util that keeps the value of the width/height, in file GLUtil.h
 	this->window = new GLWindow(window::WIDTH, window::HEIGHT, "Survival of the fishest");
-	scene = new Scene();
+	this->scene = new Scene();
 	this->gameState = GLOBAL_GameState::GAME;
-	menu = new Menu();
+	this->menu = new Menu();
 }
-
 
 GameMain::~GameMain()
 {
 	delete this->window;
 	delete this->scene;
 	delete this->menu;
+}
+
+// setting delta time
+void GameMain::SetDeltaTime()
+{
+	this->currentTime = SDL_GetTicks();
+	this->deltaTime = (currentTime - prevTime) / 1000.0f;
+	this->prevTime = currentTime;
 }
 
 // The main gameloop
@@ -29,17 +36,20 @@ void GameMain::GameLoop()
 		SDL_PumpEvents();
 		this->SetDeltaTime();
 		this->window->Clear(0, .1f, 1);
-		
-		if (this->gameState == GLOBAL_GameState::GAME)
+
+		switch (this->gameState)
 		{
+		case GLOBAL_GameState::GAME:
 			this->scene->Update(this->deltaTime);
 			this->scene->DrawScene();
+			break;
+		case GLOBAL_GameState::MENU:
+			this->menu->Update(this->deltaTime);
+			this->menu->Draw();
+			break;
+		default:
+			break;
 		}
-		else
-		{
-			std::cout << "herrp\n";
-		}
-
 
 		while (SDL_PollEvent(&e)) // getting events
 		{
@@ -53,20 +63,19 @@ void GameMain::GameLoop()
 			}
 			else
 			{
-				this->menu->HandleEvenet(&e);
-				//this->scene->HandleEvenet(&e);
-				this->scene->HandleEvenet(&e);
+				switch (this->gameState)
+				{
+				case GLOBAL_GameState::GAME:
+					this->scene->HandleEvenet(&e);
+					break;
+				case GLOBAL_GameState::MENU:
+					this->menu->HandleEvenet(&e);
+					break;
+				default:
+					break;
+				}
 			}
+			this->window->Update();
 		}
-		this->window->Update();
 	}
-
-}
-
-// setting delta time
-void GameMain::SetDeltaTime()
-{
-	this->currentTime = SDL_GetTicks();
-	this->deltaTime = (currentTime - prevTime) / 1000.0f;
-	this->prevTime = currentTime;
 }
