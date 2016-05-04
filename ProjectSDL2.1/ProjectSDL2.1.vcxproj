@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\GLNPC_PowerUpHandler.cpp" />
     <ClCompile Include="GLNPC_BlueTang.cpp" />
     <ClCompile Include="FilterComputeShader.cpp" />
     <ClCompile Include="GLGUIHandler.cpp" />
@@ -31,6 +30,7 @@
     <ClCompile Include="GLMesh.cpp" />
     <ClCompile Include="GLModel.cpp" />
     <ClCompile Include="GLNPC_GoldFish.cpp" />
+    <ClCompile Include="GLNPC_PowerUpHandler.cpp" />
     <ClCompile Include="GLPlayer.cpp" />
     <ClCompile Include="GLProjectile.cpp" />
     <ClCompile Include="GLProjectileHandler.cpp" />
