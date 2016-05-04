@@ -38,7 +38,7 @@ void ParticleEmitter::setTexture() {
 void ParticleEmitter::spawnParticle()
 {
 	glm::vec4 ranStuff = (glm::vec4(rand() % 10, rand() % 10, rand() % 10, 0)*.1f);
-	this->p_pos[nrActiveParticles] = this->positionEmitter; //+ ranStuff;
+	this->p_pos[nrActiveParticles] = this->positionEmitter;// +ranStuff; //+ ranStuff;
 	this->p_scale[nrActiveParticles] = this->particleScale;
 	this->p_vel[nrActiveParticles] = this->particleStartVelocity + ranStuff;
 	this->p_acc[nrActiveParticles] = this->particleStartAcceleration;
@@ -70,7 +70,7 @@ void ParticleEmitter::InstantiateSpaces() {
 	data.position = p_pos;
 	data.velocity = p_vel;
 	data.scaling = p_scale;
-
+	data.lifeTime = p_ctime;
 }
 
 
@@ -193,17 +193,18 @@ void ParticleEmitter::InstantiateRenderShader() {
 	//glBindVertexArray(pe_VertexArrayObject);
 
 	//glEnableVertexAttribArray(0);
+
 }
 
 void ParticleEmitter::InstantiateProjectileEmitter() {
 	this->directionFromObject = glm::vec3(0, 0, -1);
 	this->distanceFromObject = 2;
 	this->nrMaxParticles = 500;
-	this->spawnTimer = .01f;
+	this->spawnTimer = .01;
 	this->particleStartVelocity = glm::vec4(1, 0, 0, 1);
 	this->particleStartAcceleration = glm::vec4(.1, 0, 0, 0);
 	this->particleStartLifeTime = 3.f;
-	this->particleScale = 2.f;
+	this->particleScale = 1.f;
 
 
 	//this->nrActiveParticles = 0;

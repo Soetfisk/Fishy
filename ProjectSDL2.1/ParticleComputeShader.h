@@ -3,13 +3,14 @@
 struct ParticleComputeStruct {
 	glm::vec4 position;
 	glm::vec4 velocity;
-	float scaling;
+	glm::vec4 customVariables;
 };
 
 struct ParticleRenderingUpdateData {
 	glm::vec4* position;
 	glm::vec4* velocity;
 	float* scaling;
+	float* lifeTime;
 };
 
 struct ParticleTestPos {

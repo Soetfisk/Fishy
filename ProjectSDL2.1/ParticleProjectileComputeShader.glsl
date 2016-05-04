@@ -6,7 +6,7 @@
 struct Particle{
 	vec4 position;
 	vec4 velocities;
-	float scaling;
+	vec4 customVariables; //x=scale, y = currentLifeTime
 };
 
 
@@ -40,8 +40,10 @@ void main(){
 
 	const vec3 G = vec3(0.f,-9.8f,0.f);
 	
-
+	
 	uint gid = gl_GlobalInvocationID.x;
+
+	float scale = particles[gid].customVariables.x;
 	vec3 p = particles[gid].position.xyz;
 	vec3 v = particles[gid].velocities.xyz;
 
@@ -57,7 +59,7 @@ void main(){
 
 	particles[gid].position.xyz = pp;
 	particles[gid].velocities.xyz = vp;
-	particles[gid].scaling = particles[gid].scaling;
+	particles[gid].customVariables.x = scale;
 
 }
 
