@@ -137,6 +137,12 @@ void GLPlayer::SetPowerUp(GLPlayer::PowerUps power)
 	this->HandlePowerUps();
 }
 
+void GLPlayer::SetRandomPowerUp()
+{
+	int random = RNG::range(0,3);
+	this->currentPowerUp = this->getPowerUpByNumber(random);
+}
+
 void GLPlayer::ResetPlayer()
 {
 	this->m_velocity = glm::vec3(0);
@@ -332,6 +338,26 @@ void GLPlayer::HandlePowerUps()
 		this->m_projectileHandler->ChangeStateTo(ProjectilePowerUpState::BIG);
 	else
 		this->m_projectileHandler->ChangeStateTo(ProjectilePowerUpState::REGULAR);
+}
+
+GLPlayer::PowerUps GLPlayer::getPowerUpByNumber(int power)
+{
+	GLPlayer::PowerUps powerUp = POWER_NEUTRAL;
+	switch (power)
+	{
+	case 0:
+		powerUp = POWER_BUBBLESHOTGUN;
+		break;
+	case 1:
+		powerUp = POWER_BUBBLEBIG;
+		break;
+	case 2:
+		powerUp = POWER_HIGH;
+		break;
+	default:
+		break;
+	}
+	return powerUp;
 }
 
 void GLPlayer::PlayerEating(float deltaTime)

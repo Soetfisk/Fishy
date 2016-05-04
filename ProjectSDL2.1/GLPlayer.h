@@ -56,6 +56,7 @@ public:
 	glm::vec3 GetVelocity();
 	GLPlayer::PowerUps GetPowerUp();
 	void SetPowerUp(GLPlayer::PowerUps power);
+	void SetRandomPowerUp();
 	void ResetPlayer();
 	int GetPoints();
 
@@ -110,5 +111,6 @@ private:
 	void HandleDash(float& deltaTime);
 
 	void HandlePowerUps();
+	PowerUps getPowerUpByNumber(int power);
 };
 
