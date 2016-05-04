@@ -61,7 +61,7 @@
     <ClCompile Include="GLNPC_BlueTang.cpp">
       <Filter>Source\NPCs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\GLNPC_PowerUpHandler.cpp">
+    <ClCompile Include="GLNPC_PowerUpHandler.cpp">
       <Filter>Source\NPCs</Filter>
     </ClCompile>
   </ItemGroup>
@@ -141,7 +141,7 @@
     <ClInclude Include="RNG.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\GLNPC_PowerUpHandler.h">
+    <ClInclude Include="GLNPC_PowerUpHandler.h">
       <Filter>Header\NPCs</Filter>
     </ClInclude>
   </ItemGroup>
