@@ -185,3 +185,14 @@ bool GLNPC_GoldFish::GetIsPowerUp()
 {
 	return this->isPowerUp;
 }
+
+void GLNPC_GoldFish::ResetFish()
+{
+	this->currentState = NPC_MOVE;
+	transform->SetPos(glm::vec3(RNG::range(-DEADZONEX, DEADZONEX), RNG::range(-DEADZONEY, DEADZONEY), RNG::range(-DEADZONEZ, DEADZONEZ)));
+
+	this->TimeUntilChange = RNG::range(0.2, 3.0f);
+	this->scaleChange = RNG::range(-0.02f, 0.02f);
+	this->forwardSpeed = RNG::range(0.0f, 3.3f);
+	this->rotationChange = glm::vec3(0, RNG::range(-1.0f, 1.0f), 0);
+}

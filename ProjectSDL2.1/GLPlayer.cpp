@@ -14,6 +14,7 @@ GLPlayer::GLPlayer() : GLModel() //NEVER USE
 	this->dashCooldownCounter = 0;
 	this->isDashing = false;
 	this->dashOnCooldown = false;
+	this->currentPowerUp = POWER_NEUTRAL;
 }
 
 GLPlayer::GLPlayer(FishBox* FSH_Loader, char* filePath) : GLModel(FSH_Loader, filePath) //DEPRICATED USE AT OWN RISK
@@ -105,7 +106,8 @@ void GLPlayer::HandleCollision(PlayerStates state, float deltaTime, glm::vec3 mo
 	break;
 	case EATING:
 		this->transform->SetScale(this->transform->GetScale() + (deltaTime/4));
-		this->point += 10;
+		totalPoints		+=	100;
+		currentPoints	+=	100;
 		break;
 	case HIT:
 		this->m_velocity += momentum;
@@ -133,6 +135,36 @@ void GLPlayer::SetPowerUp(GLPlayer::PowerUps power)
 {
 	this->currentPowerUp = power;
 	this->HandlePowerUps();
+}
+
+void GLPlayer::SetRandomPowerUp()
+{
+	int random = RNG::range(0,3);
+	this->currentPowerUp = this->getPowerUpByNumber(random);
+}
+
+void GLPlayer::ResetPlayer()
+{
+	this->m_velocity = glm::vec3(0);
+
+	this->dashCurrentDuration = 0.0f;
+	this->dashDuration = 0.2f;
+	this->dashCooldown = 5;
+	this->dashCooldownCounter = 0;
+	this->isDashing = false;
+	this->dashOnCooldown = false;
+	this->currentPowerUp = POWER_NEUTRAL;
+	this->HandlePowerUps();
+}
+
+int GLPlayer::GetPoints()
+{
+	if (currentPoints != 0)
+	{
+		currentPoints -= 10;
+		return 10;
+	}
+	return 0;
 }
 
 //adds a controller too the player
@@ -308,7 +340,27 @@ void GLPlayer::HandlePowerUps()
 		this->m_projectileHandler->ChangeStateTo(ProjectilePowerUpState::REGULAR);
 }
 
+GLPlayer::PowerUps GLPlayer::getPowerUpByNumber(int power)
+{
+	GLPlayer::PowerUps powerUp = POWER_NEUTRAL;
+	switch (power)
+	{
+	case 0:
+		powerUp = POWER_BUBBLESHOTGUN;
+		break;
+	case 1:
+		powerUp = POWER_BUBBLEBIG;
+		break;
+	case 2:
+		powerUp = POWER_HIGH;
+		break;
+	default:
+		break;
+	}
+	return powerUp;
+}
+
 void GLPlayer::PlayerEating(float deltaTime)
 {
-	
+
 }

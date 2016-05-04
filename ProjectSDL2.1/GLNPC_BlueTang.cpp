@@ -187,3 +187,15 @@ bool GLNPC_BlueTang::GetIsPowerUp()
 {
 	return isPowerUp;
 }
+
+void GLNPC_BlueTang::ResetFish()
+{
+	this->currentState = NPC_MOVE;
+	transform->SetPos(glm::vec3(RNG::range(-DEADZONEX, DEADZONEX), RNG::range(-DEADZONEY, DEADZONEY), RNG::range(-DEADZONEZ, DEADZONEZ)));
+	glm::vec3 scale = glm::vec3(RNG::range(1.1f, 3.0f));
+	transform->SetScale(scale);
+
+	this->TimeUntilChange = RNG::range(0.2, 3.0f);
+	this->forwardSpeed = FishSpeedMultiplier * RNG::range(0.0f, 3.3f);
+	this->rotationChange = glm::vec3(0, RNG::range(-1.0f, 1.0f), 0);
+}

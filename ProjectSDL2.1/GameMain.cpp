@@ -8,6 +8,7 @@ GameMain::GameMain()
 	//window is a namespace in util that keeps the value of the width/height, in file GLUtil.h
 	this->window = new GLWindow(window::WIDTH, window::HEIGHT, "Survival of the fishest");
 	scene = new Scene();
+	this->gameState = GLOBAL_GameState::GAME;
 	menu = new Menu();
 }
 
@@ -29,10 +30,16 @@ void GameMain::GameLoop()
 		this->SetDeltaTime();
 		this->window->Clear(0, .1f, 1);
 		
-		this->menu->Update(deltaTime);
-		this->menu->Draw();
-		/*this->scene->Update(this->deltaTime);
-		this->scene->DrawScene();*/
+		if (this->gameState == GLOBAL_GameState::GAME)
+		{
+			this->scene->Update(this->deltaTime);
+			this->scene->DrawScene();
+		}
+		else
+		{
+			std::cout << "herrp\n";
+		}
+
 
 		while (SDL_PollEvent(&e)) // getting events
 		{
@@ -48,6 +55,7 @@ void GameMain::GameLoop()
 			{
 				this->menu->HandleEvenet(&e);
 				//this->scene->HandleEvenet(&e);
+				this->scene->HandleEvenet(&e);
 			}
 		}
 		this->window->Update();

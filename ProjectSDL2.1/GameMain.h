@@ -3,11 +3,13 @@
 #include "GLUtil.h"
 #include "GLWindow.h"
 #include "Scene.h"
+#include "GameState.h"
 #include "Menu.h"
 
 class GameMain
 {
 private:
+	GLOBAL_GameState gameState;
 	int prevTime;
 	int currentTime;
 	float deltaTime;

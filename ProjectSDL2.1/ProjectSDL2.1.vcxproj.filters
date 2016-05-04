@@ -147,8 +147,11 @@
     <ClInclude Include="Menu.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\GLNPC_PowerUpHandler.h">
+    <ClInclude Include="GLNPC_PowerUpHandler.h">
       <Filter>Header\NPCs</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
