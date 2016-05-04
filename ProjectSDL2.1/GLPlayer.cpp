@@ -106,7 +106,8 @@ void GLPlayer::HandleCollision(PlayerStates state, float deltaTime, glm::vec3 mo
 	break;
 	case EATING:
 		this->transform->SetScale(this->transform->GetScale() + (deltaTime/4));
-		this->point += 10;
+		totalPoints		+=	100;
+		currentPoints	+=	100;
 		break;
 	case HIT:
 		this->m_velocity += momentum;
@@ -148,6 +149,16 @@ void GLPlayer::ResetPlayer()
 	this->dashOnCooldown = false;
 	this->currentPowerUp = POWER_NEUTRAL;
 	this->HandlePowerUps();
+}
+
+int GLPlayer::GetPoints()
+{
+	if (currentPoints != 0)
+	{
+		currentPoints -= 10;
+		return 10;
+	}
+	return 0;
 }
 
 //adds a controller too the player
@@ -325,5 +336,5 @@ void GLPlayer::HandlePowerUps()
 
 void GLPlayer::PlayerEating(float deltaTime)
 {
-	
+
 }

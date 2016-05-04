@@ -54,10 +54,10 @@ public:
 	void HandleCollision(PlayerStates state, float deltaTime, glm::vec3 momentum);
 	std::vector<GLProjectile*> GetProjectiles();
 	glm::vec3 GetVelocity();
-	int point = 0;
 	GLPlayer::PowerUps GetPowerUp();
 	void SetPowerUp(GLPlayer::PowerUps power);
 	void ResetPlayer();
+	int GetPoints();
 
 	glm::vec3& getVelocity() {
 		return m_velocity;
@@ -79,6 +79,8 @@ private:
 	float lastVertical = 0;
 	float lastForward = 0;
 	glm::vec3 m_velocity;
+	unsigned int currentPoints = 0;
+	unsigned int totalPoints = 0;
 
 	float dashDuration;
 	float dashCurrentDuration;
