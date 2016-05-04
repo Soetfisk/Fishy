@@ -78,8 +78,8 @@ private:
 	float lastVertical = 0;
 	float lastForward = 0;
 	glm::vec3 m_velocity;
-	float currentPoints = 0;
-	float totalPoints = 0;
+	unsigned int currentPoints = 0;
+	unsigned int totalPoints = 0;
 
 	float dashDuration;
 	float dashCurrentDuration;
