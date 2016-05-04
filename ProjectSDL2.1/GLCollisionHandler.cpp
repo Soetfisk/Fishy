@@ -1,5 +1,12 @@
 #include "GLCollisionHandler.h"
 
+
+
+GLCollisionHandler::~GLCollisionHandler()
+{
+	delete PowerUpHandler;
+}
+
 void GLCollisionHandler::CheckCollisions(float deltaTime)
 {
 	glm::vec3 distance;
@@ -74,7 +81,7 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 			}
 		}
 
-		for (int j = 0; j < this->NPCs.size(); j++) {
+		for (unsigned int j = 0; j < this->NPCs.size(); j++) {
 
  			distance = players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos();
 			distSqrd = glm::dot(distance, distance);
@@ -88,6 +95,16 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 					{
 						NPCs.at(j)->gettingEaten(deltaTime, players.at(i)->GetTransform());
 						players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(0));
+							
+							if (NPCs.at(j)->GetIsPowerUp()==true)
+							{
+								PowerUpHandler->RemovePowerUpFish(NPCs.at(j),j);
+								players.at(i)->SetPowerUp(GLPlayer::POWER_HIGH);
+							}
+							else
+							{
+								PowerUpHandler->RemoveAvailableFish(j);
+							}
 					}
 				}
 				else if (NpcSeenSpace.containsAABB(players.at(i)->GetBoundingBox()))
@@ -170,4 +187,9 @@ void GLCollisionHandler::RemoveModel(GLModel * model)
 			this->models.erase(models.begin() + i);
 		}
 	}
+}
+
+void GLCollisionHandler::InitiatePowerUpHandler()
+{
+	this->PowerUpHandler = new NpcPowerUpHandler(this->NPCs);
 }
