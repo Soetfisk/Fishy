@@ -18,6 +18,7 @@ void Scene::LoadModels()
 	}
 	for (int i = 0; i < 10; i++) {
 		this->NPCs.push_back(new GLNPC_BlueTang(&FSH_Loader, BlueTang));
+		this->NPCs.at(i)->GetTransform().SetScale(glm::vec3(2));
 	}
 	
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Aquarium));
@@ -271,6 +272,7 @@ void Scene::Update(float& deltaTime) {
 
 	for (int i = 0; i < this->NPCs.size(); i++) {
 		this->NPCs.at(i)->NPCUpdate(deltaTime);
+
 	}
 }
 

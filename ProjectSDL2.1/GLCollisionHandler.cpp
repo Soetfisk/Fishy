@@ -93,18 +93,27 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 				{
 					if (NPCs.at(j)->GetCurrentState()!=NPC_INACTIVE && NPCs.at(j)->GetCurrentState() != NPC_BEINGEATEN)
 					{
-						NPCs.at(j)->gettingEaten(deltaTime, players.at(i)->GetTransform());
-						players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(0));
-							
-							if (NPCs.at(j)->GetIsPowerUp()==true)
+						if (NPCs.at(j)->GetTransform().GetScale().x > 1)
+						{
+							NPCs.at(j)->GetTransform().SetScale(NPCs.at(j)->GetTransform().GetScale() - 1.0f);
+							players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(1));
+							std::cout << "Scale Set too: " << NPCs.at(j)->GetTransform().GetScale().x << std::endl;
+						}
+						else
+						{
+							NPCs.at(j)->gettingEaten(deltaTime, players.at(i)->GetTransform());
+							players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(roundf(NPCs.at(j)->GetTransform().GetScale().x * 100) / 100));
+							if (NPCs.at(j)->GetIsPowerUp() == true)
 							{
-								PowerUpHandler->RemovePowerUpFish(NPCs.at(j),j);
+								PowerUpHandler->RemovePowerUpFish(NPCs.at(j), j);
 								players.at(i)->SetRandomPowerUp();
 							}
 							else
 							{
 								PowerUpHandler->RemoveAvailableFish(j);
 							}
+							std::cout << "Scale Set too: " << NPCs.at(j)->GetTransform().GetScale().x <<" probobly dead" << std::endl;
+						}
 					}
 				}
 				else if (NpcSeenSpace.containsAABB(players.at(i)->GetBoundingBox()))
