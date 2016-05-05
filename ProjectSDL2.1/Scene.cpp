@@ -77,8 +77,8 @@ void Scene::Init()
 	//player
 	this->currentPowerUp = GLPlayer::POWER_NEUTRAL;
 	// Ending game options
-	this->endTimer = 20;
-	this->endScore = 100;
+	this->endTimer = 60;
+	this->endScore = 1000;
 
 
 }
@@ -246,10 +246,6 @@ void Scene::Update(float& deltaTime) {
 
 	this->collisionHandler.CheckCollisions(deltaTime);
 	this->AddScore();
-			std::cout << a << std::endl;
-			guih->AddScorePlayer1(a);
-			std::cout << a << std::endl;
-			guih->AddScorePlayer2(a);
 
 	for (int i = 0; i < this->NPCs.size(); i++) {
 		this->NPCs.at(i)->NPCUpdate(deltaTime);
@@ -358,7 +354,7 @@ void Scene::DrawScene() {
 
 		shaders[PASS]->Bind();
 		this->frameBuffer5->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
-		glViewport(0, window::HEIGHT - (window::HEIGHT / (i + 1)), window::WIDTH, window::HEIGHT / 2);
+		glViewport(0, window::HEIGHT - (window::HEIGHT *(.5*(i + 1))), window::WIDTH, window::HEIGHT / 2);
 		this->RenderQuad();
 	}
 

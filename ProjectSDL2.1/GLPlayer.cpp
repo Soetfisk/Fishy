@@ -167,6 +167,10 @@ void GLPlayer::ResetPlayer()
 	this->currentPowerUp = POWER_NEUTRAL;
 	this->HandlePowerUps();
 	this->totalPoints = 0;
+
+	this->lastForward = 0;
+	this->lastHorizontal = 0;
+	this->lastVertical = 0;
 }
 
 int GLPlayer::GetPoints()
