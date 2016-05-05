@@ -99,7 +99,7 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 							if (NPCs.at(j)->GetIsPowerUp()==true)
 							{
 								PowerUpHandler->RemovePowerUpFish(NPCs.at(j),j);
-								players.at(i)->SetPowerUp(GLPlayer::POWER_HIGH);
+								players.at(i)->SetRandomPowerUp();
 							}
 							else
 							{
