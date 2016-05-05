@@ -106,8 +106,8 @@ void GLPlayer::HandleCollision(PlayerStates state, float deltaTime, glm::vec3 mo
 	break;
 	case EATING:
 		this->transform->SetScale(this->transform->GetScale() + (deltaTime/4));
-		totalPoints		+=	128;
-		currentPoints	+=	128;
+		totalPoints		+=	100 * momentum.x;
+		currentPoints	+=	100 * momentum.x;
 		break;
 	case HIT:
 		this->m_velocity += momentum;
@@ -162,7 +162,6 @@ int GLPlayer::GetPoints()
 {
 	if (currentPoints != 0)
 	{
-		std::cout << currentPoints << std::endl;
 		if (currentPoints % 10 == 0)
 		{
 			currentPoints -= 10;
