@@ -15,6 +15,7 @@
 #include "GUI.h"
 #include "GLGUIHandler.h"
 #include "GLCollisionHandler.h"
+#include "GameState.h"
 
 class Scene {
 private:
@@ -100,11 +101,14 @@ private:
 	GLPlayer::PowerUps currentPowerUp;
 	// Timer
 	float endTimer; // when we end game
-	float endPoints; // reach this amount of points and game end
+	float endScore; // reach this amount of points and game end
 	float endSceneTimer = 0; // private time that is used for ending the game
 	bool endGame = false;
+	bool winner = false;
+	GLOBAL_GameState* gameState;
 
 private:
+	void Init();
 	void LoadModels();
 	void LoadModels(char* folder);
 	void UpdatePlayerPowerUp(int player);
@@ -112,8 +116,8 @@ private:
 	void CheckWinner();
 	void AddScore();
 public:
-	Scene();
-	Scene(GUI* textToScreen);
+	Scene(GLOBAL_GameState* gameState);
+	Scene(GUI* textToScreen, GLOBAL_GameState* gameState);
 	~Scene();
 
 	void HandleEvenet(SDL_Event* e);

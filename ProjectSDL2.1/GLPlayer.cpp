@@ -156,6 +156,7 @@ void GLPlayer::ResetPlayer()
 	this->dashOnCooldown = false;
 	this->currentPowerUp = POWER_NEUTRAL;
 	this->HandlePowerUps();
+	this->totalPoints = 0;
 }
 
 int GLPlayer::GetPoints()

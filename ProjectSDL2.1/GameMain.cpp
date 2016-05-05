@@ -9,7 +9,7 @@ GameMain::GameMain()
 	this->window = new GLWindow(window::WIDTH, window::HEIGHT, "Survival of the fishest");
 	this->textToScreen = new GUI();
 	this->gameState = GLOBAL_GameState::MENU;
-	this->scene = new Scene();
+	this->scene = new Scene(&this->gameState);
 	this->menu = new Menu(&this->gameState);
 }
 
@@ -36,6 +36,7 @@ void GameMain::HandleUpdateDraw()
 	case GLOBAL_GameState::GAME:
 		this->scene->Update(this->deltaTime);
 		this->scene->DrawScene();
+
 		break;
 	case GLOBAL_GameState::MENU:
 		this->menu->Update(this->deltaTime);

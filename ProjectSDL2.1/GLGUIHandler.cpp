@@ -230,14 +230,14 @@ void GLGUIHandler::InitTextureInfo()
 	printText[TIME] = "";
 
 	// Winner
-	printText[WINNER] = "WON!";
+	printText[WINNER] = "Won!";
 	textScale[WINNER] = 2;
 	textPos[WINNER][0] = window::HALF_WIDTH - (gui->GetTextLenght(printText[WINNER], textScale[WINNER]) * 0.5);
 	textPos[WINNER][1] = window::HALF_HEIGHT - 20;
 	textColor[WINNER] = glm::vec3(0, 1, 0);
 
 	// Loser
-	printText[LOSER] = "LOST!";
+	printText[LOSER] = "Lost!";
 	textScale[LOSER] = 2;
 	textPos[LOSER][0] = window::HALF_WIDTH - (gui->GetTextLenght(printText[LOSER], textScale[LOSER]) * 0.5);
 	textPos[LOSER][1] = window::HALF_HEIGHT - 20;
