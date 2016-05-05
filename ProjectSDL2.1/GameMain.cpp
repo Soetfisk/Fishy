@@ -92,6 +92,14 @@ void GameMain::GameLoop()
 				this->gameOn = false;
 			else if (e.type == SDL_KEYDOWN && e.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
 				this->gameOn = false;
+			else if (e.type == SDL_CONTROLLERDEVICEADDED)
+			{
+				this->scene->HandleEvenet(&e);
+			}
+			else if (e.type == SDL_CONTROLLERDEVICEREMOVED)
+			{
+				this->scene->HandleEvenet(&e);
+			}
 			else
 			{
 				HandleEvents();

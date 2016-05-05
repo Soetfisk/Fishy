@@ -246,6 +246,10 @@ void Scene::Update(float& deltaTime) {
 
 	this->collisionHandler.CheckCollisions(deltaTime);
 	this->AddScore();
+			std::cout << a << std::endl;
+			guih->AddScorePlayer1(a);
+			std::cout << a << std::endl;
+			guih->AddScorePlayer2(a);
 
 	for (int i = 0; i < this->NPCs.size(); i++) {
 		this->NPCs.at(i)->NPCUpdate(deltaTime);
