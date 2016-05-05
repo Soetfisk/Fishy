@@ -226,44 +226,16 @@ int GLPlayer::GetTotalPoints()
 void GLPlayer::moveAnimation(float deltaTime)
 {
 	static bool left = true, stop = false;
-	float speedFactor = abs(deltaTime * 0.25);
+	float speedFactor = abs(deltaTime * 0.45), y;
 
-	if (left == true)
-	{
-		if (blendWeights[ASIX] >= 1.0f || stop )
-		{
-			blendWeights[ASIX] -= speedFactor;
-			stop = true;
-			if (blendWeights[ASIX] <= 0.0)
-			{
-				blendWeights[ASIX] = 0.0;
-				stop = false;
-				left = false;
-			}
-		}
-		else if (blendWeights[ASIX] < 1.0f && !stop)
-		{
-			blendWeights[ASIX] += speedFactor;
-		}
-	}
-	else
-	{
-		if (blendWeights[ASEVEN] >= 1.0f || stop)
-		{
-			blendWeights[ASEVEN] -= speedFactor;
-			stop = true;
-			if (blendWeights[ASEVEN] <= 0.0)
-			{
-				blendWeights[ASEVEN] = 0.0;
-				stop = false;
-				left = true;
-			}
-		}
-		else if (blendWeights[ASEVEN] < 1.0f && !stop)
-		{
-			blendWeights[ASEVEN] += speedFactor;
-		}
-	}
+	static float x = 0.0f;
+	x += speedFactor;
+
+	y = sin(x);
+	if (y > 0.0)
+		blendWeights[ASIX] = y;
+	if (y < 0.0)
+		blendWeights[ASEVEN] = y;
 }
 
 //adds a controller too the player

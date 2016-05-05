@@ -25,8 +25,8 @@ void main()
 
 	for(int i = 0; i < (BlendShapeCount); i++)
 	{
-		deltaPosition = blendShape[i].xyz - position.xyz;
-		finalPose += Weights[i] * blendShape[i].xyz * deltaPosition.xyz;
+		deltaPosition = position - blendShape[i];
+		finalPose += Weights[i] * blendShape[i] * deltaPosition;
 	}
 
 	gl_Position = ProjectionViewMatrix * TransformMatrix * vec4(finalPose, 1);
