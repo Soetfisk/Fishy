@@ -97,7 +97,6 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 						{
 							NPCs.at(j)->GetTransform().SetScale(NPCs.at(j)->GetTransform().GetScale() - 1.0f);
 							players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(1));
-							std::cout << "Scale Set too: " << NPCs.at(j)->GetTransform().GetScale().x << std::endl;
 						}
 						else
 						{
@@ -112,7 +111,6 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 							{
 								PowerUpHandler->RemoveAvailableFish(j);
 							}
-							std::cout << "Scale Set too: " << NPCs.at(j)->GetTransform().GetScale().x <<" probobly dead" << std::endl;
 						}
 					}
 				}
