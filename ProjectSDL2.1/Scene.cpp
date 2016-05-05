@@ -281,6 +281,10 @@ void Scene::DrawScene() {
 		}
 		shaders[MODELS]->Bind();
 		shaders[MODELS]->Update(players.at(i)->GetCamera());
+		for (int j = 0; j < this->players.size(); j++)
+		{
+			players.at(j)->DrawProjectile(*shaders[MODELS]);
+		}
 		for (unsigned int i = 0; i < NPCs.size(); i++)
 		{
 			NPCs.at(i)->NPCDraw(*shaders[MODELS]);

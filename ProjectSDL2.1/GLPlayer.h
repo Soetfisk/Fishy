@@ -63,6 +63,7 @@ public:
 
 	void PlayerEating(float deltaTime);
 	void TestDraw(GLShader& shader);
+	void DrawProjectile(GLShader& shader);
 	void HandleCollision(PlayerStates state, float deltaTime, glm::vec3 momentum);
 	std::vector<GLProjectile*> GetProjectiles();
 	glm::vec3 GetVelocity();
