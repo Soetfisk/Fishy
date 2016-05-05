@@ -2,5 +2,7 @@
 
 enum GLOBAL_GameState {
 	GAME,
-	MENU
+	MENU,
+	CONTROLS,
+	EXIT
 };

@@ -7,8 +7,9 @@ class Menu
 {
 public:
 	Menu();
-	Menu(GLOBAL_GameState& state);
-	Menu(GUI* gui, GLOBAL_GameState& state);
+	Menu(GLOBAL_GameState* state);
+	Menu(GUI* gui, GLOBAL_GameState* state);
+	Menu(GUI* gui, GLOBAL_GameState* state, GLShader* shader);
 	virtual ~Menu();
 	void Update(float dt);
 	void Draw();
@@ -30,15 +31,18 @@ private:
 	GUI* gui;
 	glm::mat4 projection;
 	MenuButtons selectedBttn;
-	GLOBAL_GameState gameState;
+	GLOBAL_GameState* gameState;
+	bool deleteShader, deleteGUI;
 
 	GLfloat textPos[NUM_MENU_BUTTONS][2];
 	GLfloat textScale[NUM_MENU_BUTTONS];
 	glm::vec3 textColor[NUM_MENU_BUTTONS];
 	std::string text[NUM_MENU_BUTTONS];
 
+	void InitMenuTextureInfo();
 	void HandleUp();
 	void HandleDown();
+	void HandleSpace();
 	void FixSelected();
 };
 

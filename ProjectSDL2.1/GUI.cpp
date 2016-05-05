@@ -3,17 +3,15 @@
 
 GUI::GUI()
 {
-	InitCharacters();
+	InitCharacters(DEFAULT_FONT);
+	InitBuffers();
+	
+}
 
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glBindVertexArray(VAO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
+GUI::GUI(std::string& fontName)
+{
+	InitCharacters(fontName);
+	InitBuffers();
 }
 
 GUI::~GUI()
@@ -21,14 +19,15 @@ GUI::~GUI()
 	
 }
 
-void GUI::InitCharacters()
+void GUI::InitCharacters(std::string fontName)
 {
 	// Initialize lib
 	if (FT_Init_FreeType(&ft))
 		std::cout << "ERROR::FREETYPE: Could not init FreeType Library\n";
 
+	std::string path = "fonts/" + fontName;
 	// Load font
-	if (FT_New_Face(ft, "fonts/Starjedi.ttf", 0, &face))
+	if (FT_New_Face(ft, path.c_str(), 0, &face))
 		std::cout << "ERROR::FREETYPE: Failed to load font\n";
 
 	// Set font size in width and height, 0 dynamiclly calculates the width/height based on the other, e.g. w = 0, h = 48
@@ -76,6 +75,19 @@ void GUI::InitCharacters()
 
 	FT_Done_Face(face);
 	FT_Done_FreeType(ft);
+}
+
+void GUI::InitBuffers()
+{
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+	glBindVertexArray(VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 }
 
 void GUI::RenderText(GLShader& shader, std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color)

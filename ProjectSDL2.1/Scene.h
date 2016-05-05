@@ -105,6 +105,7 @@ private:
 	GLPlayer::PowerUps currentPowerUp;
 public:
 	Scene();
+	Scene(GUI* textToScreen);
 	~Scene();
 
 	void HandleEvenet(SDL_Event* e);

@@ -15,11 +15,14 @@ private:
 	SDL_Event e;
 	bool gameOn;
 	GLWindow* window;
-	Scene * scene;
-	Menu * menu;
+	Scene* scene;
+	Menu* menu;
+	GUI* textToScreen;
 
 	//Private functions below
 	void SetDeltaTime();
+	void HandleUpdateDraw();
+	void HandleEvents();
 public:
 	GameMain();
 	~GameMain();

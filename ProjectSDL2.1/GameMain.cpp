@@ -7,9 +7,10 @@ GameMain::GameMain()
 	this->currentTime = 0;
 	//window is a namespace in util that keeps the value of the width/height, in file GLUtil.h
 	this->window = new GLWindow(window::WIDTH, window::HEIGHT, "Survival of the fishest");
+	this->textToScreen = new GUI();
+	this->gameState = GLOBAL_GameState::MENU;
 	this->scene = new Scene();
-	this->menu = new Menu();
-	this->gameState = GLOBAL_GameState::GAME;
+	this->menu = new Menu(&this->gameState);
 }
 
 GameMain::~GameMain()
@@ -17,6 +18,7 @@ GameMain::~GameMain()
 	delete this->window;
 	delete this->scene;
 	delete this->menu;
+	delete this->textToScreen;
 }
 
 // setting delta time
@@ -25,6 +27,50 @@ void GameMain::SetDeltaTime()
 	this->currentTime = SDL_GetTicks();
 	this->deltaTime = (currentTime - prevTime) / 1000.0f;
 	this->prevTime = currentTime;
+}
+
+void GameMain::HandleUpdateDraw()
+{
+	switch (this->gameState)
+	{
+	case GLOBAL_GameState::GAME:
+		this->scene->Update(this->deltaTime);
+		this->scene->DrawScene();
+		break;
+	case GLOBAL_GameState::MENU:
+		this->menu->Update(this->deltaTime);
+		this->menu->Draw();
+		break;
+	case GLOBAL_GameState::CONTROLS:
+		break;
+	case GLOBAL_GameState::EXIT:
+		this->gameOn = false;
+		break;
+	default:
+		std::cout << "GAMESTATE ERROR!\n";
+		break;
+	}
+}
+
+void GameMain::HandleEvents()
+{
+	switch (this->gameState)
+	{
+	case GLOBAL_GameState::GAME:
+		this->scene->HandleEvenet(&e);
+		break;
+	case GLOBAL_GameState::MENU:
+		this->menu->HandleEvenet(&e);
+		break;
+	case GLOBAL_GameState::CONTROLS:
+		break;
+	case GLOBAL_GameState::EXIT:
+		this->gameOn = false;
+		break;
+	default:
+		std::cout << "GAMESTATE ERROR!\n";
+		break;
+	}
 }
 
 // The main gameloop
@@ -37,30 +83,7 @@ void GameMain::GameLoop()
 		this->SetDeltaTime();
 		this->window->Clear(0, .1f, 1);
 
-		/*if (this->gameState == GLOBAL_GameState::GAME)
-		{
-			this->scene->Update(this->deltaTime);
-			this->scene->DrawScene();
-		}
-		else if (this->gameState == GLOBAL_GameState::MENU)
-		{
-			this->menu->Update(this->deltaTime);
-			this->menu->Draw();
-		}*/
-		switch(this->gameState)
-		{
-		case GLOBAL_GameState::GAME:
-			this->scene->Update(this->deltaTime);
-			this->scene->DrawScene();
-			break;
-		case GLOBAL_GameState::MENU:
-			this->menu->Update(this->deltaTime);
-			this->menu->Draw();
-			break;
-		default:
-			std::cout << "GameState error!\n";
-			break;
-		}
+		this->HandleUpdateDraw();
 
 		while (SDL_PollEvent(&e)) // getting events
 		{
@@ -70,22 +93,7 @@ void GameMain::GameLoop()
 				this->gameOn = false;
 			else
 			{
-				/*if (this->gameState == GLOBAL_GameState::GAME)
-				this->scene->HandleEvenet(&e);
-				else if (this->gameState == GLOBAL_GameState::MENU)
-				this->menu->HandleEvenet(&e);*/
-				switch (this->gameState)
-				{
-				case GLOBAL_GameState::GAME:
-					this->scene->HandleEvenet(&e);
-					break;
-				case GLOBAL_GameState::MENU:
-					this->menu->HandleEvenet(&e);
-					break;
-				default:
-					std::cout << "GameState error!\n";
-					break;
-				}
+				HandleEvents();
 			}
 		}
 		this->window->Update();
