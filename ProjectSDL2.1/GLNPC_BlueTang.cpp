@@ -49,8 +49,12 @@ void GLNPC_BlueTang::NPCUpdate(float deltaTime)
 		}
 		else if (currentState == NPC_BEINGEATEN)
 		{
-			;
-
+			glm::vec3 reduce = this->transform->GetScale() - deltaTime / 2;
+			this->transform->SetScale(reduce);
+			if (GetTransform().GetScale().y < 0.2)
+			{
+				NPCKill();
+			}
 		}
 		checkboarderCollision();
 	}
@@ -68,8 +72,7 @@ void GLNPC_BlueTang::gettingEaten(float deltaTime, GLTransform playerTransform)
 {
 	if (this->currentState != NPC_INACTIVE)
 	{
-		glm::vec3 reduce = this->transform->GetScale() - deltaTime / 2;
-		this->transform->SetScale(reduce);
+		
 		this->transform->SetPos(playerTransform.GetPos());
 		this->currentState = NPC_BEINGEATEN;
 
@@ -79,6 +82,10 @@ void GLNPC_BlueTang::gettingEaten(float deltaTime, GLTransform playerTransform)
 void GLNPC_BlueTang::NPCKill()
 {
 	this->currentState = NPC_INACTIVE;
+	if (this->isPowerUp == true)
+	{
+		;//printf("i wanna be the very fish, that no one ever was");
+	}
 }
 
 void GLNPC_BlueTang::initiateFleeingState(glm::vec3 playerForwardVector)
@@ -174,7 +181,21 @@ void GLNPC_BlueTang::checkboarderCollision()
 	transform->SetPos(pos);
 }
 
-int GLNPC_BlueTang::GetCurrentState()
+
+
+bool GLNPC_BlueTang::GetIsPowerUp()
 {
-	return this->currentState;
+	return isPowerUp;
+}
+
+void GLNPC_BlueTang::ResetFish()
+{
+	this->currentState = NPC_MOVE;
+	transform->SetPos(glm::vec3(RNG::range(-DEADZONEX, DEADZONEX), RNG::range(-DEADZONEY, DEADZONEY), RNG::range(-DEADZONEZ, DEADZONEZ)));
+	glm::vec3 scale = glm::vec3(RNG::range(1.1f, 3.0f));
+	transform->SetScale(scale);
+
+	this->TimeUntilChange = RNG::range(0.2, 3.0f);
+	this->forwardSpeed = FishSpeedMultiplier * RNG::range(0.0f, 3.3f);
+	this->rotationChange = glm::vec3(0, RNG::range(-1.0f, 1.0f), 0);
 }

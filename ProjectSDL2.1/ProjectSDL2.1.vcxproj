@@ -31,6 +31,7 @@
     <ClCompile Include="GLMesh.cpp" />
     <ClCompile Include="GLModel.cpp" />
     <ClCompile Include="GLNPC_GoldFish.cpp" />
+    <ClCompile Include="GLNPC_PowerUpHandler.cpp" />
     <ClCompile Include="GLPlayer.cpp" />
     <ClCompile Include="GLProjectile.cpp" />
     <ClCompile Include="GLProjectileHandler.cpp" />
@@ -38,13 +39,14 @@
     <ClCompile Include="GLWindow.cpp" />
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="obj_loader.cpp" />
     <ClCompile Include="Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLMeshBS.h" />
+    <ClInclude Include="GameState.h" />
     <ClInclude Include="GLNPC_BlueTang.h" />
-    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\RNG.h" />
     <ClInclude Include="AABB.h" />
     <ClInclude Include="FilterComputeShader.h" />
     <ClInclude Include="GLGUIHandler.h" />
@@ -52,6 +54,7 @@
     <ClInclude Include="GLNPC.h" />
     <ClInclude Include="FrameBuffer.h" />
     <ClInclude Include="GLNPC_GoldFish.h" />
+    <ClInclude Include="GLNPC_PowerUpHandler.h" />
     <ClInclude Include="GLProjectile.h" />
     <ClInclude Include="GLProjectileHandler.h" />
     <ClInclude Include="GameMain.h" />
@@ -65,6 +68,8 @@
     <ClInclude Include="GLUtil.h" />
     <ClInclude Include="GLWindow.h" />
     <ClInclude Include="GUI.h" />
+    <ClInclude Include="Menu.h" />
+    <ClInclude Include="RNG.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SphereBS.h" />
   </ItemGroup>
@@ -173,11 +178,15 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>.\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freetype262.lib;FishBox.lib;glew32.lib;glew32s.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;OpenGL32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

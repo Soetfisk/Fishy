@@ -48,7 +48,12 @@ void GLNPC_GoldFish::NPCUpdate(float deltaTime)
 		}
 		else if (currentState == NPC_BEINGEATEN)
 		{
-			;
+			glm::vec3 reduce = this->transform->GetScale() - deltaTime / 2;
+			this->transform->SetScale(reduce);
+			if (GetTransform().GetScale().y < 0.2)
+			{
+				NPCKill();
+			}
 		}
 		checkboarderCollision();
 		
@@ -68,17 +73,18 @@ void GLNPC_GoldFish::gettingEaten(float deltaTime, GLTransform playerTransform)
 {
 	if (this->currentState != NPC_INACTIVE)
 	{
-		glm::vec3 reduce = this->transform->GetScale() - deltaTime / 2;
-		this->transform->SetScale(reduce);
 		this->transform->SetPos(playerTransform.GetPos());
 		this->currentState = NPC_BEINGEATEN;
-
 	}
 }
 
 void GLNPC_GoldFish::NPCKill()
 {
 	this->currentState = NPC_INACTIVE;
+	if (this->isPowerUp == true)
+	{
+		//printf("i wanna be the very fish, that no one ever was");
+	}
 }
 
 void GLNPC_GoldFish::initiateFleeingState(glm::vec3 playerForwardVector)
@@ -174,7 +180,19 @@ void GLNPC_GoldFish::checkboarderCollision()
 	transform->SetPos(pos);
 }
 
-int GLNPC_GoldFish::GetCurrentState()
+
+bool GLNPC_GoldFish::GetIsPowerUp()
 {
-	return this->currentState;
+	return this->isPowerUp;
+}
+
+void GLNPC_GoldFish::ResetFish()
+{
+	this->currentState = NPC_MOVE;
+	transform->SetPos(glm::vec3(RNG::range(-DEADZONEX, DEADZONEX), RNG::range(-DEADZONEY, DEADZONEY), RNG::range(-DEADZONEZ, DEADZONEZ)));
+
+	this->TimeUntilChange = RNG::range(0.2, 3.0f);
+	this->scaleChange = RNG::range(-0.02f, 0.02f);
+	this->forwardSpeed = RNG::range(0.0f, 3.3f);
+	this->rotationChange = glm::vec3(0, RNG::range(-1.0f, 1.0f), 0);
 }
