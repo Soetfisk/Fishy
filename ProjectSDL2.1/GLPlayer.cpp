@@ -223,6 +223,49 @@ int GLPlayer::GetTotalPoints()
 	return this->totalPoints;
 }
 
+void GLPlayer::moveAnimation(float deltaTime)
+{
+	static bool left = true, stop = false;
+	float speedFactor = abs(deltaTime * 0.25);
+
+	if (left == true)
+	{
+		if (blendWeights[ASIX] >= 1.0f || stop )
+		{
+			blendWeights[ASIX] -= speedFactor;
+			stop = true;
+			if (blendWeights[ASIX] <= 0.0)
+			{
+				blendWeights[ASIX] = 0.0;
+				stop = false;
+				left = false;
+			}
+		}
+		else if (blendWeights[ASIX] < 1.0f && !stop)
+		{
+			blendWeights[ASIX] += speedFactor;
+		}
+	}
+	else
+	{
+		if (blendWeights[ASEVEN] >= 1.0f || stop)
+		{
+			blendWeights[ASEVEN] -= speedFactor;
+			stop = true;
+			if (blendWeights[ASEVEN] <= 0.0)
+			{
+				blendWeights[ASEVEN] = 0.0;
+				stop = false;
+				left = true;
+			}
+		}
+		else if (blendWeights[ASEVEN] < 1.0f && !stop)
+		{
+			blendWeights[ASEVEN] += speedFactor;
+		}
+	}
+}
+
 //adds a controller too the player
 void GLPlayer::AddController(int id)
 {
@@ -298,7 +341,7 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 
 	//this->blendWeights[AONE] = 1.0f; //ANIMATION TEST
 	//this->blendWeights[ATHREE] = 1.0f;
-
+	this->moveAnimation(deltaTime);
 	//camera update
 	this->m_camera.Update(this->GetTransform(), deltaTime);
 

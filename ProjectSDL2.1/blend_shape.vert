@@ -23,16 +23,16 @@ void main()
 	vec3 deltaPosition;
 	vec3 finalPose = position;
 
-	//for(int i = 0; i < (BlendShapeCount); i++)
-	//{
-	//deltaPosition = blendShape.xyz - position.xyz;
-	//finalPose += 1.0 * blendShape.xyz * deltaPosition.xyz;
-	//}
+	for(int i = 0; i < (BlendShapeCount); i++)
+	{
+		deltaPosition = blendShape[i].xyz - position.xyz;
+		finalPose += Weights[i] * blendShape[i].xyz * deltaPosition.xyz;
+	}
 
-	gl_Position = ProjectionViewMatrix * TransformMatrix * vec4(blendShape[6], 1);
+	gl_Position = ProjectionViewMatrix * TransformMatrix * vec4(finalPose, 1);
 
 	geom_uv = texCoord;
 	geom_normal = normalize(mat3(TransformMatrix) * normal);
-	geom_worldpos = vec3(TransformMatrix * vec4(blendShape[6], 1));
+	geom_worldpos = vec3(TransformMatrix * vec4(finalPose, 1));
 	geom_ViewPos = ViewPos;
 }

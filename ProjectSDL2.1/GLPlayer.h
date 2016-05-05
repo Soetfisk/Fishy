@@ -73,10 +73,10 @@ public:
 	void ResetPlayer();
 	int GetPoints();
 	int GetTotalPoints();
-
 	float * GetBlendWeights() { return blendWeights; }
 	unsigned int GetBlendShapeCount() { return NUM_ANIMATION; }
 	glm::vec3& getVelocity() { return m_velocity; }
+	void moveAnimation(float deltaTime);
 private:
 	const int	DEADZONE = 10000;
 	float		MOVEMENT_FRICTION = 2.0f;
