@@ -110,6 +110,7 @@ private:
 	void UpdatePlayerPowerUp(int player);
 	void HandlePlayerPowerUp();
 	void CheckWinner();
+	void AddScore();
 public:
 	Scene();
 	Scene(GUI* textToScreen);

@@ -63,6 +63,22 @@ void Scene::HandlePlayerPowerUp()
 
 void Scene::CheckWinner()
 {
+
+}
+
+void Scene::AddScore()
+{
+	for (int i = 0; i < this->players.size(); i++) {
+		this->players.at(i)->Update(GLPlayer::NOTHING, glm::vec3(deltaTime));
+		if (i == 0)
+		{
+			guih->AddScorePlayer1(this->players.at(i)->GetPoints());
+		}
+		else
+		{
+			guih->AddScorePlayer2(this->players.at(i)->GetPoints());
+		}
+	}
 }
 
 Scene::Scene() {
@@ -263,18 +279,7 @@ void Scene::Update(float& deltaTime) {
 	guih->Update(deltaTime);
 
 	this->collisionHandler.CheckCollisions(deltaTime);
-
-	for (int i = 0; i < this->players.size(); i++) {
-		this->players.at(i)->Update(GLPlayer::NOTHING ,glm::vec3(deltaTime));
-		if (i == 0)
-		{
-			guih->AddScorePlayer1(this->players.at(i)->GetPoints());
-		}
-		else
-		{
-			guih->AddScorePlayer2(this->players.at(i)->GetPoints());
-		}
-	}
+	this->AddScore();
 
 	for (int i = 0; i < this->NPCs.size(); i++) {
 		this->NPCs.at(i)->NPCUpdate(deltaTime);
