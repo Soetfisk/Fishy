@@ -61,6 +61,10 @@ void Scene::HandlePlayerPowerUp()
 	}
 }
 
+void Scene::CheckWinner()
+{
+}
+
 Scene::Scene() {
 	
 	LoadModels();
@@ -214,6 +218,9 @@ Scene::Scene(GUI* textToScreen)
 	this->fogColor = glm::vec3(0.1, 0.1, 0.8);
 	//player
 	this->currentPowerUp = GLPlayer::POWER_NEUTRAL;
+	// Ending game options
+	this->endTimer = 20;
+	this->endPoints = 100;
 }
 
 

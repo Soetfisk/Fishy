@@ -87,11 +87,6 @@ private:
 	glm::mat4 projection;
 	GLGUIHandler* guih;
 
-private:
-	void LoadModels();
-	void LoadModels(char* folder);
-	void UpdatePlayerPowerUp(int player);
-	void HandlePlayerPowerUp();
 	// variables for border shader
 	float borderThreshold1, borderThreshold2;
 	glm::vec3 borderColor1;
@@ -103,6 +98,18 @@ private:
 	glm::vec3 fogColor;
 	// Player
 	GLPlayer::PowerUps currentPowerUp;
+	// Timer
+	float endTimer; // when we end game
+	float endPoints; // reach this amount of points and game end
+	float endSceneTimer = 0; // private time that is used for ending the game
+	bool endGame = false;
+
+private:
+	void LoadModels();
+	void LoadModels(char* folder);
+	void UpdatePlayerPowerUp(int player);
+	void HandlePlayerPowerUp();
+	void CheckWinner();
 public:
 	Scene();
 	Scene(GUI* textToScreen);

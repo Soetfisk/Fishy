@@ -168,6 +168,11 @@ int GLPlayer::GetPoints()
 	return 0;
 }
 
+int GLPlayer::GetTotalPoints()
+{
+	return this->totalPoints;
+}
+
 //adds a controller too the player
 void GLPlayer::AddController(int id)
 {

@@ -59,6 +59,7 @@ public:
 	void SetRandomPowerUp();
 	void ResetPlayer();
 	int GetPoints();
+	int GetTotalPoints();
 
 	glm::vec3& getVelocity() {
 		return m_velocity;
