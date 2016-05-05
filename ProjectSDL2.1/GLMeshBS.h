@@ -12,15 +12,20 @@ public:
 		unsigned int * indices,
 		FSHData::material* material,
 		FSHData::texture * texture, 
-		FSHData::blendShape * blendShapes
+		FSHData::blendShape ** blendShapes
 		);
 
 private:
 	enum
 	{
 		Vertex_Data,
-		blendShape_Data,
-
+		blendShape0_Data,
+		blendShape1_Data,
+		blendShape2_Data,
+		blendShape3_Data,
+		blendShape4_Data,
+		blendShape5_Data,
+		blendShape6_Data,
 		NO_OF_VBO
 	};
 

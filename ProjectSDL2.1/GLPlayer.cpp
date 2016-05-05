@@ -214,7 +214,7 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	CalcVelocity(deltaTime);
 	HandleDash(deltaTime);
 
-	this->blendWeights[AONE] = 1.0f; //ANIMATION TEST
+	//this->blendWeights[AONE] = 1.0f; //ANIMATION TEST
 	//this->blendWeights[ATHREE] = 1.0f;
 
 	//camera update

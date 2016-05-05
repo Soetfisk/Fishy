@@ -7,7 +7,7 @@ GLMeshBS::GLMeshBS
 	unsigned int * indices, 
 	FSHData::material * material, 
 	FSHData::texture * texture, 
-	FSHData::blendShape * blendShapes
+	FSHData::blendShape ** blendShapes
 )
 {
 	this->m_drawCount = meshData->indexCount;
@@ -35,22 +35,32 @@ GLMeshBS::GLMeshBS
 	
 	//glVertexAttribPointer(3, 3 * blendShapeCount, GL_FLOAT, GL_FALSE, sizeof(blendShape) * blendShapeCount, (void*)0);
 
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer[blendShape_Data]);
-	glBufferData(GL_ARRAY_BUFFER, meshData->vertexCount * sizeof(blendShape) * blendShapeCount, blendShapes, GL_STATIC_DRAW);
+
 	
 	int m_location = 3;
-	for (unsigned int i = 0; i < 10; i++)
+	for (int i = 0; i < meshData->blendshapesCount; i++)
 	{
 		GLuint index = m_location + i;
-		GLsizei stride = sizeof(blendShape)/**10*/;
-		GLsizei offset = sizeof(blendShape)*i;
+
+		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer[1+i]);
+		glBufferData(GL_ARRAY_BUFFER, meshData->vertexCount * sizeof(blendShape), blendShapes[i], GL_STATIC_DRAW);
 
 		glEnableVertexAttribArray(index);
-		
-		glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, stride, reinterpret_cast<void*>(offset));
-
-		glVertexAttribDivisor(index, 0);
+		glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, sizeof(blendShape), 0);
 	}
+
+	//for (unsigned int i = 0; i < blendShapeCount; i++)
+	//{
+	//	GLuint index = m_location + i;
+	//	GLsizei stride = sizeof(blendShape);
+	//	GLsizei offset = i*sizeof(blendShape);
+
+	//	glEnableVertexAttribArray(index);
+	//	
+	
+
+	//	glVertexAttribDivisor(index, blendShapeCount);
+	//}
 
 	int n;
 	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &n);
