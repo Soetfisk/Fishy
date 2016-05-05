@@ -64,7 +64,7 @@ public:
 		return m_velocity;
 	}
 private:
-	const int	DEADZONE = 8000;
+	const int	DEADZONE = 10000;
 	float		MOVEMENT_FRICTION = 2.0f;
 	const int	MAX_SPEED = 200;	
 	const float MIN_SPEED = 0.1f;
@@ -80,7 +80,7 @@ private:
 	float lastVertical = 0;
 	float lastForward = 0;
 	glm::vec3 m_velocity;
-	unsigned int currentPoints = 0;
+	int currentPoints = 0;
 	unsigned int totalPoints = 0;
 
 	float dashDuration;

@@ -262,11 +262,15 @@ void Scene::Update(float& deltaTime) {
 		this->players.at(i)->Update(GLPlayer::NOTHING ,glm::vec3(deltaTime));
 		if (i == 0)
 		{
-			guih->AddScorePlayer1(this->players.at(i)->GetPoints());
+			int a = this->players.at(i)->GetPoints();
+			std::cout << a << std::endl;
+			guih->AddScorePlayer1(a);
 		}
 		else
 		{
-			guih->AddScorePlayer2(this->players.at(i)->GetPoints());
+			int a = this->players.at(i)->GetPoints();
+			std::cout << a << std::endl;
+			guih->AddScorePlayer2(a);
 		}
 	}
 

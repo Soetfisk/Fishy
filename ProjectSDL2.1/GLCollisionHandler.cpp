@@ -20,6 +20,7 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 		{
 			if (players.at(i)->GetBoundingBox().containsAABB(players.at(1-i)->GetBoundingBox()))
 			{
+				players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(1));
 				glm::vec3 dir = players.at(i)->GetBoundingBox().center - players.at(1 - i)->GetBoundingBox().center;
 				float center_dist = glm::dot(dir, dir);
 				glm::vec3 min_dist = players.at(i)->GetBoundingBox().halfDimension + players.at(1 - i)->GetBoundingBox().halfDimension;
@@ -76,6 +77,7 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 		{
 			if (players.at(i)->GetProjectiles().at(j)->GetBoundingBox().containsAABB(players.at(1 - i)->GetBoundingBox()))
 			{
+				players.at(1 - i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(-0.10));
 				players.at(1 - i)->HandleCollision(GLPlayer::HIT, deltaTime,players.at(i)->GetProjectiles().at(j)->GetForward() * 30.0f);
 				players.at(i)->GetProjectiles().at(j)->Inactivate();
 			}

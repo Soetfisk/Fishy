@@ -105,9 +105,19 @@ void GLPlayer::HandleCollision(PlayerStates state, float deltaTime, glm::vec3 mo
 		this->m_velocity = momentum;
 	break;
 	case EATING:
-		this->transform->SetScale(this->transform->GetScale() + (deltaTime/4));
-		totalPoints		+=	100 * momentum.x;
-		currentPoints	+=	100 * momentum.x;
+		if (momentum.x > 0)
+		{
+			this->transform->SetScale(this->transform->GetScale() + (deltaTime / 4));
+			totalPoints += 100 * momentum.x;
+			currentPoints += 100 * momentum.x;
+		}
+		if (momentum.x < 0 && (totalPoints + 100 * momentum.x) >= 0)
+		{
+			this->transform->SetScale(this->transform->GetScale() + (deltaTime / 4));
+			totalPoints += 100 * momentum.x;
+			currentPoints += 100 * momentum.x;
+			std::cout << totalPoints << " : " << 100 * momentum.x << std::endl;
+		}
 		break;
 	case HIT:
 		this->m_velocity += momentum;
@@ -160,7 +170,7 @@ void GLPlayer::ResetPlayer()
 
 int GLPlayer::GetPoints()
 {
-	if (currentPoints != 0)
+	if (currentPoints > 0)
 	{
 		if (currentPoints % 10 == 0)
 		{
@@ -172,6 +182,21 @@ int GLPlayer::GetPoints()
 			currentPoints -= 1;
 			return 1;
 		}
+
+	}
+	if (currentPoints < 0)
+	{
+		if (currentPoints % 10 == 0)
+		{
+			currentPoints += 10;
+			return -10;
+		}
+		else
+		{
+			currentPoints += 1;
+			return -1;
+		}
+
 	}
 	return 0;
 }
