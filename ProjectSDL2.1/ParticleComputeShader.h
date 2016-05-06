@@ -17,6 +17,7 @@ struct ParticleStruct {
 	glm::vec4 emiterPosition;
 	glm::vec4 velocity;
 	glm::vec4 customVariables;
+	glm::vec4 acceleration;
 };
 
 struct ParticleTestPos {
@@ -27,8 +28,7 @@ class ParticleComputeShader
 {
 private:
 	
-	GLuint transSSbo, velSSbo;
-	GLuint VAO_Buffer;
+	GLuint spawnSSBO;
 	GLuint compute_program, compute_shader;
 	glm::vec4* testPos;
 	ParticleComputeStruct* particleData;
@@ -48,6 +48,7 @@ public:
 	void InitializeProjectileShader();
 
 	void Update(const float & deltaTime, int nrActiveParticles, GLuint &ParticleSSBOS);
+	bool editComputeData(int index, GLuint &ParticleSSBO);
 };
 
 //g321

@@ -16,8 +16,8 @@ ParticleEmitter::ParticleEmitter(EmitterType type, glm::vec4 position, GLuint tr
 	this->positionEmitter = position;
 	this->texture = texture;
 	setTexture();
-	this->nrMaxParticles = 100;
-	this->nrActiveParticles = 100;
+	this->nrMaxParticles = 5;
+	this->nrActiveParticles = 5;
 
 	this->emitterComputeShader = new ParticleComputeShader();
 	this->emitterComputeShader->Initialize(this->type, this->nrMaxParticles, this->pe_particleBuffer);
@@ -35,6 +35,40 @@ ParticleEmitter::ParticleEmitter(EmitterType type, glm::vec4 position, GLuint tr
 
 	//InstantiateRenderShader();
 
+}
+
+void ParticleEmitter::updateCompute(const float &deltaTime) {
+	this->emitterComputeShader->Update(deltaTime, this->nrActiveParticles, this->pe_particleBuffer);
+}
+
+void ParticleEmitter::UpdateEmitter(const float& deltaTime) {
+	//this->emitterPosition = glm::vec3(*this->transformLocation * glm::vec4(0, 0, 0, 0)) + (this->directionFromObject * this->distanceFromObject);
+	//Update Particle timers
+	//updateParticles(deltaTime);
+
+	updateCompute(deltaTime);
+
+	//updateDrawData();
+
+
+}
+
+void ParticleEmitter::Draw(GLShader* shader) {
+
+	GLuint INDEX = shader->GetUnifromLocation("particle_tex");
+	GLuint testing = GL_TEXTURE0 + 0;
+	glActiveTexture(GL_TEXTURE0 + 0);
+	glUniform1i(shader->GetUnifromLocation("particle_tex"), 0);
+	glBindTexture(GL_TEXTURE_2D, this->textureID);
+	glBindVertexArray(this->pe_VertexArrayObject);
+
+	glDrawArrays(GL_POINTS, 0, nrMaxParticles);
+
+	glBindVertexArray(0);
+	//glBindVertexArray(pe_VertexArrayObject);
+
+	//glDrawArrays(GL_POINTS, 0, this->nrActiveParticles);
+	//glBindVertexArray(0);
 }
 
 void ParticleEmitter::setTexture() {
@@ -178,9 +212,7 @@ void ParticleEmitter::updateDrawData() {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 }
-void ParticleEmitter::updateCompute(const float &deltaTime) {
-	this->emitterComputeShader->Update(deltaTime, this->nrActiveParticles, this->pe_particleBuffer);
-}
+
 
 void ParticleEmitter::updateParticles(const float& deltaTime) {
 
@@ -236,32 +268,3 @@ void ParticleEmitter::swapData(int ID) {
 	
 }
 
-void ParticleEmitter::UpdateEmitter(const float& deltaTime) {
-	//this->emitterPosition = glm::vec3(*this->transformLocation * glm::vec4(0, 0, 0, 0)) + (this->directionFromObject * this->distanceFromObject);
-	//Update Particle timers
-	//updateParticles(deltaTime);
-
-	updateCompute(deltaTime);
-
-	//updateDrawData();
-
-
-}
-
-void ParticleEmitter::Draw(GLShader* shader) {
-
-	GLuint INDEX = shader->GetUnifromLocation("particle_tex");
-	GLuint testing = GL_TEXTURE0 + 0;
-	glActiveTexture(GL_TEXTURE0 + 0);
-	glUniform1i(shader->GetUnifromLocation("particle_tex"), 0);
-	glBindTexture(GL_TEXTURE_2D, this->textureID);
-	glBindVertexArray(this->pe_VertexArrayObject);
-
-	glDrawArrays(GL_POINTS, 0, (nrMaxParticles*nrMaxParticles)*nrMaxParticles);
-
-	glBindVertexArray(0);
-	//glBindVertexArray(pe_VertexArrayObject);
-
-	//glDrawArrays(GL_POINTS, 0, this->nrActiveParticles);
-	//glBindVertexArray(0);
-}
