@@ -139,9 +139,24 @@ std::string GLShader::LoadShader(const std::string & fileName)
 void GLShader::Uniform1f(std::string name, float number)
 {
 	glUniform1f(glGetUniformLocation(this->m_program, name.c_str()), number);
+	
 }
+
 
 void GLShader::UniformVec3(std::string name, glm::vec3 vector)
 {
 	glUniform3fv(glGetUniformLocation(this->m_program, name.c_str()), 1, &vector[0]);
+}
+
+void GLShader::Uniform1ui(std::string name, GLuint number)
+{
+	//printf("\n%d", glGetUniformLocation(this->m_program, name.c_str()));
+	glUniform1i(glGetUniformLocation(this->m_program, name.c_str()), number);
+
+}
+
+void GLShader::Uniform1fv(std::string name, float number[12])
+{
+	//printf("\n%d", glGetUniformLocation(this->m_program, name.c_str()));
+	glUniform1fv(glGetUniformLocation(this->m_program, name.c_str()), 12, number);
 }

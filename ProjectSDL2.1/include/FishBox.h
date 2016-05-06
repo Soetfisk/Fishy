@@ -25,13 +25,11 @@
 #include <vector>
 
 //OpenGL Includes
-#include <gl\glew.h>
+
 #include <glm\glm.hpp>
 #include <gl\GL.h>
-#include <glm\gtx\transform.hpp>
 
-//SDL Includes
-#include <SDL2\SDL.h>
+
 
 
 //#include "GLUtil.h"
@@ -128,7 +126,7 @@ private: //variables
 	mesh meshHEADER;
 	unsigned int* indices = nullptr;
 	vertexData * vertices = nullptr;
-	blendShape * blendShapes = nullptr;
+	blendShape ** blendShapes = nullptr;
 
 private: //functions
 	void loadVertexData();
@@ -145,7 +143,7 @@ public: //functiuons
 	vertexData * GetVertices();
 	unsigned int getVertexCount();
 	unsigned int getIndexCount();
-	blendShape * GetBlendShapes();
+	blendShape ** GetBlendShapes();
 	
 	//getUVs();
 	//getMaterial();
@@ -221,7 +219,7 @@ public: //functions
 	unsigned int ModelMeshCount(unsigned int model);
 	FSHData::material * meshMaterial(unsigned int model, unsigned int mesh);
 	FSHData::texture* meshTexture(unsigned int model, unsigned int mesh);
-	FSHData::blendShape* meshBlendShapes(unsigned int model, unsigned int mesh);
+	FSHData::blendShape** meshBlendShapes(unsigned int model, unsigned int mesh);
 
 	//extra functions
 	texture * loadTexure(char* filepath);

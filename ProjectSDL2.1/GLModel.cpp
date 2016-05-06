@@ -18,7 +18,25 @@ GLModel::GLModel(FishBox* FSH_Loader, char* filePath) //DEPRICATED USE AT OWN RI
 
 	for (unsigned int i = 0; i < FSH_Loader->ModelMeshCount(modelID); i++)
 	{
-		meshes.push_back(new GLMesh(FSH_Loader->MeshData(modelID, i), FSH_Loader->VertexData(modelID, i), FSH_Loader->IndexData(modelID, i), FSH_Loader->meshMaterial(modelID, i), FSH_Loader->meshTexture(modelID, i)));
+		if (FSH_Loader->MeshData(modelID, i)->blendshapesCount > 0)
+			meshes.push_back(new GLMeshBS
+				(
+				FSH_Loader->MeshData(modelID, i),
+				FSH_Loader->VertexData(modelID, i),
+				FSH_Loader->IndexData(modelID, i),
+				FSH_Loader->meshMaterial(modelID, i),
+				FSH_Loader->meshTexture(modelID, i),
+				FSH_Loader->meshBlendShapes(modelID, i)
+				));
+		else
+			meshes.push_back(new GLMesh
+				(
+				FSH_Loader->MeshData(modelID, i),
+				FSH_Loader->VertexData(modelID, i),
+				FSH_Loader->IndexData(modelID, i),
+				FSH_Loader->meshMaterial(modelID, i),
+				FSH_Loader->meshTexture(modelID, i))
+				);
 	}
 }
 
@@ -29,7 +47,27 @@ GLModel::GLModel(FishBox* FSH_Loader, unsigned int modelID)
 
 	for (unsigned int i = 0; i < FSH_Loader->ModelMeshCount(modelID); i++)
 	{
-		meshes.push_back(new GLMesh(FSH_Loader->MeshData(modelID, i), FSH_Loader->VertexData(modelID, i), FSH_Loader->IndexData(modelID, i), FSH_Loader->meshMaterial(modelID, i), FSH_Loader->meshTexture(modelID, i)));
+		if (FSH_Loader->MeshData(modelID, i)->blendshapesCount > 0)
+			meshes.push_back(
+					new GLMeshBS(
+								FSH_Loader->MeshData(modelID, i),
+								FSH_Loader->VertexData(modelID, i),
+								FSH_Loader->IndexData(modelID, i),
+								FSH_Loader->meshMaterial(modelID, i),
+								FSH_Loader->meshTexture(modelID, i),
+								FSH_Loader->meshBlendShapes(modelID, i)
+								)
+							);
+		else
+			meshes.push_back(
+					  new GLMesh(
+								FSH_Loader->MeshData(modelID, i),
+								FSH_Loader->VertexData(modelID, i),
+								FSH_Loader->IndexData(modelID, i),
+								FSH_Loader->meshMaterial(modelID, i),
+								FSH_Loader->meshTexture(modelID, i)
+								)
+							);
 	}
 
 	FSHData::material * test = FSH_Loader->meshMaterial(modelID, 0);

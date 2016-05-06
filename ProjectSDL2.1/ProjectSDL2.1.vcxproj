@@ -74,6 +74,8 @@
     <ClInclude Include="SphereBS.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="blend_shape.frag" />
+    <None Include="blend_shape.geom" />
     <None Include="blueFilter.glsl" />
     <None Include="lighting.frag" />
     <None Include="lighting.vert" />

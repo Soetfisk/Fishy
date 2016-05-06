@@ -270,13 +270,21 @@ void Scene::DrawScene() {
 		//Set viewport
 		glViewport(0, 0, window::WIDTH, window::HEIGHT/ 2);
 
-		shaders[MODELS]->Bind();
-		shaders[MODELS]->Update(players.at(i)->GetCamera());
+		shaders[BLEND_SHAPE]->Bind();
+		shaders[BLEND_SHAPE]->Update(players.at(i)->GetCamera());
 		this->frameBuffer->BindFrameBuffer();
 
 		for (size_t j = 0; j < this->players.size(); j++)
 		{
-			players.at(j)->TestDraw(*shaders[MODELS]);
+			players.at(j)->TestDraw(*shaders[BLEND_SHAPE]);
+			shaders[BLEND_SHAPE]->Uniform1ui("BlendShapeCount", (GLuint)players.at(j)->GetBlendShapeCount());
+			shaders[BLEND_SHAPE]->Uniform1fv("Weights", players.at(j)->GetBlendWeights());
+		}
+		shaders[MODELS]->Bind();
+		shaders[MODELS]->Update(players.at(i)->GetCamera());
+		for (int j = 0; j < this->players.size(); j++)
+		{
+			players.at(j)->DrawProjectile(*shaders[MODELS]);
 		}
 		for (size_t i = 0; i < NPCs.size(); i++)
 		{

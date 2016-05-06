@@ -17,6 +17,9 @@
 #include "GLCollisionHandler.h"
 #include "GameState.h"
 
+#define mSTATIC *shaders[MODELS]
+#define mANIMATED *shaders[BLEND_SHAPE]
+
 class Scene {
 private:
 	enum ShaderType {
@@ -88,6 +91,8 @@ private:
 	GUI* guiTest;
 	glm::mat4 projection;
 	GLGUIHandler* guih;
+
+
 
 	// variables for border shader
 	float borderThreshold1, borderThreshold2;

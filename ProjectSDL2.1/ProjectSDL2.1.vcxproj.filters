@@ -203,6 +203,12 @@
     <None Include="blend_shape.vert">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="blend_shape.geom">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="blend_shape.frag">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header">

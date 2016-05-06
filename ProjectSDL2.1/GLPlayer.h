@@ -40,6 +40,18 @@ public:
 
 		NUM_POWERUPS
 	};
+	enum Animations
+	{
+		AONE,
+		ATWO,
+		ATHREE,
+		AFOUR,
+		AFIVE,
+		ASIX,
+		ASEVEN,
+
+		NUM_ANIMATION
+	};
 
 	GLPlayer();
 	GLPlayer(FishBox * FSH_Loader, char* filePath);
@@ -51,6 +63,7 @@ public:
 
 	void PlayerEating(float deltaTime);
 	void TestDraw(GLShader& shader);
+	void DrawProjectile(GLShader& shader);
 	void HandleCollision(PlayerStates state, float deltaTime, glm::vec3 momentum);
 	std::vector<GLProjectile*> GetProjectiles();
 	glm::vec3 GetVelocity();
@@ -61,10 +74,10 @@ public:
 	int GetPoints();
 	int GetTotalPoints();
 	void Update(float dt);
-
-	glm::vec3& getVelocity() {
-		return m_velocity;
-	}
+	float * GetBlendWeights() { return blendWeights; }
+	unsigned int GetBlendShapeCount() { return NUM_ANIMATION; }
+	glm::vec3& getVelocity() { return m_velocity; }
+	void moveAnimation(float deltaTime);
 private:
 	const int	DEADZONE = 10000;
 	float		MOVEMENT_FRICTION = 2.0f;
@@ -93,6 +106,8 @@ private:
 	bool dashOnCooldown;
 	float powerUpCoolDown = 5;
 	float powerUpTimer = 0;
+
+	float * blendWeights;
 	float deltaTime = -1;
 
 	SDL_GameController *pad;

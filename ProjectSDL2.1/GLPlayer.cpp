@@ -34,6 +34,9 @@ GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID) : GLModel(FSH_Loa
 	this->dashCooldownCounter = 0;
 	this->isDashing = false;
 	this->dashOnCooldown = false;
+	blendWeights = new float[NUM_ANIMATION];
+	for (int i = 0; i < NUM_ANIMATION; i++)
+		blendWeights[i] = 0.0f;
 }
 
 GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int projectileModelID) : GLModel(FSH_Loader, modelID)
@@ -46,15 +49,19 @@ GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int proj
 	this->dashCooldownCounter = 0;
 	this->isDashing = false;
 	this->dashOnCooldown = false;
+	blendWeights = new float[NUM_ANIMATION];
+	for (int i = 0; i < NUM_ANIMATION; i++)
+		blendWeights[i] = 0.0f;
 }
 
 
 GLPlayer::~GLPlayer()
 {
 	delete this->m_projectileHandler;
+	delete[] this->blendWeights;
 }
 
-//handles events sent too the player
+//handles events sent too the player // movement.x = deltaTime
 void GLPlayer::Update(Events state, glm::vec3 movementVec)
 {
 	switch (state)
@@ -94,6 +101,11 @@ GLCamera GLPlayer::GetCamera()
 void GLPlayer::TestDraw(GLShader & shader)
 {
 	this->Draw(shader);
+	
+}
+
+void GLPlayer::DrawProjectile(GLShader & shader)
+{
 	this->m_projectileHandler->Draw(shader);
 }
 
@@ -221,6 +233,32 @@ void GLPlayer::Update(float dt)
 	this->PowerUpCoolDown();
 }
 
+	x += speedFactor;
+
+	y = sin(x);
+	if (y > 0.0)
+		blendWeights[ASIX] = y;
+	if (y < 0.0)
+		blendWeights[ASEVEN] = abs(y);
+	blendWeights[AFIVE] = 1.0f;
+}
+
+void GLPlayer::moveAnimation(float deltaTime)
+{
+	static bool left = true, stop = false;
+	float speedFactor = abs(deltaTime * 2.75), y;
+
+	static float x = 0.0f;
+	x += speedFactor;
+
+	y = sin(x);
+	if (y > 0.0)
+		blendWeights[ASIX] = y;
+	if (y < 0.0)
+		blendWeights[ASEVEN] = abs(y);
+	blendWeights[AFIVE] = 1.0f;
+}
+
 //adds a controller too the player
 void GLPlayer::AddController(int id)
 {
@@ -294,6 +332,9 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	CalcVelocity(deltaTime);
 	HandleDash(deltaTime);
 
+	//this->blendWeights[AONE] = 1.0f; //ANIMATION TEST
+	//this->blendWeights[ATHREE] = 1.0f;
+	this->moveAnimation(deltaTime);
 	//camera update
 	this->m_camera.Update(this->GetTransform(), deltaTime);
 
