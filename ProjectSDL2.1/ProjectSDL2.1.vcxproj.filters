@@ -70,6 +70,12 @@
     <ClCompile Include="Menu.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\SeaWeedLeafs.cpp">
+      <Filter>Source\SpecialStaticMeshes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\SpecialStaticMesh.cpp">
+      <Filter>Source\SpecialStaticMeshes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AABB.h">
@@ -146,9 +152,13 @@
     </ClInclude>
     <ClInclude Include="GLPlayer.h">
       <Filter>Header\Models</Filter>
+    <ClInclude Include="SeaWeedLeafs.h">
+      <Filter>Header\SpecialStaticMeshes</Filter>
     </ClInclude>
     <ClInclude Include="GLModel.h">
       <Filter>Header\Models</Filter>
+    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\SpecialStaticMesh.h">
+      <Filter>Header\SpecialStaticMeshes</Filter>
     </ClInclude>
     <ClInclude Include="GLMesh.h">
       <Filter>Header\Models</Filter>
@@ -228,9 +238,13 @@
     </Filter>
     <Filter Include="Header\Models">
       <UniqueIdentifier>{0c8e3f4e-e62f-44ee-9192-3b7a9ba3e85a}</UniqueIdentifier>
+    <Filter Include="Header\SpecialStaticMeshes">
+      <UniqueIdentifier>{5bddb961-07d5-4701-8707-81dc2e69851d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header\Models\NPCs">
       <UniqueIdentifier>{5002fbc4-4a56-453b-acbd-d7a222fdeda4}</UniqueIdentifier>
+    <Filter Include="Source\SpecialStaticMeshes">
+      <UniqueIdentifier>{9c0567b0-60fe-4249-a2bd-a2e19a540d7d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
