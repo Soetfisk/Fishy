@@ -3,7 +3,7 @@
 
 GLProjectileHandler::GLProjectileHandler()
 {
-	projectileActiveTime = 0.0f;
+	projectileActiveTime = 0;
 	projectileSpeed = 0.0f;
 }
 
@@ -25,7 +25,7 @@ GLProjectileHandler::GLProjectileHandler(FishBox* FSH_Loader, unsigned int model
 
 GLProjectileHandler::~GLProjectileHandler()
 {
-	for (int i = 0; i < projectiles.size(); i++)
+	for (size_t i = 0; i < projectiles.size(); i++)
 		delete projectiles.at(i);
 }
 
@@ -85,7 +85,7 @@ void GLProjectileHandler::ChangeStateTo(ProjectilePowerUpState state)
 void GLProjectileHandler::Update(float& dt)
 {
 	GLProjectile* temp = nullptr;
-	for (int i = 0; i < projectiles.size(); i++)
+	for (size_t i = 0; i < projectiles.size(); i++)
 		projectiles.at(i)->TestUpdate(dt);
 	if (cooldown)
 	{
@@ -100,7 +100,7 @@ void GLProjectileHandler::Update(float& dt)
 
 void GLProjectileHandler::Draw(GLShader& shader)
 {
-	for (int i = 0; i < projectiles.size(); i++)
+	for (size_t i = 0; i < projectiles.size(); i++)
 		projectiles.at(i)->TestDraw(shader);
 }
 
@@ -113,7 +113,7 @@ std::vector<GLProjectile*> GLProjectileHandler::GetActiveProjectiles()
 {
 	std::vector<GLProjectile*> result;
 
-	for (int i = 0; i < projectiles.size(); i++)
+	for (size_t i = 0; i < projectiles.size(); i++)
 	{
 		if (projectiles.at(i)->IsActive())
 		{
@@ -127,7 +127,7 @@ std::vector<GLProjectile*> GLProjectileHandler::GetActiveProjectiles()
 GLProjectile* GLProjectileHandler::GetInactiveProjectile()
 {
 	GLProjectile* projectilePtr = nullptr;
-	for (int i = 0; i < projectiles.size(); i++)
+	for (size_t i = 0; i < projectiles.size(); i++)
 	{
 		if (!projectiles.at(i)->IsActive())
 		{

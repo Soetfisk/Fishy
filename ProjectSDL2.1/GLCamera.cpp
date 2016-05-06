@@ -34,8 +34,8 @@ glm::mat4 GLCamera::GetViewProjectionMatrix() const
 //Processes lastX & lastY and adds them to pitch and angleAroundPlayer
 void GLCamera::ProcessInput(float x, float y, float deltaTime)
 {
-	float xOffset = x / (glm::pow(2, 15));
-	float yOffset = y / (glm::pow(2, 15));
+	float xOffset = (float)(x / (glm::pow(2, 15)));
+	float yOffset = (float)(y / (glm::pow(2, 15)));
 
 	xOffset *= cameraSpeed * deltaTime;
 	yOffset *= cameraSpeed * deltaTime;

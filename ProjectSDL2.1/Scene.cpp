@@ -413,11 +413,11 @@ void Scene::HandleEvenet(SDL_Event* e) {
 
 		if (e->type == SDL_CONTROLLERDEVICEADDED)
 		{
-			players.at(e->cdevice.which)->Update(GLPlayer::JOY_ADDED, glm::vec3(e->cdevice.which));
+			players.at(e->cdevice.which)->Update(GLPlayer::JOY_ADDED, glm::vec3((float)e->cdevice.which));
 		}
 		else if (e->type == SDL_CONTROLLERDEVICEREMOVED)
 		{
-			players.at(e->cdevice.which)->Update(GLPlayer::JOY_REMOVED, glm::vec3(e->cdevice.which));
+			players.at(e->cdevice.which)->Update(GLPlayer::JOY_REMOVED, glm::vec3((float)e->cdevice.which));
 		}
 		else if (e->type == SDL_CONTROLLERAXISMOTION)
 		{

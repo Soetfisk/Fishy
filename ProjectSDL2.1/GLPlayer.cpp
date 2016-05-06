@@ -72,10 +72,10 @@ void GLPlayer::Update(Events state, glm::vec3 movementVec)
 		this->PlayerDash();
 		break;
 	case JOY_ADDED:
-		this->AddController(movementVec.x);
+		this->AddController((int)movementVec.x);
 		break;
 	case JOY_REMOVED:
-		this->RemoveController(movementVec.x);
+		this->RemoveController((int)movementVec.x);
 		break;
 	case NOTHING:
 		this->PlayerUpdate(movementVec.x);
@@ -108,14 +108,14 @@ void GLPlayer::HandleCollision(PlayerStates state, float deltaTime, glm::vec3 mo
 		if (momentum.x > 0)
 		{
 			this->transform->SetScale(this->transform->GetScale() + (deltaTime / 4));
-			totalPoints += 100 * momentum.x;
-			currentPoints += 100 * momentum.x;
+			totalPoints += (int)(100 * momentum.x);
+			currentPoints += (int)(100 * momentum.x);
 		}
 		if (momentum.x < 0 && (totalPoints + 100 * momentum.x) >= 0)
 		{
 			this->transform->SetScale(this->transform->GetScale() + (deltaTime / 4));
-			totalPoints += 100 * momentum.x;
-			currentPoints += 100 * momentum.x;
+			totalPoints += (int)(100 * momentum.x);
+			currentPoints += (int)(100 * momentum.x);
 			std::cout << totalPoints << " : " << 100 * momentum.x << std::endl;
 		}
 		break;
@@ -278,7 +278,7 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	if (this->transform->m_rot.x < -glm::radians(MAX_ANGLE))
 		this->transform->m_rot.x = -glm::radians(MAX_ANGLE);
 
-	float maxAngle = 0.785398;
+	float maxAngle = 0.785398f;
 
 	if (this->meshes[0]->GetTransform().m_rot.z <= maxAngle && this->meshes[0]->GetTransform().m_rot.z >= -maxAngle)
 	{

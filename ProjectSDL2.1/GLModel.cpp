@@ -9,10 +9,10 @@ GLModel::GLModel()
 	meshes.push_back(objLoadFromFile("./res/OBJ/box2.obj"));
 	meshes.push_back(objLoadFromFile("./res/OBJ/box2.obj"));
 
-	meshes[0]->GetTransform().m_pos = glm::vec3(0, 0, 0.8);
+	meshes[0]->GetTransform().m_pos = glm::vec3(0.f, 0.f, 0.8f);
 	meshes[1]->GetTransform().m_pos = glm::vec3(0, 0, 0);
 
-	meshes[0]->GetTransform().m_scale = glm::vec3(0.8);
+	meshes[0]->GetTransform().m_scale = glm::vec3(0.8f);
 }
 
 GLModel::GLModel(FishBox* FSH_Loader, char* filePath) //DEPRICATED USE AT OWN RISK
@@ -46,7 +46,7 @@ GLModel::GLModel(FishBox* FSH_Loader, unsigned int modelID)
 
 GLModel::~GLModel()
 {
-	for (int i = 0; i < meshes.size(); i++)
+	for (size_t i = 0; i < meshes.size(); i++)
 	{
 		delete meshes[i];
 	}
@@ -56,7 +56,7 @@ GLModel::~GLModel()
 void GLModel::Draw(GLShader& shader)
 {
 
-	for (int i = 0; i < meshes.size(); i++)
+	for (size_t i = 0; i < meshes.size(); i++)
 	{
 		glUniform3fv(shader.GetUnifromLocation("diffuse"), 1, glm::value_ptr(glm::vec3(meshes[i]->GetMaterial()->diffuse[0], meshes[i]->GetMaterial()->diffuse[1], meshes[i]->GetMaterial()->diffuse[2])));
 		glUniform3fv(shader.GetUnifromLocation("ambient"), 1, glm::value_ptr(glm::vec3(meshes[i]->GetMaterial()->ambient[0], meshes[i]->GetMaterial()->ambient[1], meshes[i]->GetMaterial()->ambient[2])));

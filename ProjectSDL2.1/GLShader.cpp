@@ -21,7 +21,7 @@ GLShader::GLShader(const std::string& fileName, const bool& geometry)
 		m_shaders[1] = CreateShader(LoadShader(fileName + ".frag"), GL_FRAGMENT_SHADER);
 	}		
 
-	for (size_t i = 0; i < nrOfShaders; i++)
+	for (int i = 0; i < nrOfShaders; i++)
 	{
 		glAttachShader(m_program, m_shaders[i]);
 	}
@@ -53,15 +53,14 @@ void GLShader::Update(GLCamera& camera)
 }
 
 
-GLuint& GLShader::GetUnifromLocation(std::string name)
+GLuint GLShader::GetUnifromLocation(std::string name)
 {
-	GLuint unifrom = glGetUniformLocation(m_program, name.c_str());
-	return unifrom;
+	return glGetUniformLocation(m_program, name.c_str());
 }
 
 GLShader::~GLShader()
 {
-	for (size_t i = 0; i < nrOfShaders; i++)
+	for (int i = 0; i < nrOfShaders; i++)
 	{
 		glDetachShader(m_program, m_shaders[i]);
 		glDeleteShader(m_shaders[i]);
