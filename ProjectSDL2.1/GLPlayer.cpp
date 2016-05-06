@@ -211,6 +211,12 @@ int GLPlayer::GetTotalPoints()
 	return this->totalPoints;
 }
 
+void GLPlayer::Update(float dt)
+{
+	this->deltaTime = dt;
+	this->PowerUpCoolDown();
+}
+
 //adds a controller too the player
 void GLPlayer::AddController(int id)
 {
@@ -307,6 +313,19 @@ void GLPlayer::PlayerDash()
 
 void GLPlayer::PowerUpCoolDown()
 {
+	if (this->currentPowerUp != PowerUps::POWER_NEUTRAL)
+	{
+		this->powerUpTimer += this->deltaTime;
+
+
+		if (this->powerUpTimer >= 5)
+		{
+			int k = 0;
+			this->currentPowerUp = PowerUps::POWER_NEUTRAL;
+			this->powerUpTimer = 0.0f;
+			this->HandlePowerUps();
+		}
+	}
 }
 
 void GLPlayer::CalcVelocity(float& deltaTime)

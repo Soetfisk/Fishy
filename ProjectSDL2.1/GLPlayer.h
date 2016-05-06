@@ -60,6 +60,7 @@ public:
 	void ResetPlayer();
 	int GetPoints();
 	int GetTotalPoints();
+	void Update(float dt);
 
 	glm::vec3& getVelocity() {
 		return m_velocity;
@@ -92,6 +93,7 @@ private:
 	bool dashOnCooldown;
 	float powerUpCoolDown = 5;
 	float powerUpTimer = 0;
+	float deltaTime = -1;
 
 	SDL_GameController *pad;
 	int instanceID;

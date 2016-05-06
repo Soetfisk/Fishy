@@ -53,7 +53,7 @@ void Scene::Init()
 	light1.specular = glm::vec3(0.5f, 0.0f, 0.0f);
 	light1.constant = 1.0f;
 	light1.linear = 0.045f;
-	light1.quadratic = 0.0075;
+	light1.quadratic = 0.0075f;
 
 	this->pointLights.push_back(light1);
 
@@ -247,10 +247,11 @@ void Scene::Update(float& deltaTime) {
 	this->collisionHandler.CheckCollisions(deltaTime);
 	this->AddScore();
 
-	for (int i = 0; i < this->NPCs.size(); i++) {
+	for (int i = 0; i < this->NPCs.size(); i++) 
 		this->NPCs.at(i)->NPCUpdate(deltaTime);
 
-	}
+	for (size_t i = 0; i < this->players.size(); i++)
+		this->players.at(i)->Update(this->deltaTime);
 }
 
 //Loads the scene, models, matrices
