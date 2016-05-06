@@ -3,7 +3,7 @@
 
 void Scene::Init()
 {
-	printf("hell");//REMOVE THIS COMMENT
+	
 	// set player position and rotation to the correct startpositions
 	this->players.at(1)->GetTransform().SetPos(glm::vec3(100, 0, 0));
 	this->players.at(1)->GetTransform().SetRot(glm::vec3(0, -1.58, 0));
