@@ -64,6 +64,12 @@
     <ClCompile Include="GLMeshBS.cpp">
       <Filter>Source\Models</Filter>
     </ClCompile>
+    <ClCompile Include="GLNPC_PowerUpHandler.cpp">
+      <Filter>Source\NPCs</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AABB.h">
@@ -126,7 +132,16 @@
     <ClInclude Include="GLNPC_BlueTang.h">
       <Filter>Header\Models\NPCs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\RNG.h">
+    <ClInclude Include="RNG.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GLNPC_PowerUpHandler.h">
+      <Filter>Header\NPCs</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="GLPlayer.h">

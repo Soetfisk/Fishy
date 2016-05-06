@@ -1,12 +1,18 @@
 #include "GLCollisionHandler.h"
 
 
+
+GLCollisionHandler::~GLCollisionHandler()
+{
+	delete PowerUpHandler;
+}
+
 void GLCollisionHandler::CheckCollisions(float deltaTime)
 {
 	glm::vec3 distance;
 	float distSqrd;
 	AABB wall(glm::vec3(0), glm::vec3(125, 48, 86));
-	for (int i = 0; i < players.size(); i++)
+	for (size_t i = 0; i < players.size(); i++)
 	{
 		distance = players.at(i)->GetTransform().GetPos() - players.at(1 - i)->GetTransform().GetPos();
 		distSqrd = glm::dot(distance,distance);
@@ -14,6 +20,7 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 		{
 			if (players.at(i)->GetBoundingBox().containsAABB(players.at(1-i)->GetBoundingBox()))
 			{
+				players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(1));
 				glm::vec3 dir = players.at(i)->GetBoundingBox().center - players.at(1 - i)->GetBoundingBox().center;
 				float center_dist = glm::dot(dir, dir);
 				glm::vec3 min_dist = players.at(i)->GetBoundingBox().halfDimension + players.at(1 - i)->GetBoundingBox().halfDimension;
@@ -66,16 +73,17 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 			players.at(i)->getVelocity() -= normal * glm::dot(players.at(i)->GetVelocity(), normal);
 		}
 
-		for (int j = 0; j < players.at(i)->GetProjectiles().size(); j++)
+		for (size_t j = 0; j < players.at(i)->GetProjectiles().size(); j++)
 		{
 			if (players.at(i)->GetProjectiles().at(j)->GetBoundingBox().containsAABB(players.at(1 - i)->GetBoundingBox()))
 			{
+				players.at(1 - i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(-0.10f));
 				players.at(1 - i)->HandleCollision(GLPlayer::HIT, deltaTime,players.at(i)->GetProjectiles().at(j)->GetForward() * 30.0f);
 				players.at(i)->GetProjectiles().at(j)->Inactivate();
 			}
 		}
 
-		for (int j = 0; j < this->NPCs.size(); j++) {
+		for (unsigned int j = 0; j < this->NPCs.size(); j++) {
 
  			distance = players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos();
 			distSqrd = glm::dot(distance, distance);
@@ -85,18 +93,28 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 
 				if (NPCs.at(j)->GetBoundingBox().containsAABB(players.at(i)->GetBoundingBox()))
 				{
-					if (NPCs.at(j)->GetCurrentState()!=NPC_INACTIVE)
+					if (NPCs.at(j)->GetCurrentState()!=NPC_INACTIVE && NPCs.at(j)->GetCurrentState() != NPC_BEINGEATEN)
 					{
-						NPCs.at(j)->gettingEaten(deltaTime, players.at(i)->GetTransform());
-						players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(0));
-
-						if (NPCs.at(j)->GetTransform().GetScale().y < 0.2)
+						if (NPCs.at(j)->GetTransform().GetScale().x > 1)
 						{
-							NPCs.at(j)->NPCKill();
+							NPCs.at(j)->GetTransform().SetScale(NPCs.at(j)->GetTransform().GetScale() - 1.0f);
+							players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(1));
+						}
+						else
+						{
+							NPCs.at(j)->gettingEaten(deltaTime, players.at(i)->GetTransform());
+							players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(roundf(NPCs.at(j)->GetTransform().GetScale().x * 100) / 100));
+							if (NPCs.at(j)->GetIsPowerUp() == true)
+							{
+								PowerUpHandler->RemovePowerUpFish(NPCs.at(j), j);
+								players.at(i)->SetRandomPowerUp();
+							}
+							else
+							{
+								PowerUpHandler->RemoveAvailableFish(j);
+							}
 						}
 					}
-					
-
 				}
 				else if (NpcSeenSpace.containsAABB(players.at(i)->GetBoundingBox()))
 				{
@@ -114,7 +132,7 @@ void GLCollisionHandler::AddPlayer(GLPlayer * player)
 
 void GLCollisionHandler::AddPlayer(std::vector<GLPlayer*> players)
 {
-	for (int i = 0; i < players.size(); i++)
+	for (size_t i = 0; i < players.size(); i++)
 	{
 		this->players.push_back(players.at(i));
 	}
@@ -122,7 +140,7 @@ void GLCollisionHandler::AddPlayer(std::vector<GLPlayer*> players)
 
 void GLCollisionHandler::RemovePlayer(GLPlayer * player)
 {
-	for (int i = 0; i < this->players.size(); i++)
+	for (size_t i = 0; i < this->players.size(); i++)
 	{
 		if (this->players.at(i) == player)
 		{
@@ -139,7 +157,7 @@ void GLCollisionHandler::AddNPC(GLNPC * npc)
 
 void GLCollisionHandler::AddNPC(std::vector<GLNPC*> npcs)
 {
-	for (int i = 0; i < npcs.size(); i++)
+	for (size_t i = 0; i < npcs.size(); i++)
 	{
 		this->NPCs.push_back(npcs.at(i));
 	}
@@ -147,7 +165,7 @@ void GLCollisionHandler::AddNPC(std::vector<GLNPC*> npcs)
 
 void GLCollisionHandler::RemoveNPC(GLNPC * npc)
 {
-	for (int i = 0; i < this->NPCs.size(); i++)
+	for (size_t i = 0; i < this->NPCs.size(); i++)
 	{
 		if (this->NPCs.at(i) == npc)
 		{
@@ -163,7 +181,7 @@ void GLCollisionHandler::AddModel(GLModel * model)
 
 void GLCollisionHandler::AddModel(std::vector<GLModel*> models)
 {
-	for (int i = 0; i < models.size(); i++)
+	for (size_t i = 0; i < models.size(); i++)
 	{
 		this->models.push_back(models.at(i));
 	}
@@ -171,11 +189,16 @@ void GLCollisionHandler::AddModel(std::vector<GLModel*> models)
 
 void GLCollisionHandler::RemoveModel(GLModel * model)
 {
-	for (int i = 0; i < this->models.size(); i++)
+	for (size_t i = 0; i < this->models.size(); i++)
 	{
 		if (this->models.at(i) == model)
 		{
 			this->models.erase(models.begin() + i);
 		}
 	}
+}
+
+void GLCollisionHandler::InitiatePowerUpHandler()
+{
+	this->PowerUpHandler = new NpcPowerUpHandler(this->NPCs);
 }

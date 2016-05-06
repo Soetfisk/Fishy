@@ -2,7 +2,7 @@
 
 GLProjectile::GLProjectile() : GLModel()
 {
-	maxActiveTime = 0.0f;
+	maxActiveTime = 0;
 	timeActive = 0.0;
 	forward = glm::vec3(0);
 	currentState = INACTIVE;

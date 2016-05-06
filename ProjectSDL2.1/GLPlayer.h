@@ -54,30 +54,36 @@ public:
 	void HandleCollision(PlayerStates state, float deltaTime, glm::vec3 momentum);
 	std::vector<GLProjectile*> GetProjectiles();
 	glm::vec3 GetVelocity();
-	int point = 0;
 	GLPlayer::PowerUps GetPowerUp();
 	void SetPowerUp(GLPlayer::PowerUps power);
+	void SetRandomPowerUp();
+	void ResetPlayer();
+	int GetPoints();
+	int GetTotalPoints();
+	void Update(float dt);
 
 	glm::vec3& getVelocity() {
 		return m_velocity;
 	}
 private:
-	const int DEADZONE = 20;
-	float MOVEMENT_FRICTION = 2.0f;
-	const int MAX_SPEED = 100;	
+	const int	DEADZONE = 10000;
+	float		MOVEMENT_FRICTION = 2.0f;
+	const int	MAX_SPEED = 200;	
 	const float MIN_SPEED = 0.1f;
-	const int MAX_DASHSPEED = 200;				
-	const float DASH_DURATION = 0.3f;			// Dash duration in sec
+	const int	MAX_DASHSPEED = 400;				
+	const float DASH_DURATION = 0.5f;			// Dash duration in sec
 	const float DASH_COOLDOWN = 1.0f;			// Dash cooldown in sec
-	const float DASH_SCALE = 1.2f;				// 
+	const float DASH_SCALE = 2.0f;				// 
 	const float MOVE_CAM_DISTANCE = 5.0f;		// (MOVE_CAM_DISTANCE * deltaTime) == Distnace camera is moved each update during and after dash
 	const float MAX_ANGLE = 75;
-	const int MAX_INPUT = glm::pow(2, 15);
+	const int	MAX_INPUT = (int)glm::pow(2, 15);
 
 	float lastHorizontal = 0;
 	float lastVertical = 0;
 	float lastForward = 0;
 	glm::vec3 m_velocity;
+	int currentPoints = 0;
+	unsigned int totalPoints = 0;
 
 	float dashDuration;
 	float dashCurrentDuration;
@@ -85,6 +91,9 @@ private:
 	float dashCooldownCounter;
 	bool isDashing;
 	bool dashOnCooldown;
+	float powerUpCoolDown = 5;
+	float powerUpTimer = 0;
+	float deltaTime = -1;
 
 	SDL_GameController *pad;
 	int instanceID;
@@ -102,10 +111,12 @@ private:
 	void PlayerUpdate(float deltaTime);
 	void PlayerShoot();
 	void PlayerDash();
+	void PowerUpCoolDown();
 
 	void CalcVelocity(float& deltaTime);
 	void HandleDash(float& deltaTime);
 
 	void HandlePowerUps();
+	PowerUps getPowerUpByNumber(int power);
 };
 

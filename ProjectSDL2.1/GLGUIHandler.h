@@ -6,11 +6,11 @@ class GLGUIHandler
 {
 public:
 	GLGUIHandler();
-	GLGUIHandler(GLShader& shader);
+	GLGUIHandler(GLShader* shader, GUI* textToScreen);
 	virtual ~GLGUIHandler();
 
 	void Update(float dt);
-	void Draw(GLShader& shader);
+	void Draw();
 	void Reset();							// Reset everything
 
 	// Player1
@@ -53,6 +53,8 @@ private:
 
 	GUI* gui;
 	glm::mat4 projection;
+	GLShader* shader;
+	bool deleteShader, deleteGUI;
 
 	int score[NUM_TEXTS - 4];				// The players score
 	GLfloat textPos[NUM_TEXTS][2];			// Text positions
@@ -64,5 +66,7 @@ private:
 	int time;								// Current time
 	float newSec;							// Keep track on when it is a new sec
 	GameState currentState;
+
+	void InitTextureInfo();
 };
 

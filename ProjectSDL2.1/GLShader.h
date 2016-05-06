@@ -17,7 +17,7 @@ public:
 	void UniformVec3(std::string name, glm::vec3 vector);
 	/*void Update(GLMesh& mesh, GLCamera& camera);
 	void Update(GLTransform& tranform, GLCamera& camera);*/
-	GLuint& GetUnifromLocation(std::string name);
+	GLuint GetUnifromLocation(std::string name);
 
 	virtual ~GLShader();
 private:

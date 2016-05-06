@@ -15,6 +15,7 @@
 #include "GUI.h"
 #include "GLGUIHandler.h"
 #include "GLCollisionHandler.h"
+#include "GameState.h"
 
 class Scene {
 private:
@@ -88,11 +89,6 @@ private:
 	glm::mat4 projection;
 	GLGUIHandler* guih;
 
-private:
-	void LoadModels();
-	void LoadModels(char* folder);
-	void UpdatePlayerPowerUp(int player);
-	void HandlePlayerPowerUp();
 	// variables for border shader
 	float borderThreshold1, borderThreshold2;
 	glm::vec3 borderColor1;
@@ -104,8 +100,25 @@ private:
 	glm::vec3 fogColor;
 	// Player
 	GLPlayer::PowerUps currentPowerUp;
+	// Timer
+	float endTimer; // when we end game
+	float endScore; // reach this amount of points and game end
+	float endSceneTimer = 0; // private time that is used for ending the game
+	bool endGame = false;
+	bool winner = false;
+	GLOBAL_GameState* gameState;
+
+private:
+	void Init();
+	void LoadModels();
+	void LoadModels(char* folder);
+	void UpdatePlayerPowerUp(int player);
+	void HandlePlayerPowerUp();
+	void CheckWinner();
+	void AddScore();
 public:
-	Scene();
+	Scene(GLOBAL_GameState* gameState);
+	Scene(GUI* textToScreen, GLOBAL_GameState* gameState);
 	~Scene();
 
 	void HandleEvenet(SDL_Event* e);
@@ -114,6 +127,7 @@ public:
 	void LoadScene();
 	void DrawScene();
 	void RenderQuad();
+	void ResetScene();
 };
 
 #endif

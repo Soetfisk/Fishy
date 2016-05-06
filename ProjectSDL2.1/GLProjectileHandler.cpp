@@ -1,8 +1,9 @@
 #include "GLProjectileHandler.h"
+#include "RNG.h"
 
 GLProjectileHandler::GLProjectileHandler()
 {
-	projectileActiveTime = 0.0f;
+	projectileActiveTime = 0;
 	projectileSpeed = 0.0f;
 }
 
@@ -24,7 +25,7 @@ GLProjectileHandler::GLProjectileHandler(FishBox* FSH_Loader, unsigned int model
 
 GLProjectileHandler::~GLProjectileHandler()
 {
-	for (int i = 0; i < projectiles.size(); i++)
+	for (size_t i = 0; i < projectiles.size(); i++)
 		delete projectiles.at(i);
 }
 
@@ -84,7 +85,7 @@ void GLProjectileHandler::ChangeStateTo(ProjectilePowerUpState state)
 void GLProjectileHandler::Update(float& dt)
 {
 	GLProjectile* temp = nullptr;
-	for (int i = 0; i < projectiles.size(); i++)
+	for (size_t i = 0; i < projectiles.size(); i++)
 		projectiles.at(i)->TestUpdate(dt);
 	if (cooldown)
 	{
@@ -99,7 +100,7 @@ void GLProjectileHandler::Update(float& dt)
 
 void GLProjectileHandler::Draw(GLShader& shader)
 {
-	for (int i = 0; i < projectiles.size(); i++)
+	for (size_t i = 0; i < projectiles.size(); i++)
 		projectiles.at(i)->TestDraw(shader);
 }
 
@@ -112,7 +113,7 @@ std::vector<GLProjectile*> GLProjectileHandler::GetActiveProjectiles()
 {
 	std::vector<GLProjectile*> result;
 
-	for (int i = 0; i < projectiles.size(); i++)
+	for (size_t i = 0; i < projectiles.size(); i++)
 	{
 		if (projectiles.at(i)->IsActive())
 		{
@@ -126,7 +127,7 @@ std::vector<GLProjectile*> GLProjectileHandler::GetActiveProjectiles()
 GLProjectile* GLProjectileHandler::GetInactiveProjectile()
 {
 	GLProjectile* projectilePtr = nullptr;
-	for (int i = 0; i < projectiles.size(); i++)
+	for (size_t i = 0; i < projectiles.size(); i++)
 	{
 		if (!projectiles.at(i)->IsActive())
 		{
@@ -165,6 +166,8 @@ void GLProjectileHandler::ShotgunShoot(glm::vec3 forward, glm::vec3 pos, glm::ve
 	float size = glm::length(projectilePtr->GetBoundingBox().halfDimension) * SHOTGUN_OFFSET;
 	glm::vec3 tempRight;
 	glm::vec3 tempUp;
+	glm::vec3 tempForward;
+	float angle = 0.0f;
 	pos = pos + forward * size;
 
 	for (float x = -1; x < 2; x++)
@@ -173,11 +176,21 @@ void GLProjectileHandler::ShotgunShoot(glm::vec3 forward, glm::vec3 pos, glm::ve
 		{
 			tempRight = glm::vec3(right.x, right.y, right.z);
 			tempUp = glm::vec3(up.x, up.y, up.z);
+			do 
+				angle = RNG::range(0.0f, MAX_ANGLE);
+			while (angle == 0);
+			do 
+			{
+				tempForward = glm::vec3(forward.x + RNG::range(-angle, angle),
+										forward.y + RNG::range(-angle, angle),
+										forward.z + RNG::range(-angle, angle));
+			} while (glm::dot(forward, tempForward) < 1);
+			glm::normalize(tempForward);
 
 			if (x != 0)
 				tempRight *= size * x;	// Add offset in X
 			else
-				tempRight *= 0.0f;			// Remove offset in X
+				tempRight *= 0.0f;		// Remove offset in X
 			if (y != 0)
 				tempUp *= size * y;		// Add offset in Y
 			else
@@ -192,7 +205,7 @@ void GLProjectileHandler::ShotgunShoot(glm::vec3 forward, glm::vec3 pos, glm::ve
 			}
 			// Set scale and shoot from new start pos(startPos + tempRight + tempUp)
 			projectilePtr->SetScale(projectileSize);
-			projectilePtr->Shoot(pos + tempRight + tempUp, forward, velocity, rot);
+			projectilePtr->Shoot(pos + tempRight + tempUp, tempForward, velocity, rot);
 		}
 	}
 }
