@@ -145,6 +145,7 @@ void GLPlayer::SetPowerUp(GLPlayer::PowerUps power)
 {
 	this->currentPowerUp = power;
 	this->HandlePowerUps();
+	this->powerUpTimer = 0.0f;
 }
 
 void GLPlayer::SetRandomPowerUp()
@@ -152,6 +153,7 @@ void GLPlayer::SetRandomPowerUp()
 	int random = RNG::range(0,2);
 	this->currentPowerUp = this->getPowerUpByNumber(random);
 	this->HandlePowerUps();
+	this->powerUpTimer = 0.0f;
 }
 
 void GLPlayer::ResetPlayer()
