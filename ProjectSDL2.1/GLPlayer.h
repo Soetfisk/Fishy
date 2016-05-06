@@ -4,6 +4,7 @@
 #include "GLModel.h"
 #include "GLProjectile.h"
 #include "GLProjectileHandler.h"
+#define PI  3.141592
 
 class GLPlayer : public GLModel
 {
@@ -77,7 +78,7 @@ public:
 	float * GetBlendWeights() { return blendWeights; }
 	unsigned int GetBlendShapeCount() { return NUM_ANIMATION; }
 	glm::vec3& getVelocity() { return m_velocity; }
-	void moveAnimation(float deltaTime);
+	void moveAnimation(float deltaTime, float speedFactor);
 private:
 	const int	DEADZONE = 10000;
 	float		MOVEMENT_FRICTION = 2.0f;

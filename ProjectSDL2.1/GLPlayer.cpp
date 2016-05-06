@@ -234,19 +234,22 @@ void GLPlayer::Update(float dt)
 }
 
 
-void GLPlayer::moveAnimation(float deltaTime)
+void GLPlayer::moveAnimation(float deltaTime, float speedFactor)
 {
 	static bool left = true, stop = false;
-	float speedFactor = abs(deltaTime * 2.75), y;
+	float speed = abs(deltaTime * speedFactor), y;
 
 	static float x = 0.0f;
-	x += speedFactor;
+	x += speed;
 
 	y = sin(x);
 	if (y > 0.0)
 		blendWeights[ASIX] = y;
 	if (y < 0.0)
 		blendWeights[ASEVEN] = abs(y);
+	//if (fabs(x - PI) <= FLT_EPSILON)
+	//	x = 0.0;
+
 	blendWeights[AFIVE] = 1.0f;
 }
 
@@ -325,7 +328,7 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 
 	//this->blendWeights[AONE] = 1.0f; //ANIMATION TEST
 	//this->blendWeights[ATHREE] = 1.0f;
-	this->moveAnimation(deltaTime);
+	this->moveAnimation(deltaTime, 2.75);
 	//camera update
 	this->m_camera.Update(this->GetTransform(), deltaTime);
 
