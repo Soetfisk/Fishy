@@ -67,6 +67,9 @@
     <ClCompile Include="Menu.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="ControlsScreen.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AABB.h">
@@ -151,6 +154,9 @@
       <Filter>Header\NPCs</Filter>
     </ClInclude>
     <ClInclude Include="GameState.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ControlsScreen.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
