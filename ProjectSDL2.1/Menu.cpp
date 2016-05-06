@@ -147,6 +147,7 @@ void Menu::InitMenuTextureInfo()
 
 	textPos[SELECTED][1] = textPos[START_GAME][1];
 	selectedBttn = START_GAME;
+	textScale[selectedBttn] = 1.2f;
 }
 
 void Menu::HandleUp()
