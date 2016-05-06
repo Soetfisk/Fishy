@@ -174,7 +174,7 @@ void Scene::CheckWinner()
 void Scene::AddScore()
 {
 	this->CheckWinner();
-	for (int i = 0; i < this->players.size(); i++) {
+	for (unsigned int i = 0; i < this->players.size(); i++) {
 		this->players.at(i)->Update(GLPlayer::NOTHING, glm::vec3(deltaTime));
 		if (i == 0)
 		{
@@ -231,7 +231,7 @@ Scene::~Scene(){
 	{
 		delete NPCs.at(i);
 	}
-	for (int i = 0; i < staticMeshes.size(); i++)
+	for (unsigned int i = 0; i < staticMeshes.size(); i++)
 	{
 		delete staticMeshes.at(i);
 	}

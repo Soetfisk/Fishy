@@ -185,19 +185,19 @@ void Menu::HandleDown()
 	{
 	case START_GAME:
 		textScale[selectedBttn] = 1.0f;
-		textPos[selectedBttn][0] = window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5;
+		textPos[selectedBttn][0] = (float)(window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5);
 
 		selectedBttn = CONTROLS;
 		break;
 	case CONTROLS:
 		textScale[selectedBttn] = 1.0f;
-		textPos[selectedBttn][0] = window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5;
+		textPos[selectedBttn][0] = (float)(window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5);
 
 		selectedBttn = EXIT;
 		break;
 	case EXIT:
 		textScale[selectedBttn] = 1.0f;
-		textPos[selectedBttn][0] = window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5;
+		textPos[selectedBttn][0] = (float)(window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5);
 
 		selectedBttn = START_GAME;
 		break;

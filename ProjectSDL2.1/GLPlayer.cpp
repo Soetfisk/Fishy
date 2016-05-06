@@ -305,6 +305,10 @@ void GLPlayer::PlayerDash()
 	}
 }
 
+void GLPlayer::PowerUpCoolDown()
+{
+}
+
 void GLPlayer::CalcVelocity(float& deltaTime)
 {
 	glm::vec3 forward = this->GetForward();

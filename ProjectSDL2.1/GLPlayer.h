@@ -90,6 +90,8 @@ private:
 	float dashCooldownCounter;
 	bool isDashing;
 	bool dashOnCooldown;
+	float powerUpCoolDown = 5;
+	float powerUpTimer = 0;
 
 	SDL_GameController *pad;
 	int instanceID;
@@ -107,6 +109,7 @@ private:
 	void PlayerUpdate(float deltaTime);
 	void PlayerShoot();
 	void PlayerDash();
+	void PowerUpCoolDown();
 
 	void CalcVelocity(float& deltaTime);
 	void HandleDash(float& deltaTime);
