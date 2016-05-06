@@ -9,7 +9,7 @@ GLNPC_BlueTang::GLNPC_BlueTang(FishBox * FSH_Loader, unsigned int modelID) : GLN
 	glm::vec3 scale = glm::vec3(RNG::range(1.1f,3.0f));
 	transform->SetScale(scale);
 
-	this->TimeUntilChange = RNG::range(0.2, 3.0f);
+	this->TimeUntilChange = RNG::range(0.2f, 3.0f);
 	this->forwardSpeed = FishSpeedMultiplier * RNG::range(0.0f, 3.3f);
 	this->rotationChange = glm::vec3(0, RNG::range(-1.0f, 1.0f), 0);
 }
@@ -21,7 +21,7 @@ void GLNPC_BlueTang::NPCUpdate(float deltaTime)
 		TimeUntilChange -= deltaTime;
 		if (TimeUntilChange < 0)
 		{
-			this->TimeUntilChange = RNG::range(0.2, 3.0f);
+			this->TimeUntilChange = RNG::range(0.2f, 3.0f);
 			this->forwardSpeed = FishSpeedMultiplier * RNG::range(0.5f, 6.3f);
 			this->rotationChange = glm::vec3(RNG::range(-0.1f, 0.1f), RNG::range(-1.0f, 1.0f), 0);
 		}
@@ -94,7 +94,7 @@ void GLNPC_BlueTang::initiateFleeingState(glm::vec3 playerForwardVector)
 	{
 		this->currentState = NPC_FLEEING;
 		//this->transform->SetRot(playerForwardVector);
-		fleeingTimer = RNG::range(3, 10);
+		fleeingTimer = (float)RNG::range(3, 10);
 	}
 }
 
@@ -117,7 +117,7 @@ void GLNPC_BlueTang::checkboarderCollision()
 	}
 	if (pos.x < -this->DEADZONEX)
 	{
-		pos.x = -DEADZONEX;
+		pos.x = (float)-DEADZONEX;
 		if (rot.y >= 0)
 		{
 			this->rotationChange = glm::vec3(RNG::range(-0.1f, 0.1f), RNG::range(1.5f, 2.0f), 0);
@@ -129,7 +129,7 @@ void GLNPC_BlueTang::checkboarderCollision()
 	}
 	else if (pos.x >this->DEADZONEX)
 	{
-		pos.x = DEADZONEX;
+		pos.x = (float)DEADZONEX;
 		if (rot.y >= 0)
 		{
 			this->rotationChange = glm::vec3(RNG::range(-0.1f, 0.1f), RNG::range(1.5f, 2.0f), 0);
@@ -142,18 +142,18 @@ void GLNPC_BlueTang::checkboarderCollision()
 
 	if (pos.y < -this->DEADZONEY)
 	{
-		pos.y = -DEADZONEY;
+		pos.y = (float)-DEADZONEY;
 		this->rotationChange = glm::vec3(RNG::range(-0.3f, -0.2f), RNG::range(-0.8f, 0.8f), 0);
 	}
 	else if (pos.y >this->DEADZONEY)
 	{
-		pos.y = DEADZONEY;
+		pos.y = (float)DEADZONEY;
 		this->rotationChange = glm::vec3(RNG::range(0.2f, 0.3f), RNG::range(-0.8f, 0.8f), 0);
 	}
 
 	if (pos.z < -this->DEADZONEZ)
 	{
-		pos.z = -DEADZONEZ;
+		pos.z = (float)-DEADZONEZ;
 
 		if (rot.y >= 0)
 		{
@@ -166,7 +166,7 @@ void GLNPC_BlueTang::checkboarderCollision()
 	}
 	else if (pos.z >this->DEADZONEZ)
 	{
-		pos.z = DEADZONEZ;
+		pos.z = (float)DEADZONEZ;
 
 		if (rot.y >= 0)
 		{
@@ -195,7 +195,7 @@ void GLNPC_BlueTang::ResetFish()
 	glm::vec3 scale = glm::vec3(RNG::range(1.1f, 3.0f));
 	transform->SetScale(scale);
 
-	this->TimeUntilChange = RNG::range(0.2, 3.0f);
+	this->TimeUntilChange = RNG::range(0.2f, 3.0f);
 	this->forwardSpeed = FishSpeedMultiplier * RNG::range(0.0f, 3.3f);
 	this->rotationChange = glm::vec3(0, RNG::range(-1.0f, 1.0f), 0);
 }

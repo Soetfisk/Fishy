@@ -79,7 +79,7 @@ GLMesh *objLoadFromFile(const std::string& fileName) {
 
 		int index = -1;
 
-		for (int j = 0; j < final_vertices.size(); j++)
+		for (size_t j = 0; j < final_vertices.size(); j++)
 		{
 			if (final_vertices[j].Pos() == vertex && final_vertices[j].Normal() == normal
 				&& final_vertices[j].TexCoord() == uv)

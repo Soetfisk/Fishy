@@ -13,8 +13,8 @@ GLWindow::GLWindow()
 GLWindow::GLWindow(int width, int height, const std::string & title)
 {
 	InitWindow(width, height, title);
-	this->m_LastX = width / 2;
-	this->m_LastY = height / 2;
+	this->m_LastX = (float)(width / 2);
+	this->m_LastY = (float)(height / 2);
 
 	this->m_IsClosed = false;
 }

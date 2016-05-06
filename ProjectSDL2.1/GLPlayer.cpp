@@ -173,6 +173,8 @@ void GLPlayer::ResetPlayer()
 	this->lastForward = 0;
 	this->lastHorizontal = 0;
 	this->lastVertical = 0;
+
+	this->powerUpTimer = 0.0f;
 }
 
 int GLPlayer::GetPoints()

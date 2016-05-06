@@ -34,7 +34,7 @@ private:
 
 	FishBox* FSH_Loader; 
 	unsigned int modelID;
-	int projectileActiveTime;																								
+	float projectileActiveTime;																								
 	float projectileSpeed, projectileStrength, projectileSize;
 	float cooldownDuration, cooldownCounter;
 	bool cooldown;

@@ -76,7 +76,7 @@ private:
 	const float DASH_SCALE = 2.0f;				// 
 	const float MOVE_CAM_DISTANCE = 5.0f;		// (MOVE_CAM_DISTANCE * deltaTime) == Distnace camera is moved each update during and after dash
 	const float MAX_ANGLE = 75;
-	const int	MAX_INPUT = glm::pow(2, 15);
+	const int	MAX_INPUT = (int)glm::pow(2, 15);
 
 	float lastHorizontal = 0;
 	float lastVertical = 0;

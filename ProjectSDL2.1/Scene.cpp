@@ -217,21 +217,21 @@ Scene::~Scene(){
 	delete this->frameBuffer4;
 	delete this->frameBuffer5;
 	delete this->filterComputeShader;
-	for (int i = 0; i < models.size(); i++)
+	for (size_t i = 0; i < models.size(); i++)
 	{
 		delete models.at(i);
 	}
 
-	for (int i = 0; i < players.size(); i++)
+	for (size_t i = 0; i < players.size(); i++)
 	{
 		delete players.at(i);
 	}
 
-	for (int i = 0; i < NPCs.size(); i++)
+	for (size_t i = 0; i < NPCs.size(); i++)
 	{
 		delete NPCs.at(i);
 	}
-	for (unsigned int i = 0; i < staticMeshes.size(); i++)
+	for (size_t i = 0; i < staticMeshes.size(); i++)
 	{
 		delete staticMeshes.at(i);
 	}
@@ -247,7 +247,7 @@ void Scene::Update(float& deltaTime) {
 	this->collisionHandler.CheckCollisions(deltaTime);
 	this->AddScore();
 
-	for (int i = 0; i < this->NPCs.size(); i++) 
+	for (size_t i = 0; i < this->NPCs.size(); i++)
 		this->NPCs.at(i)->NPCUpdate(deltaTime);
 
 	for (size_t i = 0; i < this->players.size(); i++)
@@ -263,7 +263,7 @@ void Scene::LoadScene() {
 void Scene::DrawScene() {
 	guih->Draw();
 
-	for (int i = 0; i < this->players.size(); i++) {
+	for (size_t i = 0; i < this->players.size(); i++) {
 		// handle player powerup
 		this->UpdatePlayerPowerUp(i);
 		this->HandlePlayerPowerUp();
@@ -274,15 +274,15 @@ void Scene::DrawScene() {
 		shaders[MODELS]->Update(players.at(i)->GetCamera());
 		this->frameBuffer->BindFrameBuffer();
 
-		for (int j = 0; j < this->players.size(); j++) 
+		for (size_t j = 0; j < this->players.size(); j++)
 		{
 			players.at(j)->TestDraw(*shaders[MODELS]);
 		}
-		for (unsigned int i = 0; i < NPCs.size(); i++)
+		for (size_t i = 0; i < NPCs.size(); i++)
 		{
 			NPCs.at(i)->NPCDraw(*shaders[MODELS]);
 		}
-		for (unsigned int i = 0; i < staticMeshes.size(); i++)
+		for (size_t i = 0; i < staticMeshes.size(); i++)
 		{
 			staticMeshes.at(i)->Draw(*shaders[MODELS]);
 		}
@@ -290,7 +290,7 @@ void Scene::DrawScene() {
 		this->frameBuffer2->BindFrameBuffer();
 		shaders[LIGHTING]->Bind();
 
-		for (int i = 0; i < pointLights.size(); i++)
+		for (size_t i = 0; i < pointLights.size(); i++)
 		{
 			glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(i) + "].ambient"), 1, glm::value_ptr(pointLights.at(i).ambient));
 			glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(i) + "].diffuse"), 1, glm::value_ptr(pointLights.at(i).diffuse));
@@ -325,8 +325,8 @@ void Scene::DrawScene() {
 
 		this->frameBuffer3->BindFrameBuffer();
 		shaders[BORDER]->Bind();
-		shaders[BORDER]->Uniform1f("width", window::WIDTH);
-		shaders[BORDER]->Uniform1f("height", window::HEIGHT / 2);
+		shaders[BORDER]->Uniform1f("width", (float)window::WIDTH);
+		shaders[BORDER]->Uniform1f("height", (float)(window::HEIGHT / 2));
 		shaders[BORDER]->Uniform1f("thresholdFloat",this->borderThreshold1);
 		shaders[BORDER]->UniformVec3("borderColor",this->borderColor1);
 		this->frameBuffer2->BindTexturesToProgram(shaders[BORDER]->GetUnifromLocation("texture"), 0);
@@ -335,8 +335,8 @@ void Scene::DrawScene() {
 
 		this->frameBuffer4->BindFrameBuffer();
 		shaders[BORDER]->Bind();
-		shaders[BORDER]->Uniform1f("width", window::WIDTH);
-		shaders[BORDER]->Uniform1f("height", window::HEIGHT / 2);
+		shaders[BORDER]->Uniform1f("width", (float)window::WIDTH);
+		shaders[BORDER]->Uniform1f("height", (float)(window::HEIGHT / 2));
 		shaders[BORDER]->Uniform1f("thresholdFloat", this->borderThreshold2);
 		shaders[BORDER]->UniformVec3("borderColor", this->borderColor1);
 		this->frameBuffer3->BindTexturesToProgram(shaders[BORDER]->GetUnifromLocation("texture"), 0);
@@ -355,7 +355,7 @@ void Scene::DrawScene() {
 
 		shaders[PASS]->Bind();
 		this->frameBuffer5->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
-		glViewport(0, window::HEIGHT - (window::HEIGHT *(.5*(i + 1))), window::WIDTH, window::HEIGHT / 2);
+		glViewport(0, (GLint)(window::HEIGHT - (window::HEIGHT *(.5*(i + 1)))), (GLint)window::WIDTH, (GLint)(window::HEIGHT / 2));
 		this->RenderQuad();
 	}
 
@@ -390,12 +390,12 @@ void Scene::RenderQuad()
 
 void Scene::ResetScene()
 {
-	for (int i = 0; i < NPCs.size(); i++)
+	for (size_t i = 0; i < NPCs.size(); i++)
 	{
 		NPCs.at(i)->ResetFish();
 	}
 	guih->Reset();
-	for (int i = 0; i < players.size(); i++)
+	for (size_t i = 0; i < players.size(); i++)
 	{
 		players.at(i)->ResetPlayer();
 	}

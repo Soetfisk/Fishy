@@ -31,7 +31,7 @@ void GUI::InitCharacters(std::string fontName)
 		std::cout << "ERROR::FREETYPE: Failed to load font\n";
 
 	// Set font size in width and height, 0 dynamiclly calculates the width/height based on the other, e.g. w = 0, h = 48
-	FT_Set_Pixel_Sizes(face, 0, fontSize);
+	FT_Set_Pixel_Sizes(face, 0, (int)fontSize);
 
 	// Disable byte-alignment restriction
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
