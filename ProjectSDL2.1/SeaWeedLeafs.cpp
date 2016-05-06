@@ -6,11 +6,14 @@ SeaWeedLeafs::SeaWeedLeafs(FishBox* FSH_Loader, unsigned int modelID) : SpecialS
 	this->modelID = modelID;
 
 	this->transform->SetRot(glm::vec3(20, 20, 0));
-	for (size_t i = 0; i < 0; i++)
+
+	for (size_t i = 0; i < 10; i++)
 	{
 		this->Leafs.push_back(new GLModel(this->FSH_Loader, this->modelID));
+
 		glm::vec3 randomRotationVector = glm::vec3(RNG::range(0.0f, 30.0f), RNG::range(0.0f, 30.0f), RNG::range(0.0f, 30.0f));
 		Leafs.at(i)->GetTransform().SetRot(randomRotationVector);
+		
 	}
 
 }
