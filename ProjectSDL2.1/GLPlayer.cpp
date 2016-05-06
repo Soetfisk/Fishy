@@ -233,15 +233,6 @@ void GLPlayer::Update(float dt)
 	this->PowerUpCoolDown();
 }
 
-	x += speedFactor;
-
-	y = sin(x);
-	if (y > 0.0)
-		blendWeights[ASIX] = y;
-	if (y < 0.0)
-		blendWeights[ASEVEN] = abs(y);
-	blendWeights[AFIVE] = 1.0f;
-}
 
 void GLPlayer::moveAnimation(float deltaTime)
 {
