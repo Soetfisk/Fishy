@@ -67,11 +67,13 @@
     <ClCompile Include="Menu.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="GLNPC_PowerUpHandler.cpp" />
-    <ClCompile Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\SpecialStaticMesh.cpp">
+    <ClCompile Include="GLNPC_PowerUpHandler.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecialStaticMesh.cpp">
       <Filter>Source\Models\SpecialStaticMeshes</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\SeaWeedLeafs.cpp">
+    <ClCompile Include="SeaWeedLeafs.cpp">
       <Filter>Source\Models\SpecialStaticMeshes</Filter>
     </ClCompile>
   </ItemGroup>
@@ -157,12 +159,14 @@
     <ClInclude Include="GLMeshBS.h">
       <Filter>Header\Models</Filter>
     </ClInclude>
-    <ClInclude Include="GLNPC_PowerUpHandler.h" />
     <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\SpecialStaticMesh.h">
       <Filter>Header\Models\SpecialStaticMeshes</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\SeaWeedLeafs.h">
       <Filter>Header\Models\SpecialStaticMeshes</Filter>
+    </ClInclude>
+    <ClInclude Include="GLNPC_PowerUpHandler.h">
+      <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

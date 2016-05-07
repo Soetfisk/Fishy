@@ -19,8 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\SeaWeedLeafs.cpp" />
-    <ClCompile Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\SpecialStaticMesh.cpp" />
     <ClCompile Include="GLMeshBS.cpp" />
     <ClCompile Include="GLNPC_BlueTang.cpp" />
     <ClCompile Include="FilterComputeShader.cpp" />
@@ -44,6 +42,8 @@
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="obj_loader.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SeaWeedLeafs.cpp" />
+    <ClCompile Include="SpecialStaticMesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\SeaWeedLeafs.h" />
