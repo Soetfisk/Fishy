@@ -1,7 +1,6 @@
 #include "ParticleEmitter.h"
 
 
-
 ParticleEmitter::ParticleEmitter(EmitterType type, glm::mat4*& transformMatrix, GLuint transformMatrixLocation)
 {
 	this->type = type;
@@ -23,7 +22,7 @@ ParticleEmitter::ParticleEmitter(EmitterType type, glm::vec4 position, GLuint tr
 	
 	
 	instantiateVertexData(); //neeeds to be after c_shader
-	this->spawnParticle();
+
 	//InstantiateEmitter();
 
 	//InstantiateRenderShader();
@@ -31,19 +30,49 @@ ParticleEmitter::ParticleEmitter(EmitterType type, glm::vec4 position, GLuint tr
 }
 
 void ParticleEmitter::instantiateVariables() {
-	this->nrMaxParticles = 100;
 	this->nrActiveParticles = 0;
 	this->emiterAwakeTime = 0;
 	this->emiterSpawnTCurrent = 0;
-	this->emiterSpawnTDelay = .01;
 
+	switch (this->type)
+	{
+	case EmitterType::STATICSTREAM:
+		instantiateStaticStream();
+		break;
+	case EmitterType::GOLDSTREAM:
+		instantiateGoldStream();
+		break;
+	default:
+		break;
+	}
+}
+
+void ParticleEmitter::instantiateStaticStream() {
+	this->nrMaxParticles = 500;
+	this->emiterSpawnTDelay = .01;
 
 	this->particle.p_pos = this->positionEmitter;
 	this->particle.p_lifeTime = 2;
-	this->particle.p_acc = glm::vec4(-.2, .3, -1, 0);
+	this->particle.p_acc = glm::vec4(0, -1, 0, 0);
 	this->particle.p_scale = .05;
-	this->particle.p_speed = 2;
+	this->particle.p_speed = 1;
 	this->particle.p_vel = glm::vec4(0, 0, 0, 0);
+
+
+}
+
+void ParticleEmitter::instantiateGoldStream() {
+	this->nrMaxParticles = 1090;
+	this->emiterSpawnTDelay = .5;
+
+	this->particle.p_pos = this->positionEmitter;
+	this->particle.p_lifeTime = 4;
+	this->particle.p_acc = glm::vec4(0, -1, 0, 0);
+	this->particle.p_scale = .25f;
+	this->particle.p_speed = .5;
+	this->particle.p_vel = glm::vec4(0, 1, 0, 0);
+
+	this->directionEmitter = glm::vec4(1, 0, 0, 1);
 }
 
 void ParticleEmitter::instantiateSpawnBuffer() {
@@ -52,6 +81,8 @@ void ParticleEmitter::instantiateSpawnBuffer() {
 void ParticleEmitter::updateParticles(const float& deltaTime) {
 	this->emiterSpawnTCurrent += deltaTime;
 	this->emiterAwakeTime += deltaTime;
+	
+
 	
 
 	if (this->emiterSpawnTCurrent >= this->emiterSpawnTDelay && this->nrActiveParticles < this->nrMaxParticles ) {
@@ -70,18 +101,26 @@ void ParticleEmitter::updateParticles(const float& deltaTime) {
 void ParticleEmitter::spawnParticle() {
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, this->pe_particleBuffer);
-	GLint bufMask = GL_MAP_WRITE_BIT  ; // the invalidate makes a big difference when re-writing
+	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_RANGE_BIT; // the invalidate makes a big difference when re-writing
 	struct ParticleStruct* tempParticles;
 
 	tempParticles = (struct ParticleStruct *) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, nrActiveParticles * sizeof(ParticleStruct), sizeof(ParticleStruct), bufMask);
 
 	Particle tempData = generateParticleData();
+	ParticleStruct tempData2;
+	
+	tempData2.acceleration = tempData.p_acc;
+	tempData2.customVariables = glm::vec4(tempData.p_scale, tempData.p_lifeTime, tempData.p_speed, 1);    //x= scale, y=lifeTime, z = speed, w = is alive
+	tempData2.emiterPosition = this->positionEmitter;
+	tempData2.pos = tempData.p_pos;
+	tempData2.velocity = tempData.p_vel;
+	tempParticles[0] = tempData2;
 
-	tempParticles[0].acceleration = tempData.p_acc;
-	tempParticles[0].customVariables = glm::vec4(tempData.p_scale, tempData.p_lifeTime, tempData.p_speed, 1);    //x= scale, y=lifeTime, z = speed, w = is alive
-	tempParticles[0].emiterPosition = this->positionEmitter;
-	tempParticles[0].pos = tempData.p_pos;
-	tempParticles[0].velocity = tempData.p_vel;
+	//tempParticles[0].acceleration = tempData.p_acc;
+	//tempParticles[0].customVariables = glm::vec4(tempData.p_scale, tempData.p_lifeTime, tempData.p_speed, 1);    //x= scale, y=lifeTime, z = speed, w = is alive
+	//tempParticles[0].emiterPosition = this->positionEmitter;
+	//tempParticles[0].pos = tempData.p_pos;
+	//tempParticles[0].velocity = tempData.p_vel;
 	
 	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 
@@ -93,20 +132,20 @@ void ParticleEmitter::spawnParticle() {
 	
 }
 
+
 void ParticleEmitter::checkDeadParticles() {
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, this->pe_particleBuffer);
 
-	//glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT);
+	//glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT);	
 	ParticleStruct* tempParticlesz = (struct ParticleStruct *) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, nrActiveParticles* sizeof(ParticleStruct), GL_MAP_READ_BIT | GL_MAP_WRITE_BIT);
 
-	ParticleStruct temp;
-
+	ParticleStruct* temp = tempParticlesz;
 	for (int i = 0; i < nrActiveParticles; i++) {
-		temp = tempParticlesz[i];
+		
 
 
-		if (tempParticlesz[i].customVariables.y <= 0) {
+		if (temp[i].customVariables.y <= 0) {
 			//std::cout << "KILL AT: " << i << std::endl;
 			killParticleAtIndex(i, tempParticlesz);
 		}
@@ -115,10 +154,10 @@ void ParticleEmitter::checkDeadParticles() {
 	if (glUnmapBuffer(GL_SHADER_STORAGE_BUFFER) == GL_FALSE) {
 		int k = 0;
 	}
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);	
-	
 }
+
 
 /*
 Kills a particle at given index, re position the buffer to fit the drawing
@@ -149,19 +188,34 @@ void ParticleEmitter::swapData(int fromID, int destID, struct ParticleStruct* te
 Particle ParticleEmitter::generateParticleData() {
 	Particle returnData;
 	returnData = this->particle;
-	//returnData.p_pos = glm::vec4(returnData.p_pos.x + this->nrActiveParticles, returnData.p_pos.y + this->nrActiveParticles, returnData.p_pos.z + this->nrActiveParticles, 1);
-	
+	float tempNr;
+	float tempNr2;
+	glm::vec4 data;
+	switch (this->type)
+	{
+	case EmitterType::STATICSTREAM:
+		data.x= (float)(rand() % 5) / 10;
+		data.y= (float)(rand() % 5) / 10;
+		data.z = (float)(rand() % 5) / 10;
 
-	float ranX = (float)(rand() % 5) / 10;
-	float ranY = (float)(rand() % 5) / 10;
-	float ranZ = (float)(rand() % 5) / 10;
-	//float ranSize = (((float)(rand() % 5) /100)) + returnData.p_scale;
-	returnData.p_acc = glm::vec4(returnData.p_acc.x + ranX, returnData.p_acc.y + ranY, returnData.p_acc.z + ranZ, 0);
-	returnData.p_vel = glm::vec4(returnData.p_acc.x + ranX, returnData.p_acc.y + ranY, returnData.p_acc.z + ranZ, 0);
-	//returnData.p_scale = ranSize;
+		returnData.p_acc = glm::vec4(returnData.p_acc.x + data.x, returnData.p_acc.y + data.y, returnData.p_acc.z + data.z, 0);
+		returnData.p_vel = glm::vec4(returnData.p_acc.x + data.x, returnData.p_acc.y + data.y, returnData.p_acc.z + data.z, 0);
+		break;
+	case EmitterType::GOLDSTREAM:
+		int plusOrNot = rand() % 2;
+		int plusOrNot2 = rand() % 2;
+
+		tempNr2 = ((float)(rand() % 10) + 1)/10;
+		float amount = 1;
+		
+		data.x = (plusOrNot ? -amount: amount)*tempNr2;
+		data.z = (plusOrNot2 ? -amount : amount)*10- tempNr2;
+		//float ranY = (float)(rand() % 10) / 100;
+		returnData.p_acc = glm::vec4(data.x, returnData.p_acc.y, data.z, 0);
+		break;
+	}
 	return returnData;
 }
-
 void ParticleEmitter::updateCompute(const float &deltaTime) {
 	this->emitterComputeShader->Update(deltaTime, this->nrActiveParticles, this->pe_particleBuffer);
 }

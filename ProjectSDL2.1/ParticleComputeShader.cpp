@@ -69,20 +69,20 @@ void ParticleComputeShader::Initialize(EmitterType type, int nrMaxParticles, GLu
 	CheckShaderError(compute_program, GL_LINK_STATUS, true);
 
 
-	switch (type)
-	{
-	case PROJECTILE:
-		InitializeProjectileShader();
-		break;
-	case PLAYERFOLLOW:
-		break;
-	case STATICSTREAM:
-		break;
-	case EMITERTYPENR:
-		break;
-	default:
-		break;
-	}
+	//switch (type)
+	//{
+	//case PROJECTILE:
+	//	InitializeProjectileShader();
+	//	break;
+	//case PLAYERFOLLOW:
+	//	break;
+	//case STATICSTREAM:
+	//	break;
+	//case EMITERTYPENR:
+	//	break;
+	//default:
+	//	break;
+	//}
 }
 
 void ParticleComputeShader::Update(const float & deltaTime, int nrActiveParticles, GLuint& ParticleSSBO) {

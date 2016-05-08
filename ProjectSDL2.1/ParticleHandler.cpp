@@ -6,8 +6,10 @@ ParticleHandler::ParticleHandler(GLShader* renderShader, FishBox *FSH_LoaderRefe
 	this->transformationLocation = renderShader->GetUnifromLocation("TransformMatrix");
 	this->FSH_LoaderReference = FSH_LoaderReference;
 
-	this->textures = new FSHData::texture*[1];
-	this->textures[0] = this->FSH_LoaderReference->loadTexure("res/BubbleTest.png");
+	this->textures = new FSHData::texture*[EmitterType::NREMITERTYPE];
+
+	this->textures[EmitterType::STATICSTREAM] = this->FSH_LoaderReference->loadTexure("res/BubbleTest.png");
+	this->textures[EmitterType::GOLDSTREAM] = this->FSH_LoaderReference->loadTexure("res/Star.png");
 }
 
 
@@ -41,5 +43,5 @@ void ParticleHandler::AddEmiter(EmitterType type, glm::mat4*& transformMatrix) {
 }
 
 void ParticleHandler::AddEmiter(EmitterType type, glm::vec4 position) {
-	this->emiters.push_back(new ParticleEmitter(type, position, this->transformationLocation, this->textures[0]));
+	this->emiters.push_back(new ParticleEmitter(type, position, this->transformationLocation, this->textures[type]));
 }

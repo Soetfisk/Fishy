@@ -37,6 +37,7 @@ private:
 	GLuint transformationLocation;
 
 	glm::vec4 positionEmitter;
+	glm::vec4 directionEmitter;
 	GLuint pe_VertexArrayObject;
 	GLuint pe_particleBuffer, pe_particleSpawnBuffer;
 	GLuint pe_VertexArrayBuffers[NUM_BUFFERS];
@@ -44,12 +45,6 @@ private:
 	GLuint pe_posBuf, pe_scaleBuf;
 
 
-	float distanceFromObject;
-	glm::vec3 directionFromObject;
-	glm::vec4 particleStartVelocity;
-	glm::vec4 particleStartAcceleration;
-	float particleStartLifeTime;
-	float particleScale;
 
 	int nrActiveParticles;
 	int nrMaxParticles;
@@ -76,10 +71,12 @@ private:
 	void instantiateVariables();
 	Particle generateParticleData();
 	void checkDeadParticles();
+
+	void instantiateStaticStream();
+	void instantiateGoldStream();
 	
 
 	Particle particle;
-
 
 
 
