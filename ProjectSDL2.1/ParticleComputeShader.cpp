@@ -14,44 +14,15 @@ ParticleComputeShader::~ParticleComputeShader()
 	glDeleteProgram(compute_program);
 }
 
-bool ParticleComputeShader::editComputeData(int index, GLuint &ParticleSSBO) {
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ParticleSSBO);
-
-	struct ParticleStruct* particle;
-
-	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT; // the invalidate makes a big difference when re-writing
-	particle = (struct ParticleStruct *) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, index*sizeof(ParticleStruct), sizeof(ParticleStruct), bufMask);
-
-	if (particle[0].customVariables.w == 1) {
-		glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
-
-		return false;
-	}
-
-	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
-
-	return false;
-
-
-	//int index = i;
-	//particles[index].pos = glm::vec4(0 + ParticleSSBO % 5, i, 3, 1);
-	//particles[index].customVariables = glm::vec4(.2f, 5.f, .5f, 1); //Scale, Lifetime, Speed, IsAlive(1,0)
-	//particles[index].velocity = glm::vec4(1, 0, 0, 0);
-	//particles[index].emiterPosition = glm::vec4(0 + ParticleSSBO % 5, i, 3, 1);
-	//particles[index].acceleration = glm::vec4(0.f, -.98f, 0.f, 0);
-
-	
-}
-
 void ParticleComputeShader::Initialize(EmitterType type, int nrMaxParticles, GLuint &ParticleSSBO) {
 	glGenBuffers(1, &ParticleSSBO);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ParticleSSBO);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, nrMaxParticles*sizeof(ParticleStruct), NULL, GL_STATIC_COPY);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, nrMaxParticles*sizeof(ParticleStruct), NULL, GL_STATIC_DRAW);
 
 	struct ParticleStruct* particles;
 
-	//GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT; // the invalidate makes a big difference when re-writing
-//	particles = (struct ParticleStruct *) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, nrMaxParticles * sizeof(ParticleStruct), bufMask);
+	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT; // the invalidate makes a big difference when re-writing
+	particles = (struct ParticleStruct *) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, nrMaxParticles * sizeof(ParticleStruct), bufMask);
 
 	//for (float i = 0; i < nrMaxParticles; i++) {
 	//	int index = i;
@@ -62,14 +33,14 @@ void ParticleComputeShader::Initialize(EmitterType type, int nrMaxParticles, GLu
 	//	particles[index].acceleration = glm::vec4(0.f, -.98f, 0.f,0);
 	//}
 
-	//for (float i = 0; i < nrMaxParticles; i++) {
-	//	int index = i;
-	//	particles[index].pos = glm::vec4();
-	//	particles[index].customVariables = glm::vec4(0); //Scale, Lifetime, Speed, IsAlive(1,0)
-	//	particles[index].velocity = glm::vec4();
-	//	particles[index].emiterPosition = glm::vec4();
-	//	particles[index].acceleration = glm::vec4();
-	//}
+	for (float i = 0; i < nrMaxParticles; i++) {
+		int index = i;
+		particles[index].pos = glm::vec4();
+		particles[index].customVariables = glm::vec4(0); //Scale, Lifetime, Speed, IsAlive(1,0)
+		particles[index].velocity = glm::vec4();
+		particles[index].emiterPosition = glm::vec4();
+		particles[index].acceleration = glm::vec4();
+	}
 
 	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 
@@ -117,14 +88,14 @@ void ParticleComputeShader::Initialize(EmitterType type, int nrMaxParticles, GLu
 void ParticleComputeShader::Update(const float & deltaTime, int nrActiveParticles, GLuint& ParticleSSBO) {
 	
 	//if (nrActiveParticles == 2)
-	//	int k = 0;
+	//	int k = 0; 
 	//for (int i = 0; i < nrActiveParticles; i++) {
 	//	particleData[i].position = data.position[i];
 	//	particleData[i].scaling = data.scaling[i];
 	//	particleData[i].velocity = data.velocity[i];
 	//}
 	//glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 6, ParticleSSBO);
-
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 6, ParticleSSBO);
 	glUseProgram(compute_program);
 	glUniform1fv(glGetUniformLocation(compute_program, "DT"), 1, &deltaTime);
 

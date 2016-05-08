@@ -31,18 +31,18 @@ ParticleEmitter::ParticleEmitter(EmitterType type, glm::vec4 position, GLuint tr
 }
 
 void ParticleEmitter::instantiateVariables() {
-	this->nrMaxParticles = 1;
+	this->nrMaxParticles = 10;
 	this->nrActiveParticles = 0;
 	this->emiterAwakeTime = 0;
 	this->emiterSpawnTCurrent = 0;
-	this->emiterSpawnTDelay = 1;
+	this->emiterSpawnTDelay = .1;
 
 
 	this->particle.p_pos = this->positionEmitter;
 	this->particle.p_lifeTime = 5;
 	this->particle.p_acc = glm::vec4(0, 1, 0, 0);
 	this->particle.p_scale = .5;
-	this->particle.p_speed = 1;
+	this->particle.p_speed = .3;
 	this->particle.p_vel = glm::vec4(0, 0, 0, 0);
 }
 
@@ -83,20 +83,22 @@ void ParticleEmitter::updateParticles(const float& deltaTime) {
 		this->nrActiveParticles++;
 	}
 	
-	if (nrActiveParticles > 0)
+	if (nrActiveParticles> 10) {
 		int k = 0;
-		//checkDeadParticles();
+		checkDeadParticles();
+	}
+		
 }
 
 void ParticleEmitter::spawnParticle() {
+
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, this->pe_particleBuffer);
-	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT; // the invalidate makes a big difference when re-writing
+	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT ; // the invalidate makes a big difference when re-writing
 	struct ParticleStruct* tempParticles;
 
 	tempParticles = (struct ParticleStruct *) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, nrActiveParticles * sizeof(ParticleStruct), sizeof(ParticleStruct), bufMask);
 
-	Particle tempData;
-	generateParticleData(tempData);
+	Particle tempData = generateParticleData();
 
 	tempParticles[0].acceleration = tempData.p_acc;
 	tempParticles[0].customVariables = glm::vec4(tempData.p_scale, tempData.p_lifeTime, tempData.p_speed, 1);    //x= scale, y=lifeTime, z = speed, w = is alive
@@ -106,35 +108,42 @@ void ParticleEmitter::spawnParticle() {
 	
 	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 
+	
+
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 
+
+	
 }
 
 void ParticleEmitter::checkDeadParticles() {
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, this->pe_particleBuffer);
-	struct ParticleStruct* tempParticlesz;
 
-	tempParticlesz = (struct ParticleStruct *) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, nrActiveParticles * sizeof(ParticleStruct), GL_MAP_READ_BIT );
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, this->pe_particleBuffer);
+
+	//glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT);
+	ParticleStruct* tempParticlesz = (ParticleStruct *) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, sizeof(ParticleStruct), GL_MAP_READ_BIT );
 
 	if (tempParticlesz != NULL || tempParticlesz != nullptr) {
 		ParticleStruct temp;
-
-		if(nrActiveParticles == nrMaxParticles)
-			int k = 0;
-		for (int i = 0; i < nrActiveParticles; i++) {
-			temp = tempParticlesz[0];
-		}
+		temp = tempParticlesz[0];
 	}
+
+	if (glUnmapBuffer(GL_SHADER_STORAGE_BUFFER) == GL_FALSE) {
+		int k = 0;
+	}
+
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 	
 
-	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 
 	
 }
 
-void ParticleEmitter::generateParticleData(Particle tempData) {
-	tempData = this->particle;
-	//tempData.p_pos = glm::vec4(tempData.p_pos.x + this->nrActiveParticles, tempData.p_pos.y + this->nrActiveParticles, tempData.p_pos.z + this->nrActiveParticles, 0);
+Particle ParticleEmitter::generateParticleData() {
+	Particle returnData;
+	returnData = this->particle;
+	returnData.p_pos = glm::vec4(returnData.p_pos.x + this->nrActiveParticles, returnData.p_pos.y + this->nrActiveParticles, returnData.p_pos.z + this->nrActiveParticles, 1);
+	return returnData;
 }
 
 void ParticleEmitter::updateCompute(const float &deltaTime) {
@@ -144,7 +153,7 @@ void ParticleEmitter::updateCompute(const float &deltaTime) {
 void ParticleEmitter::UpdateEmitter(const float& deltaTime) {
 	this->emitterComputeShader->bind();
 	updateParticles(deltaTime);
-	//updateCompute(deltaTime);
+	updateCompute(deltaTime);
 
 
 }

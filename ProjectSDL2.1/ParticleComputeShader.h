@@ -37,7 +37,6 @@ public:
 	void InitializeProjectileShader();
 
 	void Update(const float & deltaTime, int nrActiveParticles, GLuint &ParticleSSBOS);
-	bool editComputeData(int index, GLuint &ParticleSSBO);
 
 	int getNrParticles();
 	void spawnParticle(GLuint &ParticleSSBO);

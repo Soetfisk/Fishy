@@ -74,7 +74,7 @@ private:
 	void spawnParticle();
 
 	void instantiateVariables();
-	void generateParticleData(Particle tempData);
+	Particle generateParticleData();
 	void checkDeadParticles();
 	
 
