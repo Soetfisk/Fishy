@@ -69,7 +69,7 @@ private:
 
 	void instantiateSpawnBuffer();
 	void instantiateVertexData();
-	void killParticleAtIndex(int index);
+	void killParticleAtIndex(int index, ParticleStruct *& particleDestroyList);
 	void swapData(int fromID, int destID, struct ParticleStruct* tempParticles);
 	void spawnParticle();
 

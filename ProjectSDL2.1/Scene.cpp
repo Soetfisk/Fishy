@@ -96,8 +96,11 @@ Scene::Scene() {
 
 	particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
 
-	for (int i = 0; i < 1; i++) {
-		particleHandler->AddEmiter(EmitterType::PROJECTILE, glm::vec4(0, -10, 3+i*2, 1));
+	for (int z = 0; z < 30; z++) {
+		for (int x = 0; x < 30; x++) {
+			particleHandler->AddEmiter(EmitterType::PROJECTILE, glm::vec4((x % 2 == 0) ? x * 2 : -x * 2, 0, 3 + (z % 2 == 0) ? z * 2 : -z * 2, 1));
+		}
+			
 	}
 
 	//particleHandler->AddEmiter(EmitterType::PROJECTILE, glm::vec4(0, 1, 3, 1));
