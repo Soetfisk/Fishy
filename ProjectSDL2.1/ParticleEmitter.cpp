@@ -7,7 +7,6 @@ ParticleEmitter::ParticleEmitter(EmitterType type, glm::mat4*& transformMatrix, 
 	this->type = type;
 	this->transformationLocation = transformMatrixLocation;
 
-	InstantiateEmitter();
 }
 
 ParticleEmitter::ParticleEmitter(EmitterType type, glm::vec4 position, GLuint transformMatrixLocation, FSHData::texture* texture) {
@@ -16,25 +15,126 @@ ParticleEmitter::ParticleEmitter(EmitterType type, glm::vec4 position, GLuint tr
 	this->positionEmitter = position;
 	this->texture = texture;
 	setTexture();
-	this->nrMaxParticles = 5;
-	this->nrActiveParticles = 5;
 
+	instantiateVariables();
+	//instantiateSpawnBuffer();
 	this->emitterComputeShader = new ParticleComputeShader();
 	this->emitterComputeShader->Initialize(this->type, this->nrMaxParticles, this->pe_particleBuffer);
-
-	glGenVertexArrays(1, &pe_VertexArrayObject);
-	glBindVertexArray(pe_VertexArrayObject);
-	glBindBuffer(GL_ARRAY_BUFFER, this->pe_particleBuffer);
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(ParticleStruct), 0);
-	glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, sizeof(ParticleStruct), (void*)(sizeof(glm::vec4)*3));
-	glBindVertexArray(0);
-
+	
+	
+	instantiateVertexData(); //neeeds to be after c_shader
+	this->spawnParticle();
 	//InstantiateEmitter();
 
 	//InstantiateRenderShader();
 
+}
+
+void ParticleEmitter::instantiateVariables() {
+	this->nrMaxParticles = 1;
+	this->nrActiveParticles = 0;
+	this->emiterAwakeTime = 0;
+	this->emiterSpawnTCurrent = 0;
+	this->emiterSpawnTDelay = 1;
+
+
+	this->particle.p_pos = this->positionEmitter;
+	this->particle.p_lifeTime = 5;
+	this->particle.p_acc = glm::vec4(0, 1, 0, 0);
+	this->particle.p_scale = .5;
+	this->particle.p_speed = 1;
+	this->particle.p_vel = glm::vec4(0, 0, 0, 0);
+}
+
+void ParticleEmitter::instantiateSpawnBuffer() {
+	//glGenBuffers(1, &this->pe_particleSpawnBuffer);
+	//glBindBuffer(GL_SHADER_STORAGE_BUFFER, pe_particleSpawnBuffer);
+	//glBufferData(GL_SHADER_STORAGE_BUFFER, nrMaxParticles*sizeof(ParticleSpawnStruct), NULL, GL_STATIC_DRAW);
+	//GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT; // the invalidate makes a big difference when re-writing
+	//struct ParticleSpawnStruct* particlesSpawn;
+
+	//particlesSpawn = (struct ParticleSpawnStruct *) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, nrMaxParticles * sizeof(ParticleSpawnStruct), bufMask);
+	//
+	//
+
+	//for (float i = 0; i < nrMaxParticles; i++) {
+	//	
+	//	int index = i;
+	//	particlesSpawn[index].customVariables = glm::vec4(); //Scale, Lifetime, Speed, IsAlive(1,0)
+	//	particlesSpawn[index].velocity = glm::vec4();
+	//	particlesSpawn[index].emiterPosition = glm::vec4();
+	//	particlesSpawn[index].acceleration = glm::vec4();
+	//}
+
+	//glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+
+	//glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+}
+
+void ParticleEmitter::updateParticles(const float& deltaTime) {
+	this->emiterSpawnTCurrent += deltaTime;
+
+	
+
+	if (this->emiterSpawnTCurrent >= this->emiterSpawnTDelay && this->nrActiveParticles < this->nrMaxParticles) {
+		this->emiterSpawnTCurrent = 0;
+		this->spawnParticle();
+
+		this->nrActiveParticles++;
+	}
+	
+	if (nrActiveParticles > 0)
+		int k = 0;
+		//checkDeadParticles();
+}
+
+void ParticleEmitter::spawnParticle() {
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, this->pe_particleBuffer);
+	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT; // the invalidate makes a big difference when re-writing
+	struct ParticleStruct* tempParticles;
+
+	tempParticles = (struct ParticleStruct *) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, nrActiveParticles * sizeof(ParticleStruct), sizeof(ParticleStruct), bufMask);
+
+	Particle tempData;
+	generateParticleData(tempData);
+
+	tempParticles[0].acceleration = tempData.p_acc;
+	tempParticles[0].customVariables = glm::vec4(tempData.p_scale, tempData.p_lifeTime, tempData.p_speed, 1);    //x= scale, y=lifeTime, z = speed, w = is alive
+	tempParticles[0].emiterPosition = this->positionEmitter;
+	tempParticles[0].pos = tempData.p_pos;
+	tempParticles[0].velocity = tempData.p_vel;
+	
+	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+
+}
+
+void ParticleEmitter::checkDeadParticles() {
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, this->pe_particleBuffer);
+	struct ParticleStruct* tempParticlesz;
+
+	tempParticlesz = (struct ParticleStruct *) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, nrActiveParticles * sizeof(ParticleStruct), GL_MAP_READ_BIT );
+
+	if (tempParticlesz != NULL || tempParticlesz != nullptr) {
+		ParticleStruct temp;
+
+		if(nrActiveParticles == nrMaxParticles)
+			int k = 0;
+		for (int i = 0; i < nrActiveParticles; i++) {
+			temp = tempParticlesz[0];
+		}
+	}
+	
+
+	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+
+	
+}
+
+void ParticleEmitter::generateParticleData(Particle tempData) {
+	tempData = this->particle;
+	//tempData.p_pos = glm::vec4(tempData.p_pos.x + this->nrActiveParticles, tempData.p_pos.y + this->nrActiveParticles, tempData.p_pos.z + this->nrActiveParticles, 0);
 }
 
 void ParticleEmitter::updateCompute(const float &deltaTime) {
@@ -42,13 +142,9 @@ void ParticleEmitter::updateCompute(const float &deltaTime) {
 }
 
 void ParticleEmitter::UpdateEmitter(const float& deltaTime) {
-	//this->emitterPosition = glm::vec3(*this->transformLocation * glm::vec4(0, 0, 0, 0)) + (this->directionFromObject * this->distanceFromObject);
-	//Update Particle timers
-	//updateParticles(deltaTime);
-
-	updateCompute(deltaTime);
-
-	//updateDrawData();
+	this->emitterComputeShader->bind();
+	updateParticles(deltaTime);
+	//updateCompute(deltaTime);
 
 
 }
@@ -62,14 +158,12 @@ void ParticleEmitter::Draw(GLShader* shader) {
 	glBindTexture(GL_TEXTURE_2D, this->textureID);
 	glBindVertexArray(this->pe_VertexArrayObject);
 
-	glDrawArrays(GL_POINTS, 0, nrMaxParticles);
+	glDrawArrays(GL_POINTS, 0, nrActiveParticles);
 
 	glBindVertexArray(0);
-	//glBindVertexArray(pe_VertexArrayObject);
+} 
 
-	//glDrawArrays(GL_POINTS, 0, this->nrActiveParticles);
-	//glBindVertexArray(0);
-}
+
 
 void ParticleEmitter::setTexture() {
 	glGenTextures(1, &this->textureID);
@@ -82,43 +176,46 @@ void ParticleEmitter::setTexture() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 }
 
+void ParticleEmitter::instantiateVertexData() {
+	glGenVertexArrays(1, &pe_VertexArrayObject);
+	glBindVertexArray(pe_VertexArrayObject);
+	glBindBuffer(GL_ARRAY_BUFFER, this->pe_particleBuffer);
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(ParticleStruct), (void*)offsetof(struct ParticleStruct, pos));
 
-
-void ParticleEmitter::spawnParticle()
-{
-	glm::vec4 ranStuff = (glm::vec4(rand() % 10, rand() % 10, rand() % 10, 0)*.1f);
-	this->p_pos[nrActiveParticles] = this->positionEmitter; //+ ranStuff;
-	this->p_scale[nrActiveParticles] = this->particleScale;
-	this->p_vel[nrActiveParticles] = this->particleStartVelocity + ranStuff;
-	this->p_acc[nrActiveParticles] = this->particleStartAcceleration;
-	this->p_ctime[nrActiveParticles] = 0;
-	this->p_ltime[nrActiveParticles] = this->particleStartLifeTime;
-	this->p_alive[nrActiveParticles] = true;
-
-
-	this->nrActiveParticles++;
+	glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, sizeof(ParticleStruct), (void*)(offsetof(struct ParticleStruct, customVariables)));
+	glBindVertexArray(0);
 }
 
-void ParticleEmitter::InstantiateSpaces() {
+void ParticleEmitter::killParticleAtIndex(int index) {
 
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, this->pe_particleBuffer);
+	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT; // the invalidate makes a big difference when re-writing
+	struct ParticleStruct* tempParticles;
 
-	this->p_pos = new glm::vec4[this->nrMaxParticles];
-	this->p_vel = new glm::vec4[this->nrMaxParticles];
-	this->p_acc = new glm::vec4[this->nrMaxParticles];
-	this->p_scale = new float[this->nrMaxParticles];
-	this->p_ctime = new float[this->nrMaxParticles];
-	this->p_ltime = new float[this->nrMaxParticles];
-	this->p_alive = new bool[this->nrMaxParticles];
+	tempParticles = (struct ParticleStruct *) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, nrActiveParticles * sizeof(ParticleStruct), bufMask);
 
-	nrActiveParticles = 0;
+	if (this->nrActiveParticles > 1) {
+		nrActiveParticles -= 1;
 
-	//for (int i = 0; i < this->nrMaxParticles; i++) {
-	//	spawnParticle();
-	//}
+		if(nrActiveParticles != index)
+			swapData(nrActiveParticles, index, tempParticles);
+		tempParticles[nrActiveParticles].customVariables.w = 0; //Set's alive to false
+		 
+		
+	}
+	else {
+		nrActiveParticles -= 1;
+		tempParticles[index].customVariables.w = 0; //Set's alive to false
+	}
 
-	data.position = p_pos;
-	data.velocity = p_vel;
-	//data.customVariables = p_scale;
+	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+}
+void ParticleEmitter::swapData(int fromID, int destID, struct ParticleStruct* tempParticles) {
+	tempParticles[destID] = tempParticles[fromID];
 
 }
 
@@ -135,136 +232,5 @@ ParticleEmitter::~ParticleEmitter()
 	//delete[] this->p_ltime;
 	//delete[]this->p_alive;
 
-	//for (int i = 0; i < this->nrActiveParticles; i++) {
-	//	deleteParticleAtID(i);
-	//}
 
 }
-
-
-void ParticleEmitter::InstantiateEmitter() {
-
-	this->emiterAwakeTime = 0.f;
-	this->emiterTimeSinceLastParticle = 0.f;
-
-	switch (this->type)
-	{
-	case EmitterType::PROJECTILE:
-		InstantiateProjectileEmitter();
-		break;
-	default:
-		std::cout << "Couldnt instantiate emitter, didnt find type: " << this->type << std::endl;
-		break;
-	}
-
-
-
-	InstantiateSpaces();
-
-	//this->emitterComputeShader = new ParticleComputeShader();
-	//this->emitterComputeShader->Initialize(this->type, this->nrMaxParticles, this->data);
-
-}
-
-void ParticleEmitter::InstantiateRenderShader() {
-	glGenVertexArrays(1, &this->pe_VertexArrayObject);
-	glBindVertexArray(this->pe_VertexArrayObject);
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-
-	glGenBuffers(NUM_BUFFERS, pe_VertexArrayBuffers);
-	glBindBuffer(GL_ARRAY_BUFFER, pe_VertexArrayBuffers[POSITION_VB]);
-	glBufferData(GL_ARRAY_BUFFER, this->nrMaxParticles * (sizeof(float) * 4), p_pos, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
-
-	glBindBuffer(GL_ARRAY_BUFFER, pe_VertexArrayBuffers[SIZE_VB]);
-	glBufferData(GL_ARRAY_BUFFER, this->nrMaxParticles * sizeof(float), p_scale, GL_STATIC_DRAW);
-	glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, 0, 0);
-
-	glBindVertexArray(0);
-}
-
-void ParticleEmitter::InstantiateProjectileEmitter() {
-	this->directionFromObject = glm::vec3(0, 0, -1);
-	this->distanceFromObject = 2;
-	this->nrMaxParticles = 500;
-	this->spawnTimer = .1f;
-	this->particleStartVelocity = glm::vec4(1, 0, 0, 1);
-	this->particleStartAcceleration = glm::vec4(.1, 0, 0, 0);
-	this->particleStartLifeTime = 5.f;
-	this->particleScale = 1.f;
-
-
-	//this->nrActiveParticles = 0;
-}
-
-
-
-void ParticleEmitter::updateDrawData() {
-	if (this->nrActiveParticles > 0) {
-
-		glBindBuffer(GL_ARRAY_BUFFER, pe_VertexArrayBuffers[POSITION_VB]);
-		glBufferData(GL_ARRAY_BUFFER, this->nrMaxParticles * (sizeof(float) * 4), p_pos, GL_STATIC_DRAW);
-
-		glBindBuffer(GL_ARRAY_BUFFER, pe_VertexArrayBuffers[SIZE_VB]);
-		glBufferData(GL_ARRAY_BUFFER, this->nrMaxParticles * sizeof(float), p_scale, GL_STATIC_DRAW);
-
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-	}
-}
-
-
-void ParticleEmitter::updateParticles(const float& deltaTime) {
-
-	for (int i = 0; i < this->nrActiveParticles; i++) {
-		this->p_ctime[i] += deltaTime;
-		std::cout << i << " :::: SCALE: " << p_scale[i]<< "| x."<<p_pos[i].x<<", y." << p_pos[i].y << ", z." << p_pos[i].z << ", w." << p_pos[i].w << std::endl;
-		if (this->p_ctime[i] >= this->p_ltime[i]) {
-			deactivateParticleAt(i);
-
-		}
-	}
-
-	this->emiterTimeSinceLastParticle += deltaTime;
-
-	if (this->emiterTimeSinceLastParticle >= this->spawnTimer) {
-		if (this->nrActiveParticles < this->nrMaxParticles) {
-
-			spawnParticle();
-			this->emiterTimeSinceLastParticle = 0.f;
-
-		}
-
-	}
-
-}
-
-void ParticleEmitter::deactivateParticleAt(int ID) {
-
-
-	if (nrActiveParticles > 1) {
-		this->nrActiveParticles--;
-
-		swapData(ID);
-		this->p_alive[nrActiveParticles] = false;
-
-	}
-	else {
-		this->nrActiveParticles--;
-
-		this->p_alive[ID] = false;
-	}
-}
-
-void ParticleEmitter::swapData(int ID) {
-	this->p_pos[ID] = this->p_pos[nrActiveParticles];
-	this->p_vel[ID] = this->p_vel[nrActiveParticles];
-	this->p_acc[ID] = this->p_acc[nrActiveParticles];
-	this->p_ctime[ID] = this->p_ctime[nrActiveParticles];
-	this->p_ltime[ID] = this->p_ltime[nrActiveParticles];
-	
-	this->p_scale[ID] = this->p_scale[nrActiveParticles];
-	this->p_alive[ID] = this->p_alive[nrActiveParticles];
-	
-}
-

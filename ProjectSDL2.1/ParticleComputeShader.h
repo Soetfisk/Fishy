@@ -1,23 +1,11 @@
 #include "GLUtil.h"
 
-struct ParticleComputeStruct {
-	glm::vec4 position;
-	glm::vec4 velocity;
-	glm::vec4 customVariables;
-};
-
-struct ParticleRenderingUpdateData {
-	glm::vec4* position;
-	glm::vec4* velocity;
-	glm::vec4* customVariables;
-};
-
 struct ParticleStruct {
 	glm::vec4 pos;
 	glm::vec4 emiterPosition;
 	glm::vec4 velocity;
-	glm::vec4 customVariables;
 	glm::vec4 acceleration;
+	glm::vec4 customVariables; //x= scale, y=lifeTime, z = speed, w = is alive
 };
 
 struct ParticleTestPos {
@@ -27,11 +15,10 @@ struct ParticleTestPos {
 class ParticleComputeShader
 {
 private:
-	
-	GLuint spawnSSBO;
+
+	GLuint atomicBuffer;
 	GLuint compute_program, compute_shader;
 	glm::vec4* testPos;
-	ParticleComputeStruct* particleData;
 
 	ParticleTestPos* ParticleTestPos1;
 
@@ -39,7 +26,9 @@ private:
 	void CheckShaderError(GLuint shader, GLuint flag, bool isProgram);
 	std::string LoadShader(const std::string& fileName);
 
+	void spawnParticleAt(int index);
 	void readBuffer();
+	int nrParticles;
 public:
 	ParticleComputeShader();
 	~ParticleComputeShader();
@@ -49,6 +38,11 @@ public:
 
 	void Update(const float & deltaTime, int nrActiveParticles, GLuint &ParticleSSBOS);
 	bool editComputeData(int index, GLuint &ParticleSSBO);
+
+	int getNrParticles();
+	void spawnParticle(GLuint &ParticleSSBO);
+	void updateEmitterPosition(glm::vec4 pos, GLuint &ParticleSSBO);
+	void bind();
 };
 
 //g321

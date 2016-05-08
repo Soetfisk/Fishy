@@ -6,6 +6,14 @@
 #include "GLtexture.h"
 
 
+struct Particle {
+	float p_lifeTime;
+	float p_scale;
+	float p_speed;
+	glm::vec4 p_vel;
+	glm::vec4 p_acc;
+	glm::vec4 p_pos;
+};
 
 class ParticleEmitter
 {
@@ -23,25 +31,14 @@ private:
 
 	EmitterType type;
 
-	//Particle Data
-	glm::mat4* p_transMat;
-	glm::vec4* p_pos;
-	glm::vec4* p_rot;
-	glm::vec4* p_vel;
-	glm::vec4* p_acc;
-	float* p_scale;
-	float* p_ctime;
-	float* p_ltime;
-	bool* p_alive;
-
-	ParticleRenderingUpdateData data;
+	//ParticleRenderingUpdateData data;
 
 	ParticleComputeShader* emitterComputeShader;
 	GLuint transformationLocation;
 
 	glm::vec4 positionEmitter;
 	GLuint pe_VertexArrayObject;
-	GLuint pe_particleBuffer;
+	GLuint pe_particleBuffer, pe_particleSpawnBuffer;
 	GLuint pe_VertexArrayBuffers[NUM_BUFFERS];
 
 	GLuint pe_posBuf, pe_scaleBuf;
@@ -56,29 +53,35 @@ private:
 
 	int nrActiveParticles;
 	int nrMaxParticles;
-	float spawnTimer;
 	float emiterAwakeTime;
 	float emiterTimeSinceLastParticle;
+	float emiterSpawnTDelay;
+	float emiterSpawnTCurrent;
 
 
-
-	void swapData(int ID);
-	void deactivateParticleAt(int ID);
-	void spawnParticle();
 	void updateParticles(const float& deltaTime);
-	void updateDrawData();
 	void updateCompute(const float &deltaTime);
-
-
-	void InstantiateProjectileEmitter();
-	void InstantiateEmitter();
-	void InstantiateRenderShader();
-	void InstantiateSpaces();
 
 	void setTexture();
 	FSHData::texture* texture;
 	GLuint textureID;
 	GLTexture* tempTexture;
+
+	void instantiateSpawnBuffer();
+	void instantiateVertexData();
+	void killParticleAtIndex(int index);
+	void swapData(int fromID, int destID, struct ParticleStruct* tempParticles);
+	void spawnParticle();
+
+	void instantiateVariables();
+	void generateParticleData(Particle tempData);
+	void checkDeadParticles();
+	
+
+	Particle particle;
+
+
+
 
 public:
 	ParticleEmitter(EmitterType type, glm::mat4*&  transformMatrix, GLuint transformMatrixLocation);
