@@ -276,9 +276,9 @@ void Scene::DrawScene() {
 
 		for (size_t j = 0; j < this->players.size(); j++)
 		{
-			players.at(j)->TestDraw(*shaders[BLEND_SHAPE]);
 			shaders[BLEND_SHAPE]->Uniform1ui("BlendShapeCount", (GLuint)players.at(j)->GetBlendShapeCount());
 			shaders[BLEND_SHAPE]->Uniform1fv("Weights", players.at(j)->GetBlendWeights());
+			players.at(j)->TestDraw(*shaders[BLEND_SHAPE]);
 		}
 		shaders[MODELS]->Bind();
 		shaders[MODELS]->Update(players.at(i)->GetCamera());

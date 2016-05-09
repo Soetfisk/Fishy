@@ -36,7 +36,10 @@ GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID) : GLModel(FSH_Loa
 	this->dashOnCooldown = false;
 	blendWeights = new float[NUM_ANIMATION];
 	for (int i = 0; i < NUM_ANIMATION; i++)
+	{
 		blendWeights[i] = 0.0f;
+		animationFactors[i] = 0.0f;
+	}
 }
 
 GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int projectileModelID) : GLModel(FSH_Loader, modelID)
@@ -236,21 +239,34 @@ void GLPlayer::Update(float dt)
 
 void GLPlayer::moveAnimation(float deltaTime, float speedFactor)
 {
-	static bool left = true, stop = false;
 	float speed = abs(deltaTime * speedFactor), y;
 
-	static float x = 0.0f;
-	x += speed;
+	//static float x = 0.0f;
+	animationFactors[AONE] += speed;
 
-	y = sin(x);
+	y = sin(animationFactors[AONE]);
 	if (y > 0.0)
-		blendWeights[ASIX] = y;
+		this->blendWeights[ASIX] = y;
 	if (y < 0.0)
-		blendWeights[ASEVEN] = abs(y);
+		this->blendWeights[ASEVEN] = abs(y);
 	//if (fabs(x - PI) <= FLT_EPSILON)
 	//	x = 0.0;
 
 	blendWeights[AFIVE] = 1.0f;
+}
+
+void GLPlayer::idleAnimation(float deltaTime, float speedFactor)
+{
+	float speed = deltaTime * speedFactor;
+
+	for (size_t i = 0; i < NUM_ANIMATION; i++)
+	{
+		if (blendWeights[i] > 0.0f)
+		{
+			blendWeights[i] -= speed;
+			animationFactors[i] = 0.0f;
+		}
+	}
 }
 
 //adds a controller too the player
@@ -323,12 +339,14 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	
 	//std::cout << "X: " << this->m_velocity.x << " Y: " << this->m_velocity.y << " Z: " << this->m_velocity.z << std::endl;
 
+	if (lastForward > DEADZONE)
+		moveAnimation(deltaTime, sqrt(glm::dot(m_velocity, m_velocity)));
+
 	CalcVelocity(deltaTime);
 	HandleDash(deltaTime);
 
-	//this->blendWeights[AONE] = 1.0f; //ANIMATION TEST
-	//this->blendWeights[ATHREE] = 1.0f;
-	this->moveAnimation(deltaTime, 2.75);
+	idleAnimation(deltaTime, 2.0f);
+
 	//camera update
 	this->m_camera.Update(this->GetTransform(), deltaTime);
 
@@ -391,10 +409,13 @@ void GLPlayer::CalcVelocity(float& deltaTime)
 			//m_velocity.z = (m_velocity.z > MAX_SPEED) ? MAX_SPEED : (m_velocity.z < -MAX_SPEED) ? -MAX_SPEED : m_velocity.z;
 			
 		}
+		
 
 		this->transform->m_pos += (m_velocity  * deltaTime);
 		glm::vec3 friction = (m_velocity * MOVEMENT_FRICTION);
 		m_velocity -= friction * deltaTime;
+
+		
 	}
 
 	if (glm::dot(m_velocity, m_velocity) < MAX_SPEED)

@@ -79,6 +79,7 @@ public:
 	unsigned int GetBlendShapeCount() { return NUM_ANIMATION; }
 	glm::vec3& getVelocity() { return m_velocity; }
 	void moveAnimation(float deltaTime, float speedFactor);
+	void idleAnimation(float deltaTime, float speedFactor);
 private:
 	const int	DEADZONE = 10000;
 	float		MOVEMENT_FRICTION = 2.0f;
@@ -109,6 +110,7 @@ private:
 	float powerUpTimer = 0;
 
 	float * blendWeights;
+	float animationFactors[NUM_ANIMATION];
 	float deltaTime = -1;
 
 	SDL_GameController *pad;
