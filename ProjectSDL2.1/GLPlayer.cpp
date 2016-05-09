@@ -228,10 +228,7 @@ void GLPlayer::moveAnimation(float deltaTime, float speedFactor)
 		this->blendWeights[ASIX] = y;
 	if (y < 0.0)
 		this->blendWeights[ASEVEN] = abs(y);
-	//if (fabs(x - PI) <= FLT_EPSILON)
-	//	x = 0.0;
 
-	blendWeights[AFIVE] = 1.0f;
 }
 
 void GLPlayer::idleAnimation(float deltaTime, float speedFactor)
@@ -313,6 +310,27 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 		//this->meshes[1]->GetTransform().m_rot.z += -(lastHorizontal / (glm::pow(2, 15))) * deltaTime;
 	}
 		
+
+	//if (abs(lastHorizontal) > DEADZONE)
+	//{
+	//	if (lastVertical > 0.0)
+
+
+	//	else if (lastVertical < 0.0)
+
+
+	//}
+	//if (abs(lastVertical) > DEADZONE)
+	//{
+	//	if (lastVertical > 0.0)
+	//	
+	//	
+	//	else if (lastVertical < 0.0)
+
+
+	//}
+
+
 	this->meshes[0]->GetTransform().m_rot.z -= this->meshes[0]->GetTransform().m_rot.z * deltaTime;
 	//this->meshes[1]->GetTransform().m_rot.z -= this->meshes[0]->GetTransform().m_rot.z * deltaTime;
 	
