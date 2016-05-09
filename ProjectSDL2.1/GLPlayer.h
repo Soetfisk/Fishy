@@ -79,7 +79,9 @@ public:
 	unsigned int GetBlendShapeCount() { return NUM_ANIMATION; }
 	glm::vec3& getVelocity() { return m_velocity; }
 	void moveAnimation(float deltaTime, float speedFactor);
+	FollowParticle* getParticleFollowPlayer();
 private:
+	float speed;
 	const int	DEADZONE = 10000;
 	float		MOVEMENT_FRICTION = 2.0f;
 	const int	MAX_SPEED = 200;	
@@ -134,5 +136,6 @@ private:
 
 	void HandlePowerUps();
 	PowerUps getPowerUpByNumber(int power);
+	
 };
 

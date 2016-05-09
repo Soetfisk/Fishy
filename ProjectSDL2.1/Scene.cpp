@@ -88,7 +88,10 @@ void Scene::Init()
 		for (int x = 0; x < 5; x++) {
 			particleHandler->AddEmiter(EmitterType::STATICSTREAM, glm::vec4((float)x* RNG::range(-40.f, 40.f), -50.f, (float)z* RNG::range(-60.f, 60.f), 1));
 		}
-		
+	}
+
+	for (int i = 0; i <  players.size(); i++) {
+		particleHandler->AddEmiter(EmitterType::PLAYERFOLLOW, players.at(i)->getParticleFollowPlayer());
 	}
 	//for (int z = 0; z < 3; z++) {
 	//	particleHandler->AddEmiter(EmitterType::GOLDSTREAM, glm::vec4(2, 1, 3 + (z % 2 == 0) ? z * 2 : -z * 2, 1));

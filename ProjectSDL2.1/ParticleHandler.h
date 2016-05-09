@@ -16,8 +16,8 @@ public:
 
 	void UpdateParticles(const float& deltaTime);
 	void DrawParticles(GLShader* shader, GLCamera& camera);
-	void AddEmiter(EmitterType type, glm::mat4*& transformMatrix);
 	void AddEmiter(EmitterType type, glm::vec4 position);
+	void AddEmiter(EmitterType type, FollowParticle* objectToFollow);
 
 };
 

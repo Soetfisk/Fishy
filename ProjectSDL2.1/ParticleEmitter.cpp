@@ -1,20 +1,14 @@
 #include "ParticleEmitter.h"
 #include "RNG.h"
+#include "glm\ext.hpp"
 
-
-ParticleEmitter::ParticleEmitter(EmitterType type, glm::mat4*& transformMatrix, GLuint transformMatrixLocation)
-{
+ParticleEmitter::ParticleEmitter(EmitterType type, glm::vec4 position, FSHData::texture* texture) {
 	this->type = type;
-	this->transformationLocation = transformMatrixLocation;
-
-}
-
-ParticleEmitter::ParticleEmitter(EmitterType type, glm::vec4 position, GLuint transformMatrixLocation, FSHData::texture* texture) {
-	this->type = type;
-	//this->transformationLocation = transformMatrixLocation;
 	this->positionEmitter = position;
 	this->texture = texture;
+	shouldUpdateObject = false;
 	setTexture();
+	
 
 	instantiateVariables();
 	//instantiateSpawnBuffer();
@@ -27,7 +21,22 @@ ParticleEmitter::ParticleEmitter(EmitterType type, glm::vec4 position, GLuint tr
 	//InstantiateEmitter();
 
 	//InstantiateRenderShader();
+}
 
+ParticleEmitter::ParticleEmitter(EmitterType type, FollowParticle* objToFollow, FSHData::texture* texture) {
+	this->type = type;
+	this->objectFollow = objToFollow;
+	this->texture = texture;
+	shouldUpdateObject = true;
+	setTexture();
+	
+	instantiateVariables();
+	//instantiateSpawnBuffer();
+	this->emitterComputeShader = new ParticleComputeShader();
+	this->emitterComputeShader->Initialize(this->type, this->nrMaxParticles, this->pe_particleBuffer);
+
+
+	instantiateVertexData(); //neeeds to be after c_shader
 }
 
 void ParticleEmitter::instantiateVariables() {
@@ -56,11 +65,12 @@ void ParticleEmitter::instantiateVariables() {
 
 void ParticleEmitter::instantiatePlayerFollow() {
 	this->nrMaxParticles = 500;
-	this->emiterSpawnTDelay = .5;
+	this->emiterSpawnTDelay = .01;
+	this->emiterSpawnTDelayStandard = emiterSpawnTDelay;
 
 	this->particle.p_pos = this->positionEmitter;
 	this->particle.p_lifeTime = 2;
-	this->particle.p_acc = glm::vec4(0, -1, 0, 0);
+	this->particle.p_acc = glm::vec4(0, .5f, 0, 0);
 	this->particle.p_scale = .05;
 	this->particle.p_speed = 1;
 	this->particle.p_vel = glm::vec4(0, 0, 0, 0);
@@ -69,6 +79,7 @@ void ParticleEmitter::instantiatePlayerFollow() {
 void ParticleEmitter::instantiateStaticStream() {
 	this->nrMaxParticles = 500;
 	this->emiterSpawnTDelay = .6f;
+	this->emiterSpawnTDelayStandard = emiterSpawnTDelay;
 
 	this->particle.p_pos = this->positionEmitter;
 	this->particle.p_lifeTime = 10;
@@ -83,6 +94,7 @@ void ParticleEmitter::instantiateStaticStream() {
 void ParticleEmitter::instantiateGoldStream() {
 	this->nrMaxParticles = 1090;
 	this->emiterSpawnTDelay = 1;
+	this->emiterSpawnTDelayStandard = emiterSpawnTDelay;
 
 	this->particle.p_pos = this->positionEmitter;
 	this->particle.p_lifeTime = 4;
@@ -149,8 +161,64 @@ void ParticleEmitter::spawnParticle() {
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 
+}
 
+Particle ParticleEmitter::generateParticleData() {
+	Particle returnData;
+	returnData = this->particle;
+	glm::vec4 data;
+	switch (this->type)
+	{
+	case EmitterType::STATICSTREAM:
+		data.x = RNG::range(-0.4f, .4f);
+		data.y = RNG::range(0.f, .4f);
+		data.z = RNG::range(-.4f, .4f);
+
+		returnData.p_acc = glm::vec4(returnData.p_acc.x + data.x, returnData.p_acc.y + data.y, returnData.p_acc.z + data.z, 0);
+		returnData.p_vel = glm::vec4(returnData.p_vel.x + data.x, returnData.p_vel.y + data.y, returnData.p_vel.z + data.z, 0);
+		returnData.p_scale = RNG::range(1.f, 1.5f);
+		break;
+	case EmitterType::GOLDSTREAM:
+		returnData.p_acc = glm::vec4(RNG::range(-.5f, .5f), returnData.p_acc.y, RNG::range(-.5f, .5f), 0);
+		break;
+	case EmitterType::PLAYERFOLLOW:
+		data.x = RNG::range(.5f, 1.f);
+		data.y = RNG::range(.5f, 1.f);
+		data.z = RNG::range(.5f, 1.f);
+		returnData.p_acc = this->directionEmitter + glm::vec4(returnData.p_acc.x + data.x, returnData.p_acc.y + data.y, returnData.p_acc.z + data.z, 0);
+		returnData.p_pos = this->positionEmitter;
+		returnData.p_pos += glm::vec4(*this->objectFollow->o_directionRight*RNG::range(-10.f, 10.f),0);
+		returnData.p_pos += glm::vec4(*this->objectFollow->o_directionUp*RNG::range(-10.f, 10.f),0);
+
+		//std::cout << "SPAWNING AT: " << glm::to_string(returnData.p_pos) << std::endl;
+
+		returnData.p_vel = -this->directionEmitter + glm::vec4(returnData.p_acc.x + data.x, returnData.p_acc.y + data.y, returnData.p_acc.z + data.z, 0);
+		returnData.p_scale = RNG::range(.1f, .15f);
+		returnData.p_lifeTime *= RNG::range(.5f, 1.5f);
+		break;
+	}
+
+	return returnData;
+}
+
+void ParticleEmitter::UpdateParticleObject() {
+	this->positionEmitter = glm::vec4(*objectFollow->o_pos,1);
+	this->directionEmitter = glm::vec4(*objectFollow->o_direction, 1);
+	this->emiterSpawnTDelay = (*objectFollow->o_speed > .1f) ?  (100 / (*objectFollow->o_speed))* emiterSpawnTDelayStandard : 10;
 	
+	if (*objectFollow->o_speed > .1f)
+		std::cout << "RIGHT: " << glm::to_string(*objectFollow->o_directionRight) << std::endl << "UP: " << glm::to_string(*objectFollow->o_directionUp) << std::endl;
+		//std::cout << *objectFollow->o_speed<< " : " << this->positionEmitter.x << " : "<< this->directionEmitter.x << std::endl;
+
+	//this->emiterSpawnTDelay = this->emiterSpawnTDelayStandard* *objectFollow->o_speed;
+}
+
+bool ParticleEmitter::shouldUpdateTransformation() {
+	return shouldUpdateObject;
+}
+
+bool ParticleEmitter::followObjectDead() {
+	return (objectFollow->o_pos == nullptr);
 }
 
 
@@ -206,36 +274,7 @@ void ParticleEmitter::swapData(int fromID, int destID, struct ParticleStruct* te
 }
 
 
-Particle ParticleEmitter::generateParticleData() {
-	Particle returnData;
-	returnData = this->particle;
-	glm::vec4 data;
-	switch (this->type)
-	{
-	case EmitterType::STATICSTREAM:
-		data.x = RNG::range(-0.4f, .4f);
-		data.y= RNG::range(0.f, .4f);
-		data.z = RNG::range(-.4f, .4f);
 
-		returnData.p_acc = glm::vec4(returnData.p_acc.x + data.x, returnData.p_acc.y + data.y, returnData.p_acc.z + data.z, 0);
-		returnData.p_vel = glm::vec4(returnData.p_vel.x + data.x, returnData.p_vel.y + data.y, returnData.p_vel.z + data.z, 0);
-		returnData.p_scale = RNG::range(1.f, 1.5f);
-		break;
-	case EmitterType::GOLDSTREAM:
-		returnData.p_acc = glm::vec4(RNG::range(-.5f, .5f), returnData.p_acc.y, RNG::range(-.5f, .5f), 0);
-		break;
-	case EmitterType::PLAYERFOLLOW:
-		data.x = RNG::range(0.f, .4f);
-		data.y = RNG::range(0.f, .4f);
-		data.z = RNG::range(0.f, .4f);
-		returnData.p_acc = this->directionEmitter+ glm::vec4(returnData.p_acc.x + data.x, returnData.p_acc.y + data.y, returnData.p_acc.z + data.z, 0);
-		returnData.p_vel = this->directionEmitter+ glm::vec4(returnData.p_acc.x + data.x, returnData.p_acc.y + data.y, returnData.p_acc.z + data.z, 0);
-		returnData.p_scale = RNG::range(.1f, .13f);
-		break;
-	}
-	
-	return returnData;
-}
 void ParticleEmitter::updateCompute(const float &deltaTime) {
 	this->emitterComputeShader->Update(deltaTime, this->nrActiveParticles, this->pe_particleBuffer);
 }
@@ -294,6 +333,9 @@ ParticleEmitter::~ParticleEmitter()
 {
 
 	delete emitterComputeShader;
+
+	if(shouldUpdateObject)
+		delete objectFollow;
 	//delete[]this->p_pos;
 	//delete[]this->p_scale;
 	//delete[]this->p_vel;

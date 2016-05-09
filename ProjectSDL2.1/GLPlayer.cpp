@@ -34,6 +34,7 @@ GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID) : GLModel(FSH_Loa
 	this->dashCooldownCounter = 0;
 	this->isDashing = false;
 	this->dashOnCooldown = false;
+	
 	blendWeights = new float[NUM_ANIMATION];
 	for (int i = 0; i < NUM_ANIMATION; i++)
 		blendWeights[i] = 0.0f;
@@ -49,6 +50,7 @@ GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int proj
 	this->dashCooldownCounter = 0;
 	this->isDashing = false;
 	this->dashOnCooldown = false;
+	this->speed = 0;
 	blendWeights = new float[NUM_ANIMATION];
 	for (int i = 0; i < NUM_ANIMATION; i++)
 		blendWeights[i] = 0.0f;
@@ -117,8 +119,8 @@ void GLPlayer::HandleCollision(PlayerStates state, float deltaTime, glm::vec3 mo
 		this->m_velocity = momentum;
 	break;
 	case EATING:
-		if (momentum.x > 0)
-		{
+		if (momentum.x > 0){
+		
 			this->transform->SetScale(this->transform->GetScale() + (deltaTime / 4));
 			totalPoints += (int)(100 * momentum.x);
 			currentPoints += (int)(100 * momentum.x);
@@ -404,6 +406,8 @@ void GLPlayer::CalcVelocity(float& deltaTime)
 	m_velocity.x = (glm::abs(m_velocity.x) < MIN_SPEED) ? 0.0f : m_velocity.x;
 	m_velocity.y = (glm::abs(m_velocity.y) < MIN_SPEED) ? 0.0f : m_velocity.y;
 	m_velocity.z = (glm::abs(m_velocity.z) < MIN_SPEED) ? 0.0f : m_velocity.z;
+
+	this->speed = sqrt(glm::dot(m_velocity, m_velocity));
 }
 
 void GLPlayer::HandleDash(float & deltaTime)
@@ -470,4 +474,8 @@ GLPlayer::PowerUps GLPlayer::getPowerUpByNumber(int power)
 void GLPlayer::PlayerEating(float deltaTime)
 {
 
+}
+
+FollowParticle* GLPlayer::getParticleFollowPlayer() {
+	return new FollowParticle(this->getParticleFollow(), &this->speed);
 }

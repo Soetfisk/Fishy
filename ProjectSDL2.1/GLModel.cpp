@@ -121,26 +121,26 @@ GLTransform& GLModel::GetTransform()
 
 glm::vec3 GLModel::GetForward()
 {
-	glm::vec3 front;
-	front.x = cos(this->transform->m_rot.x) * sin(this->transform->m_rot.y);
-	front.y = -sin(this->transform->m_rot.x);
-	front.z = cos(this->transform->m_rot.x) * cos(this->transform->m_rot.y);
-	return glm::normalize(front);
+	this->forward.x = cos(this->transform->m_rot.x) * sin(this->transform->m_rot.y);
+	this->forward.y = -sin(this->transform->m_rot.x);
+	this->forward.z = cos(this->transform->m_rot.x) * cos(this->transform->m_rot.y);
+	return glm::normalize(this->forward);
+
 }
 
 glm::vec3 GLModel::GetRight()
 {
-	glm::vec3 right;
-	right.x = sin(this->transform->m_rot.y - 3.14f / 2.0f);
-	right.y = 0;
-	right.z = cos(this->transform->m_rot.y - 3.14f / 2.0f);
-	return glm::normalize(right);
+	this->right.x = sin(this->transform->m_rot.y - 3.14f / 2.0f);
+	this->right.y = 0;
+	this->right.z = cos(this->transform->m_rot.y - 3.14f / 2.0f);
+	return glm::normalize(this->right);
 }
 
 glm::vec3 GLModel::GetUp()
 {
-	glm::vec3 up = glm::cross(GetForward(), GetRight());
-	return glm::normalize(up);
+	this->up = glm::cross(GetForward(), GetRight());
+	return glm::normalize(this->up);
+	//glm::normalize(up);
 }
 
 AABB GLModel::GetBoundingBox()
@@ -169,4 +169,9 @@ void GLModel::DuplicateModel(FishBox * FSH_Loader, unsigned int modelID)
 
 	FSHData::material * test = FSH_Loader->meshMaterial(modelID, 0);
 
+}
+
+FollowParticle* GLModel::getParticleFollow() {
+	FollowParticle*test = new FollowParticle(&this->transform->GetPos(), &this->forward, &this->up, &this->right);
+	return test;
 }

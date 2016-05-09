@@ -29,10 +29,10 @@ ParticleHandler::~ParticleHandler(){
 }
 
 void ParticleHandler::DrawParticles(GLShader* shader, GLCamera& camera) {
-	
+	shader->Bind();
+	shader->Update(camera);
 	for (int i = 0; i < this->emiters.size(); i++) {
-		shader->Bind();
-		shader->Update(camera);
+		
 		this->emiters.at(i)->Draw(shader);
 	}
 }
@@ -40,17 +40,32 @@ void ParticleHandler::DrawParticles(GLShader* shader, GLCamera& camera) {
 void ParticleHandler::UpdateParticles(const float& deltaTime) {
 
 	for (int i = 0; i < this->emiters.size(); i++) {
-		this->emiters.at(i)->UpdateEmitter(deltaTime);
+
+		if (this->emiters.at(i)->shouldUpdateTransformation()) {
+			if (!this->emiters.at(i)->followObjectDead()) {
+				this->emiters.at(i)->UpdateParticleObject();
+			}
+			else {
+				//remove emitter
+			}
+			this->emiters.at(i)->UpdateEmitter(deltaTime);
+		}
+		else {
+			this->emiters.at(i)->UpdateEmitter(deltaTime);
+		}
+
+		
 		
 	}
 
 	
 }
 
-void ParticleHandler::AddEmiter(EmitterType type, glm::mat4*& transformMatrix) {
-	this->emiters.push_back(new ParticleEmitter(type, transformMatrix, this->transformationLocation));
-}
 
 void ParticleHandler::AddEmiter(EmitterType type, glm::vec4 position) {
-	this->emiters.push_back(new ParticleEmitter(type, position, this->transformationLocation, this->textures[type]));
+	this->emiters.push_back(new ParticleEmitter(type, position, this->textures[type]));
+}
+
+void ParticleHandler::AddEmiter(EmitterType type, FollowParticle *objectToFollow) {
+	this->emiters.push_back(new ParticleEmitter(type, objectToFollow, this->textures[type]));
 }
