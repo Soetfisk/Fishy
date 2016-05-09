@@ -110,6 +110,8 @@ void Scene::LoadModels()
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
 
 	this->specialStaticMeshes.push_back(new SeaWeedLeafs(&FSH_Loader, SeaWeedLeaf));
+	this->specialStaticMeshes.push_back(new SeaWeedLeafs(&FSH_Loader, SeaWeedLeaf));
+	specialStaticMeshes.at(1)->GetTransform().SetPos(glm::vec3 (10.0f, 2.0f, 2.0f));
 
 	this->collisionHandler.AddNPC(NPCs);
 	this->collisionHandler.AddPlayer(players);
