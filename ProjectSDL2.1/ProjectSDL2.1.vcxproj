@@ -41,6 +41,9 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="obj_loader.cpp" />
+    <ClCompile Include="ParticleComputeShader.cpp" />
+    <ClCompile Include="ParticleEmitter.cpp" />
+    <ClCompile Include="ParticleHandler.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SeaWeedLeafs.cpp" />
     <ClCompile Include="SpecialStaticMesh.cpp" />
@@ -73,6 +76,9 @@
     <ClInclude Include="GLWindow.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="ParticleComputeShader.h" />
+    <ClInclude Include="ParticleEmitter.h" />
+    <ClInclude Include="ParticleHandler.h" />
     <ClInclude Include="RNG.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SphereBS.h" />
@@ -84,6 +90,11 @@
     <None Include="lighting.frag" />
     <None Include="lighting.vert" />
     <None Include="blend_shape.vert" />
+    <None Include="Particle.frag" />
+    <None Include="Particle.geom" />
+    <None Include="Particle.vert" />
+    <None Include="ParticleProjectileComputeShader.glsl" />
+    <None Include="ParticleTestShader.glsl" />
     <None Include="pass.frag" />
     <None Include="pass.vert" />
     <None Include="post.frag" />
