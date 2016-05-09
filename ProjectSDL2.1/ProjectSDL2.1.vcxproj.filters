@@ -64,11 +64,17 @@
     <ClCompile Include="GLMeshBS.cpp">
       <Filter>Source\Models</Filter>
     </ClCompile>
-    <ClCompile Include="GLNPC_PowerUpHandler.cpp">
-      <Filter>Source\NPCs</Filter>
-    </ClCompile>
     <ClCompile Include="Menu.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GLNPC_PowerUpHandler.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecialStaticMesh.cpp">
+      <Filter>Source\Models\SpecialStaticMeshes</Filter>
+    </ClCompile>
+    <ClCompile Include="SeaWeedLeafs.cpp">
+      <Filter>Source\Models\SpecialStaticMeshes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -138,9 +144,6 @@
     <ClInclude Include="Menu.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="GLNPC_PowerUpHandler.h">
-      <Filter>Header\NPCs</Filter>
-    </ClInclude>
     <ClInclude Include="GameState.h">
       <Filter>Header</Filter>
     </ClInclude>
@@ -155,6 +158,15 @@
     </ClInclude>
     <ClInclude Include="GLMeshBS.h">
       <Filter>Header\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\SpecialStaticMesh.h">
+      <Filter>Header\Models\SpecialStaticMeshes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\SeaWeedLeafs.h">
+      <Filter>Header\Models\SpecialStaticMeshes</Filter>
+    </ClInclude>
+    <ClInclude Include="GLNPC_PowerUpHandler.h">
+      <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -231,6 +243,12 @@
     </Filter>
     <Filter Include="Header\Models\NPCs">
       <UniqueIdentifier>{5002fbc4-4a56-453b-acbd-d7a222fdeda4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header\Models\SpecialStaticMeshes">
+      <UniqueIdentifier>{a14a602f-46cb-4cb2-bec7-47ee8b1ee2ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Models\SpecialStaticMeshes">
+      <UniqueIdentifier>{a791cb2d-94e7-4a3b-93ea-48e01b0e164e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

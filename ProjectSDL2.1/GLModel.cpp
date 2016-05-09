@@ -74,6 +74,8 @@ GLModel::GLModel(FishBox* FSH_Loader, unsigned int modelID)
 }
 
 
+
+
 GLModel::~GLModel()
 {
 	for (size_t i = 0; i < meshes.size(); i++)
@@ -148,8 +150,23 @@ AABB GLModel::GetBoundingBox()
 	return this->boundingBox;
 }
 
+
 void GLModel::SetBoundingBox(glm::vec3 center, glm::vec3 extents)
 {
 	this->boundingBox.center = center;
 	this->boundingBox.halfDimension = extents;
+}
+
+void GLModel::DuplicateModel(FishBox * FSH_Loader, unsigned int modelID)
+{
+	transform = new GLTransform();
+	this->modelID = modelID;
+
+	for (unsigned int i = 0; i < FSH_Loader->ModelMeshCount(modelID); i++)
+	{
+		meshes.push_back(new GLMesh(FSH_Loader->MeshData(modelID, i), FSH_Loader->VertexData(modelID, i), FSH_Loader->IndexData(modelID, i), FSH_Loader->meshMaterial(modelID, i), FSH_Loader->meshTexture(modelID, i)));
+	}
+
+	FSHData::material * test = FSH_Loader->meshMaterial(modelID, 0);
+
 }
