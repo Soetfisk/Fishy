@@ -76,6 +76,15 @@
     <ClCompile Include="SeaWeedLeafs.cpp">
       <Filter>Source\Models\SpecialStaticMeshes</Filter>
     </ClCompile>
+    <ClCompile Include="ParticleComputeShader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleEmitter.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleHandler.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AABB.h">
@@ -168,6 +177,15 @@
     <ClInclude Include="GLNPC_PowerUpHandler.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="ParticleHandler.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleComputeShader.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleEmitter.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="blueFilter.glsl">
@@ -219,6 +237,21 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="blend_shape.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Particle.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Particle.geom">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Particle.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="ParticleProjectileComputeShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="ParticleTestShader.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

@@ -17,6 +17,7 @@
 #include "GLCollisionHandler.h"
 #include "GameState.h"
 #include "SeaWeedLeafs.h"
+#include "ParticleHandler.h"
 
 
 #define mSTATIC *shaders[MODELS]
@@ -34,6 +35,7 @@ private:
 		WAVY,
 		BORDER,
 		BLEND_SHAPE,
+		PARTICLE,
 		NUM_SHADERS
 	};
 	enum
@@ -118,6 +120,8 @@ private:
 	bool endGame = false;
 	bool winner = false;
 	GLOBAL_GameState* gameState;
+
+	ParticleHandler* particleHandler;
 
 private:
 	void Init();

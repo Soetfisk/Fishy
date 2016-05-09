@@ -13,6 +13,8 @@ public:
 
 	glm::vec3& Position();
 	glm::mat4 GetViewProjectionMatrix() const;
+	glm::mat4 GetViewMatrix() const;
+	glm::mat4 GetProjectionMatrix() const;
 	void Update(GLTransform transform, float deltaTime);
 	void SetInput(float x, float y);
 	void AddDistance(float dist);
