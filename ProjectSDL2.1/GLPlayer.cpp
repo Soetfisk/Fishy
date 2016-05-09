@@ -364,7 +364,7 @@ void GLPlayer::PlayerDash()
 		isDashing = true;
 		dashCurrentDuration = 0.0f;
 		dashCooldownCounter = 0.0f;
-		//lastForward = 32768.0f;
+		lastForward = 32768.0f;
 	}
 }
 
@@ -452,7 +452,7 @@ void GLPlayer::HandleDash(float & deltaTime)
 		{
 			dashOnCooldown = false;
 			dashCooldownCounter = 0.0f;
-			//lastForward = 0.0f;
+			lastForward = 0.0f;
 		}
 	}
 }

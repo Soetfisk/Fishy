@@ -45,12 +45,8 @@
     <ClCompile Include="ParticleEmitter.cpp" />
     <ClCompile Include="ParticleHandler.cpp" />
     <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="SeaWeedLeafs.cpp" />
-    <ClCompile Include="SpecialStaticMesh.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\SeaWeedLeafs.h" />
-    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\SpecialStaticMesh.h" />
     <ClInclude Include="GLMeshBS.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GLNPC_BlueTang.h" />
