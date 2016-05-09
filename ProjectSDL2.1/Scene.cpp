@@ -43,9 +43,9 @@ void Scene::Init()
 	this->frameBuffer5->UnbindFrameBuffer();
 
 	// computeshader off cus crash
-	filterComputeShader = new FilterComputeShader("derp");
+	/*filterComputeShader = new FilterComputeShader("derp");
 	filterComputeShader->LoadShader("blueFilter.glsl");
-	filterComputeShader->CreateShader(filterComputeShader->LoadShader("blueFilter.glsl"));
+	filterComputeShader->CreateShader(filterComputeShader->LoadShader("blueFilter.glsl"));*/
 
 	// lights
 	PointLight light1;
@@ -231,7 +231,7 @@ Scene::~Scene(){
 	delete this->frameBuffer3;
 	delete this->frameBuffer4;
 	delete this->frameBuffer5;
-	delete this->filterComputeShader;
+	//delete this->filterComputeShader;
 	for (size_t i = 0; i < models.size(); i++)
 	{
 		delete models.at(i);

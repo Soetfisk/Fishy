@@ -70,13 +70,13 @@ void GLGUIHandler::Draw()
 	case ACTIVE:
 		for (int i = 0; i < NUM_TEXTS - 2; i++)
 		{
-			gui->RenderText(*shader, printText[i], textPos[i][0], textPos[i][1], textScale[i], textColor[i]);
+			gui->OptimizedRenderText(*shader, printText[i], textPos[i][0], textPos[i][1], textScale[i], textColor[i]);
 		}
 		break;
 	case OVER:
 		for(int i = 0; i < NUM_TEXTS; i++)
 		{
-			gui->RenderText(*shader, printText[i], textPos[i][0], textPos[i][1], textScale[i], textColor[i]);
+			gui->OptimizedRenderText(*shader, printText[i], textPos[i][0], textPos[i][1], textScale[i], textColor[i]);
 		}
 		break;
 	}
