@@ -31,6 +31,12 @@ glm::mat4 GLCamera::GetViewProjectionMatrix() const
 {
 	return m_perspective * glm::lookAt(m_position, m_position + m_forward, m_up);
 }
+glm::mat4 GLCamera::GetViewMatrix() const {
+	return glm::lookAt(m_position, m_position + m_forward, m_up);
+}
+glm::mat4 GLCamera::GetProjectionMatrix() const {
+	return m_perspective;
+}
 //Processes lastX & lastY and adds them to pitch and angleAroundPlayer
 void GLCamera::ProcessInput(float x, float y, float deltaTime)
 {

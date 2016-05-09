@@ -22,7 +22,6 @@ GLGUIHandler::GLGUIHandler(GLShader* shader, GUI* textToScreen)
 	InitTextureInfo();
 }
 
-
 GLGUIHandler::~GLGUIHandler()
 {
 	if (deleteGUI)
@@ -113,6 +112,16 @@ void GLGUIHandler::ResetPlayer1()
 	textStart[PLAYER1] = "Fish1 ";
 	textEnd[PLAYER1] = " food";
 	printText[PLAYER1] = textStart[PLAYER1] + std::to_string(score[PLAYER1]) + textEnd[PLAYER1];
+
+	// Player1 Power Up
+	textScale[P1POWERUP] = 0.5f;
+	textColor[P1POWERUP] = glm::vec3(0, 1, 0);
+	textStart[P1POWERUP] = "Power up: ";
+	p1CurrentPowerUp = PlayerPowerUpText::NOTHING;
+	textEnd[P1POWERUP] = "nothing";
+	printText[P1POWERUP] = textStart[P1POWERUP] + textEnd[P1POWERUP];
+	textPos[P1POWERUP][0] = textPos[PLAYER1][0];
+	textPos[P1POWERUP][1] = textPos[PLAYER1][1] - gui->GetTextHeight(printText[P1POWERUP], textScale[P1POWERUP]) - POWER_UP_OFFSET;
 }
 
 int GLGUIHandler::GetScorePlayer1()
@@ -125,6 +134,12 @@ void GLGUIHandler::Player1Won()
 	currentState = OVER;
 	textPos[WINNER][1] += window::QUARTER_HEIGHT;
 	textPos[LOSER][1] -= window::QUARTER_HEIGHT;
+}
+
+void GLGUIHandler::Player1SetPowerUp(PlayerPowerUpText powerUp)
+{
+	textEnd[P1POWERUP] = powerUpStringMap[powerUp];
+	printText[P1POWERUP] = textStart[P1POWERUP] + textEnd[P1POWERUP];
 }
 
 void GLGUIHandler::AddScorePlayer2(int addVal)
@@ -158,6 +173,15 @@ void GLGUIHandler::ResetPlayer2()
 	textStart[PLAYER1] = "Fish1 ";
 	textEnd[PLAYER1] = " food";
 	printText[PLAYER1] = textStart[PLAYER1] + std::to_string(score[PLAYER1]) + textEnd[PLAYER1];
+
+	// Player2 Power Up
+	textPos[P2POWERUP][0] = textPos[PLAYER2][0];
+	textPos[P2POWERUP][1] = textPos[PLAYER2][1] + gui->GetTextHeight(printText[PLAYER2], textScale[PLAYER2]) + POWER_UP_OFFSET;
+	textScale[P2POWERUP] = 0.5f;
+	textColor[P2POWERUP] = glm::vec3(0, 1, 0);
+	textStart[P2POWERUP] = "Power up: ";
+	textEnd[P2POWERUP] = powerUpStringMap[PlayerPowerUpText::NOTHING];
+	printText[P2POWERUP] = textStart[P2POWERUP] + textEnd[P2POWERUP];
 }
 
 int GLGUIHandler::GetScorePlayer2()
@@ -170,6 +194,12 @@ void GLGUIHandler::Player2Won()
 	currentState = OVER;
 	textPos[WINNER][1] -= window::QUARTER_HEIGHT;
 	textPos[LOSER][1] += window::QUARTER_HEIGHT;
+}
+
+void GLGUIHandler::Player2SetPowerUp(PlayerPowerUpText powerUp)
+{
+	textEnd[P2POWERUP] = powerUpStringMap[powerUp];
+	printText[P2POWERUP] = textStart[P2POWERUP] + textEnd[P2POWERUP];
 }
 
 void GLGUIHandler::ResetTime()
@@ -250,6 +280,26 @@ void GLGUIHandler::InitTextureInfo()
 	printText[FPS] = "";
 	textPos[FPS][0] = window::WIDTH;
 	textPos[FPS][1] = window::HEIGHT - 40;
+
+	// PLAYER1 POWER UP
+	textScale[P1POWERUP] = 0.5f;
+	textColor[P1POWERUP] = glm::vec3(0, 1, 0);
+	textStart[P1POWERUP] = "Power up: ";
+	p1CurrentPowerUp = PlayerPowerUpText::NOTHING;
+	textEnd[P1POWERUP] = "nothing";
+	printText[P1POWERUP] = textStart[P1POWERUP] + textEnd[P1POWERUP];
+	textPos[P1POWERUP][0] = textPos[PLAYER1][0];
+	textPos[P1POWERUP][1] = textPos[PLAYER1][1] - gui->GetTextHeight(printText[P1POWERUP], textScale[P1POWERUP]) - POWER_UP_OFFSET;
+
+	// PLAYER2 POWER UP
+	textPos[P2POWERUP][0] = textPos[PLAYER2][0];
+	textPos[P2POWERUP][1] = textPos[PLAYER2][1] + gui->GetTextHeight(printText[PLAYER2], textScale[PLAYER2]) + POWER_UP_OFFSET;
+	textScale[P2POWERUP] = 0.5f;
+	textColor[P2POWERUP] = glm::vec3(0, 1, 0);
+	textStart[P2POWERUP] = "Power up: ";
+	p2CurrentPowerUp = PlayerPowerUpText::NOTHING;
+	textEnd[P2POWERUP] = "nothing";
+	printText[P2POWERUP] = textStart[P2POWERUP] + textEnd[P2POWERUP];
 }
 
 void GLGUIHandler::Reset()
@@ -257,17 +307,34 @@ void GLGUIHandler::Reset()
 	currentState = ACTIVE;
 
 	// Player1
-	ResetScorePlayer1();
+	ResetPlayer1();
 
 	// Player2
-	ResetScorePlayer2();
+	ResetPlayer2();
 
 	// Time
 	ResetTime();
 
 	// Winner
+	printText[WINNER] = "Won!";
+	textPos[WINNER][0] = (float)(window::HALF_WIDTH - (gui->GetTextLenght(printText[WINNER], textScale[WINNER]) * 0.5));
 	textPos[WINNER][1] = window::HALF_HEIGHT - 20;
 
 	// Loser
+	printText[LOSER] = "Lost!";
+	textPos[LOSER][0] = (float)(window::HALF_WIDTH - (gui->GetTextLenght(printText[LOSER], textScale[LOSER]) * 0.5));
 	textPos[LOSER][1] = window::HALF_HEIGHT - 20;
+}
+
+void GLGUIHandler::Tie()
+{
+	currentState = OVER;
+	
+	printText[WINNER] = "Tie!";
+	textPos[WINNER][0] = (float)(window::HALF_WIDTH - (gui->GetTextLenght(printText[WINNER], textScale[WINNER]) * 0.5));
+	textPos[WINNER][1] -= window::QUARTER_HEIGHT;
+	
+	printText[LOSER] = "Tie!";
+	textPos[LOSER][0] = (float)(window::HALF_WIDTH - (gui->GetTextLenght(printText[LOSER], textScale[LOSER]) * 0.5));
+	textPos[LOSER][1] += window::QUARTER_HEIGHT;
 }

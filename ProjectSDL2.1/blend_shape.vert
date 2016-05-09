@@ -11,7 +11,8 @@ out vec3 geom_worldpos;
 out vec3 geom_ViewPos;
 
 uniform mat4 TransformMatrix;
-uniform mat4 ProjectionViewMatrix;
+uniform mat4 ProjectionMatrix;
+uniform mat4 ViewMatrix;
 uniform vec3 ViewPos;
 uniform int BlendShapeCount;
 uniform float Weights[10];
@@ -54,7 +55,7 @@ void main()
 		finalPose += blendShape[i] * (Weights[i]/sum_w);
 	}
 
-	gl_Position = ProjectionViewMatrix * TransformMatrix * vec4(finalPose, 1);
+	gl_Position = ProjectionMatrix * ViewMatrix * TransformMatrix * vec4(finalPose, 1);
 
 	geom_uv = texCoord;
 	geom_normal = normalize(mat3(TransformMatrix) * normal);
