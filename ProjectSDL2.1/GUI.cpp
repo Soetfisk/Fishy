@@ -115,7 +115,7 @@ void GUI::InitTextureAtlas(std::string fontName)
 	glGenTextures(1, &atlasTexture);
 	glBindTexture(GL_TEXTURE_2D, atlasTexture);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);	// Disable byte-alignment restriction
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, w, h, 0, GL_ALPHA, GL_UNSIGNED_BYTE, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, w, h, 0, GL_RED, GL_UNSIGNED_BYTE, 0);
 
 	int x = 0;
 	for (int c = 32; c < 128; c++)
