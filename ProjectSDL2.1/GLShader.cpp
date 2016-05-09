@@ -30,7 +30,8 @@ GLShader::GLShader(const std::string& fileName, const bool& geometry)
 	CheckShaderError(m_program, GL_LINK_STATUS, true);
 
 	m_uniforms[TRANSFROM_U] =	glGetUniformLocation(m_program, "TransformMatrix");
-	m_uniforms[PROJVIEW_U] =	glGetUniformLocation(m_program, "ProjectionViewMatrix");
+	m_uniforms[PROJECTION_U] = glGetUniformLocation(m_program, "ProjectionMatrix");
+	m_uniforms[VIEW_U] = glGetUniformLocation(m_program, "ViewMatrix");
 	m_uniforms[VIEWPOS_U] =		glGetUniformLocation(m_program, "ViewPos");
 	GLuint d = glGetUniformLocation(m_program, "diffuseTexture");
 
@@ -46,9 +47,12 @@ void GLShader::Bind()
 
 void GLShader::Update(GLCamera& camera)
 {
-	glm::mat4 projView = camera.GetViewProjectionMatrix();
+	glm::mat4 view_matrix = camera.GetViewMatrix();
+	glm::mat4 proj_matrix = camera.GetProjectionMatrix();
 	glm::vec3 viewPos = camera.Position();
-	glUniformMatrix4fv(m_uniforms[PROJVIEW_U], 1, GL_FALSE, glm::value_ptr(projView));
+	glUniformMatrix4fv(m_uniforms[VIEW_U], 1, GL_FALSE, glm::value_ptr(view_matrix));
+	glUniformMatrix4fv(m_uniforms[PROJECTION_U], 1, GL_FALSE, glm::value_ptr(proj_matrix));
+
 	glUniform3fv(m_uniforms[VIEWPOS_U], 1, glm::value_ptr(viewPos));
 }
 

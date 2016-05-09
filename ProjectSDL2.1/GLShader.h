@@ -28,7 +28,8 @@ private:
 	enum
 	{
 		TRANSFROM_U,
-		PROJVIEW_U,
+		PROJECTION_U,
+		VIEW_U,
 		VIEWPOS_U,
 
 		NUM_UNIFORMS
