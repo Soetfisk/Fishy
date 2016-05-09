@@ -17,30 +17,6 @@ GLPlayer::GLPlayer() : GLModel() //NEVER USE
 	this->currentPowerUp = POWER_NEUTRAL;
 }
 
-GLPlayer::GLPlayer(FishBox* FSH_Loader, char* filePath) : GLModel(FSH_Loader, filePath) //DEPRICATED USE AT OWN RISK
-{
-	this->m_camera;
-	this->m_projectileHandler = new GLProjectileHandler(FSH_Loader, 2, 1, 20, 10.0f);
-	this->m_velocity = glm::vec3(0);
-}
-
-GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID) : GLModel(FSH_Loader, modelID)
-{
-	this->m_camera;
-	this->m_projectileHandler = new GLProjectileHandler(FSH_Loader, 2, 1, 20, 20.0f);
-	this->m_velocity = glm::vec3(0);
-	
-	this->dashCurrentDuration = 0.0f;
-	this->dashCooldownCounter = 0;
-	this->isDashing = false;
-	this->dashOnCooldown = false;
-	blendWeights = new float[NUM_ANIMATION];
-	for (int i = 0; i < NUM_ANIMATION; i++)
-	{
-		blendWeights[i] = 0.0f;
-		animationFactors[i] = 0.0f;
-	}
-}
 
 GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int projectileModelID) : GLModel(FSH_Loader, modelID)
 {
@@ -54,7 +30,10 @@ GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int proj
 	this->dashOnCooldown = false;
 	blendWeights = new float[NUM_ANIMATION];
 	for (int i = 0; i < NUM_ANIMATION; i++)
+	{
 		blendWeights[i] = 0.0f;
+		animationFactors[i] = 0.0f;
+	}
 }
 
 
@@ -241,10 +220,10 @@ void GLPlayer::moveAnimation(float deltaTime, float speedFactor)
 {
 	float speed = abs(deltaTime * speedFactor), y;
 
-	//static float x = 0.0f;
 	animationFactors[AONE] += speed;
 
 	y = sin(animationFactors[AONE]);
+	//y = sin(animationFactors[AONE]);
 	if (y > 0.0)
 		this->blendWeights[ASIX] = y;
 	if (y < 0.0)
@@ -341,11 +320,12 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 
 	if (lastForward > DEADZONE)
 		moveAnimation(deltaTime, sqrt(glm::dot(m_velocity, m_velocity)));
-
+	else 
+		idleAnimation(deltaTime, 2.0f);
 	CalcVelocity(deltaTime);
 	HandleDash(deltaTime);
 
-	idleAnimation(deltaTime, 2.0f);
+	
 
 	//camera update
 	this->m_camera.Update(this->GetTransform(), deltaTime);
