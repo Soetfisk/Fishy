@@ -5,9 +5,17 @@
 #include "Scene.h"
 #include "Menu.h"
 
+
 class GameMain
 {
 private:
+	enum
+	{
+		BACKGROUND,
+		HIGH,
+
+		NUM_MUSIC
+	};
 	GLOBAL_GameState gameState;
 	int prevTime;
 	int currentTime;

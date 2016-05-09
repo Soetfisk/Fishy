@@ -26,6 +26,10 @@ public:
 	void Draw(GLShader& shader);																// Draw all active Projectiles
 	std::vector<GLProjectile*>& GetProjectiles();
 	std::vector<GLProjectile*> GetActiveProjectiles();
+	bool CanShoot()
+	{
+		return !cooldown;
+	}
 
 private:
 	const float SHOTGUN_OFFSET = 1.0f;

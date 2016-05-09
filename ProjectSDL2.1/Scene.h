@@ -18,6 +18,8 @@
 #include "GameState.h"
 #include "SeaWeedLeafs.h"
 #include "ParticleHandler.h"
+#include <time.h>
+#include <SDL2\SDL_mixer.h>
 
 
 #define mSTATIC *shaders[MODELS]
@@ -68,6 +70,14 @@ private:
 		glm::vec3 diffuse;
 		glm::vec3 specular;
 	};
+	enum
+	{
+		BACKGROUND_MUSIC,
+
+		NUM_MUSIC
+	};
+	
+	Mix_Music *music[NUM_MUSIC];
 	//todo implement
 	//std::vector<Model> models;
 	FishBox FSH_Loader;
