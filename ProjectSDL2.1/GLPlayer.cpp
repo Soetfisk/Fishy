@@ -4,6 +4,7 @@
 
 GLPlayer::GLPlayer() : GLModel() //NEVER USE
 {
+	sound[SHOOT_SOUND] = Mix_LoadWAV("./res/Sounds/shoot.wav");
 	this->m_camera;
 	this->m_projectileHandler = new GLProjectileHandler();
 	this->m_velocity = glm::vec3(0);
@@ -19,6 +20,7 @@ GLPlayer::GLPlayer() : GLModel() //NEVER USE
 
 GLPlayer::GLPlayer(FishBox* FSH_Loader, char* filePath) : GLModel(FSH_Loader, filePath) //DEPRICATED USE AT OWN RISK
 {
+	sound[SHOOT_SOUND] = Mix_LoadWAV("./res/Sounds/shoot.wav");
 	this->m_camera;
 	this->m_projectileHandler = new GLProjectileHandler(FSH_Loader, 2, 1, 20, 10.0f);
 	this->m_velocity = glm::vec3(0);
@@ -26,6 +28,7 @@ GLPlayer::GLPlayer(FishBox* FSH_Loader, char* filePath) : GLModel(FSH_Loader, fi
 
 GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID) : GLModel(FSH_Loader, modelID)
 {
+	sound[SHOOT_SOUND] = Mix_LoadWAV("./res/Sounds/shoot.wav");
 	this->m_camera;
 	this->m_projectileHandler = new GLProjectileHandler(FSH_Loader, 2, 1, 20, 20.0f);
 	this->m_velocity = glm::vec3(0);
@@ -41,6 +44,7 @@ GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID) : GLModel(FSH_Loa
 
 GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int projectileModelID) : GLModel(FSH_Loader, modelID)
 {
+	sound[SHOOT_SOUND] = Mix_LoadWAV("./res/Sounds/shoot.wav");
 	this->m_camera;
 	this->m_projectileHandler = new GLProjectileHandler(FSH_Loader, projectileModelID, 1, 2, 20.0f);
 	this->m_velocity = glm::vec3(0);
@@ -57,6 +61,10 @@ GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int proj
 
 GLPlayer::~GLPlayer()
 {
+	for (int i = 0; i < NUM_SOUND; i++)
+	{
+		Mix_FreeChunk(sound[i]);
+	}
 	delete this->m_projectileHandler;
 	delete[] this->blendWeights;
 }
@@ -337,6 +345,10 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 
 void GLPlayer::PlayerShoot()
 {
+	if (this->m_projectileHandler->CanShoot())
+	{
+		Mix_PlayChannel(-1, sound[SHOOT_SOUND], 0);
+	}
 	this->m_projectileHandler->Shoot(GetForward(), transform->m_pos, transform->m_rot, m_velocity, GetRight(), GetUp());
 }
 void GLPlayer::PlayerDash()

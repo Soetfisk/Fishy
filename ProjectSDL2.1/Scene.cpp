@@ -81,6 +81,7 @@ void Scene::Init()
 	this->endTimer = 60;
 	this->endScore = 1000;
 
+	
 
 }
 
@@ -194,6 +195,9 @@ void Scene::AddScore()
 }
 
 Scene::Scene(GLOBAL_GameState* gameState) {
+	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
+	Mix_VolumeMusic(20);
+	music[BACKGROUND_MUSIC] = Mix_LoadMUS("./res/Sounds/background.wav");
 	LoadModels();
 	Init();
 
@@ -247,9 +251,24 @@ Scene::~Scene(){
 	}
 
 	delete guih;
+
+	for (int i = 0; i < NUM_MUSIC; i++)
+	{
+		Mix_FreeMusic(music[i]);
+	}
+	Mix_CloseAudio();
 }
 
 void Scene::Update(float& deltaTime) {
+
+	if (Mix_PlayingMusic() == 0)
+	{
+		srand(time(0));
+		int num = rand() % NUM_MUSIC;
+		//Play the music
+		Mix_PlayMusic(music[num], -1);
+	}
+
 	this->deltaTime = deltaTime;
 
 	guih->Update(deltaTime);

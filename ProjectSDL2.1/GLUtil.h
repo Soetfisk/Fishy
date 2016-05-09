@@ -19,6 +19,7 @@
 
 //SDL Includes
 #include <SDL2\SDL.h>
+#include <SDL2\SDL_mixer.h>
 
 //FSH includes
 #include <FishBox.h>
