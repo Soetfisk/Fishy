@@ -68,10 +68,10 @@ void ParticleEmitter::instantiatePlayerFollow() {
 
 void ParticleEmitter::instantiateStaticStream() {
 	this->nrMaxParticles = 500;
-	this->emiterSpawnTDelay = .3f;
+	this->emiterSpawnTDelay = .6f;
 
 	this->particle.p_pos = this->positionEmitter;
-	this->particle.p_lifeTime = 5;
+	this->particle.p_lifeTime = 10;
 	this->particle.p_acc = glm::vec4(0, 1, 0, 0);
 	this->particle.p_scale = .05;
 	this->particle.p_speed = 1;
@@ -213,13 +213,13 @@ Particle ParticleEmitter::generateParticleData() {
 	switch (this->type)
 	{
 	case EmitterType::STATICSTREAM:
-		data.x = RNG::range(-0.7f, .7f);
+		data.x = RNG::range(-0.4f, .4f);
 		data.y= RNG::range(0.f, .4f);
-		data.z = RNG::range(-.7f, .7f);
+		data.z = RNG::range(-.4f, .4f);
 
 		returnData.p_acc = glm::vec4(returnData.p_acc.x + data.x, returnData.p_acc.y + data.y, returnData.p_acc.z + data.z, 0);
-		//returnData.p_vel = glm::vec4(returnData.p_acc.x + data.x, returnData.p_acc.y + data.y, returnData.p_acc.z + data.z, 0);
-		returnData.p_scale = RNG::range(.25f, .35f);
+		returnData.p_vel = glm::vec4(returnData.p_vel.x + data.x, returnData.p_vel.y + data.y, returnData.p_vel.z + data.z, 0);
+		returnData.p_scale = RNG::range(1.f, 1.5f);
 		break;
 	case EmitterType::GOLDSTREAM:
 		returnData.p_acc = glm::vec4(RNG::range(-.5f, .5f), returnData.p_acc.y, RNG::range(-.5f, .5f), 0);
