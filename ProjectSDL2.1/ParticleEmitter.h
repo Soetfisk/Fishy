@@ -52,6 +52,8 @@ private:
 	float emiterTimeSinceLastParticle;
 	float emiterSpawnTDelay;
 	float emiterSpawnTCurrent;
+	float emiterCheckDeadTDelay;
+	float emiterCheckDeadTCurrent;
 
 
 	void updateParticles(const float& deltaTime);
@@ -62,7 +64,6 @@ private:
 	GLuint textureID;
 	GLTexture* tempTexture;
 
-	void instantiateSpawnBuffer();
 	void instantiateVertexData();
 	void killParticleAtIndex(int index, ParticleStruct *& particleDestroyList);
 	void swapData(int fromID, int destID, struct ParticleStruct* tempParticles);
@@ -74,7 +75,9 @@ private:
 
 	void instantiateStaticStream();
 	void instantiateGoldStream();
+	void instantiatePlayerFollow();
 	
+	void changeDirection(glm::vec4 dir);
 
 	Particle particle;
 
