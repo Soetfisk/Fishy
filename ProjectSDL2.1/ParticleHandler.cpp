@@ -8,8 +8,9 @@ ParticleHandler::ParticleHandler(GLShader* renderShader, FishBox *FSH_LoaderRefe
 
 	this->textures = new FSHData::texture*[EmitterType::NREMITERTYPE];
 
-	this->textures[EmitterType::STATICSTREAM] = this->FSH_LoaderReference->loadTexure("res/BubbleTest.png");
-	this->textures[EmitterType::GOLDSTREAM] = this->FSH_LoaderReference->loadTexure("res/Star.png");
+	this->textures[EmitterType::STATICSTREAM] = this->FSH_LoaderReference->loadTexure("./res/BubbleTest.png");
+	this->textures[EmitterType::GOLDSTREAM] = this->FSH_LoaderReference->loadTexure("./res/Star.png");
+	this->textures[EmitterType::PLAYERFOLLOW] = this->FSH_LoaderReference->loadTexure("./res/BubbleTest.png");
 
 	
 }
@@ -20,7 +21,7 @@ ParticleHandler::~ParticleHandler(){
 		delete emiters.at(i);
 	}
 	FSH_LoaderReference->clean();
-	for (int i = 0; i < EmitterType::NREMITERTYPE - 1; i++) {
+	for (int i = 0; i < EmitterType::NREMITERTYPE; i++) {
 		delete textures[i];
 	}
 	delete[] textures;

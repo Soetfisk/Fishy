@@ -82,11 +82,14 @@ void Scene::Init()
 	this->endTimer = 60;
 	this->endScore = 1000;
 
-	//particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
+	particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
 
-	//for (int z = 0; z < 1; z++) {
-	//	particleHandler->AddEmiter(EmitterType::STATICSTREAM, glm::vec4(0, 1, 3 + (z % 2 == 0) ? z * 2 : -z * 2, 1));
-	//}
+	for (int z = 0; z < 5; z++) {
+		for (int x = 0; x < 5; x++) {
+			particleHandler->AddEmiter(EmitterType::STATICSTREAM, glm::vec4((float)x* RNG::range(-40.f, 40.f), -50.f, (float)z* RNG::range(-60.f, 60.f), 1));
+		}
+		
+	}
 	//for (int z = 0; z < 3; z++) {
 	//	particleHandler->AddEmiter(EmitterType::GOLDSTREAM, glm::vec4(2, 1, 3 + (z % 2 == 0) ? z * 2 : -z * 2, 1));
 	//}
@@ -256,7 +259,7 @@ Scene::~Scene(){
 	}
 
 	delete guih;
-	//delete particleHandler;
+	delete particleHandler;
 }
 
 void Scene::Update(float& deltaTime) {
@@ -264,9 +267,9 @@ void Scene::Update(float& deltaTime) {
 
 	guih->Update(deltaTime);
 
-	this->collisionHandler.CheckCollisions(deltaTime);
+	//this->collisionHandler.CheckCollisions(deltaTime);
 	this->AddScore();
-	//this->particleHandler->UpdateParticles(deltaTime);
+	this->particleHandler->UpdateParticles(deltaTime);
 	for (size_t i = 0; i < this->NPCs.size(); i++)
 		this->NPCs.at(i)->NPCUpdate(deltaTime);
 
@@ -319,7 +322,7 @@ void Scene::DrawScene() {
 			specialStaticMeshes.at(i)->Draw(*shaders[MODELS]);
 		}
 
-		//this->particleHandler->DrawParticles(shaders[PARTICLE], players.at(i)->GetCamera());
+		this->particleHandler->DrawParticles(shaders[PARTICLE], players.at(i)->GetCamera());
 
 		this->frameBuffer->UnbindFrameBuffer();
 		this->frameBuffer2->BindFrameBuffer();
