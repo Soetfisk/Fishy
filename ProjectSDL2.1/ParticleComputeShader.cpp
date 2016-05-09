@@ -24,15 +24,6 @@ void ParticleComputeShader::Initialize(EmitterType type, int nrMaxParticles, GLu
 	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT; // the invalidate makes a big difference when re-writing
 	particles = (struct ParticleStruct *) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, nrMaxParticles * sizeof(ParticleStruct), bufMask);
 
-	//for (float i = 0; i < nrMaxParticles; i++) {
-	//	int index = i;
-	//	particles[index].pos = glm::vec4(0 + ParticleSSBO%5, i, 3, 1);
-	//	particles[index].customVariables = glm::vec4(.2f, 5.f, .5f, 0); //Scale, Lifetime, Speed, IsAlive(1,0)
-	//	particles[index].velocity = glm::vec4(1, 0, 0, 0);
-	//	particles[index].emiterPosition = glm::vec4(0 + ParticleSSBO % 5, i, 3, 1);
-	//	particles[index].acceleration = glm::vec4(0.f, -.98f, 0.f,0);
-	//}
-
 	for (float i = 0; i < nrMaxParticles; i++) {
 		int index = i;
 		particles[index].pos = glm::vec4();
@@ -41,6 +32,8 @@ void ParticleComputeShader::Initialize(EmitterType type, int nrMaxParticles, GLu
 		particles[index].emiterPosition = glm::vec4();
 		particles[index].acceleration = glm::vec4();
 	}
+
+	//delete[]particles;
 
 	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 

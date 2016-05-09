@@ -94,7 +94,7 @@ void ParticleEmitter::updateParticles(const float& deltaTime) {
 	
 	if (nrActiveParticles > 0) {
 		int k = 0;
-		//checkDeadParticles();
+		checkDeadParticles();
 	}
 		
 }
@@ -265,7 +265,8 @@ void ParticleEmitter::instantiateVertexData() {
 
 ParticleEmitter::~ParticleEmitter()
 {
-	//delete emitterComputeShader;
+
+	delete emitterComputeShader;
 	//delete[]this->p_pos;
 	//delete[]this->p_scale;
 	//delete[]this->p_vel;

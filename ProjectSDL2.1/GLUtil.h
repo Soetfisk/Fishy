@@ -25,6 +25,17 @@
 
 //Structs
 
+//Particle
+enum EmitterType
+{
+	STATICSTREAM,
+	GOLDSTREAM,
+	PROJECTILE,
+
+	NREMITERTYPE
+};
+
+
 //WINDOW
 
 namespace window {

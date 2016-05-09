@@ -84,12 +84,12 @@ void Scene::Init()
 
 	particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
 
-	for (int z = 0; z < 20; z++) {
+	for (int z = 0; z < 1; z++) {
 		particleHandler->AddEmiter(EmitterType::STATICSTREAM, glm::vec4(0, 1, 3 + (z % 2 == 0) ? z * 2 : -z * 2, 1));
 	}
-	for (int z = 0; z < 3; z++) {
-		particleHandler->AddEmiter(EmitterType::GOLDSTREAM, glm::vec4(2, 1, 3 + (z % 2 == 0) ? z * 2 : -z * 2, 1));
-	}
+	//for (int z = 0; z < 3; z++) {
+	//	particleHandler->AddEmiter(EmitterType::GOLDSTREAM, glm::vec4(2, 1, 3 + (z % 2 == 0) ? z * 2 : -z * 2, 1));
+	//}
 
 }
 
@@ -256,6 +256,7 @@ Scene::~Scene(){
 	}
 
 	delete guih;
+	delete particleHandler;
 }
 
 void Scene::Update(float& deltaTime) {

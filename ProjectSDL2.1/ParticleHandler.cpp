@@ -10,6 +10,8 @@ ParticleHandler::ParticleHandler(GLShader* renderShader, FishBox *FSH_LoaderRefe
 
 	this->textures[EmitterType::STATICSTREAM] = this->FSH_LoaderReference->loadTexure("res/BubbleTest.png");
 	this->textures[EmitterType::GOLDSTREAM] = this->FSH_LoaderReference->loadTexure("res/Star.png");
+
+	
 }
 
 
@@ -17,6 +19,12 @@ ParticleHandler::~ParticleHandler(){
 	for (int i = 0; i < this->emiters.size(); i++) {
 		delete emiters.at(i);
 	}
+	FSH_LoaderReference->clean();
+	for (int i = 0; i < EmitterType::NREMITERTYPE - 1; i++) {
+		delete textures[i];
+	}
+	delete[] textures;
+	
 }
 
 void ParticleHandler::DrawParticles(GLShader* shader, GLCamera& camera) {
