@@ -16,7 +16,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 {
 	//_CrtDumpMemoryLeaks();
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 	InitDosConsole();
 
 	//Project Setup:

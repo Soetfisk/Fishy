@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GLMesh.h"
+#include "GLMeshBS.h"
 #include "GLShader.h"
 #include "AABB.h"
 
@@ -23,6 +24,7 @@ public:
 	AABB GetBoundingBox();
 	void SetBoundingBox(glm::vec3 center, glm::vec3 extents);
 protected:
+	void DuplicateModel(FishBox* FSH_Loader, unsigned int modelID);
 	std::vector<GLMesh*> meshes;
 	GLTransform* transform;
 	int modelID;

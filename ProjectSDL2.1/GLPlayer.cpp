@@ -34,6 +34,9 @@ GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID) : GLModel(FSH_Loa
 	this->dashCooldownCounter = 0;
 	this->isDashing = false;
 	this->dashOnCooldown = false;
+	blendWeights = new float[NUM_ANIMATION];
+	for (int i = 0; i < NUM_ANIMATION; i++)
+		blendWeights[i] = 0.0f;
 }
 
 GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int projectileModelID) : GLModel(FSH_Loader, modelID)
@@ -46,15 +49,19 @@ GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int proj
 	this->dashCooldownCounter = 0;
 	this->isDashing = false;
 	this->dashOnCooldown = false;
+	blendWeights = new float[NUM_ANIMATION];
+	for (int i = 0; i < NUM_ANIMATION; i++)
+		blendWeights[i] = 0.0f;
 }
 
 
 GLPlayer::~GLPlayer()
 {
 	delete this->m_projectileHandler;
+	delete[] this->blendWeights;
 }
 
-//handles events sent too the player
+//handles events sent too the player // movement.x = deltaTime
 void GLPlayer::Update(Events state, glm::vec3 movementVec)
 {
 	switch (state)
@@ -72,10 +79,10 @@ void GLPlayer::Update(Events state, glm::vec3 movementVec)
 		this->PlayerDash();
 		break;
 	case JOY_ADDED:
-		this->AddController(movementVec.x);
+		this->AddController((int)movementVec.x);
 		break;
 	case JOY_REMOVED:
-		this->RemoveController(movementVec.x);
+		this->RemoveController((int)movementVec.x);
 		break;
 	case NOTHING:
 		this->PlayerUpdate(movementVec.x);
@@ -94,6 +101,11 @@ GLCamera GLPlayer::GetCamera()
 void GLPlayer::TestDraw(GLShader & shader)
 {
 	this->Draw(shader);
+	
+}
+
+void GLPlayer::DrawProjectile(GLShader & shader)
+{
 	this->m_projectileHandler->Draw(shader);
 }
 
@@ -108,14 +120,14 @@ void GLPlayer::HandleCollision(PlayerStates state, float deltaTime, glm::vec3 mo
 		if (momentum.x > 0)
 		{
 			this->transform->SetScale(this->transform->GetScale() + (deltaTime / 4));
-			totalPoints += 100 * momentum.x;
-			currentPoints += 100 * momentum.x;
+			totalPoints += (int)(100 * momentum.x);
+			currentPoints += (int)(100 * momentum.x);
 		}
 		if (momentum.x < 0 && (totalPoints + 100 * momentum.x) >= 0)
 		{
 			this->transform->SetScale(this->transform->GetScale() + (deltaTime / 4));
-			totalPoints += 100 * momentum.x;
-			currentPoints += 100 * momentum.x;
+			totalPoints += (int)(100 * momentum.x);
+			currentPoints += (int)(100 * momentum.x);
 			std::cout << totalPoints << " : " << 100 * momentum.x << std::endl;
 		}
 		break;
@@ -145,6 +157,7 @@ void GLPlayer::SetPowerUp(GLPlayer::PowerUps power)
 {
 	this->currentPowerUp = power;
 	this->HandlePowerUps();
+	this->powerUpTimer = 0.0f;
 }
 
 void GLPlayer::SetRandomPowerUp()
@@ -152,6 +165,7 @@ void GLPlayer::SetRandomPowerUp()
 	int random = RNG::range(0,2);
 	this->currentPowerUp = this->getPowerUpByNumber(random);
 	this->HandlePowerUps();
+	this->powerUpTimer = 0.0f;
 }
 
 void GLPlayer::ResetPlayer()
@@ -171,6 +185,8 @@ void GLPlayer::ResetPlayer()
 	this->lastForward = 0;
 	this->lastHorizontal = 0;
 	this->lastVertical = 0;
+
+	this->powerUpTimer = 0.0f;
 }
 
 int GLPlayer::GetPoints()
@@ -209,6 +225,32 @@ int GLPlayer::GetPoints()
 int GLPlayer::GetTotalPoints()
 {
 	return this->totalPoints;
+}
+
+void GLPlayer::Update(float dt)
+{
+	this->deltaTime = dt;
+	this->PowerUpCoolDown();
+}
+
+
+void GLPlayer::moveAnimation(float deltaTime, float speedFactor)
+{
+	static bool left = true, stop = false;
+	float speed = abs(deltaTime * speedFactor), y;
+
+	static float x = 0.0f;
+	x += speed;
+
+	y = sin(x);
+	if (y > 0.0)
+		blendWeights[ASIX] = y;
+	if (y < 0.0)
+		blendWeights[ASEVEN] = abs(y);
+	//if (fabs(x - PI) <= FLT_EPSILON)
+	//	x = 0.0;
+
+	blendWeights[AFIVE] = 1.0f;
 }
 
 //adds a controller too the player
@@ -268,7 +310,7 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	if (this->transform->m_rot.x < -glm::radians(MAX_ANGLE))
 		this->transform->m_rot.x = -glm::radians(MAX_ANGLE);
 
-	float maxAngle = 0.785398;
+	float maxAngle = 0.785398f;
 
 	if (this->meshes[0]->GetTransform().m_rot.z <= maxAngle && this->meshes[0]->GetTransform().m_rot.z >= -maxAngle)
 	{
@@ -284,6 +326,9 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	CalcVelocity(deltaTime);
 	HandleDash(deltaTime);
 
+	//this->blendWeights[AONE] = 1.0f; //ANIMATION TEST
+	//this->blendWeights[ATHREE] = 1.0f;
+	this->moveAnimation(deltaTime, 2.75);
 	//camera update
 	this->m_camera.Update(this->GetTransform(), deltaTime);
 
@@ -302,6 +347,23 @@ void GLPlayer::PlayerDash()
 		dashCurrentDuration = 0.0f;
 		dashCooldownCounter = 0.0f;
 		lastForward = 32768.0f;
+	}
+}
+
+void GLPlayer::PowerUpCoolDown()
+{
+	if (this->currentPowerUp != PowerUps::POWER_NEUTRAL)
+	{
+		this->powerUpTimer += this->deltaTime;
+
+
+		if (this->powerUpTimer >= 5)
+		{
+			int k = 0;
+			this->currentPowerUp = PowerUps::POWER_NEUTRAL;
+			this->powerUpTimer = 0.0f;
+			this->HandlePowerUps();
+		}
 	}
 }
 

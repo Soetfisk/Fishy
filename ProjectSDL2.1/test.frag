@@ -24,7 +24,6 @@ void main()
 	vec3 V = normalize(frag_ViewPos - frag_worldpos); // pos to camera
 	vec3 L = normalize(lightPos - frag_worldpos); // pos to light
 	
-
 	float dist = gl_FragCoord.z / gl_FragCoord.w; // distance
 
 	color4 = vec4(dist,0,0,1);

@@ -42,7 +42,7 @@ void GLGUIHandler::Update(float dt)
 			time++;
 			newSec = 0;
 			printText[TIME] = textStart[TIME] + std::to_string(time) + textEnd[TIME];
-			textPos[TIME][0] = window::HALF_WIDTH - (gui->GetTextLenght(printText[TIME], textScale[TIME]) * 0.5);
+			textPos[TIME][0] = (float)(window::HALF_WIDTH - (gui->GetTextLenght(printText[TIME], textScale[TIME]) * 0.5));
 
 			// Update FPS
 			printText[FPS] = textStart[FPS] + std::to_string((int)(1 / dt));
@@ -177,7 +177,7 @@ void GLGUIHandler::ResetTime()
 	time = 0;
 	newSec = 0;
 	printText[TIME] = textStart[TIME] + std::to_string(time) + textEnd[TIME];
-	textPos[TIME][0] = (window::WIDTH * 0.5) - (gui->GetTextLenght(printText[TIME], textScale[TIME]) * 0.5);
+	textPos[TIME][0] = (float)((window::WIDTH * 0.5) - (gui->GetTextLenght(printText[TIME], textScale[TIME]) * 0.5));
 }
 
 int GLGUIHandler::GetTime()
@@ -232,19 +232,19 @@ void GLGUIHandler::InitTextureInfo()
 	// Winner
 	printText[WINNER] = "Won!";
 	textScale[WINNER] = 2;
-	textPos[WINNER][0] = window::HALF_WIDTH - (gui->GetTextLenght(printText[WINNER], textScale[WINNER]) * 0.5);
+	textPos[WINNER][0] = (float)(window::HALF_WIDTH - (gui->GetTextLenght(printText[WINNER], textScale[WINNER]) * 0.5));
 	textPos[WINNER][1] = window::HALF_HEIGHT - 20;
 	textColor[WINNER] = glm::vec3(0, 1, 0);
 
 	// Loser
 	printText[LOSER] = "Lost!";
 	textScale[LOSER] = 2;
-	textPos[LOSER][0] = window::HALF_WIDTH - (gui->GetTextLenght(printText[LOSER], textScale[LOSER]) * 0.5);
+	textPos[LOSER][0] = (float)(window::HALF_WIDTH - (gui->GetTextLenght(printText[LOSER], textScale[LOSER]) * 0.5));
 	textPos[LOSER][1] = window::HALF_HEIGHT - 20;
 	textColor[LOSER] = glm::vec3(0, 1, 0);
 
 	// FPS
-	textScale[FPS] = 0.8;
+	textScale[FPS] = 0.8f;
 	textColor[FPS] = glm::vec3(0, 1, 0);
 	textStart[FPS] = "FPS: ";
 	printText[FPS] = "";

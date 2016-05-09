@@ -4,6 +4,7 @@
 #include "GLModel.h"
 #include "GLProjectile.h"
 #include "GLProjectileHandler.h"
+#define PI  3.141592
 
 class GLPlayer : public GLModel
 {
@@ -40,6 +41,18 @@ public:
 
 		NUM_POWERUPS
 	};
+	enum Animations
+	{
+		AONE,
+		ATWO,
+		ATHREE,
+		AFOUR,
+		AFIVE,
+		ASIX,
+		ASEVEN,
+
+		NUM_ANIMATION
+	};
 
 	GLPlayer();
 	GLPlayer(FishBox * FSH_Loader, char* filePath);
@@ -51,6 +64,7 @@ public:
 
 	void PlayerEating(float deltaTime);
 	void TestDraw(GLShader& shader);
+	void DrawProjectile(GLShader& shader);
 	void HandleCollision(PlayerStates state, float deltaTime, glm::vec3 momentum);
 	std::vector<GLProjectile*> GetProjectiles();
 	glm::vec3 GetVelocity();
@@ -60,10 +74,11 @@ public:
 	void ResetPlayer();
 	int GetPoints();
 	int GetTotalPoints();
-
-	glm::vec3& getVelocity() {
-		return m_velocity;
-	}
+	void Update(float dt);
+	float * GetBlendWeights() { return blendWeights; }
+	unsigned int GetBlendShapeCount() { return NUM_ANIMATION; }
+	glm::vec3& getVelocity() { return m_velocity; }
+	void moveAnimation(float deltaTime, float speedFactor);
 private:
 	const int	DEADZONE = 10000;
 	float		MOVEMENT_FRICTION = 2.0f;
@@ -75,7 +90,7 @@ private:
 	const float DASH_SCALE = 2.0f;				// 
 	const float MOVE_CAM_DISTANCE = 5.0f;		// (MOVE_CAM_DISTANCE * deltaTime) == Distnace camera is moved each update during and after dash
 	const float MAX_ANGLE = 75;
-	const int	MAX_INPUT = glm::pow(2, 15);
+	const int	MAX_INPUT = (int)glm::pow(2, 15);
 
 	float lastHorizontal = 0;
 	float lastVertical = 0;
@@ -90,6 +105,11 @@ private:
 	float dashCooldownCounter;
 	bool isDashing;
 	bool dashOnCooldown;
+	float powerUpCoolDown = 5;
+	float powerUpTimer = 0;
+
+	float * blendWeights;
+	float deltaTime = -1;
 
 	SDL_GameController *pad;
 	int instanceID;
@@ -107,6 +127,7 @@ private:
 	void PlayerUpdate(float deltaTime);
 	void PlayerShoot();
 	void PlayerDash();
+	void PowerUpCoolDown();
 
 	void CalcVelocity(float& deltaTime);
 	void HandleDash(float& deltaTime);

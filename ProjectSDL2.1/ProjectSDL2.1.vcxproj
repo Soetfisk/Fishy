@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ControlsScreen.cpp" />
+    <ClCompile Include="GLMeshBS.cpp" />
     <ClCompile Include="GLNPC_BlueTang.cpp" />
     <ClCompile Include="FilterComputeShader.cpp" />
     <ClCompile Include="GLGUIHandler.cpp" />
@@ -42,9 +43,14 @@
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="obj_loader.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SeaWeedLeafs.cpp" />
+    <ClCompile Include="SpecialStaticMesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ControlsScreen.h" />
+    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\SeaWeedLeafs.h" />
+    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\SpecialStaticMesh.h" />
+    <ClInclude Include="GLMeshBS.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GLNPC_BlueTang.h" />
     <ClInclude Include="AABB.h" />
@@ -69,15 +75,17 @@
     <ClInclude Include="GLWindow.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="Menu.h" />
-    <ClInclude Include="obj_loader.h" />
     <ClInclude Include="RNG.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SphereBS.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="blend_shape.frag" />
+    <None Include="blend_shape.geom" />
     <None Include="blueFilter.glsl" />
     <None Include="lighting.frag" />
     <None Include="lighting.vert" />
+    <None Include="blend_shape.vert" />
     <None Include="pass.frag" />
     <None Include="pass.vert" />
     <None Include="post.frag" />
@@ -153,6 +161,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>.\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>freetype262.lib;FishBox.lib;glew32.lib;glew32s.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;OpenGL32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <AdditionalOptions>/NODEFAULTLIB:MSVCRT %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -185,6 +195,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>.\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>freetype262.lib;FishBox.lib;glew32.lib;glew32s.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;OpenGL32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

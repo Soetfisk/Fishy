@@ -19,15 +19,6 @@
     <ClCompile Include="GLGUIHandler.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="GLMesh.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="GLModel.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="GLPlayer.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="GLProjectile.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -53,22 +44,40 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="GLNPC.cpp">
-      <Filter>Source\NPCs</Filter>
+      <Filter>Source\Models\NPCs</Filter>
     </ClCompile>
     <ClCompile Include="GLNPC_GoldFish.cpp">
-      <Filter>Source\NPCs</Filter>
+      <Filter>Source\Models\NPCs</Filter>
     </ClCompile>
     <ClCompile Include="GLNPC_BlueTang.cpp">
-      <Filter>Source\NPCs</Filter>
+      <Filter>Source\Models\NPCs</Filter>
     </ClCompile>
-    <ClCompile Include="GLNPC_PowerUpHandler.cpp">
-      <Filter>Source\NPCs</Filter>
+    <ClCompile Include="GLMesh.cpp">
+      <Filter>Source\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="GLModel.cpp">
+      <Filter>Source\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="GLPlayer.cpp">
+      <Filter>Source\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="GLMeshBS.cpp">
+      <Filter>Source\Models</Filter>
     </ClCompile>
     <ClCompile Include="Menu.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="ControlsScreen.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GLNPC_PowerUpHandler.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecialStaticMesh.cpp">
+      <Filter>Source\Models\SpecialStaticMeshes</Filter>
+    </ClCompile>
+    <ClCompile Include="SeaWeedLeafs.cpp">
+      <Filter>Source\Models\SpecialStaticMeshes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -91,15 +100,6 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="GLGUIHandler.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="GLMesh.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="GLModel.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="GLPlayer.h">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="GLProjectile.h">
@@ -126,9 +126,6 @@
     <ClInclude Include="GUI.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="obj_loader.h">
-      <Filter>Header</Filter>
-    </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Header</Filter>
     </ClInclude>
@@ -136,13 +133,13 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="GLNPC.h">
-      <Filter>Header\NPCs</Filter>
+      <Filter>Header\Models\NPCs</Filter>
     </ClInclude>
     <ClInclude Include="GLNPC_GoldFish.h">
-      <Filter>Header\NPCs</Filter>
+      <Filter>Header\Models\NPCs</Filter>
     </ClInclude>
     <ClInclude Include="GLNPC_BlueTang.h">
-      <Filter>Header\NPCs</Filter>
+      <Filter>Header\Models\NPCs</Filter>
     </ClInclude>
     <ClInclude Include="RNG.h">
       <Filter>Header</Filter>
@@ -150,13 +147,31 @@
     <ClInclude Include="Menu.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="GLNPC_PowerUpHandler.h">
-      <Filter>Header\NPCs</Filter>
-    </ClInclude>
     <ClInclude Include="GameState.h">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="ControlsScreen.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GLPlayer.h">
+      <Filter>Header\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="GLModel.h">
+      <Filter>Header\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="GLMesh.h">
+      <Filter>Header\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="GLMeshBS.h">
+      <Filter>Header\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\SpecialStaticMesh.h">
+      <Filter>Header\Models\SpecialStaticMeshes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\SeaWeedLeafs.h">
+      <Filter>Header\Models\SpecialStaticMeshes</Filter>
+    </ClInclude>
+    <ClInclude Include="GLNPC_PowerUpHandler.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
@@ -203,6 +218,15 @@
     <None Include="lighting.vert">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="blend_shape.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="blend_shape.geom">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="blend_shape.frag">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header">
@@ -214,11 +238,23 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{e8b73c92-61ec-434a-a513-1770d8b81781}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header\NPCs">
+    <Filter Include="Source\Models">
+      <UniqueIdentifier>{fba40bd5-0733-4eb6-ba57-835b28623e99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Models\NPCs">
+      <UniqueIdentifier>{3b6a892c-3bcf-4b61-bdaf-e7fd1fb1baa9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header\Models">
+      <UniqueIdentifier>{0c8e3f4e-e62f-44ee-9192-3b7a9ba3e85a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header\Models\NPCs">
       <UniqueIdentifier>{5002fbc4-4a56-453b-acbd-d7a222fdeda4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\NPCs">
-      <UniqueIdentifier>{3b6a892c-3bcf-4b61-bdaf-e7fd1fb1baa9}</UniqueIdentifier>
+    <Filter Include="Header\Models\SpecialStaticMeshes">
+      <UniqueIdentifier>{a14a602f-46cb-4cb2-bec7-47ee8b1ee2ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Models\SpecialStaticMeshes">
+      <UniqueIdentifier>{a791cb2d-94e7-4a3b-93ea-48e01b0e164e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

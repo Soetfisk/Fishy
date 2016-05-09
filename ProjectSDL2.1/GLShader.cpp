@@ -21,7 +21,7 @@ GLShader::GLShader(const std::string& fileName, const bool& geometry)
 		m_shaders[1] = CreateShader(LoadShader(fileName + ".frag"), GL_FRAGMENT_SHADER);
 	}		
 
-	for (unsigned int i = 0; i < nrOfShaders; i++)
+	for (int i = 0; i < nrOfShaders; i++)
 	{
 		glAttachShader(m_program, m_shaders[i]);
 	}
@@ -53,15 +53,14 @@ void GLShader::Update(GLCamera& camera)
 }
 
 
-GLuint& GLShader::GetUnifromLocation(std::string name)
+GLuint GLShader::GetUnifromLocation(std::string name)
 {
-	GLuint unifrom = glGetUniformLocation(m_program, name.c_str());
-	return unifrom;
+	return glGetUniformLocation(m_program, name.c_str());
 }
 
 GLShader::~GLShader()
 {
-	for (unsigned int i = 0; i < nrOfShaders; i++)
+	for (int i = 0; i < nrOfShaders; i++)
 	{
 		glDetachShader(m_program, m_shaders[i]);
 		glDeleteShader(m_shaders[i]);
@@ -140,9 +139,24 @@ std::string GLShader::LoadShader(const std::string & fileName)
 void GLShader::Uniform1f(std::string name, float number)
 {
 	glUniform1f(glGetUniformLocation(this->m_program, name.c_str()), number);
+	
 }
+
 
 void GLShader::UniformVec3(std::string name, glm::vec3 vector)
 {
 	glUniform3fv(glGetUniformLocation(this->m_program, name.c_str()), 1, &vector[0]);
+}
+
+void GLShader::Uniform1ui(std::string name, GLuint number)
+{
+	//printf("\n%d", glGetUniformLocation(this->m_program, name.c_str()));
+	glUniform1i(glGetUniformLocation(this->m_program, name.c_str()), number);
+
+}
+
+void GLShader::Uniform1fv(std::string name, float number[12])
+{
+	//printf("\n%d", glGetUniformLocation(this->m_program, name.c_str()));
+	glUniform1fv(glGetUniformLocation(this->m_program, name.c_str()), 12, number);
 }

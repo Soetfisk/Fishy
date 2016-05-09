@@ -1,18 +1,10 @@
 #include "GLModel.h"
-#include "obj_loader.h"
+
 
 
 GLModel::GLModel()
 {
-	//Test
-	transform = new GLTransform();
-	meshes.push_back(objLoadFromFile("./res/OBJ/box2.obj"));
-	meshes.push_back(objLoadFromFile("./res/OBJ/box2.obj"));
 
-	meshes[0]->GetTransform().m_pos = glm::vec3(0, 0, 0.8);
-	meshes[1]->GetTransform().m_pos = glm::vec3(0, 0, 0);
-
-	meshes[0]->GetTransform().m_scale = glm::vec3(0.8);
 }
 
 GLModel::GLModel(FishBox* FSH_Loader, char* filePath) //DEPRICATED USE AT OWN RISK
@@ -26,7 +18,25 @@ GLModel::GLModel(FishBox* FSH_Loader, char* filePath) //DEPRICATED USE AT OWN RI
 
 	for (unsigned int i = 0; i < FSH_Loader->ModelMeshCount(modelID); i++)
 	{
-		meshes.push_back(new GLMesh(FSH_Loader->MeshData(modelID, i), FSH_Loader->VertexData(modelID, i), FSH_Loader->IndexData(modelID, i), FSH_Loader->meshMaterial(modelID, i), FSH_Loader->meshTexture(modelID, i)));
+		if (FSH_Loader->MeshData(modelID, i)->blendshapesCount > 0)
+			meshes.push_back(new GLMeshBS
+				(
+				FSH_Loader->MeshData(modelID, i),
+				FSH_Loader->VertexData(modelID, i),
+				FSH_Loader->IndexData(modelID, i),
+				FSH_Loader->meshMaterial(modelID, i),
+				FSH_Loader->meshTexture(modelID, i),
+				FSH_Loader->meshBlendShapes(modelID, i)
+				));
+		else
+			meshes.push_back(new GLMesh
+				(
+				FSH_Loader->MeshData(modelID, i),
+				FSH_Loader->VertexData(modelID, i),
+				FSH_Loader->IndexData(modelID, i),
+				FSH_Loader->meshMaterial(modelID, i),
+				FSH_Loader->meshTexture(modelID, i))
+				);
 	}
 }
 
@@ -37,16 +47,38 @@ GLModel::GLModel(FishBox* FSH_Loader, unsigned int modelID)
 
 	for (unsigned int i = 0; i < FSH_Loader->ModelMeshCount(modelID); i++)
 	{
-		meshes.push_back(new GLMesh(FSH_Loader->MeshData(modelID, i), FSH_Loader->VertexData(modelID, i), FSH_Loader->IndexData(modelID, i), FSH_Loader->meshMaterial(modelID, i), FSH_Loader->meshTexture(modelID, i)));
+		if (FSH_Loader->MeshData(modelID, i)->blendshapesCount > 0)
+			meshes.push_back(
+					new GLMeshBS(
+								FSH_Loader->MeshData(modelID, i),
+								FSH_Loader->VertexData(modelID, i),
+								FSH_Loader->IndexData(modelID, i),
+								FSH_Loader->meshMaterial(modelID, i),
+								FSH_Loader->meshTexture(modelID, i),
+								FSH_Loader->meshBlendShapes(modelID, i)
+								)
+							);
+		else
+			meshes.push_back(
+					  new GLMesh(
+								FSH_Loader->MeshData(modelID, i),
+								FSH_Loader->VertexData(modelID, i),
+								FSH_Loader->IndexData(modelID, i),
+								FSH_Loader->meshMaterial(modelID, i),
+								FSH_Loader->meshTexture(modelID, i)
+								)
+							);
 	}
 
 	FSHData::material * test = FSH_Loader->meshMaterial(modelID, 0);
 }
 
 
+
+
 GLModel::~GLModel()
 {
-	for (int i = 0; i < meshes.size(); i++)
+	for (size_t i = 0; i < meshes.size(); i++)
 	{
 		delete meshes[i];
 	}
@@ -56,7 +88,7 @@ GLModel::~GLModel()
 void GLModel::Draw(GLShader& shader)
 {
 
-	for (int i = 0; i < meshes.size(); i++)
+	for (size_t i = 0; i < meshes.size(); i++)
 	{
 		glUniform3fv(shader.GetUnifromLocation("diffuse"), 1, glm::value_ptr(glm::vec3(meshes[i]->GetMaterial()->diffuse[0], meshes[i]->GetMaterial()->diffuse[1], meshes[i]->GetMaterial()->diffuse[2])));
 		glUniform3fv(shader.GetUnifromLocation("ambient"), 1, glm::value_ptr(glm::vec3(meshes[i]->GetMaterial()->ambient[0], meshes[i]->GetMaterial()->ambient[1], meshes[i]->GetMaterial()->ambient[2])));
@@ -118,8 +150,23 @@ AABB GLModel::GetBoundingBox()
 	return this->boundingBox;
 }
 
+
 void GLModel::SetBoundingBox(glm::vec3 center, glm::vec3 extents)
 {
 	this->boundingBox.center = center;
 	this->boundingBox.halfDimension = extents;
+}
+
+void GLModel::DuplicateModel(FishBox * FSH_Loader, unsigned int modelID)
+{
+	transform = new GLTransform();
+	this->modelID = modelID;
+
+	for (unsigned int i = 0; i < FSH_Loader->ModelMeshCount(modelID); i++)
+	{
+		meshes.push_back(new GLMesh(FSH_Loader->MeshData(modelID, i), FSH_Loader->VertexData(modelID, i), FSH_Loader->IndexData(modelID, i), FSH_Loader->meshMaterial(modelID, i), FSH_Loader->meshTexture(modelID, i)));
+	}
+
+	FSHData::material * test = FSH_Loader->meshMaterial(modelID, 0);
+
 }
