@@ -4,6 +4,7 @@
 #include "GLMeshBS.h"
 #include "GLShader.h"
 #include "AABB.h"
+#include "ParticleEmitter.h"
 
 class GLModel
 {
@@ -18,16 +19,20 @@ public:
 
 	GLTransform& GetTransform();
 	glm::vec3 GetForward();
+	
 	glm::vec3 GetRight();
 	glm::vec3 GetUp();
 
 	AABB GetBoundingBox();
 	void SetBoundingBox(glm::vec3 center, glm::vec3 extents);
+	
 protected:
-	void DuplicateModel(FishBox* FSH_Loader, unsigned int modelID);
 	std::vector<GLMesh*> meshes;
 	GLTransform* transform;
 	int modelID;
 	AABB boundingBox;
+	glm::vec3 forward;
+	glm::vec3 up;
+	glm::vec3 right;
 };
 

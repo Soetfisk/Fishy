@@ -89,9 +89,6 @@ void Menu::HandleEvenet(SDL_Event * e)
 		case SDL_SCANCODE_SPACE:
 			HandleSpace();
 			break;
-		case SDL_SCANCODE_RETURN:
-			HandleSpace();
-			break;
 		default:
 			break;
 		}
