@@ -31,10 +31,6 @@ public:
 		return !cooldown;
 	}
 
-	void drawParticles(GLShader *shader);
-	void updateParticles(float& deltaTime);
-	void addParticleHandlerReference(ParticleHandler* pHandlerRef);
-
 private:
 	const float SHOTGUN_OFFSET = 1.0f;
 	const float BIG_PROJECTILE_SIZE = 3.0f;
@@ -52,8 +48,6 @@ private:
 	GLProjectile* GetInactiveProjectile();
 	void RegularShoot(glm::vec3 forward, glm::vec3 pos, glm::vec3 rot, glm::vec3 velocity);
 	void ShotgunShoot(glm::vec3 forward, glm::vec3 pos, glm::vec3 rot, glm::vec3 velocity, glm::vec3 right, glm::vec3 up);
-
-	ParticleHandler *particleHandlerReference;
 };
 
 /*

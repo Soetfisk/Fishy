@@ -3,6 +3,7 @@
 
 void Scene::Init()
 {
+	
 	// set player position and rotation to the correct startpositions
 	this->players.at(1)->GetTransform().SetPos(glm::vec3(100, 0, 0));
 	this->players.at(1)->GetTransform().SetRot(glm::vec3(0, -1.58, 0));
@@ -78,30 +79,13 @@ void Scene::Init()
 	//player
 	this->currentPowerUp = GLPlayer::POWER_NEUTRAL;
 	// Ending game options
-	this->endTimer = 300;
+	this->endTimer = 60;
 	this->endScore = 1000;
 
-	particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
-	
+	//particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
 
-	for (int i = 0; i < players.size(); i++)
-	{
-		players.at(i)->addParticleHandleRefernce(particleHandler);
-	}
-
-	for (int z = 0; z < 5; z++) {
-		for (int x = 0; x < 5; x++) {
-			particleHandler->AddEmiter(EmitterType::STATICSTREAM, glm::vec4((float)x* RNG::range(-4.f, 4.f), -50.f, (float)z* RNG::range(-6.f, 6.f), 1));
-		}
-	}
-	//for (int z = -125; z < 125; z+=25) {
-	//	for (int x = -125; x < 125; x+=25) {
-	//		particleHandler->AddEmiter(EmitterType::STATICSTREAM, glm::vec4(x, -50.f, z, 1));
-	//	}
-	//}
-
-	//for (int i = 0; i <  players.size(); i++) {
-	//	particleHandler->AddEmiter(EmitterType::PLAYERFOLLOW, players.at(i)->getParticleFollowPlayer());
+	//for (int z = 0; z < 1; z++) {
+	//	particleHandler->AddEmiter(EmitterType::STATICSTREAM, glm::vec4(0, 1, 3 + (z % 2 == 0) ? z * 2 : -z * 2, 1));
 	//}
 	//for (int z = 0; z < 3; z++) {
 	//	particleHandler->AddEmiter(EmitterType::GOLDSTREAM, glm::vec4(2, 1, 3 + (z % 2 == 0) ? z * 2 : -z * 2, 1));
@@ -113,10 +97,12 @@ void Scene::Init()
 void Scene::LoadModels()
 {
 	FSH_Loader.LoadScene("Models/fishy.FSH"); //PlayerFish
-	FSH_Loader.LoadScene("Models/GoldFishBlend.FSH"); //GoldFish
+	FSH_Loader.LoadScene("Models/Goldfish.FSH"); //GoldFish
 	FSH_Loader.LoadScene("Models/BlueTang.FSH"); //BlueTang
 	FSH_Loader.LoadScene("Models/Bubble2.FSH"); //Bubble
-	FSH_Loader.LoadScene("Models/AquariumRedux.FSH"); //Aquarium
+	FSH_Loader.LoadScene("Models/tempAquarium.FSH"); //Aquarium
+	FSH_Loader.LoadScene("Models/weed2.FSH"); //SeaWeedLeaf
+
 	
 	for (int i = 0; i < 2; i++) {
 		this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));
@@ -132,6 +118,9 @@ void Scene::LoadModels()
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Aquarium));
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
+
+	this->specialStaticMeshes.push_back(new SeaWeedLeafs(&FSH_Loader, SeaWeedLeaf));
+
 	this->collisionHandler.AddNPC(NPCs);
 	this->collisionHandler.AddPlayer(players);
 	this->collisionHandler.AddModel(models);
@@ -176,8 +165,10 @@ void Scene::CheckWinner()
 	if (!this->winner && (this->guih->GetTime() >= this->endTimer || this->players.at(0)->GetTotalPoints() >= this->endScore || this->players.at(1)->GetTotalPoints() >= this->endScore))
 	{
 		this->winner = true;
-
-		if (this->players.at(0)->GetTotalPoints() > this->players.at(1)->GetTotalPoints())
+		
+		if (this->players.at(0)->GetTotalPoints() == this->players.at(1)->GetTotalPoints())
+			this->guih->Tie();
+		else if (this->players.at(0)->GetTotalPoints() > this->players.at(1)->GetTotalPoints())
 			this->guih->Player1Won();
 		else
 			this->guih->Player2Won();
@@ -192,10 +183,8 @@ void Scene::CheckWinner()
 		{
 			*this->gameState = GLOBAL_GameState::MENU;
 			this->ResetScene();
-		}
-			
+		}		
 	}
-
 }
 
 void Scene::AddScore()
@@ -217,9 +206,7 @@ void Scene::AddScore()
 Scene::Scene(GLOBAL_GameState* gameState) {
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
 	Mix_VolumeMusic(20);
-	music[COMBAT_BACKGROUND_MUSIC] = Mix_LoadMUS("./res/Sounds/background.wav");
-	music[ATTACK_BACKGROUND_MUSIC] = Mix_LoadMUS("./res/Sounds/attack.wav");
-	music[ARCADE_BACKGROUND_MUSIC] = Mix_LoadMUS("./res/Sounds/arcade.wav");
+	music[BACKGROUND_MUSIC] = Mix_LoadMUS("./res/Sounds/background.wav");
 	LoadModels();
 	Init();
 
@@ -266,9 +253,13 @@ Scene::~Scene(){
 	{
 		delete staticMeshes.at(i);
 	}
+	for (int i = 0; i < specialStaticMeshes.size(); i++)
+	{
+		delete specialStaticMeshes.at(i);
+	}
 
 	delete guih;
-	delete particleHandler;
+	//delete particleHandler;
 	for (int i = 0; i < NUM_MUSIC; i++)
 	{
 		Mix_FreeMusic(music[i]);
@@ -283,7 +274,6 @@ void Scene::Update(float& deltaTime) {
 		srand(time(0));
 		int num = rand() % NUM_MUSIC;
 		//Play the music
-		currentSong = num;
 		Mix_PlayMusic(music[num], -1);
 	}
 
@@ -293,15 +283,12 @@ void Scene::Update(float& deltaTime) {
 
 	this->collisionHandler.CheckCollisions(deltaTime);
 	this->AddScore();
-	this->particleHandler->UpdateParticles(deltaTime);
+	//this->particleHandler->UpdateParticles(deltaTime);
 	for (size_t i = 0; i < this->NPCs.size(); i++)
 		this->NPCs.at(i)->NPCUpdate(deltaTime);
 
-	for (size_t i = 0; i < this->players.size(); i++) {
+	for (size_t i = 0; i < this->players.size(); i++)
 		this->players.at(i)->Update(this->deltaTime);
-		this->players.at(i)->UpdateParticles(this->deltaTime);
-	}
-		
 }
 
 //Loads the scene, models, matrices
@@ -326,9 +313,9 @@ void Scene::DrawScene() {
 
 		for (size_t j = 0; j < this->players.size(); j++)
 		{
+			players.at(j)->TestDraw(*shaders[BLEND_SHAPE]);
 			shaders[BLEND_SHAPE]->Uniform1ui("BlendShapeCount", (GLuint)players.at(j)->GetBlendShapeCount());
 			shaders[BLEND_SHAPE]->Uniform1fv("Weights", players.at(j)->GetBlendWeights());
-			players.at(j)->TestDraw(*shaders[BLEND_SHAPE]);
 		}
 		shaders[MODELS]->Bind();
 		shaders[MODELS]->Update(players.at(i)->GetCamera());
@@ -344,16 +331,12 @@ void Scene::DrawScene() {
 		{
 			staticMeshes.at(i)->Draw(*shaders[MODELS]);
 		}
-
-		//Drawing All Particles
-		shaders[PARTICLE]->Bind();
-		shaders[PARTICLE]->Update(players.at(i)->GetCamera());
-		for (size_t j = 0; j < this->players.size(); j++)
+		for (unsigned int i = 0; i < specialStaticMeshes.size(); i++)
 		{
-			players.at(j)->DrawParticles(shaders[PARTICLE]);
+			specialStaticMeshes.at(i)->Draw(*shaders[MODELS]);
 		}
 
-		this->particleHandler->DrawParticles(shaders[PARTICLE]);
+		//this->particleHandler->DrawParticles(shaders[PARTICLE], players.at(i)->GetCamera());
 
 		this->frameBuffer->UnbindFrameBuffer();
 		this->frameBuffer2->BindFrameBuffer();
@@ -476,6 +459,7 @@ void Scene::ResetScene()
 	this->endSceneTimer = 0;
 	this->endGame = false;
 	this->winner = false;
+	this->guih->Reset();
 }
 
 void Scene::HandleEvenet(SDL_Event* e) {
@@ -564,15 +548,19 @@ void Scene::HandleEvenet(SDL_Event* e) {
 				break;
 			case SDL_SCANCODE_H:
 				players.at(1)->SetPowerUp(GLPlayer::POWER_HIGH);
+				guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::HIGH);
 				break;
 			case SDL_SCANCODE_Y:
 				players.at(1)->SetPowerUp(GLPlayer::POWER_NEUTRAL);
+				guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::NOTHING);
 				break;
 			case SDL_SCANCODE_J:
 				players.at(1)->SetPowerUp(GLPlayer::POWER_BUBBLESHOTGUN);
+				guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::SHOTGUN);
 				break;
 			case SDL_SCANCODE_K:
 				players.at(1)->SetPowerUp(GLPlayer::POWER_BUBBLEBIG);
+				guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::BIG);
 				break;
 			case SDL_SCANCODE_L:
 				ResetScene();
@@ -588,12 +576,7 @@ void Scene::HandleEvenet(SDL_Event* e) {
 			case SDL_SCANCODE_SPACE:
 				players.at(1)->Update(GLPlayer::PLAYER_SHOOT, glm::vec3(0));
 				break;
-			case SDL_SCANCODE_N:
-				currentSong = (currentSong + 1) % NUM_MUSIC;
-				Mix_PlayMusic(music[currentSong], -1);
-				break;
 			}
-
 		}
 
 		const Uint8* keyState = SDL_GetKeyboardState(NULL);
