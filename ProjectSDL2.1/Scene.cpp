@@ -99,10 +99,10 @@ void Scene::Init()
 void Scene::LoadModels()
 {
 	FSH_Loader.LoadScene("Models/fishy.FSH"); //PlayerFish
-	FSH_Loader.LoadScene("Models/Goldfish.FSH"); //GoldFish
+	FSH_Loader.LoadScene("Models/GoldFishBlend.FSH"); //GoldFish
 	FSH_Loader.LoadScene("Models/BlueTang.FSH"); //BlueTang
 	FSH_Loader.LoadScene("Models/Bubble2.FSH"); //Bubble
-	FSH_Loader.LoadScene("Models/tempAquarium.FSH"); //Aquarium
+	FSH_Loader.LoadScene("Models/AquariumRedux.FSH"); //Aquarium
 	
 	for (int i = 0; i < 2; i++) {
 		this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));
