@@ -7,7 +7,7 @@ GLGUIHandler::GLGUIHandler()
 
 	this->shader = new GLShader("text");
 	deleteShader = true;
-	this->nrFramesThisSecond = 0;
+
 	InitTextureInfo();
 }
 
@@ -21,7 +21,6 @@ GLGUIHandler::GLGUIHandler(GLShader* shader, GUI* textToScreen)
 
 	InitTextureInfo();
 }
-
 
 GLGUIHandler::~GLGUIHandler()
 {
@@ -37,7 +36,6 @@ void GLGUIHandler::Update(float dt)
 	{
 	case ACTIVE:
 		newSec += dt;
-		this->nrFramesThisSecond++;
 		if (newSec >= 1)
 		{
 			time++;
@@ -46,9 +44,8 @@ void GLGUIHandler::Update(float dt)
 			textPos[TIME][0] = (float)(window::HALF_WIDTH - (gui->GetTextLenght(printText[TIME], textScale[TIME]) * 0.5));
 
 			// Update FPS
-			printText[FPS] = textStart[FPS] + std::to_string(nrFramesThisSecond);
+			printText[FPS] = textStart[FPS] + std::to_string((int)(1 / dt));
 			textPos[FPS][0] = window::WIDTH - (gui->GetTextLenght(printText[FPS], textScale[FPS]));
-			this->nrFramesThisSecond = 0;
 		}
 		break;
 	case OVER:
@@ -80,6 +77,28 @@ void GLGUIHandler::Draw()
 		for(int i = 0; i < NUM_TEXTS; i++)
 		{
 			gui->RenderText(*shader, printText[i], textPos[i][0], textPos[i][1], textScale[i], textColor[i]);
+		}
+		break;
+	}
+	glDisable(GL_BLEND);
+}
+
+void GLGUIHandler::OptimizedDraw()
+{
+	glViewport(0, 0, window::WIDTH, window::HEIGHT);
+	glEnable(GL_BLEND);
+	switch (currentState)
+	{
+	case ACTIVE:
+		for (int i = 0; i < NUM_TEXTS - 2; i++)
+		{
+			gui->OptimizedRenderText(*shader, printText[i], textPos[i][0], textPos[i][1], textScale[i], textColor[i]);
+		}
+		break;
+	case OVER:
+		for (int i = 0; i < NUM_TEXTS; i++)
+		{
+			gui->OptimizedRenderText(*shader, printText[i], textPos[i][0], textPos[i][1], textScale[i], textColor[i]);
 		}
 		break;
 	}

@@ -164,8 +164,8 @@ void GLShader::Uniform1ui(std::string name, GLuint number)
 
 }
 
-void GLShader::Uniform1fv(std::string name, float number[10])
+void GLShader::Uniform1fv(std::string name, float number[12])
 {
 	//printf("\n%d", glGetUniformLocation(this->m_program, name.c_str()));
-	glUniform1fv(glGetUniformLocation(this->m_program, name.c_str()), 10, number);
+	glUniform1fv(glGetUniformLocation(this->m_program, name.c_str()), 12, number);
 }

@@ -108,7 +108,7 @@ int ParticleComputeShader::getNrParticles() {
 	GLuint numPart;
 
 	glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, atomicBuffer);
-	
+
 	GLuint* userCounters = (GLuint*)glMapBufferRange(GL_ATOMIC_COUNTER_BUFFER, 0, sizeof(GLuint), GL_MAP_READ_BIT);
 	numPart = userCounters[0];
 	glUnmapBuffer(GL_ATOMIC_COUNTER_BUFFER);

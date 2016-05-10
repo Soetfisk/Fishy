@@ -16,19 +16,35 @@ GLPlayer::GLPlayer() : GLModel() //NEVER USE
 	this->isDashing = false;
 	this->dashOnCooldown = false;
 	this->currentPowerUp = POWER_NEUTRAL;
-	this->playEat = false;
 }
 
+GLPlayer::GLPlayer(FishBox* FSH_Loader, char* filePath) : GLModel(FSH_Loader, filePath) //DEPRICATED USE AT OWN RISK
+{
+	sound[SHOOT_SOUND] = Mix_LoadWAV("./res/Sounds/shoot.wav");
+	this->m_camera;
+	this->m_projectileHandler = new GLProjectileHandler(FSH_Loader, 2, 1, 20, 10.0f);
+	this->m_velocity = glm::vec3(0);
+}
 
+GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID) : GLModel(FSH_Loader, modelID)
+{
+	sound[SHOOT_SOUND] = Mix_LoadWAV("./res/Sounds/shoot.wav");
+	this->m_camera;
+	this->m_projectileHandler = new GLProjectileHandler(FSH_Loader, 2, 1, 20, 20.0f);
+	this->m_velocity = glm::vec3(0);
 	
+	this->dashCurrentDuration = 0.0f;
+	this->dashCooldownCounter = 0;
+	this->isDashing = false;
+	this->dashOnCooldown = false;
+	blendWeights = new float[NUM_ANIMATION];
+	for (int i = 0; i < NUM_ANIMATION; i++)
+		blendWeights[i] = 0.0f;
+}
 
 GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int projectileModelID) : GLModel(FSH_Loader, modelID)
 {
-	sound[SHOOT_SOUND] = Mix_LoadWAV("./res/Sounds/bubble.wav");
-	sound[BIG_SHOOT_SOUND] = Mix_LoadWAV("./res/Sounds/big_bubble.wav");
-	sound[SHOTGUN_SHOOT_SOUND] = Mix_LoadWAV("./res/Sounds/shotgun.wav");
-	sound[DASH_SOUND] = Mix_LoadWAV("./res/Sounds/dash_short.wav");
-	sound[MOVE_SOUND] = Mix_LoadWAV("./res/Sounds/move.wav");
+	sound[SHOOT_SOUND] = Mix_LoadWAV("./res/Sounds/shoot.wav");
 	this->m_camera;
 	this->m_projectileHandler = new GLProjectileHandler(FSH_Loader, projectileModelID, 1, 2, 20.0f);
 	this->m_velocity = glm::vec3(0);
@@ -37,14 +53,9 @@ GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int proj
 	this->dashCooldownCounter = 0;
 	this->isDashing = false;
 	this->dashOnCooldown = false;
-	this->blendWeights = new float[NUM_ANIMATION];
-	this->speed = 0;
-	this->playEat = false;
+	blendWeights = new float[NUM_ANIMATION];
 	for (int i = 0; i < NUM_ANIMATION; i++)
-	{
 		blendWeights[i] = 0.0f;
-		animationFactors[i] = 0.0f;
-	}
 }
 
 
@@ -56,7 +67,6 @@ GLPlayer::~GLPlayer()
 	}
 	delete this->m_projectileHandler;
 	delete[] this->blendWeights;
-	//delete this->player_PartcileEmitter;
 }
 
 //handles events sent too the player // movement.x = deltaTime
@@ -115,19 +125,18 @@ void GLPlayer::HandleCollision(PlayerStates state, float deltaTime, glm::vec3 mo
 		this->m_velocity = momentum;
 	break;
 	case EATING:
-		if (momentum.x > 0){
-		
-			size += momentum.x;
+		if (momentum.x > 0)
+		{
+			this->transform->SetScale(this->transform->GetScale() + (deltaTime / 4));
 			totalPoints += (int)(100 * momentum.x);
 			currentPoints += (int)(100 * momentum.x);
 		}
 		if (momentum.x < 0 && (totalPoints + 100 * momentum.x) >= 0)
 		{
-			size += momentum.x;
+			this->transform->SetScale(this->transform->GetScale() + (deltaTime / 4));
 			totalPoints += (int)(100 * momentum.x);
 			currentPoints += (int)(100 * momentum.x);
 		}
-		playEat = true;
 		break;
 	case HIT:
 		this->m_velocity += momentum;
@@ -232,215 +241,23 @@ void GLPlayer::Update(float dt)
 }
 
 
-
-void GLPlayer::resetMoveAnimation(float deltaTime, float speedFactor)
-{
-	float speed = deltaTime * speedFactor;
-
-
-	if (blendWeights[ASIX] > 0.0f)
-	{
-		blendWeights[ASIX] -= speed;
-		animationFactors[ASIX] = 0.0f;
-		if (blendWeights[ASIX] < 0.0f)
-			blendWeights[ASIX] = 0.0f;
-	}
-	else if (blendWeights[ASEVEN] > 0.0f)
-	{
-		blendWeights[ASEVEN] -= speed;
-		animationFactors[ASEVEN] = 0.0f;
-		if (blendWeights[ASEVEN] < 0.0f)
-			blendWeights[ASEVEN] = 0.0f;
-	}
-}
-
-void GLPlayer::resetHeadAnimation(float deltaTime, float speedFactor, int axis) // 0 = horizontal, 2 = vertical
-{
-	float speed = deltaTime * speedFactor;
-
-
-	if (axis == 0) // handle horizontal
-	{
-		if (blendWeights[AONE] > 0.0f)
-		{
-			blendWeights[AONE] -= speed;
-			animationFactors[AONE] = 0.0f;
-			if (blendWeights[AONE] < 0.0f)
-			{
-				blendWeights[AONE] = 0.0f;
-			}
-		}
-		if (blendWeights[AFOUR] > 0.0f)
-		{
-			blendWeights[AFOUR] -= speed;
-			animationFactors[AFOUR] = 0.0f;
-			if (blendWeights[AFOUR] < 0.0f)
-			{
-				blendWeights[AFOUR] = 0.0f;
-			}
-		}
-	}
-
-	if (axis == 1) // handle Vertical
-	{
-		if (blendWeights[ATWO] > 0.0f)
-		{
-			blendWeights[ATWO] -= speed;
-			animationFactors[ATWO] = 0.0f;
-			if (blendWeights[ATWO] < 0.0f)
-			{
-				blendWeights[ATWO] = 0.0f;
-			}
-		}
-		if (blendWeights[ATHREE] > 0.0f)
-		{
-			blendWeights[ATHREE] -= speed;
-			animationFactors[ATHREE] = 0.0f;
-			if (blendWeights[ATHREE] < 0.0f)
-			{
-				blendWeights[ATHREE] = 0.0f;
-			}
-		}
-	}
-
-
-
-
-}
-
-
 void GLPlayer::moveAnimation(float deltaTime, float speedFactor)
 {
+	static bool left = true, stop = false;
 	float speed = abs(deltaTime * speedFactor), y;
 
-	animationFactors[ASIX] += speed;
+	static float x = 0.0f;
+	x += speed;
 
-	y = sin(animationFactors[ASIX]);
-
+	y = sin(x);
 	if (y > 0.0)
-		this->blendWeights[ASIX] = y;
+		blendWeights[ASIX] = y;
 	if (y < 0.0)
-		this->blendWeights[ASEVEN] = abs(y);
+		blendWeights[ASEVEN] = abs(y);
+	//if (fabs(x - PI) <= FLT_EPSILON)
+	//	x = 0.0;
 
-}
-
-void GLPlayer::eatAnimation(float deltaTime, float speedFactor)
-{
-	// (sin(x-(3/2))+1)/2    // sine 0 -> 1 and back
-	float speed = abs(deltaTime * speedFactor), y;
-
-	animationFactors[AFIVE] += speed;
-	y = sin(animationFactors[AFIVE]);
-		
-	if (y > 0.0f)
-		blendWeights[AFIVE] = y;
-	if (y < 0.0f)
-		blendWeights[AFIVE] = y;
-
-	if (blendWeights[AFIVE] <= 0.05f)
-	{
-		playEat = false;
-		animationFactors[AFIVE] = 0.0f;
-	}
-}
-
-void GLPlayer::headAnimation(float deltaTime, float speedFactor, int direction)
-{
-
-	//horizontal
-
-	if (direction == 0 && blendWeights[AONE] < 1.0) //head left
-	{
-		if (blendWeights[AFOUR] > 0.0)
-		{
-			animationFactors[AFOUR] -= abs(deltaTime * speedFactor);
-			blendWeights[AFOUR] += animationFactors[AFOUR];
-		}
-		else if (blendWeights[AFOUR] < 0.0)
-		{
-			blendWeights[AFOUR] = 0.0f;
-			animationFactors[AFOUR] = 0.0f;
-		}
-
-		else
-		{
-			animationFactors[AONE] += abs(deltaTime * speedFactor);
-			blendWeights[AONE] += animationFactors[AONE];
-		}
-		if (animationFactors[AFOUR] >= 0.0f)
-			animationFactors[AFOUR] = 0.0f;
-
-	}
-
-	else if (direction == 3 && blendWeights[AFOUR] < 1.0) //head right
-	{
-		if (blendWeights[AONE] > 0.0)
-		{
-			animationFactors[AONE] -= abs(deltaTime * speedFactor);
-			blendWeights[AONE] += animationFactors[AONE];
-		}
-		else if (blendWeights[AONE] < 0.0)
-		{
-			blendWeights[AONE] = 0.0f;
-			animationFactors[AONE] = 0.0f;
-		}
-
-		else
-		{
-			animationFactors[AFOUR] += abs(deltaTime * speedFactor);
-			blendWeights[AFOUR] += animationFactors[AFOUR];
-		}
-		if (animationFactors[AONE] >= 0.0f)
-			animationFactors[AONE] = 0.0f;
-	}
-
-
-	//vertical
-	if (direction == 1 && blendWeights[ATHREE] < 1.0) //head up
-	{
-		if (blendWeights[ATWO] > 0.0)
-		{
-			animationFactors[ATWO] -= abs(deltaTime * speedFactor);
-			blendWeights[ATWO] += animationFactors[ATWO];
-		}
-		else if (blendWeights[ATWO] < 0.0)
-		{
-			blendWeights[ATWO] = 0.0f;
-			animationFactors[ATWO] = 0.0f;
-		}
-
-		else
-		{
-			animationFactors[ATHREE] += abs(deltaTime * speedFactor);
-			blendWeights[ATHREE] += animationFactors[ATHREE];
-		}
-		if (animationFactors[ATWO] >= 0.0f)
-			animationFactors[ATWO] = 0.0f;
-	}
-	else if (direction == 2 && blendWeights[ATWO] < 1.0) //head down
-	{
-		if (blendWeights[ATHREE] > 0.0)
-		{
-			animationFactors[ATHREE] -= abs(deltaTime * speedFactor);
-			blendWeights[ATHREE] += animationFactors[ATHREE];
-		}
-		else if (blendWeights[ATHREE] < 0.0)
-		{
-			blendWeights[ATHREE] = 0.0f;
-			animationFactors[ATHREE] = 0.0f;
-		}
-
-		else
-		{
-			animationFactors[ATWO] += abs(deltaTime * speedFactor);
-			blendWeights[ATWO] += animationFactors[ATWO];
-		}
-		if (animationFactors[ATHREE] >= 0.0f)
-			animationFactors[ATHREE] = 0.0f;
-
-	}
-	
-
+	blendWeights[AFIVE] = 1.0f;
 }
 
 //adds a controller too the player
@@ -524,86 +341,39 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 		//this->meshes[1]->GetTransform().m_rot.z += -(lastHorizontal / (glm::pow(2, 15))) * deltaTime;
 	}
 		
-
-	if (abs(lastHorizontal) > DEADZONE)
-	{
-		if (lastHorizontal > 0.0)
-			headAnimation(deltaTime, 0.25, 0);
-		else if (lastHorizontal < 0.0)
-			headAnimation(deltaTime, 0.25, 3);
-	}
-	else
-		resetHeadAnimation(deltaTime, 3.0, 0);
-	if (abs(lastVertical) > DEADZONE)
-	{
-		if (lastVertical > 0.0)
-			headAnimation(deltaTime, 0.25, 1);
-		else if (lastVertical < 0.0)
-			headAnimation(deltaTime, 0.25, 2);
-	}
-	else
-		resetHeadAnimation(deltaTime, 3.0, 1);
-	if (playEat)
-		eatAnimation(deltaTime, 3.0);
-
 	this->meshes[0]->GetTransform().m_rot.z -= this->meshes[0]->GetTransform().m_rot.z * deltaTime;
 	//this->meshes[1]->GetTransform().m_rot.z -= this->meshes[0]->GetTransform().m_rot.z * deltaTime;
 	
 	//std::cout << "X: " << this->m_velocity.x << " Y: " << this->m_velocity.y << " Z: " << this->m_velocity.z << std::endl;
 
-	if (lastForward > DEADZONE)
-		moveAnimation(deltaTime, sqrt(glm::dot(m_velocity, m_velocity)));
-	else
-		resetMoveAnimation(deltaTime, 2.0f);
-	
 	CalcVelocity(deltaTime);
 	HandleDash(deltaTime);
 
-	if (this->GetTransform().GetScale().x < size)
-	{
-		this->transform->SetScale(this->transform->GetScale() + (deltaTime / 4));
-	}
-
+	//this->blendWeights[AONE] = 1.0f; //ANIMATION TEST
+	//this->blendWeights[ATHREE] = 1.0f;
+	this->moveAnimation(deltaTime, 2.75);
 	//camera update
 	this->m_camera.Update(this->GetTransform(), deltaTime);
 
 	this->m_projectileHandler->Update(deltaTime);
-
-
-	
 }
 
 void GLPlayer::PlayerShoot()
 {
 	if (this->m_projectileHandler->CanShoot())
 	{
-		switch (currentPowerUp)
-		{
-		case 0:
-			Mix_PlayChannel(-1, sound[SHOOT_SOUND], 0);
-			break;
-		case 1:
-			Mix_PlayChannel(-1, sound[SHOTGUN_SHOOT_SOUND], 0);
-			break;
-		case 2:
-			Mix_PlayChannel(-1, sound[BIG_SHOOT_SOUND], 0);
-			break;
-		}
+		Mix_PlayChannel(-1, sound[SHOOT_SOUND], 0);
 	}
 	this->m_projectileHandler->Shoot(GetForward(), transform->m_pos, transform->m_rot, m_velocity, GetRight(), GetUp());
 }
-
-
-
 void GLPlayer::PlayerDash()
 {
 	if (!isDashing && !dashOnCooldown)
 	{
-		Mix_PlayChannel(-1, sound[DASH_SOUND], 0);
 		isDashing = true;
 		dashCurrentDuration = 0.0f;
 		dashCooldownCounter = 0.0f;
-		lastForward = 32768.0f;
+		//lastForward = 32768.0f;
 	}
 }
 
@@ -629,11 +399,6 @@ void GLPlayer::CalcVelocity(float& deltaTime)
 	glm::vec3 forward = this->GetForward();
 	if (m_velocity != glm::vec3(0))
 	{
-		if (!isMoving)
-		{
-			isMoving = true;
-			Mix_PlayChannel(0, sound[MOVE_SOUND], -1);
-		}
 		if (isDashing)
 		{
 			if (glm::dot(m_velocity, m_velocity) < MAX_DASHSPEED)
@@ -653,27 +418,10 @@ void GLPlayer::CalcVelocity(float& deltaTime)
 			//m_velocity.z = (m_velocity.z > MAX_SPEED) ? MAX_SPEED : (m_velocity.z < -MAX_SPEED) ? -MAX_SPEED : m_velocity.z;
 			
 		}
-		
 
 		this->transform->m_pos += (m_velocity  * deltaTime);
 		glm::vec3 friction = (m_velocity * MOVEMENT_FRICTION);
 		m_velocity -= friction * deltaTime;
-
-		
-	}
-
-	if (glm::dot(m_velocity, m_velocity) > 20)
-	{
-		if (!isMoving)
-		{
-			isMoving = true;
-			Mix_PlayChannel(0, sound[MOVE_SOUND], -1);
-		}
-	}
-	else if (isMoving)
-	{
-		isMoving = false;
-		Mix_HaltChannel(0);
 	}
 	if (glm::dot(m_velocity, m_velocity) < MAX_SPEED)
 	{
@@ -684,8 +432,6 @@ void GLPlayer::CalcVelocity(float& deltaTime)
 	m_velocity.x = (glm::abs(m_velocity.x) < MIN_SPEED) ? 0.0f : m_velocity.x;
 	m_velocity.y = (glm::abs(m_velocity.y) < MIN_SPEED) ? 0.0f : m_velocity.y;
 	m_velocity.z = (glm::abs(m_velocity.z) < MIN_SPEED) ? 0.0f : m_velocity.z;
-
-	this->speed = sqrt(glm::dot(m_velocity, m_velocity));
 }
 
 void GLPlayer::HandleDash(float & deltaTime)
@@ -713,7 +459,7 @@ void GLPlayer::HandleDash(float & deltaTime)
 		{
 			dashOnCooldown = false;
 			dashCooldownCounter = 0.0f;
-			lastForward = 0.0f;
+			//lastForward = 0.0f;
 		}
 	}
 }
@@ -752,42 +498,4 @@ GLPlayer::PowerUps GLPlayer::getPowerUpByNumber(int power)
 void GLPlayer::PlayerEating(float deltaTime)
 {
 
-
-
-}
-
-void GLPlayer::addParticleHandleRefernce(ParticleHandler* pHandlerReference) {
-	this->particleHandlerReference = pHandlerReference;
-
-	this->player_PartcileEmitter = this->particleHandlerReference->CreateEmitter(EmitterType::PLAYERFOLLOW, glm::vec4(this->GetTransform().GetPos(),1));
-	this->player_PartcileEmitter->updateDirection(glm::vec4(this->forward, 0));
-}
-
-void GLPlayer::DrawParticles(GLShader* shader) {
-	if(this->player_PartcileEmitter != nullptr)
-		this->player_PartcileEmitter->Draw(shader);
-	
-}
-
-void GLPlayer::UpdateParticles(float &deltaTime) {
-	
-
-	if (this->player_PartcileEmitter != nullptr) {
-
-		if (this->speed > 0.3f) {
-			this->player_PartcileEmitter->updateEmitterData(glm::vec4(this->transform->GetPos(), 1),
-				glm::vec4(this->forward, 0), glm::vec4(this->GetRight(), 0), glm::vec4(this->GetUp(), 0), 2 / speed, this->transform->GetScale().z);
-			//this->player_PartcileEmitter->updateDirection(glm::vec4(this->forward, 0));
-			//this->player_PartcileEmitter->updatePosition(glm::vec4(this->transform->GetPos(), 1));
-			//this->player_PartcileEmitter->updateSpawnRate(2/speed);
-		}
-		else {
-			this->player_PartcileEmitter->updateSpawnRate(1000.f);
-		}
-
-		this->player_PartcileEmitter->UpdateEmitter(deltaTime);
-		//this->m_projectileHandler->updateParticles(deltaTime);
-	}
-
-	
 }

@@ -74,6 +74,8 @@ GLModel::GLModel(FishBox* FSH_Loader, unsigned int modelID)
 }
 
 
+
+
 GLModel::~GLModel()
 {
 	for (size_t i = 0; i < meshes.size(); i++)
@@ -119,25 +121,26 @@ GLTransform& GLModel::GetTransform()
 
 glm::vec3 GLModel::GetForward()
 {
-	this->forward.x = cos(this->transform->m_rot.x) * sin(this->transform->m_rot.y);
-	this->forward.y = -sin(this->transform->m_rot.x);
-	this->forward.z = cos(this->transform->m_rot.x) * cos(this->transform->m_rot.y);
-	return glm::normalize(this->forward);
-
+	glm::vec3 front;
+	front.x = cos(this->transform->m_rot.x) * sin(this->transform->m_rot.y);
+	front.y = -sin(this->transform->m_rot.x);
+	front.z = cos(this->transform->m_rot.x) * cos(this->transform->m_rot.y);
+	return glm::normalize(front);
 }
 
 glm::vec3 GLModel::GetRight()
 {
-	this->right.x = sin(this->transform->m_rot.y - 3.14f / 2.0f);
-	this->right.y = 0;
-	this->right.z = cos(this->transform->m_rot.y - 3.14f / 2.0f);
-	return glm::normalize(this->right);
+	glm::vec3 right;
+	right.x = sin(this->transform->m_rot.y - 3.14f / 2.0f);
+	right.y = 0;
+	right.z = cos(this->transform->m_rot.y - 3.14f / 2.0f);
+	return glm::normalize(right);
 }
 
 glm::vec3 GLModel::GetUp()
 {
-	this->up = glm::cross(GetForward(), GetRight());
-	return glm::normalize(this->up);
+	glm::vec3 up = glm::cross(GetForward(), GetRight());
+	return glm::normalize(up);
 }
 
 AABB GLModel::GetBoundingBox()
@@ -147,8 +150,23 @@ AABB GLModel::GetBoundingBox()
 	return this->boundingBox;
 }
 
+
 void GLModel::SetBoundingBox(glm::vec3 center, glm::vec3 extents)
 {
 	this->boundingBox.center = center;
 	this->boundingBox.halfDimension = extents;
+}
+
+void GLModel::DuplicateModel(FishBox * FSH_Loader, unsigned int modelID)
+{
+	transform = new GLTransform();
+	this->modelID = modelID;
+
+	for (unsigned int i = 0; i < FSH_Loader->ModelMeshCount(modelID); i++)
+	{
+		meshes.push_back(new GLMesh(FSH_Loader->MeshData(modelID, i), FSH_Loader->VertexData(modelID, i), FSH_Loader->IndexData(modelID, i), FSH_Loader->meshMaterial(modelID, i), FSH_Loader->meshTexture(modelID, i)));
+	}
+
+	FSHData::material * test = FSH_Loader->meshMaterial(modelID, 0);
+
 }
