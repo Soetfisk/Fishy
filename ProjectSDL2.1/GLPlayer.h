@@ -12,8 +12,8 @@ public:
 	enum Events
 	{
 		NOTHING,
-		CAMERA_MOVE,
-		PLAYER_MOVE,
+		PLAYER_MOVE_RIGHT,
+		PLAYER_MOVE_LEFT,
 		PLAYER_SHOOT,
 		PLAYER_DASH,
 		JOY_ADDED,
@@ -98,9 +98,12 @@ private:
 	const float MAX_ANGLE = 75;
 	const int	MAX_INPUT = (int)glm::pow(2, 15);
 
+	float size = 1;
 	float lastHorizontal = 0;
 	float lastVertical = 0;
 	float lastForward = 0;
+	float lastSide = 0;
+	float lastUp = 0;
 	glm::vec3 m_velocity;
 	int currentPoints = 0;
 	unsigned int totalPoints = 0;
@@ -131,7 +134,7 @@ private:
 
 	void AddController(int id);
 	void RemoveController(int id);
-	void PlayerMove(float x, float y, float z);
+	void PlayerMove(float lx, float ly, float z, float rx, float ry);
 	void PlayerUpdate(float deltaTime);
 	void PlayerShoot();
 	void PlayerDash();
