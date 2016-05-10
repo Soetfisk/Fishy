@@ -501,7 +501,7 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 			headAnimation(deltaTime, 0.25, 3);
 	}
 	else
-		resetHeadAnimation(deltaTime, 2.0, 0);
+		resetHeadAnimation(deltaTime, 3.0, 0);
 	if (abs(lastVertical) > DEADZONE)
 	{
 		if (lastVertical > 0.0)
@@ -510,7 +510,7 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 			headAnimation(deltaTime, 0.25, 2);
 	}
 	else
-		resetHeadAnimation(deltaTime, 2.0, 1);
+		resetHeadAnimation(deltaTime, 3.0, 1);
 
 
 	this->meshes[0]->GetTransform().m_rot.z -= this->meshes[0]->GetTransform().m_rot.z * deltaTime;
