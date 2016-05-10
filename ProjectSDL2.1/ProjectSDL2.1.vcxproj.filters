@@ -79,6 +79,9 @@
     <ClCompile Include="ParticleHandler.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="RoundCounter.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AABB.h">
@@ -172,6 +175,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="ParticleEmitter.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RoundCounter.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

@@ -42,9 +42,9 @@ void Scene::Init()
 	this->frameBuffer5->UnbindFrameBuffer();
 
 	// computeshader off cus crash
-	filterComputeShader = new FilterComputeShader("derp");
+	/*filterComputeShader = new FilterComputeShader("derp");
 	filterComputeShader->LoadShader("blueFilter.glsl");
-	filterComputeShader->CreateShader(filterComputeShader->LoadShader("blueFilter.glsl"));
+	filterComputeShader->CreateShader(filterComputeShader->LoadShader("blueFilter.glsl"));*/
 
 	// lights
 	PointLight light1;
@@ -117,6 +117,8 @@ void Scene::LoadModels()
 	FSH_Loader.LoadScene("Models/BlueTang.FSH"); //BlueTang
 	FSH_Loader.LoadScene("Models/Bubble2.FSH"); //Bubble
 	FSH_Loader.LoadScene("Models/AquariumRedux.FSH"); //Aquarium
+	FSH_Loader.LoadScene("Models/weed2.FSH"); //SeaWeedLeaf
+
 	
 	for (int i = 0; i < 2; i++) {
 		this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));
@@ -132,6 +134,9 @@ void Scene::LoadModels()
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Aquarium));
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
+
+	this->specialStaticMeshes.push_back(new SeaWeedLeafs(&FSH_Loader, SeaWeedLeaf));
+
 	this->collisionHandler.AddNPC(NPCs);
 	this->collisionHandler.AddPlayer(players);
 	this->collisionHandler.AddModel(models);
@@ -176,11 +181,19 @@ void Scene::CheckWinner()
 	if (!this->winner && (this->guih->GetTime() >= this->endTimer || this->players.at(0)->GetTotalPoints() >= this->endScore || this->players.at(1)->GetTotalPoints() >= this->endScore))
 	{
 		this->winner = true;
-
-		if (this->players.at(0)->GetTotalPoints() > this->players.at(1)->GetTotalPoints())
+		
+		if (this->players.at(0)->GetTotalPoints() == this->players.at(1)->GetTotalPoints())
+			this->guih->Tie();
+		else if (this->players.at(0)->GetTotalPoints() > this->players.at(1)->GetTotalPoints())
+		{
 			this->guih->Player1Won();
+			this->rc->PlayerWon(RoundCounter::RoundPlayers::PLAYER1);
+		}
 		else
+		{
 			this->guih->Player2Won();
+			this->rc->PlayerWon(RoundCounter::RoundPlayers::PLAYER2);
+		}
 	}
 	
 	// if we have a winner
@@ -224,8 +237,8 @@ Scene::Scene(GLOBAL_GameState* gameState) {
 	Init();
 
 	guih = new GLGUIHandler();
+	rc = new RoundCounter();
 	this->gameState = gameState;
-
 }
 
 Scene::Scene(GUI* textToScreen, GLOBAL_GameState* gameState)
@@ -234,6 +247,7 @@ Scene::Scene(GUI* textToScreen, GLOBAL_GameState* gameState)
 	Init();
 
 	guih = new GLGUIHandler(shaders[TEXT], textToScreen);
+	rc = new RoundCounter(shaders[TEXT], textToScreen);
 	this->gameState = gameState;
 }
 
@@ -248,7 +262,7 @@ Scene::~Scene(){
 	delete this->frameBuffer3;
 	delete this->frameBuffer4;
 	delete this->frameBuffer5;
-	delete this->filterComputeShader;
+	//delete this->filterComputeShader;
 	for (size_t i = 0; i < models.size(); i++)
 	{
 		delete models.at(i);
@@ -267,9 +281,14 @@ Scene::~Scene(){
 	{
 		delete staticMeshes.at(i);
 	}
+	for (int i = 0; i < specialStaticMeshes.size(); i++)
+	{
+		delete specialStaticMeshes.at(i);
+	}
 
 	delete guih;
 	delete particleHandler;
+	delete rc;
 	for (int i = 0; i < NUM_MUSIC; i++)
 	{
 		Mix_FreeMusic(music[i]);
@@ -313,7 +332,7 @@ void Scene::LoadScene() {
 //Calls the models.draw
 void Scene::DrawScene() {
 	guih->Draw();
-
+	rc->Draw();
 	for (size_t i = 0; i < this->players.size(); i++) {
 		// handle player powerup
 		this->UpdatePlayerPowerUp(i);
@@ -565,15 +584,19 @@ void Scene::HandleEvenet(SDL_Event* e) {
 				break;
 			case SDL_SCANCODE_H:
 				players.at(1)->SetPowerUp(GLPlayer::POWER_HIGH);
+				guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::HIGH);
 				break;
 			case SDL_SCANCODE_Y:
 				players.at(1)->SetPowerUp(GLPlayer::POWER_NEUTRAL);
+				guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::NOTHING);
 				break;
 			case SDL_SCANCODE_J:
 				players.at(1)->SetPowerUp(GLPlayer::POWER_BUBBLESHOTGUN);
+				guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::SHOTGUN);
 				break;
 			case SDL_SCANCODE_K:
 				players.at(1)->SetPowerUp(GLPlayer::POWER_BUBBLEBIG);
+				guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::BIG);
 				break;
 			case SDL_SCANCODE_L:
 				ResetScene();
