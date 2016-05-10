@@ -25,7 +25,6 @@ public:
 
 	AABB GetBoundingBox();
 	void SetBoundingBox(glm::vec3 center, glm::vec3 extents);
-	FollowParticle* getParticleFollow();
 	
 protected:
 	void DuplicateModel(FishBox* FSH_Loader, unsigned int modelID);
@@ -36,6 +35,5 @@ protected:
 	glm::vec3 forward;
 	glm::vec3 up;
 	glm::vec3 right;
-	FollowParticle* particleFollow;
 };
 

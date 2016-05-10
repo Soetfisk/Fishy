@@ -15,18 +15,6 @@ struct Particle {
 	glm::vec4 p_pos;
 };
 
-struct FollowParticle {
-	glm::vec3* o_pos;
-	float* o_speed;
-	glm::vec3* o_direction;
-	glm::vec3* o_directionUp;
-	glm::vec3* o_directionRight;
-	//float* o_distanceFromObject;
-
-	FollowParticle(FollowParticle *FP, float *speed) : o_pos(FP->o_pos), o_direction(FP->o_direction), o_directionUp(FP->o_directionUp), o_directionRight(FP->o_directionRight), o_speed(speed) {}
-	FollowParticle(glm::vec3* pos, glm::vec3* dir, glm::vec3* up, glm::vec3* right) : o_pos(pos), o_direction(dir), o_directionUp(up), o_directionRight(right) {}
-};
-
 class ParticleEmitter
 {
 private:
@@ -50,11 +38,11 @@ private:
 
 	glm::vec4 positionEmitter;
 	glm::vec4 directionEmitter;
+	glm::vec4 directionRightEmitter;
+	glm::vec4 directionUpEmitter;
 	GLuint pe_VertexArrayObject;
-	GLuint pe_particleBuffer, pe_particleSpawnBuffer;
+	GLuint pe_particleBuffer;
 	GLuint pe_VertexArrayBuffers[NUM_BUFFERS];
-
-	GLuint pe_posBuf, pe_scaleBuf;
 
 
 
@@ -67,7 +55,9 @@ private:
 	float emiterSpawnTCurrent;
 	float emiterCheckDeadTDelay;
 	float emiterCheckDeadTCurrent;
-	bool shouldUpdateObject;
+	bool emiterMulitbleSpawner;
+	float emiterNrToSpawnSimutan;
+	float emiterScale;
 
 
 	void updateParticles(const float& deltaTime);
@@ -90,24 +80,23 @@ private:
 	void instantiateStaticStream();
 	void instantiateGoldStream();
 	void instantiatePlayerFollow();
-	
+	bool player1;
 	void changeDirection(glm::vec4 dir);
 
 	Particle particle;
-	FollowParticle* objectFollow;
 
-
-
+	void Reset();
 public:
 	ParticleEmitter(EmitterType type, glm::vec4 position, FSHData::texture* texture);
-	ParticleEmitter(EmitterType type, FollowParticle* objToFollow, FSHData::texture* texture);
 	~ParticleEmitter();
 	void UpdateEmitter(const float& deltaTime);
 	void Draw(GLShader* shader);
 
-	void UpdateParticleObject();
-	bool shouldUpdateTransformation();
-	bool followObjectDead();
+	void updatePosition(glm::vec4 pos);
+	void updateDirection(glm::vec4 dir);
+	void updateSpawnRate(float rate);
+
+	void updateEmitterData(glm::vec4& pos, glm::vec4& dir, glm::vec4& right, glm::vec4& up, float rate, float scale);
 };
 
 #endif

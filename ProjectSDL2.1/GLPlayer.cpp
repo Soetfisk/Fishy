@@ -61,6 +61,7 @@ GLPlayer::~GLPlayer()
 {
 	delete this->m_projectileHandler;
 	delete[] this->blendWeights;
+	//delete this->player_PartcileEmitter;
 }
 
 //handles events sent too the player // movement.x = deltaTime
@@ -335,12 +336,18 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	this->m_camera.Update(this->GetTransform(), deltaTime);
 
 	this->m_projectileHandler->Update(deltaTime);
+
+
+	
 }
 
 void GLPlayer::PlayerShoot()
 {
 	this->m_projectileHandler->Shoot(GetForward(), transform->m_pos, transform->m_rot, m_velocity, GetRight(), GetUp());
 }
+
+
+
 void GLPlayer::PlayerDash()
 {
 	if (!isDashing && !dashOnCooldown)
@@ -476,6 +483,38 @@ void GLPlayer::PlayerEating(float deltaTime)
 
 }
 
-FollowParticle* GLPlayer::getParticleFollowPlayer() {
-	return new FollowParticle(this->getParticleFollow(), &this->speed);
+void GLPlayer::addParticleHandleRefernce(ParticleHandler* pHandlerReference) {
+	this->particleHandlerReference = pHandlerReference;
+
+	this->player_PartcileEmitter = this->particleHandlerReference->CreateEmitter(EmitterType::PLAYERFOLLOW, glm::vec4(this->GetTransform().GetPos(),1));
+	this->player_PartcileEmitter->updateDirection(glm::vec4(this->forward, 0));
+}
+
+void GLPlayer::DrawParticles(GLShader* shader) {
+	if(this->player_PartcileEmitter != nullptr)
+		this->player_PartcileEmitter->Draw(shader);
+	
+}
+
+void GLPlayer::UpdateParticles(float &deltaTime) {
+	
+
+	if (this->player_PartcileEmitter != nullptr) {
+
+		if (this->speed > 0.3f) {
+			this->player_PartcileEmitter->updateEmitterData(glm::vec4(this->transform->GetPos(), 1),
+				glm::vec4(this->forward, 0), glm::vec4(this->GetRight(), 0), glm::vec4(this->GetUp(), 0), 2 / speed, this->transform->GetScale().z);
+			//this->player_PartcileEmitter->updateDirection(glm::vec4(this->forward, 0));
+			//this->player_PartcileEmitter->updatePosition(glm::vec4(this->transform->GetPos(), 1));
+			//this->player_PartcileEmitter->updateSpawnRate(2/speed);
+		}
+		else {
+			this->player_PartcileEmitter->updateSpawnRate(1000.f);
+		}
+
+		this->player_PartcileEmitter->UpdateEmitter(deltaTime);
+		//this->m_projectileHandler->updateParticles(deltaTime);
+	}
+
+	
 }

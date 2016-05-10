@@ -4,6 +4,7 @@
 #include "GLModel.h"
 #include "GLProjectile.h"
 #include "GLProjectileHandler.h"
+#include "ParticleHandler.h"
 #define PI  3.141592
 
 class GLPlayer : public GLModel
@@ -79,7 +80,11 @@ public:
 	unsigned int GetBlendShapeCount() { return NUM_ANIMATION; }
 	glm::vec3& getVelocity() { return m_velocity; }
 	void moveAnimation(float deltaTime, float speedFactor);
-	FollowParticle* getParticleFollowPlayer();
+
+	void addParticleHandleRefernce(ParticleHandler* pHandlerReference);
+	void DrawParticles(GLShader* shader);
+	void UpdateParticles(float &deltaTime);
+
 private:
 	float speed;
 	const int	DEADZONE = 10000;
@@ -137,5 +142,7 @@ private:
 	void HandlePowerUps();
 	PowerUps getPowerUpByNumber(int power);
 	
+	ParticleHandler *particleHandlerReference;
+	ParticleEmitter *player_PartcileEmitter;
 };
 

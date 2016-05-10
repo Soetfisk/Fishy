@@ -11,6 +11,7 @@ ParticleHandler::ParticleHandler(GLShader* renderShader, FishBox *FSH_LoaderRefe
 	this->textures[EmitterType::STATICSTREAM] = this->FSH_LoaderReference->loadTexure("./res/BubbleTest.png");
 	this->textures[EmitterType::GOLDSTREAM] = this->FSH_LoaderReference->loadTexure("./res/Star.png");
 	this->textures[EmitterType::PLAYERFOLLOW] = this->FSH_LoaderReference->loadTexure("./res/BubbleTest.png");
+	this->textures[EmitterType::PROJECTILE] = this->FSH_LoaderReference->loadTexure("./res/BubbleTest.png");
 
 	
 }
@@ -28,9 +29,9 @@ ParticleHandler::~ParticleHandler(){
 	
 }
 
-void ParticleHandler::DrawParticles(GLShader* shader, GLCamera& camera) {
-	shader->Bind();
-	shader->Update(camera);
+void ParticleHandler::DrawParticles(GLShader* shader/*, GLCamera& camera*/) {
+	//shader->Bind();
+	//shader->Update(camera);
 	for (int i = 0; i < this->emiters.size(); i++) {
 		
 		this->emiters.at(i)->Draw(shader);
@@ -40,32 +41,17 @@ void ParticleHandler::DrawParticles(GLShader* shader, GLCamera& camera) {
 void ParticleHandler::UpdateParticles(const float& deltaTime) {
 
 	for (int i = 0; i < this->emiters.size(); i++) {
-
-		if (this->emiters.at(i)->shouldUpdateTransformation()) {
-			if (!this->emiters.at(i)->followObjectDead()) {
-				this->emiters.at(i)->UpdateParticleObject();
-			}
-			else {
-				//remove emitter
-			}
-			this->emiters.at(i)->UpdateEmitter(deltaTime);
-		}
-		else {
-			this->emiters.at(i)->UpdateEmitter(deltaTime);
-		}
-
-		
-		
+		this->emiters.at(i)->UpdateEmitter(deltaTime);
 	}
-
-	
 }
+
+
 
 
 void ParticleHandler::AddEmiter(EmitterType type, glm::vec4 position) {
 	this->emiters.push_back(new ParticleEmitter(type, position, this->textures[type]));
 }
 
-void ParticleHandler::AddEmiter(EmitterType type, FollowParticle *objectToFollow) {
-	this->emiters.push_back(new ParticleEmitter(type, objectToFollow, this->textures[type]));
+ParticleEmitter *ParticleHandler::CreateEmitter(EmitterType type, glm::vec4 position) {
+	return new ParticleEmitter(type, position, this->textures[type]);
 }

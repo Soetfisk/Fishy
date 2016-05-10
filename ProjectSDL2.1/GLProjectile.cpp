@@ -145,3 +145,16 @@ bool GLProjectile::IsActive()
 		check = true;
 	return check;
 }
+
+void GLProjectile::addParticleEmitter(ParticleEmitter* emitter) {
+	this->projectileEmitter = emitter;
+	
+}
+
+void GLProjectile::updateParticleEmitter(float& deltaTime) {
+	this->projectileEmitter->UpdateEmitter(deltaTime);
+}
+
+void GLProjectile::drawParticles(GLShader* shader) {
+	this->projectileEmitter->Draw(shader);
+}

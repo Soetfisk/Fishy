@@ -95,5 +95,6 @@ private:
 	};
 
 	void InitTextureInfo();
+	int nrFramesThisSecond;
 };
 

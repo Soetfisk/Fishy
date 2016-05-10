@@ -6,7 +6,6 @@ ParticleEmitter::ParticleEmitter(EmitterType type, glm::vec4 position, FSHData::
 	this->type = type;
 	this->positionEmitter = position;
 	this->texture = texture;
-	shouldUpdateObject = false;
 	setTexture();
 	
 
@@ -23,21 +22,6 @@ ParticleEmitter::ParticleEmitter(EmitterType type, glm::vec4 position, FSHData::
 	//InstantiateRenderShader();
 }
 
-ParticleEmitter::ParticleEmitter(EmitterType type, FollowParticle* objToFollow, FSHData::texture* texture) {
-	this->type = type;
-	this->objectFollow = objToFollow;
-	this->texture = texture;
-	shouldUpdateObject = true;
-	setTexture();
-	
-	instantiateVariables();
-	//instantiateSpawnBuffer();
-	this->emitterComputeShader = new ParticleComputeShader();
-	this->emitterComputeShader->Initialize(this->type, this->nrMaxParticles, this->pe_particleBuffer);
-
-
-	instantiateVertexData(); //neeeds to be after c_shader
-}
 
 void ParticleEmitter::instantiateVariables() {
 	this->nrActiveParticles = 0;
@@ -64,25 +48,28 @@ void ParticleEmitter::instantiateVariables() {
 }
 
 void ParticleEmitter::instantiatePlayerFollow() {
-	this->nrMaxParticles = 500;
-	this->emiterSpawnTDelay = .01;
+	this->nrMaxParticles = 300;
+	this->emiterSpawnTDelay = .5;
 	this->emiterSpawnTDelayStandard = emiterSpawnTDelay;
+	this->emiterNrToSpawnSimutan = 1;
+	this->emiterMulitbleSpawner = true;
 
 	this->particle.p_pos = this->positionEmitter;
 	this->particle.p_lifeTime = 2;
-	this->particle.p_acc = glm::vec4(0, .5f, 0, 0);
+	this->particle.p_acc = glm::vec4(0, 0, 0, 0);
 	this->particle.p_scale = .05;
 	this->particle.p_speed = 1;
 	this->particle.p_vel = glm::vec4(0, 0, 0, 0);
 }
 
 void ParticleEmitter::instantiateStaticStream() {
-	this->nrMaxParticles = 500;
+	this->nrMaxParticles = 10;
 	this->emiterSpawnTDelay = .6f;
 	this->emiterSpawnTDelayStandard = emiterSpawnTDelay;
+	this->emiterMulitbleSpawner = false;
 
 	this->particle.p_pos = this->positionEmitter;
-	this->particle.p_lifeTime = 10;
+	this->particle.p_lifeTime = 5;
 	this->particle.p_acc = glm::vec4(0, 1, 0, 0);
 	this->particle.p_scale = .05;
 	this->particle.p_speed = 1;
@@ -92,9 +79,10 @@ void ParticleEmitter::instantiateStaticStream() {
 }
 
 void ParticleEmitter::instantiateGoldStream() {
-	this->nrMaxParticles = 1090;
+	this->nrMaxParticles = 10;
 	this->emiterSpawnTDelay = 1;
 	this->emiterSpawnTDelayStandard = emiterSpawnTDelay;
+	this->emiterMulitbleSpawner = false;
 
 	this->particle.p_pos = this->positionEmitter;
 	this->particle.p_lifeTime = 4;
@@ -114,15 +102,23 @@ void ParticleEmitter::updateParticles(const float& deltaTime) {
 	this->emiterSpawnTCurrent += deltaTime;
 	this->emiterAwakeTime += deltaTime;
 	this->emiterCheckDeadTCurrent += deltaTime;
-
 	
-
-	if (this->emiterSpawnTCurrent >= this->emiterSpawnTDelay && this->nrActiveParticles < this->nrMaxParticles ) {
+	if (this->emiterSpawnTCurrent >= this->emiterSpawnTDelay && this->nrActiveParticles < this->nrMaxParticles) {
+		if (!this->emiterMulitbleSpawner) {
+			this->spawnParticle();
+			this->nrActiveParticles++;
+		}
+		else {
+			for (int i = 0; i < this->emiterNrToSpawnSimutan; i++) {
+				this->spawnParticle();
+				this->nrActiveParticles++;
+				
+			}
+		}
 		
-		this->spawnParticle();
-		this->nrActiveParticles++;
 		this->emiterSpawnTCurrent = 0;
 	}
+
 	
 	if (nrActiveParticles > 0 && this->emiterCheckDeadTCurrent >= this->emiterCheckDeadTDelay) {
 		this->emiterCheckDeadTCurrent = 0;
@@ -134,7 +130,7 @@ void ParticleEmitter::updateParticles(const float& deltaTime) {
 void ParticleEmitter::spawnParticle() {
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, this->pe_particleBuffer);
-	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_RANGE_BIT; // the invalidate makes a big difference when re-writing
+	GLint bufMask = GL_MAP_WRITE_BIT; // the invalidate makes a big difference when re-writing
 	struct ParticleStruct* tempParticles;
 
 	tempParticles = (struct ParticleStruct *) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, nrActiveParticles * sizeof(ParticleStruct), sizeof(ParticleStruct), bufMask);
@@ -160,13 +156,43 @@ void ParticleEmitter::spawnParticle() {
 	
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+}
 
+void ParticleEmitter::Reset() {
+
+}
+
+void ParticleEmitter::updatePosition(glm::vec4 pos) {
+	this->player1 = true;
+	this->positionEmitter = pos;
+}
+void ParticleEmitter::updateDirection(glm::vec4 dir) {
+	this->directionEmitter = -dir;
+}
+
+void ParticleEmitter::updateSpawnRate(float rate) {
+	this->emiterSpawnTDelay = rate;
+	if (this->emiterMulitbleSpawner) {
+		this->emiterNrToSpawnSimutan = .35 / rate;
+	}
+}
+
+void ParticleEmitter::updateEmitterData(glm::vec4& pos, glm::vec4& dir, glm::vec4& right, glm::vec4& up, float rate, float scale) {
+	this->positionEmitter = pos;
+	this->directionEmitter = -dir;
+
+	updateSpawnRate(rate);
+	this->emiterScale = scale/3;
+	this->directionRightEmitter = right;
+	this->directionUpEmitter = up;
 }
 
 Particle ParticleEmitter::generateParticleData() {
 	Particle returnData;
 	returnData = this->particle;
 	glm::vec4 data;
+	float testRight;
+	float testUp;
 	switch (this->type)
 	{
 	case EmitterType::STATICSTREAM:
@@ -182,45 +208,25 @@ Particle ParticleEmitter::generateParticleData() {
 		returnData.p_acc = glm::vec4(RNG::range(-.5f, .5f), returnData.p_acc.y, RNG::range(-.5f, .5f), 0);
 		break;
 	case EmitterType::PLAYERFOLLOW:
-		data.x = RNG::range(.5f, 1.f);
-		data.y = RNG::range(.5f, 1.f);
-		data.z = RNG::range(.5f, 1.f);
+		data.x = RNG::range(-.4f, .4f);
+		data.y = RNG::range(-.25f, .25f);
+		data.z = RNG::range(-.4f, .4f);
 		returnData.p_acc = this->directionEmitter + glm::vec4(returnData.p_acc.x + data.x, returnData.p_acc.y + data.y, returnData.p_acc.z + data.z, 0);
-		returnData.p_pos = this->positionEmitter;
-		returnData.p_pos += glm::vec4(*this->objectFollow->o_directionRight*RNG::range(-10.f, 10.f),0);
-		returnData.p_pos += glm::vec4(*this->objectFollow->o_directionUp*RNG::range(-10.f, 10.f),0);
+		returnData.p_pos = (this->positionEmitter + (this->directionEmitter)) +(this->directionRightEmitter *RNG::range(-emiterScale, emiterScale)) + (this->directionUpEmitter*RNG::range(-emiterScale, emiterScale)); // + data;
 
-		//std::cout << "SPAWNING AT: " << glm::to_string(returnData.p_pos) << std::endl;
-
-		returnData.p_vel = -this->directionEmitter + glm::vec4(returnData.p_acc.x + data.x, returnData.p_acc.y + data.y, returnData.p_acc.z + data.z, 0);
+		/*if(this->player1)
+			std::cout << "SPAWNING AT: " << glm::to_string(returnData.p_pos) << std::endl<<"Acc: "<<glm::to_string(returnData.p_acc)<<std::endl;
+*/
+		returnData.p_vel = this->directionEmitter + glm::vec4(returnData.p_vel.x + data.x, returnData.p_vel.y + data.y, returnData.p_vel.z + data.z, 0)*5;
 		returnData.p_scale = RNG::range(.1f, .15f);
 		returnData.p_lifeTime *= RNG::range(.5f, 1.5f);
+		break;
+	case EmitterType::PROJECTILE:
 		break;
 	}
 
 	return returnData;
 }
-
-void ParticleEmitter::UpdateParticleObject() {
-	this->positionEmitter = glm::vec4(*objectFollow->o_pos,1);
-	this->directionEmitter = glm::vec4(*objectFollow->o_direction, 1);
-	this->emiterSpawnTDelay = (*objectFollow->o_speed > .1f) ?  (100 / (*objectFollow->o_speed))* emiterSpawnTDelayStandard : 10;
-	
-	if (*objectFollow->o_speed > .1f)
-		std::cout << "RIGHT: " << glm::to_string(*objectFollow->o_directionRight) << std::endl << "UP: " << glm::to_string(*objectFollow->o_directionUp) << std::endl;
-		//std::cout << *objectFollow->o_speed<< " : " << this->positionEmitter.x << " : "<< this->directionEmitter.x << std::endl;
-
-	//this->emiterSpawnTDelay = this->emiterSpawnTDelayStandard* *objectFollow->o_speed;
-}
-
-bool ParticleEmitter::shouldUpdateTransformation() {
-	return shouldUpdateObject;
-}
-
-bool ParticleEmitter::followObjectDead() {
-	return (objectFollow->o_pos == nullptr);
-}
-
 
 void ParticleEmitter::checkDeadParticles() {
 
@@ -328,14 +334,11 @@ void ParticleEmitter::instantiateVertexData() {
 
 
 
-
 ParticleEmitter::~ParticleEmitter()
 {
 
 	delete emitterComputeShader;
-
-	if(shouldUpdateObject)
-		delete objectFollow;
+	glDeleteBuffers(nrMaxParticles, &this->pe_particleBuffer);
 	//delete[]this->p_pos;
 	//delete[]this->p_scale;
 	//delete[]this->p_vel;

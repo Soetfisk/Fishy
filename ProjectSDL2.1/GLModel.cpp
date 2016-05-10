@@ -140,7 +140,6 @@ glm::vec3 GLModel::GetUp()
 {
 	this->up = glm::cross(GetForward(), GetRight());
 	return glm::normalize(this->up);
-	//glm::normalize(up);
 }
 
 AABB GLModel::GetBoundingBox()
@@ -168,10 +167,4 @@ void GLModel::DuplicateModel(FishBox * FSH_Loader, unsigned int modelID)
 	}
 
 	FSHData::material * test = FSH_Loader->meshMaterial(modelID, 0);
-
-}
-
-FollowParticle* GLModel::getParticleFollow() {
-	FollowParticle*test = new FollowParticle(&this->transform->GetPos(), &this->forward, &this->up, &this->right);
-	return test;
 }

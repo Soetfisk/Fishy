@@ -7,7 +7,7 @@ GLGUIHandler::GLGUIHandler()
 
 	this->shader = new GLShader("text");
 	deleteShader = true;
-
+	this->nrFramesThisSecond = 0;
 	InitTextureInfo();
 }
 
@@ -36,6 +36,7 @@ void GLGUIHandler::Update(float dt)
 	{
 	case ACTIVE:
 		newSec += dt;
+		this->nrFramesThisSecond++;
 		if (newSec >= 1)
 		{
 			time++;
@@ -44,8 +45,9 @@ void GLGUIHandler::Update(float dt)
 			textPos[TIME][0] = (float)(window::HALF_WIDTH - (gui->GetTextLenght(printText[TIME], textScale[TIME]) * 0.5));
 
 			// Update FPS
-			printText[FPS] = textStart[FPS] + std::to_string((int)(1 / dt));
+			printText[FPS] = textStart[FPS] + std::to_string(nrFramesThisSecond);
 			textPos[FPS][0] = window::WIDTH - (gui->GetTextLenght(printText[FPS], textScale[FPS]));
+			this->nrFramesThisSecond = 0;
 		}
 		break;
 	case OVER:
