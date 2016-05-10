@@ -127,13 +127,13 @@ void GLPlayer::HandleCollision(PlayerStates state, float deltaTime, glm::vec3 mo
 	case EATING:
 		if (momentum.x > 0)
 		{
-			this->transform->SetScale(this->transform->GetScale() + (deltaTime / 4));
+			size += momentum.x;
 			totalPoints += (int)(100 * momentum.x);
 			currentPoints += (int)(100 * momentum.x);
 		}
 		if (momentum.x < 0 && (totalPoints + 100 * momentum.x) >= 0)
 		{
-			this->transform->SetScale(this->transform->GetScale() + (deltaTime / 4));
+			size += momentum.x;
 			totalPoints += (int)(100 * momentum.x);
 			currentPoints += (int)(100 * momentum.x);
 		}
@@ -348,6 +348,11 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 
 	CalcVelocity(deltaTime);
 	HandleDash(deltaTime);
+
+	if (this->GetTransform().GetScale().x < size)
+	{
+		this->transform->SetScale(this->transform->GetScale() + (deltaTime / 4));
+	}
 
 	//this->blendWeights[AONE] = 1.0f; //ANIMATION TEST
 	//this->blendWeights[ATHREE] = 1.0f;

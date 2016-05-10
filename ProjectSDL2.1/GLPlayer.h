@@ -98,6 +98,7 @@ private:
 	const float MAX_ANGLE = 75;
 	const int	MAX_INPUT = (int)glm::pow(2, 15);
 
+	float size = 1;
 	float lastHorizontal = 0;
 	float lastVertical = 0;
 	float lastForward = 0;
