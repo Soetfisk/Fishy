@@ -18,29 +18,7 @@ GLPlayer::GLPlayer() : GLModel() //NEVER USE
 	this->currentPowerUp = POWER_NEUTRAL;
 }
 
-GLPlayer::GLPlayer(FishBox* FSH_Loader, char* filePath) : GLModel(FSH_Loader, filePath) //DEPRICATED USE AT OWN RISK
-{
-	sound[SHOOT_SOUND] = Mix_LoadWAV("./res/Sounds/shoot.wav");
-	this->m_camera;
-	this->m_projectileHandler = new GLProjectileHandler(FSH_Loader, 2, 1, 20, 10.0f);
-	this->m_velocity = glm::vec3(0);
-}
 
-GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID) : GLModel(FSH_Loader, modelID)
-{
-	sound[SHOOT_SOUND] = Mix_LoadWAV("./res/Sounds/shoot.wav");
-	this->m_camera;
-	this->m_projectileHandler = new GLProjectileHandler(FSH_Loader, 2, 1, 20, 20.0f);
-	this->m_velocity = glm::vec3(0);
-	
-	this->dashCurrentDuration = 0.0f;
-	this->dashCooldownCounter = 0;
-	this->isDashing = false;
-	this->dashOnCooldown = false;
-	blendWeights = new float[NUM_ANIMATION];
-	for (int i = 0; i < NUM_ANIMATION; i++)
-		blendWeights[i] = 0.0f;
-}
 
 GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int projectileModelID) : GLModel(FSH_Loader, modelID)
 {
@@ -59,7 +37,10 @@ GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int proj
 	this->dashOnCooldown = false;
 	blendWeights = new float[NUM_ANIMATION];
 	for (int i = 0; i < NUM_ANIMATION; i++)
+	{
 		blendWeights[i] = 0.0f;
+		animationFactors[i] = 0.0f;
+	}
 }
 
 
@@ -247,21 +228,191 @@ void GLPlayer::Update(float dt)
 
 void GLPlayer::moveAnimation(float deltaTime, float speedFactor)
 {
-	static bool left = true, stop = false;
 	float speed = abs(deltaTime * speedFactor), y;
 
-	static float x = 0.0f;
-	x += speed;
+	animationFactors[ASIX] += speed;
 
-	y = sin(x);
+	y = sin(animationFactors[ASIX]);
+
 	if (y > 0.0)
-		blendWeights[ASIX] = y;
+		this->blendWeights[ASIX] = y;
 	if (y < 0.0)
-		blendWeights[ASEVEN] = abs(y);
-	//if (fabs(x - PI) <= FLT_EPSILON)
-	//	x = 0.0;
+		this->blendWeights[ASEVEN] = abs(y);
 
-	blendWeights[AFIVE] = 1.0f;
+}
+
+void GLPlayer::resetMoveAnimation(float deltaTime, float speedFactor)
+{
+	float speed = deltaTime * speedFactor;
+
+
+	if (blendWeights[ASIX] > 0.0f)
+	{
+		blendWeights[ASIX] -= speed;
+		animationFactors[ASIX] = 0.0f;
+		if (blendWeights[ASIX] < 0.0f)
+			blendWeights[ASIX] = 0.0f;
+	}
+	else if (blendWeights[ASEVEN] > 0.0f)
+	{
+		blendWeights[ASEVEN] -= speed;
+		animationFactors[ASEVEN] = 0.0f;
+		if (blendWeights[ASEVEN] < 0.0f)
+			blendWeights[ASEVEN] = 0.0f;
+	}
+}
+
+void GLPlayer::resetHeadAnimation(float deltaTime, float speedFactor, int axis) // 0 = horizontal, 2 = vertical
+{
+	float speed = deltaTime * speedFactor;
+
+
+	if (axis == 0) // handle horizontal
+	{
+		if (blendWeights[AONE] > 0.0f)
+		{
+			blendWeights[AONE] -= speed;
+			animationFactors[AONE] = 0.0f;
+			if (blendWeights[AONE] < 0.0f)
+			{
+				blendWeights[AONE] = 0.0f;
+			}
+		}
+		if (blendWeights[AFOUR] > 0.0f)
+		{
+			blendWeights[AFOUR] -= speed;
+			animationFactors[AFOUR] = 0.0f;
+			if (blendWeights[AFOUR] < 0.0f)
+			{
+				blendWeights[AFOUR] = 0.0f;
+			}
+		}
+	}
+
+	if (axis == 1) // handle Vertical
+	{
+		if (blendWeights[ATWO] > 0.0f)
+		{
+			blendWeights[ATWO] -= speed;
+			animationFactors[ATWO] = 0.0f;
+			if (blendWeights[ATWO] < 0.0f)
+			{
+				blendWeights[ATWO] = 0.0f;
+			}
+		}
+		if (blendWeights[ATHREE] > 0.0f)
+		{
+			blendWeights[ATHREE] -= speed;
+			animationFactors[ATHREE] = 0.0f;
+			if (blendWeights[ATHREE] < 0.0f)
+			{
+				blendWeights[ATHREE] = 0.0f;
+			}
+		}
+	}
+
+
+
+
+}
+
+void GLPlayer::headAnimation(float deltaTime, float speedFactor, int direction)
+{
+
+	//horizontal
+
+	if (direction == 0 && blendWeights[AONE] < 1.0) //head left
+	{
+		if (blendWeights[AFOUR] > 0.0)
+		{
+			animationFactors[AFOUR] -= abs(deltaTime * speedFactor);
+			blendWeights[AFOUR] += animationFactors[AFOUR];
+		}
+		else if (blendWeights[AFOUR] < 0.0)
+		{
+			blendWeights[AFOUR] = 0.0f;
+			animationFactors[AFOUR] = 0.0f;
+		}
+
+		else
+		{
+			animationFactors[AONE] += abs(deltaTime * speedFactor);
+			blendWeights[AONE] += animationFactors[AONE];
+		}
+		if (animationFactors[AFOUR] >= 0.0f)
+			animationFactors[AFOUR] = 0.0f;
+
+	}
+
+	else if (direction == 3 && blendWeights[AFOUR] < 1.0) //head right
+	{
+		if (blendWeights[AONE] > 0.0)
+		{
+			animationFactors[AONE] -= abs(deltaTime * speedFactor);
+			blendWeights[AONE] += animationFactors[AONE];
+		}
+		else if (blendWeights[AONE] < 0.0)
+		{
+			blendWeights[AONE] = 0.0f;
+			animationFactors[AONE] = 0.0f;
+		}
+
+		else
+		{
+			animationFactors[AFOUR] += abs(deltaTime * speedFactor);
+			blendWeights[AFOUR] += animationFactors[AFOUR];
+		}
+		if (animationFactors[AONE] >= 0.0f)
+			animationFactors[AONE] = 0.0f;
+	}
+
+
+	//vertical
+	if (direction == 1 && blendWeights[ATHREE] < 1.0) //head up
+	{
+		if (blendWeights[ATWO] > 0.0)
+		{
+			animationFactors[ATWO] -= abs(deltaTime * speedFactor);
+			blendWeights[ATWO] += animationFactors[ATWO];
+		}
+		else if (blendWeights[ATWO] < 0.0)
+		{
+			blendWeights[ATWO] = 0.0f;
+			animationFactors[ATWO] = 0.0f;
+		}
+
+		else
+		{
+			animationFactors[ATHREE] += abs(deltaTime * speedFactor);
+			blendWeights[ATHREE] += animationFactors[ATHREE];
+		}
+		if (animationFactors[ATWO] >= 0.0f)
+			animationFactors[ATWO] = 0.0f;
+	}
+	else if (direction == 2 && blendWeights[ATWO] < 1.0) //head down
+	{
+		if (blendWeights[ATHREE] > 0.0)
+		{
+			animationFactors[ATHREE] -= abs(deltaTime * speedFactor);
+			blendWeights[ATHREE] += animationFactors[ATHREE];
+		}
+		else if (blendWeights[ATHREE] < 0.0)
+		{
+			blendWeights[ATHREE] = 0.0f;
+			animationFactors[ATHREE] = 0.0f;
+		}
+
+		else
+		{
+			animationFactors[ATWO] += abs(deltaTime * speedFactor);
+			blendWeights[ATWO] += animationFactors[ATWO];
+		}
+		if (animationFactors[ATHREE] >= 0.0f)
+			animationFactors[ATHREE] = 0.0f;
+
+	}
+	
+
 }
 
 //adds a controller too the player
@@ -345,11 +496,37 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 		//this->meshes[1]->GetTransform().m_rot.z += -(lastHorizontal / (glm::pow(2, 15))) * deltaTime;
 	}
 		
+
+	if (abs(lastHorizontal) > DEADZONE)
+	{
+		if (lastHorizontal > 0.0)
+			headAnimation(deltaTime, 0.25, 0);
+		else if (lastHorizontal < 0.0)
+			headAnimation(deltaTime, 0.25, 3);
+	}
+	else
+		resetHeadAnimation(deltaTime, 3.0, 0);
+	if (abs(lastVertical) > DEADZONE)
+	{
+		if (lastVertical > 0.0)
+			headAnimation(deltaTime, 0.25, 1);
+		else if (lastVertical < 0.0)
+			headAnimation(deltaTime, 0.25, 2);
+	}
+	else
+		resetHeadAnimation(deltaTime, 3.0, 1);
+
+
 	this->meshes[0]->GetTransform().m_rot.z -= this->meshes[0]->GetTransform().m_rot.z * deltaTime;
 	//this->meshes[1]->GetTransform().m_rot.z -= this->meshes[0]->GetTransform().m_rot.z * deltaTime;
 	
 	//std::cout << "X: " << this->m_velocity.x << " Y: " << this->m_velocity.y << " Z: " << this->m_velocity.z << std::endl;
 
+	if (lastForward > DEADZONE)
+		moveAnimation(deltaTime, sqrt(glm::dot(m_velocity, m_velocity)));
+	else
+		resetMoveAnimation(deltaTime, 2.0f);
+	
 	CalcVelocity(deltaTime);
 	HandleDash(deltaTime);
 
@@ -358,9 +535,6 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 		this->transform->SetScale(this->transform->GetScale() + (deltaTime / 4));
 	}
 
-	//this->blendWeights[AONE] = 1.0f; //ANIMATION TEST
-	//this->blendWeights[ATHREE] = 1.0f;
-	this->moveAnimation(deltaTime, 2.75);
 	//camera update
 	this->m_camera.Update(this->GetTransform(), deltaTime);
 
@@ -394,7 +568,7 @@ void GLPlayer::PlayerDash()
 		isDashing = true;
 		dashCurrentDuration = 0.0f;
 		dashCooldownCounter = 0.0f;
-		//lastForward = 32768.0f;
+		lastForward = 32768.0f;
 	}
 }
 
@@ -444,10 +618,13 @@ void GLPlayer::CalcVelocity(float& deltaTime)
 			//m_velocity.z = (m_velocity.z > MAX_SPEED) ? MAX_SPEED : (m_velocity.z < -MAX_SPEED) ? -MAX_SPEED : m_velocity.z;
 			
 		}
+		
 
 		this->transform->m_pos += (m_velocity  * deltaTime);
 		glm::vec3 friction = (m_velocity * MOVEMENT_FRICTION);
 		m_velocity -= friction * deltaTime;
+
+		
 	}
 
 	if (glm::dot(m_velocity, m_velocity) > 20)
@@ -499,7 +676,7 @@ void GLPlayer::HandleDash(float & deltaTime)
 		{
 			dashOnCooldown = false;
 			dashCooldownCounter = 0.0f;
-			//lastForward = 0.0f;
+			lastForward = 0.0f;
 		}
 	}
 }

@@ -55,13 +55,10 @@ public:
 	};
 
 	GLPlayer();
-	GLPlayer(FishBox * FSH_Loader, char* filePath);
-	GLPlayer(FishBox * FSH_Loader, unsigned int modelID);
 	GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int projectileModelID);
 	~GLPlayer();
 	void Update(Events state, glm::vec3 movementVec);
 	GLCamera GetCamera();
-
 	void PlayerEating(float deltaTime);
 	void TestDraw(GLShader& shader);
 	void DrawProjectile(GLShader& shader);
@@ -79,6 +76,9 @@ public:
 	unsigned int GetBlendShapeCount() { return NUM_ANIMATION; }
 	glm::vec3& getVelocity() { return m_velocity; }
 	void moveAnimation(float deltaTime, float speedFactor);
+	void resetMoveAnimation(float deltaTime, float speedFactor);
+	void headAnimation(float deltaTime, float speedFactor, int direction);
+	void resetHeadAnimation(float deltaTime, float speedFactor, int axis);
 private:
 	enum
 	{
@@ -123,6 +123,7 @@ private:
 	float powerUpTimer = 0;
 
 	float * blendWeights;
+	float animationFactors[NUM_ANIMATION];
 	float deltaTime = -1;
 
 

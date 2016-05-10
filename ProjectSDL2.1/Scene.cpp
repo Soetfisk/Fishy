@@ -3,7 +3,6 @@
 
 void Scene::Init()
 {
-	
 	// set player position and rotation to the correct startpositions
 	this->players.at(1)->GetTransform().SetPos(glm::vec3(100, 0, 0));
 	this->players.at(1)->GetTransform().SetRot(glm::vec3(0, -1.58, 0));
@@ -82,11 +81,14 @@ void Scene::Init()
 	this->endTimer = 60;
 	this->endScore = 1000;
 
-	//particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
+	particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
 
-	//for (int z = 0; z < 1; z++) {
-	//	particleHandler->AddEmiter(EmitterType::STATICSTREAM, glm::vec4(0, 1, 3 + (z % 2 == 0) ? z * 2 : -z * 2, 1));
-	//}
+	for (int z = 0; z < 5; z++) {
+		for (int x = 0; x < 5; x++) {
+			particleHandler->AddEmiter(EmitterType::STATICSTREAM, glm::vec4((float)x* RNG::range(-40.f, 40.f), -50.f, (float)z* RNG::range(-60.f, 60.f), 1));
+		}
+		
+	}
 	//for (int z = 0; z < 3; z++) {
 	//	particleHandler->AddEmiter(EmitterType::GOLDSTREAM, glm::vec4(2, 1, 3 + (z % 2 == 0) ? z * 2 : -z * 2, 1));
 	//}
@@ -97,12 +99,10 @@ void Scene::Init()
 void Scene::LoadModels()
 {
 	FSH_Loader.LoadScene("Models/fishy.FSH"); //PlayerFish
-	FSH_Loader.LoadScene("Models/Goldfish.FSH"); //GoldFish
+	FSH_Loader.LoadScene("Models/GoldFishBlend.FSH"); //GoldFish
 	FSH_Loader.LoadScene("Models/BlueTang.FSH"); //BlueTang
 	FSH_Loader.LoadScene("Models/Bubble2.FSH"); //Bubble
-	FSH_Loader.LoadScene("Models/tempAquarium.FSH"); //Aquarium
-	FSH_Loader.LoadScene("Models/weed2.FSH"); //SeaWeedLeaf
-
+	FSH_Loader.LoadScene("Models/AquariumRedux.FSH"); //Aquarium
 	
 	for (int i = 0; i < 2; i++) {
 		this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));
@@ -118,9 +118,6 @@ void Scene::LoadModels()
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Aquarium));
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
-
-	this->specialStaticMeshes.push_back(new SeaWeedLeafs(&FSH_Loader, SeaWeedLeaf));
-
 	this->collisionHandler.AddNPC(NPCs);
 	this->collisionHandler.AddPlayer(players);
 	this->collisionHandler.AddModel(models);
@@ -165,10 +162,8 @@ void Scene::CheckWinner()
 	if (!this->winner && (this->guih->GetTime() >= this->endTimer || this->players.at(0)->GetTotalPoints() >= this->endScore || this->players.at(1)->GetTotalPoints() >= this->endScore))
 	{
 		this->winner = true;
-		
-		if (this->players.at(0)->GetTotalPoints() == this->players.at(1)->GetTotalPoints())
-			this->guih->Tie();
-		else if (this->players.at(0)->GetTotalPoints() > this->players.at(1)->GetTotalPoints())
+
+		if (this->players.at(0)->GetTotalPoints() > this->players.at(1)->GetTotalPoints())
 			this->guih->Player1Won();
 		else
 			this->guih->Player2Won();
@@ -183,8 +178,10 @@ void Scene::CheckWinner()
 		{
 			*this->gameState = GLOBAL_GameState::MENU;
 			this->ResetScene();
-		}		
+		}
+			
 	}
+
 }
 
 void Scene::AddScore()
@@ -256,13 +253,9 @@ Scene::~Scene(){
 	{
 		delete staticMeshes.at(i);
 	}
-	for (int i = 0; i < specialStaticMeshes.size(); i++)
-	{
-		delete specialStaticMeshes.at(i);
-	}
 
 	delete guih;
-	//delete particleHandler;
+	delete particleHandler;
 	for (int i = 0; i < NUM_MUSIC; i++)
 	{
 		Mix_FreeMusic(music[i]);
@@ -285,9 +278,9 @@ void Scene::Update(float& deltaTime) {
 
 	guih->Update(deltaTime);
 
-	this->collisionHandler.CheckCollisions(deltaTime);
+	//this->collisionHandler.CheckCollisions(deltaTime);
 	this->AddScore();
-	//this->particleHandler->UpdateParticles(deltaTime);
+	this->particleHandler->UpdateParticles(deltaTime);
 	for (size_t i = 0; i < this->NPCs.size(); i++)
 		this->NPCs.at(i)->NPCUpdate(deltaTime);
 
@@ -317,9 +310,9 @@ void Scene::DrawScene() {
 
 		for (size_t j = 0; j < this->players.size(); j++)
 		{
-			players.at(j)->TestDraw(*shaders[BLEND_SHAPE]);
 			shaders[BLEND_SHAPE]->Uniform1ui("BlendShapeCount", (GLuint)players.at(j)->GetBlendShapeCount());
 			shaders[BLEND_SHAPE]->Uniform1fv("Weights", players.at(j)->GetBlendWeights());
+			players.at(j)->TestDraw(*shaders[BLEND_SHAPE]);
 		}
 		shaders[MODELS]->Bind();
 		shaders[MODELS]->Update(players.at(i)->GetCamera());
@@ -335,12 +328,8 @@ void Scene::DrawScene() {
 		{
 			staticMeshes.at(i)->Draw(*shaders[MODELS]);
 		}
-		for (unsigned int i = 0; i < specialStaticMeshes.size(); i++)
-		{
-			specialStaticMeshes.at(i)->Draw(*shaders[MODELS]);
-		}
 
-		//this->particleHandler->DrawParticles(shaders[PARTICLE], players.at(i)->GetCamera());
+		this->particleHandler->DrawParticles(shaders[PARTICLE], players.at(i)->GetCamera());
 
 		this->frameBuffer->UnbindFrameBuffer();
 		this->frameBuffer2->BindFrameBuffer();
@@ -463,7 +452,6 @@ void Scene::ResetScene()
 	this->endSceneTimer = 0;
 	this->endGame = false;
 	this->winner = false;
-	this->guih->Reset();
 }
 
 void Scene::HandleEvenet(SDL_Event* e) {
@@ -552,19 +540,15 @@ void Scene::HandleEvenet(SDL_Event* e) {
 				break;
 			case SDL_SCANCODE_H:
 				players.at(1)->SetPowerUp(GLPlayer::POWER_HIGH);
-				guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::HIGH);
 				break;
 			case SDL_SCANCODE_Y:
 				players.at(1)->SetPowerUp(GLPlayer::POWER_NEUTRAL);
-				guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::NOTHING);
 				break;
 			case SDL_SCANCODE_J:
 				players.at(1)->SetPowerUp(GLPlayer::POWER_BUBBLESHOTGUN);
-				guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::SHOTGUN);
 				break;
 			case SDL_SCANCODE_K:
 				players.at(1)->SetPowerUp(GLPlayer::POWER_BUBBLEBIG);
-				guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::BIG);
 				break;
 			case SDL_SCANCODE_L:
 				ResetScene();
