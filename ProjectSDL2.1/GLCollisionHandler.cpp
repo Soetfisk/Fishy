@@ -11,7 +11,7 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 {
 	glm::vec3 distance;
 	float distSqrd;
-	AABB wall(glm::vec3(0), glm::vec3(125, 48, 86));
+	AABB wall(glm::vec3(0), glm::vec3(123, 48, 83));
 	for (size_t i = 0; i < players.size(); i++)
 	{
 		distance = players.at(i)->GetTransform().GetPos() - players.at(1 - i)->GetTransform().GetPos();

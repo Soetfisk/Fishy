@@ -278,7 +278,7 @@ void Scene::Update(float& deltaTime) {
 
 	guih->Update(deltaTime);
 
-	//this->collisionHandler.CheckCollisions(deltaTime);
+	this->collisionHandler.CheckCollisions(deltaTime);
 	this->AddScore();
 	this->particleHandler->UpdateParticles(deltaTime);
 	for (size_t i = 0; i < this->NPCs.size(); i++)
