@@ -155,8 +155,10 @@ void Scene::CheckWinner()
 	if (!this->winner && (this->guih->GetTime() >= this->endTimer || this->players.at(0)->GetTotalPoints() >= this->endScore || this->players.at(1)->GetTotalPoints() >= this->endScore))
 	{
 		this->winner = true;
-
-		if (this->players.at(0)->GetTotalPoints() > this->players.at(1)->GetTotalPoints())
+		
+		if (this->players.at(0)->GetTotalPoints() == this->players.at(1)->GetTotalPoints())
+			this->guih->Tie();
+		else if (this->players.at(0)->GetTotalPoints() > this->players.at(1)->GetTotalPoints())
 			this->guih->Player1Won();
 		else
 			this->guih->Player2Won();
@@ -171,10 +173,8 @@ void Scene::CheckWinner()
 		{
 			*this->gameState = GLOBAL_GameState::MENU;
 			this->ResetScene();
-		}
-			
+		}		
 	}
-
 }
 
 void Scene::AddScore()
@@ -517,15 +517,19 @@ void Scene::HandleEvenet(SDL_Event* e) {
 				break;
 			case SDL_SCANCODE_H:
 				players.at(1)->SetPowerUp(GLPlayer::POWER_HIGH);
+				guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::HIGH);
 				break;
 			case SDL_SCANCODE_Y:
 				players.at(1)->SetPowerUp(GLPlayer::POWER_NEUTRAL);
+				guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::NOTHING);
 				break;
 			case SDL_SCANCODE_J:
 				players.at(1)->SetPowerUp(GLPlayer::POWER_BUBBLESHOTGUN);
+				guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::SHOTGUN);
 				break;
 			case SDL_SCANCODE_K:
 				players.at(1)->SetPowerUp(GLPlayer::POWER_BUBBLEBIG);
+				guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::BIG);
 				break;
 			case SDL_SCANCODE_L:
 				ResetScene();
