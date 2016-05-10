@@ -68,5 +68,6 @@ private:
 	GameState currentState;
 
 	void InitTextureInfo();
+	int nrFramesThisSecond;
 };
 
