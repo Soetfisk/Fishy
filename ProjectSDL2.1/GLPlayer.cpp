@@ -20,6 +20,7 @@ GLPlayer::GLPlayer() : GLModel() //NEVER USE
 }
 
 
+	
 
 GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int projectileModelID) : GLModel(FSH_Loader, modelID)
 {
@@ -37,6 +38,7 @@ GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int proj
 	this->isDashing = false;
 	this->dashOnCooldown = false;
 	this->blendWeights = new float[NUM_ANIMATION];
+	this->speed = 0;
 	this->playEat = false;
 	for (int i = 0; i < NUM_ANIMATION; i++)
 	{
@@ -54,6 +56,7 @@ GLPlayer::~GLPlayer()
 	}
 	delete this->m_projectileHandler;
 	delete[] this->blendWeights;
+	//delete this->player_PartcileEmitter;
 }
 
 //handles events sent too the player // movement.x = deltaTime
@@ -112,8 +115,8 @@ void GLPlayer::HandleCollision(PlayerStates state, float deltaTime, glm::vec3 mo
 		this->m_velocity = momentum;
 	break;
 	case EATING:
-		if (momentum.x > 0)
-		{
+		if (momentum.x > 0){
+		
 			size += momentum.x;
 			totalPoints += (int)(100 * momentum.x);
 			currentPoints += (int)(100 * momentum.x);
@@ -565,6 +568,9 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	this->m_camera.Update(this->GetTransform(), deltaTime);
 
 	this->m_projectileHandler->Update(deltaTime);
+
+
+	
 }
 
 void GLPlayer::PlayerShoot()
@@ -586,6 +592,9 @@ void GLPlayer::PlayerShoot()
 	}
 	this->m_projectileHandler->Shoot(GetForward(), transform->m_pos, transform->m_rot, m_velocity, GetRight(), GetUp());
 }
+
+
+
 void GLPlayer::PlayerDash()
 {
 	if (!isDashing && !dashOnCooldown)
@@ -675,6 +684,8 @@ void GLPlayer::CalcVelocity(float& deltaTime)
 	m_velocity.x = (glm::abs(m_velocity.x) < MIN_SPEED) ? 0.0f : m_velocity.x;
 	m_velocity.y = (glm::abs(m_velocity.y) < MIN_SPEED) ? 0.0f : m_velocity.y;
 	m_velocity.z = (glm::abs(m_velocity.z) < MIN_SPEED) ? 0.0f : m_velocity.z;
+
+	this->speed = sqrt(glm::dot(m_velocity, m_velocity));
 }
 
 void GLPlayer::HandleDash(float & deltaTime)
@@ -743,4 +754,40 @@ void GLPlayer::PlayerEating(float deltaTime)
 
 
 
+}
+
+void GLPlayer::addParticleHandleRefernce(ParticleHandler* pHandlerReference) {
+	this->particleHandlerReference = pHandlerReference;
+
+	this->player_PartcileEmitter = this->particleHandlerReference->CreateEmitter(EmitterType::PLAYERFOLLOW, glm::vec4(this->GetTransform().GetPos(),1));
+	this->player_PartcileEmitter->updateDirection(glm::vec4(this->forward, 0));
+}
+
+void GLPlayer::DrawParticles(GLShader* shader) {
+	if(this->player_PartcileEmitter != nullptr)
+		this->player_PartcileEmitter->Draw(shader);
+	
+}
+
+void GLPlayer::UpdateParticles(float &deltaTime) {
+	
+
+	if (this->player_PartcileEmitter != nullptr) {
+
+		if (this->speed > 0.3f) {
+			this->player_PartcileEmitter->updateEmitterData(glm::vec4(this->transform->GetPos(), 1),
+				glm::vec4(this->forward, 0), glm::vec4(this->GetRight(), 0), glm::vec4(this->GetUp(), 0), 2 / speed, this->transform->GetScale().z);
+			//this->player_PartcileEmitter->updateDirection(glm::vec4(this->forward, 0));
+			//this->player_PartcileEmitter->updatePosition(glm::vec4(this->transform->GetPos(), 1));
+			//this->player_PartcileEmitter->updateSpawnRate(2/speed);
+		}
+		else {
+			this->player_PartcileEmitter->updateSpawnRate(1000.f);
+		}
+
+		this->player_PartcileEmitter->UpdateEmitter(deltaTime);
+		//this->m_projectileHandler->updateParticles(deltaTime);
+	}
+
+	
 }

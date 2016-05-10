@@ -15,10 +15,10 @@ public:
 	~ParticleHandler();
 
 	void UpdateParticles(const float& deltaTime);
-	void DrawParticles(GLShader* shader, GLCamera& camera);
-	void AddEmiter(EmitterType type, glm::mat4*& transformMatrix);
+	void DrawParticles(GLShader* shader/*, GLCamera& camera*/);
 	void AddEmiter(EmitterType type, glm::vec4 position);
 
+	ParticleEmitter *CreateEmitter(EmitterType type , glm::vec4 position);
 };
 
 #endif
