@@ -10,7 +10,7 @@ ParticleHandler::ParticleHandler(GLShader* renderShader, FishBox *FSH_LoaderRefe
 
 	this->textures[EmitterType::STATICSTREAM] = this->FSH_LoaderReference->loadTexure("./res/BubbleTest.png");
 	this->textures[EmitterType::GOLDSTREAM] = this->FSH_LoaderReference->loadTexure("./res/Star.png");
-	this->textures[EmitterType::PLAYERFOLLOW] = this->FSH_LoaderReference->loadTexure("./res/BubbleTest.png");
+	this->textures[EmitterType::PLAYERFOLLOW] = this->FSH_LoaderReference->loadTexure("./res/Star.png");
 	this->textures[EmitterType::PROJECTILE] = this->FSH_LoaderReference->loadTexure("./res/BubbleTest.png");
 
 	

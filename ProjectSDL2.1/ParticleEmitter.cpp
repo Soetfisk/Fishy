@@ -63,16 +63,16 @@ void ParticleEmitter::instantiatePlayerFollow() {
 }
 
 void ParticleEmitter::instantiateStaticStream() {
-	this->nrMaxParticles = 10;
-	this->emiterSpawnTDelay = .6f;
+	this->nrMaxParticles = 20;
+	this->emiterSpawnTDelay = 2.f;
 	this->emiterSpawnTDelayStandard = emiterSpawnTDelay;
 	this->emiterMulitbleSpawner = false;
 
 	this->particle.p_pos = this->positionEmitter;
-	this->particle.p_lifeTime = 5;
+	this->particle.p_lifeTime = 30;
 	this->particle.p_acc = glm::vec4(0, 1, 0, 0);
-	this->particle.p_scale = .05;
-	this->particle.p_speed = 1;
+	this->particle.p_scale = .8f;
+	this->particle.p_speed = 1.f;
 	this->particle.p_vel = glm::vec4(0, 1, 0, 0);
 	this->directionEmitter = glm::vec4(1, 0, 0, 1);
 
@@ -202,7 +202,7 @@ Particle ParticleEmitter::generateParticleData() {
 
 		returnData.p_acc = glm::vec4(returnData.p_acc.x + data.x, returnData.p_acc.y + data.y, returnData.p_acc.z + data.z, 0);
 		returnData.p_vel = glm::vec4(returnData.p_vel.x + data.x, returnData.p_vel.y + data.y, returnData.p_vel.z + data.z, 0);
-		returnData.p_scale = RNG::range(1.f, 1.5f);
+		returnData.p_scale = RNG::range(returnData.p_scale, returnData.p_scale*1.4f);
 		break;
 	case EmitterType::GOLDSTREAM:
 		returnData.p_acc = glm::vec4(RNG::range(-.5f, .5f), returnData.p_acc.y, RNG::range(-.5f, .5f), 0);
