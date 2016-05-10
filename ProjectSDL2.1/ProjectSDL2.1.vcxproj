@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ControlsScreen.cpp" />
     <ClCompile Include="GLMeshBS.cpp" />
     <ClCompile Include="GLNPC_BlueTang.cpp" />
     <ClCompile Include="FilterComputeShader.cpp" />
@@ -46,8 +47,13 @@
     <ClCompile Include="ParticleHandler.cpp" />
     <ClCompile Include="RoundCounter.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SeaWeedLeafs.cpp" />
+    <ClCompile Include="SpecialStaticMesh.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ControlsScreen.h" />
+    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\SeaWeedLeafs.h" />
+    <ClInclude Include="..\..\..\..\GitHub%27\LitetSpel\Fishy\ProjectSDL2.1\SpecialStaticMesh.h" />
     <ClInclude Include="GLMeshBS.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GLNPC_BlueTang.h" />

@@ -40,8 +40,8 @@ enum EmitterType
 //WINDOW
 
 namespace window {
-	const int WIDTH = 1024;
-	const int HEIGHT = 768;
+	const int WIDTH = 800;
+	const int HEIGHT = 600;
 	const float HALF_WIDTH = WIDTH * 0.5;
 	const float HALF_HEIGHT = HEIGHT * 0.5;
 	const float QUARTER_WIDHT = HALF_WIDTH * 0.5;

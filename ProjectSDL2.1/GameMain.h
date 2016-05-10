@@ -4,6 +4,7 @@
 #include "GLWindow.h"
 #include "Scene.h"
 #include "Menu.h"
+#include "ControlsScreen.h"
 
 
 class GameMain
@@ -25,6 +26,7 @@ private:
 	GLWindow* window;
 	Scene* scene;
 	Menu* menu;
+	ControlsScreen* controls;
 	GUI* textToScreen;
 
 	//Private functions below

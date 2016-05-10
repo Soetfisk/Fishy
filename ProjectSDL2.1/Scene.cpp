@@ -45,7 +45,7 @@ void Scene::Init()
 	/*filterComputeShader = new FilterComputeShader("derp");
 	filterComputeShader->LoadShader("blueFilter.glsl");
 	filterComputeShader->CreateShader(filterComputeShader->LoadShader("blueFilter.glsl"));*/
-
+	
 	// lights
 	PointLight light1;
 	light1.ambient = glm::vec3(0.0f, 0.1f, 0.0f);
@@ -204,10 +204,8 @@ void Scene::CheckWinner()
 		{
 			*this->gameState = GLOBAL_GameState::MENU;
 			this->ResetScene();
-		}
-			
+		}		
 	}
-
 }
 
 void Scene::AddScore()

@@ -22,7 +22,6 @@ GLGUIHandler::GLGUIHandler(GLShader* shader, GUI* textToScreen)
 	InitTextureInfo();
 }
 
-
 GLGUIHandler::~GLGUIHandler()
 {
 	if (deleteGUI)
@@ -191,9 +190,6 @@ void GLGUIHandler::ResetScorePlayer2()
 void GLGUIHandler::ResetPlayer2()
 {
 	score[PLAYER2] = 0;
-	textScale[PLAYER1] = 1;
-	textColor[PLAYER1] = glm::vec3(0, 1, 0);
-	textStart[PLAYER1] = "Fish1 ";
 	textEnd[PLAYER1] = " food";
 	textScale[PLAYER2] = 1;
 	textColor[PLAYER2] = glm::vec3(0, 1, 0);

@@ -11,7 +11,7 @@ GameMain::GameMain()
 	this->gameState = GLOBAL_GameState::MENU;
 	this->scene = new Scene(&this->gameState);
 	this->menu = new Menu(&this->gameState);
-	
+	this->controls = new ControlsScreen(&this->gameState);
 }
 
 GameMain::~GameMain()
@@ -19,6 +19,7 @@ GameMain::~GameMain()
 	delete this->window;
 	delete this->scene;
 	delete this->menu;
+	delete this->controls;
 	delete this->textToScreen;
 }
 
@@ -44,6 +45,7 @@ void GameMain::HandleUpdateDraw()
 		this->menu->Draw();
 		break;
 	case GLOBAL_GameState::CONTROLS:
+		this->controls->Draw();
 		break;
 	case GLOBAL_GameState::EXIT:
 		this->gameOn = false;
@@ -65,6 +67,7 @@ void GameMain::HandleEvents()
 		this->menu->HandleEvenet(&e);
 		break;
 	case GLOBAL_GameState::CONTROLS:
+		this->controls->HandleEvenet(&e);
 		break;
 	case GLOBAL_GameState::EXIT:
 		this->gameOn = false;
