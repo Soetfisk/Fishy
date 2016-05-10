@@ -78,7 +78,7 @@ void Scene::Init()
 	//player
 	this->currentPowerUp = GLPlayer::POWER_NEUTRAL;
 	// Ending game options
-	this->endTimer = 60;
+	this->endTimer = 300;
 	this->endScore = 1000;
 
 	particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
