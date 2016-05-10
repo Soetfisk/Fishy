@@ -74,11 +74,11 @@ void GLPlayer::Update(Events state, glm::vec3 movementVec)
 {
 	switch (state)
 	{
-	case CAMERA_MOVE:
-		m_camera.SetInput((movementVec.x == 0) ? -1 : movementVec.x, (movementVec.y == 0)? -1: movementVec.y);
+	case PLAYER_MOVE_RIGHT:
+		this->PlayerMove(-1, -1, -1, (movementVec.x == 0) ? -1 : movementVec.x, (movementVec.y == 0) ? -1 : movementVec.y);
 		break;
-	case PLAYER_MOVE:
-		this->PlayerMove((movementVec.x == 0) ? -1 : movementVec.x, (movementVec.y == 0) ? -1 : movementVec.y, (movementVec.z == 0) ? -1 : movementVec.z);
+	case PLAYER_MOVE_LEFT:
+		this->PlayerMove((movementVec.x == 0) ? -1 : movementVec.x, (movementVec.y == 0) ? -1 : movementVec.y, (movementVec.z == 0) ? -1 : movementVec.z, -1, -1);
 		break;
 	case PLAYER_SHOOT:
 		this->PlayerShoot();
@@ -136,7 +136,6 @@ void GLPlayer::HandleCollision(PlayerStates state, float deltaTime, glm::vec3 mo
 			this->transform->SetScale(this->transform->GetScale() + (deltaTime / 4));
 			totalPoints += (int)(100 * momentum.x);
 			currentPoints += (int)(100 * momentum.x);
-			std::cout << totalPoints << " : " << 100 * momentum.x << std::endl;
 		}
 		break;
 	case HIT:
@@ -279,21 +278,21 @@ void GLPlayer::RemoveController(int id)
 	SDL_GameControllerFromInstanceID(id);
 }
 
-void GLPlayer::PlayerMove(float x, float y, float z)
+void GLPlayer::PlayerMove(float lx, float ly, float z, float rx, float ry)
 {
-	if ((x < -DEADZONE || x > DEADZONE))
+	if ((lx < -DEADZONE || lx > DEADZONE))
 	{
-		lastHorizontal = -x;
+		lastHorizontal = -lx;
 	}
-	else if (x != -1)
+	else if (lx != -1)
 	{
 		lastHorizontal = 0;
 	}
-	if ((y < -DEADZONE || y > DEADZONE))
+	if ((ly < -DEADZONE || ly > DEADZONE))
 	{
-		lastVertical = y;
+		lastVertical = -ly;
 	}
-	else if (y != -1)
+	else if (ly != -1)
 	{
 		lastVertical = 0;
 	}
@@ -304,6 +303,22 @@ void GLPlayer::PlayerMove(float x, float y, float z)
 	else if (z != -1)
 	{
 		lastForward = 0;
+	}
+	if ((rx < -DEADZONE || rx > DEADZONE))
+	{
+		lastSide = -rx;
+	}
+	else if (rx != -1)
+	{
+		lastSide = 0;
+	}
+	if ((ry < -DEADZONE || ry > DEADZONE))
+	{
+		lastUp = ry;
+	}
+	else if (ry != -1)
+	{
+		lastUp = 0;
 	}
 }
 
@@ -408,10 +423,11 @@ void GLPlayer::CalcVelocity(float& deltaTime)
 		glm::vec3 friction = (m_velocity * MOVEMENT_FRICTION);
 		m_velocity -= friction * deltaTime;
 	}
-
 	if (glm::dot(m_velocity, m_velocity) < MAX_SPEED)
 	{
 		m_velocity += forward * (float)(lastForward / (MAX_INPUT));
+		m_velocity += this->GetUp() * (float)(lastUp / (MAX_INPUT));
+		m_velocity += this->GetRight() * (float)(lastSide / (MAX_INPUT));
 	}
 	m_velocity.x = (glm::abs(m_velocity.x) < MIN_SPEED) ? 0.0f : m_velocity.x;
 	m_velocity.y = (glm::abs(m_velocity.y) < MIN_SPEED) ? 0.0f : m_velocity.y;
