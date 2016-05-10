@@ -326,15 +326,18 @@ void GLPlayer::eatAnimation(float deltaTime, float speedFactor)
 	// (sin(x-(3/2))+1)/2    // sine 0 -> 1 and back
 	float speed = abs(deltaTime * speedFactor), y;
 
-	animationFactors[ASIX] += speed;
-	y = ((sin(animationFactors[ASIX] - (3 / 2))) + 1) / 2;
+	animationFactors[AFIVE] += speed;
+	y = sin(animationFactors[AFIVE]);
 		
-	blendWeights[ASIX] = animationFactors[ASIX];
+	if (y > 0.0f)
+		blendWeights[AFIVE] = y;
+	if (y < 0.0f)
+		blendWeights[AFIVE] = y;
 
-	if (blendWeights[ASIX] <= 0.0f)
+	if (blendWeights[AFIVE] <= 0.05f)
 	{
 		playEat = false;
-		animationFactors[ASIX] = 0.0f;
+		animationFactors[AFIVE] = 0.0f;
 	}
 }
 
