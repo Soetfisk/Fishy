@@ -43,9 +43,9 @@ void Scene::Init()
 	this->frameBuffer5->UnbindFrameBuffer();
 
 	// computeshader off cus crash
-	filterComputeShader = new FilterComputeShader("derp");
+	/*filterComputeShader = new FilterComputeShader("derp");
 	filterComputeShader->LoadShader("blueFilter.glsl");
-	filterComputeShader->CreateShader(filterComputeShader->LoadShader("blueFilter.glsl"));
+	filterComputeShader->CreateShader(filterComputeShader->LoadShader("blueFilter.glsl"));*/
 
 	// lights
 	PointLight light1;
@@ -211,8 +211,8 @@ Scene::Scene(GLOBAL_GameState* gameState) {
 	Init();
 
 	guih = new GLGUIHandler();
+	rc = new RoundCounter();
 	this->gameState = gameState;
-
 }
 
 Scene::Scene(GUI* textToScreen, GLOBAL_GameState* gameState)
@@ -221,6 +221,7 @@ Scene::Scene(GUI* textToScreen, GLOBAL_GameState* gameState)
 	Init();
 
 	guih = new GLGUIHandler(shaders[TEXT], textToScreen);
+	rc = new RoundCounter(shaders[TEXT], textToScreen);
 	this->gameState = gameState;
 }
 
@@ -235,7 +236,7 @@ Scene::~Scene(){
 	delete this->frameBuffer3;
 	delete this->frameBuffer4;
 	delete this->frameBuffer5;
-	delete this->filterComputeShader;
+	//delete this->filterComputeShader;
 	for (size_t i = 0; i < models.size(); i++)
 	{
 		delete models.at(i);
@@ -260,6 +261,7 @@ Scene::~Scene(){
 	}
 
 	delete guih;
+	delete rc;
 	//delete particleHandler;
 	for (int i = 0; i < NUM_MUSIC; i++)
 	{
@@ -300,7 +302,7 @@ void Scene::LoadScene() {
 //Calls the models.draw
 void Scene::DrawScene() {
 	guih->Draw();
-
+	rc->Draw();
 	for (size_t i = 0; i < this->players.size(); i++) {
 		// handle player powerup
 		this->UpdatePlayerPowerUp(i);
