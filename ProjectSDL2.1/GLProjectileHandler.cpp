@@ -151,6 +151,7 @@ void GLProjectileHandler::RegularShoot(glm::vec3 forward, glm::vec3 pos, glm::ve
 	float size = glm::length(projectilePtr->GetBoundingBox().halfDimension) * SHOTGUN_OFFSET;
 	pos = pos + forward * size;
 	projectilePtr->Shoot(pos, forward, velocity, rot);
+	//projectilePtr->addParticleEmitter(this->particleHandlerReference->CreateEmitter(EmitterType::PROJECTILE, glm::vec4(pos,1)));
 }
 
 void GLProjectileHandler::ShotgunShoot(glm::vec3 forward, glm::vec3 pos, glm::vec3 rot, glm::vec3 velocity, glm::vec3 right, glm::vec3 up)
@@ -206,6 +207,21 @@ void GLProjectileHandler::ShotgunShoot(glm::vec3 forward, glm::vec3 pos, glm::ve
 			// Set scale and shoot from new start pos(startPos + tempRight + tempUp)
 			projectilePtr->SetScale(projectileSize);
 			projectilePtr->Shoot(pos + tempRight + tempUp, tempForward, velocity, rot);
+			//projectilePtr->addParticleEmitter(this->particleHandlerReference->CreateEmitter(EmitterType::PROJECTILE, glm::vec4(pos + tempRight, 1)));
 		}
 	}
+}
+
+void GLProjectileHandler::drawParticles(GLShader *shader) {
+	for (size_t i = 0; i < projectiles.size(); i++)
+		projectiles.at(i)->drawParticles(shader);
+}
+
+void GLProjectileHandler::updateParticles(float& deltaTime) {
+	for (size_t i = 0; i < projectiles.size(); i++)
+		projectiles.at(i)->updateParticleEmitter(deltaTime);
+}
+
+void GLProjectileHandler::addParticleHandlerReference(ParticleHandler* pHandlerRef) {
+	this->particleHandlerReference = pHandlerRef;
 }

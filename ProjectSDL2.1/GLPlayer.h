@@ -4,6 +4,7 @@
 #include "GLModel.h"
 #include "GLProjectile.h"
 #include "GLProjectileHandler.h"
+#include "ParticleHandler.h"
 #define PI  3.141592
 
 class GLPlayer : public GLModel
@@ -55,13 +56,10 @@ public:
 	};
 
 	GLPlayer();
-	GLPlayer(FishBox * FSH_Loader, char* filePath);
-	GLPlayer(FishBox * FSH_Loader, unsigned int modelID);
 	GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int projectileModelID);
 	~GLPlayer();
 	void Update(Events state, glm::vec3 movementVec);
 	GLCamera GetCamera();
-
 	void PlayerEating(float deltaTime);
 	void TestDraw(GLShader& shader);
 	void DrawProjectile(GLShader& shader);
@@ -78,14 +76,25 @@ public:
 	float * GetBlendWeights() { return blendWeights; }
 	unsigned int GetBlendShapeCount() { return NUM_ANIMATION; }
 	glm::vec3& getVelocity() { return m_velocity; }
-	void moveAnimation(float deltaTime, float speedFactor);
+
+
+	void addParticleHandleRefernce(ParticleHandler* pHandlerReference);
+	void DrawParticles(GLShader* shader);
+	void UpdateParticles(float &deltaTime);
+
 private:
+	float speed;
 	enum
 	{
 		SHOOT_SOUND,
+		BIG_SHOOT_SOUND,
+		SHOTGUN_SHOOT_SOUND,
+		DASH_SOUND,
+		MOVE_SOUND,
 
 		NUM_SOUND
 	};
+	bool isMoving = false;
 	const int	DEADZONE = 10000;
 	float		MOVEMENT_FRICTION = 2.0f;
 	const int	MAX_SPEED = 200;	
@@ -98,6 +107,7 @@ private:
 	const float MAX_ANGLE = 75;
 	const int	MAX_INPUT = (int)glm::pow(2, 15);
 
+	float size = 1;
 	float lastHorizontal = 0;
 	float lastVertical = 0;
 	float lastForward = 0;
@@ -117,7 +127,9 @@ private:
 	float powerUpTimer = 0;
 
 	float * blendWeights;
+	float animationFactors[NUM_ANIMATION];
 	float deltaTime = -1;
+	bool playEat;
 
 
 	Mix_Chunk *sound[NUM_SOUND];
@@ -141,8 +153,17 @@ private:
 
 	void CalcVelocity(float& deltaTime);
 	void HandleDash(float& deltaTime);
+	
+	void moveAnimation(float deltaTime, float speedFactor);
+	void resetMoveAnimation(float deltaTime, float speedFactor);
+	void headAnimation(float deltaTime, float speedFactor, int direction);
+	void resetHeadAnimation(float deltaTime, float speedFactor, int axis);
+	void eatAnimation(float deltaTime, float speedFactor);
 
 	void HandlePowerUps();
 	PowerUps getPowerUpByNumber(int power);
+	
+	ParticleHandler *particleHandlerReference;
+	ParticleEmitter *player_PartcileEmitter;
 };
 

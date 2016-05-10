@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GLModel.h"
+#include "ParticleHandler.h"
 
 enum ProjectileStates
 {
@@ -32,6 +33,9 @@ public:
 	void Inactivate();					// Deactivates the projectile
 	bool IsActive();					// Returns true if the projectile is active
 
+	void addParticleEmitter(ParticleEmitter* emitter);
+	void updateParticleEmitter(float& deltaTime);
+	void drawParticles(GLShader* shader);
 private:
 	const float MIN_PROJECTILE_SPEED = 20;
 	const float MIN_SPEED = 0.5f;
@@ -44,6 +48,7 @@ private:
 	glm::vec3 forward;				// The direction the projectile will travel
 	glm::vec3 forwardVel;
 	ProjectileStates currentState;	// The current state
+	ParticleEmitter* projectileEmitter;
 };
 
 /*

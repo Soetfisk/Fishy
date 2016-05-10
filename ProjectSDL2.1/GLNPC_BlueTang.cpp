@@ -16,48 +16,48 @@ GLNPC_BlueTang::GLNPC_BlueTang(FishBox * FSH_Loader, unsigned int modelID) : GLN
 
 void GLNPC_BlueTang::NPCUpdate(float deltaTime)
 {
-	if (currentState != NPC_INACTIVE)
-	{
-		TimeUntilChange -= deltaTime;
-		if (TimeUntilChange < 0)
-		{
-			this->TimeUntilChange = RNG::range(0.2f, 3.0f);
-			this->forwardSpeed = FishSpeedMultiplier * RNG::range(0.5f, 6.3f);
-			this->rotationChange = glm::vec3(RNG::range(-0.1f, 0.1f), RNG::range(-1.0f, 1.0f), 0);
-		}
+	//if (currentState != NPC_INACTIVE)
+	//{
+	//	TimeUntilChange -= deltaTime;
+	//	if (TimeUntilChange < 0)
+	//	{
+	//		this->TimeUntilChange = RNG::range(0.2f, 3.0f);
+	//		this->forwardSpeed = FishSpeedMultiplier * RNG::range(0.5f, 6.3f);
+	//		this->rotationChange = glm::vec3(RNG::range(-0.1f, 0.1f), RNG::range(-1.0f, 1.0f), 0);
+	//	}
 
 
-		if (currentState == NPC_MOVE)
-		{
-			this->transform->m_pos += (this->GetForward() * forwardSpeed) * deltaTime;
-			this->transform->m_rot += rotationChange * deltaTime;
-			;
-		}
-		else if (currentState == NPC_FLEEING)
-		{
-			this->TimeUntilChange -= deltaTime;
-			this->transform->m_pos += this->GetForward() * (forwardSpeed + 2 * 3) * deltaTime;
-			this->transform->m_rot += rotationChange * deltaTime * 2.f;
+	//	if (currentState == NPC_MOVE)
+	//	{
+	//		this->transform->m_pos += (this->GetForward() * forwardSpeed) * deltaTime;
+	//		this->transform->m_rot += rotationChange * deltaTime;
+	//		;
+	//	}
+	//	else if (currentState == NPC_FLEEING)
+	//	{
+	//		this->TimeUntilChange -= deltaTime;
+	//		this->transform->m_pos += this->GetForward() * (forwardSpeed + 2 * 3) * deltaTime;
+	//		this->transform->m_rot += rotationChange * deltaTime * 2.f;
 
-			fleeingTimer -= deltaTime;
-			if (fleeingTimer < 0)
-			{
-				currentState = NPC_MOVE;
-			}
+	//		fleeingTimer -= deltaTime;
+	//		if (fleeingTimer < 0)
+	//		{
+	//			currentState = NPC_MOVE;
+	//		}
 
 
-		}
-		else if (currentState == NPC_BEINGEATEN)
-		{
-			glm::vec3 reduce = this->transform->GetScale() - deltaTime / 2;
-			this->transform->SetScale(reduce);
-			if (GetTransform().GetScale().y < 0.2)
-			{
-				NPCKill();
-			}
-		}
-		checkboarderCollision();
-	}
+	//	}
+	//	else if (currentState == NPC_BEINGEATEN)
+	//	{
+	//		glm::vec3 reduce = this->transform->GetScale() - deltaTime / 2;
+	//		this->transform->SetScale(reduce);
+	//		if (GetTransform().GetScale().y < 0.2)
+	//		{
+	//			NPCKill();
+	//		}
+	//	}
+	//	checkboarderCollision();
+	//}
 }
 
 void GLNPC_BlueTang::NPCDraw(GLShader & shader)
