@@ -72,7 +72,9 @@ private:
 	};
 	enum
 	{
-		BACKGROUND_MUSIC,
+		COMBAT_BACKGROUND_MUSIC,
+		ATTACK_BACKGROUND_MUSIC,
+		ARCADE_BACKGROUND_MUSIC,
 
 		NUM_MUSIC
 	};
@@ -130,6 +132,7 @@ private:
 	bool endGame = false;
 	bool winner = false;
 	GLOBAL_GameState* gameState;
+	int currentSong = 0;
 
 	ParticleHandler* particleHandler;
 

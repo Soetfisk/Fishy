@@ -206,7 +206,9 @@ void Scene::AddScore()
 Scene::Scene(GLOBAL_GameState* gameState) {
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
 	Mix_VolumeMusic(20);
-	music[BACKGROUND_MUSIC] = Mix_LoadMUS("./res/Sounds/background.wav");
+	music[COMBAT_BACKGROUND_MUSIC] = Mix_LoadMUS("./res/Sounds/background.wav");
+	music[ATTACK_BACKGROUND_MUSIC] = Mix_LoadMUS("./res/Sounds/attack.wav");
+	music[ARCADE_BACKGROUND_MUSIC] = Mix_LoadMUS("./res/Sounds/arcade.wav");
 	LoadModels();
 	Init();
 
@@ -275,6 +277,7 @@ void Scene::Update(float& deltaTime) {
 		srand(time(0));
 		int num = rand() % NUM_MUSIC;
 		//Play the music
+		currentSong = num;
 		Mix_PlayMusic(music[num], -1);
 	}
 
@@ -577,7 +580,12 @@ void Scene::HandleEvenet(SDL_Event* e) {
 			case SDL_SCANCODE_SPACE:
 				players.at(1)->Update(GLPlayer::PLAYER_SHOOT, glm::vec3(0));
 				break;
+			case SDL_SCANCODE_N:
+				currentSong = (currentSong + 1) % NUM_MUSIC;
+				Mix_PlayMusic(music[currentSong], -1);
+				break;
 			}
+
 		}
 
 		const Uint8* keyState = SDL_GetKeyboardState(NULL);

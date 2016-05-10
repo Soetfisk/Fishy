@@ -83,9 +83,14 @@ private:
 	enum
 	{
 		SHOOT_SOUND,
+		BIG_SHOOT_SOUND,
+		SHOTGUN_SHOOT_SOUND,
+		DASH_SOUND,
+		MOVE_SOUND,
 
 		NUM_SOUND
 	};
+	bool isMoving = false;
 	const int	DEADZONE = 10000;
 	float		MOVEMENT_FRICTION = 2.0f;
 	const int	MAX_SPEED = 200;	
