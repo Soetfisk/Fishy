@@ -81,19 +81,19 @@ void Scene::Init()
 	this->endTimer = 300;
 	this->endScore = 1000;
 
-	particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
-	
+	//particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
+	//
 
-	for (int i = 0; i < players.size(); i++)
-	{
-		players.at(i)->addParticleHandleRefernce(particleHandler);
-	}
+	//for (int i = 0; i < players.size(); i++)
+	//{
+	//	players.at(i)->addParticleHandleRefernce(particleHandler);
+	//}
 
-	for (int z = 0; z < 5; z++) {
-		for (int x = 0; x < 5; x++) {
-			particleHandler->AddEmiter(EmitterType::STATICSTREAM, glm::vec4((float)x* RNG::range(-4.f, 4.f), -50.f, (float)z* RNG::range(-6.f, 6.f), 1));
-		}
-	}
+	//for (int z = 0; z < 5; z++) {
+	//	for (int x = 0; x < 5; x++) {
+	//		particleHandler->AddEmiter(EmitterType::STATICSTREAM, glm::vec4((float)x* RNG::range(-4.f, 4.f), -50.f, (float)z* RNG::range(-6.f, 6.f), 1));
+	//	}
+	//}
 	//for (int z = -125; z < 125; z+=25) {
 	//	for (int x = -125; x < 125; x+=25) {
 	//		particleHandler->AddEmiter(EmitterType::STATICSTREAM, glm::vec4(x, -50.f, z, 1));
@@ -285,7 +285,7 @@ Scene::~Scene(){
 
 	delete guih;
 	delete rc;
-	delete particleHandler;
+	/*delete particleHandler;*/
 	for (int i = 0; i < NUM_MUSIC; i++)
 	{
 		Mix_FreeMusic(music[i]);
@@ -310,13 +310,13 @@ void Scene::Update(float& deltaTime) {
 
 	this->collisionHandler.CheckCollisions(deltaTime);
 	this->AddScore();
-	this->particleHandler->UpdateParticles(deltaTime);
+	//this->particleHandler->UpdateParticles(deltaTime);
 	for (size_t i = 0; i < this->NPCs.size(); i++)
 		this->NPCs.at(i)->NPCUpdate(deltaTime);
 
 	for (size_t i = 0; i < this->players.size(); i++) {
 		this->players.at(i)->Update(this->deltaTime);
-		this->players.at(i)->UpdateParticles(this->deltaTime);
+		//this->players.at(i)->UpdateParticles(this->deltaTime);
 	}
 		
 }
@@ -368,14 +368,14 @@ void Scene::DrawScene() {
 		}
 
 		//Drawing All Particles
-		shaders[PARTICLE]->Bind();
+		/*shaders[PARTICLE]->Bind();
 		shaders[PARTICLE]->Update(players.at(i)->GetCamera());
 		for (size_t j = 0; j < this->players.size(); j++)
 		{
 			players.at(j)->DrawParticles(shaders[PARTICLE]);
 		}
 
-		this->particleHandler->DrawParticles(shaders[PARTICLE]);
+		this->particleHandler->DrawParticles(shaders[PARTICLE]);*/
 
 		this->frameBuffer->UnbindFrameBuffer();
 		this->frameBuffer2->BindFrameBuffer();
