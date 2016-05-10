@@ -78,10 +78,10 @@ void Scene::Init()
 	//player
 	this->currentPowerUp = GLPlayer::POWER_NEUTRAL;
 	// Ending game options
-	this->endTimer = 60;
+	this->endTimer = 5;
 	this->endScore = 1000;
 
-	/*particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
+	particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
 	
 
 	for (int i = 0; i < players.size(); i++)
@@ -93,7 +93,7 @@ void Scene::Init()
 		for (int x = 0; x < 5; x++) {
 			particleHandler->AddEmiter(EmitterType::STATICSTREAM, glm::vec4((float)x* RNG::range(-4.f, 4.f), -50.f, (float)z* RNG::range(-6.f, 6.f), 1));
 		}
-	}*/
+	}
 	//for (int z = -125; z < 125; z+=25) {
 	//	for (int x = -125; x < 125; x+=25) {
 	//		particleHandler->AddEmiter(EmitterType::STATICSTREAM, glm::vec4(x, -50.f, z, 1));
@@ -106,7 +106,7 @@ void Scene::Init()
 	//for (int z = 0; z < 3; z++) {
 	//	particleHandler->AddEmiter(EmitterType::GOLDSTREAM, glm::vec4(2, 1, 3 + (z % 2 == 0) ? z * 2 : -z * 2, 1));
 	//}
-	
+
 
 }
 
@@ -117,7 +117,8 @@ void Scene::LoadModels()
 	FSH_Loader.LoadScene("Models/BlueTang.FSH"); //BlueTang
 	FSH_Loader.LoadScene("Models/Bubble2.FSH"); //Bubble
 	FSH_Loader.LoadScene("Models/AquariumRedux.FSH"); //Aquarium
-	
+	FSH_Loader.LoadScene("Models/weed2.FSH"); //SeaWeedLeaf
+
 	for (int i = 0; i < 2; i++) {
 		this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));
 	}
@@ -128,10 +129,13 @@ void Scene::LoadModels()
 		this->NPCs.push_back(new GLNPC_BlueTang(&FSH_Loader, BlueTang));
 		this->NPCs.at(i)->GetTransform().SetScale(glm::vec3(2));
 	}
-	
+
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Aquarium));
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
+
+	this->specialStaticMeshes.push_back(new SeaWeedLeafs(&FSH_Loader, SeaWeedLeaf));
+
 	this->collisionHandler.AddNPC(NPCs);
 	this->collisionHandler.AddPlayer(players);
 	this->collisionHandler.AddModel(models);
@@ -156,7 +160,7 @@ void Scene::HandlePlayerPowerUp()
 	{
 		this->wavyAmount = 10;
 		this->wavyLength = 0.5f; // how long the waves are. Lower = longer waves. standard = 1
-		this->fogColor = glm::vec3(0.3,0.7,0.3);
+		this->fogColor = glm::vec3(0.3, 0.7, 0.3);
 		this->fogStart = 1.0f;
 		this->fogEnd = 35.0f;
 	}
@@ -164,7 +168,7 @@ void Scene::HandlePlayerPowerUp()
 	{
 		this->wavyAmount = 0.3f; // how fast the waves will go, higher = faster. Standard = 1
 		this->wavyLength = 1.0f; // how long the waves are. Lower = longer waves. standard = 1
-		this->fogColor = glm::vec3(0.1,0.1,0.8);
+		this->fogColor = glm::vec3(0.1, 0.1, 0.8);
 		this->fogStart = 50.f;
 		this->fogEnd = 210.f;
 	}
@@ -177,9 +181,9 @@ void Scene::CheckWinner()
 	{
 		this->winner = true;
 
-		if(this->players.at(0)->GetTotalPoints() == this->players.at(1)->GetTotalPoints())
-
-		if (this->players.at(0)->GetTotalPoints() > this->players.at(1)->GetTotalPoints())
+		if (this->players.at(0)->GetTotalPoints() == this->players.at(1)->GetTotalPoints())
+			this->guih->Tie();
+		else if (this->players.at(0)->GetTotalPoints() > this->players.at(1)->GetTotalPoints())
 		{
 			this->guih->Player1Won();
 			this->rc->PlayerWon(RoundCounter::RoundPlayers::PLAYER1);
@@ -190,7 +194,7 @@ void Scene::CheckWinner()
 			this->rc->PlayerWon(RoundCounter::RoundPlayers::PLAYER2);
 		}
 	}
-	
+
 	// if we have a winner
 	if (this->winner)
 	{
@@ -201,9 +205,7 @@ void Scene::CheckWinner()
 			*this->gameState = GLOBAL_GameState::MENU;
 			this->ResetScene();
 		}
-			
 	}
-
 }
 
 void Scene::AddScore()
@@ -247,11 +249,11 @@ Scene::Scene(GUI* textToScreen, GLOBAL_GameState* gameState)
 }
 
 
-Scene::~Scene(){
+Scene::~Scene() {
 	for (int i = 0; i < NUM_SHADERS; i++) {
 		delete shaders[i];
 	}
-	
+
 	delete this->frameBuffer;
 	delete this->frameBuffer2;
 	delete this->frameBuffer3;
@@ -276,9 +278,14 @@ Scene::~Scene(){
 	{
 		delete staticMeshes.at(i);
 	}
+	for (int i = 0; i < specialStaticMeshes.size(); i++)
+	{
+		delete specialStaticMeshes.at(i);
+	}
 
 	delete guih;
 	delete rc;
+	delete particleHandler;
 	for (int i = 0; i < NUM_MUSIC; i++)
 	{
 		Mix_FreeMusic(music[i]);
@@ -303,15 +310,15 @@ void Scene::Update(float& deltaTime) {
 
 	this->collisionHandler.CheckCollisions(deltaTime);
 	this->AddScore();
-	//this->particleHandler->UpdateParticles(deltaTime);
+	this->particleHandler->UpdateParticles(deltaTime);
 	for (size_t i = 0; i < this->NPCs.size(); i++)
 		this->NPCs.at(i)->NPCUpdate(deltaTime);
 
 	for (size_t i = 0; i < this->players.size(); i++) {
 		this->players.at(i)->Update(this->deltaTime);
-		//this->players.at(i)->UpdateParticles(this->deltaTime);
+		this->players.at(i)->UpdateParticles(this->deltaTime);
 	}
-		
+
 }
 
 //Loads the scene, models, matrices
@@ -328,7 +335,7 @@ void Scene::DrawScene() {
 		this->UpdatePlayerPowerUp(i);
 		this->HandlePlayerPowerUp();
 		//Set viewport
-		glViewport(0, 0, window::WIDTH, window::HEIGHT/ 2);
+		glViewport(0, 0, window::WIDTH, window::HEIGHT / 2);
 
 		shaders[BLEND_SHAPE]->Bind();
 		shaders[BLEND_SHAPE]->Update(players.at(i)->GetCamera());
@@ -355,22 +362,20 @@ void Scene::DrawScene() {
 			staticMeshes.at(i)->Draw(*shaders[MODELS]);
 		}
 
-		//Drawing All Particles
-		/*shaders[PARTICLE]->Update(players.at(i)->GetCamera());
-		for (size_t j = 0; j < this->players.size(); j++)
+		for (unsigned int i = 0; i < specialStaticMeshes.size(); i++)
 		{
-			players.at(j)->DrawParticles(shaders[PARTICLE]);
-		}*/
+			specialStaticMeshes.at(i)->Draw(*shaders[MODELS]);
+		}
 
 		//Drawing All Particles
-		/*shaders[PARTICLE]->Bind();
+		shaders[PARTICLE]->Bind();
 		shaders[PARTICLE]->Update(players.at(i)->GetCamera());
 		for (size_t j = 0; j < this->players.size(); j++)
 		{
-			players.at(j)->DrawParticles(shaders[PARTICLE]);
-		}*/
-		
-		//this->particleHandler->DrawParticles(shaders[PARTICLE], players.at(i)->GetCamera());
+		players.at(j)->DrawParticles(shaders[PARTICLE]);
+		}
+
+		this->particleHandler->DrawParticles(shaders[PARTICLE]);
 
 		this->frameBuffer->UnbindFrameBuffer();
 		this->frameBuffer2->BindFrameBuffer();
@@ -394,27 +399,27 @@ void Scene::DrawScene() {
 
 		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("ViewPos"), 1, glm::value_ptr(players.at(i)->GetCamera().Position()));
 
-		shaders[LIGHTING]->Uniform1f("fogStartFloat",this->fogStart);
+		shaders[LIGHTING]->Uniform1f("fogStartFloat", this->fogStart);
 		shaders[LIGHTING]->Uniform1f("fogEndFloat", this->fogEnd);
-		shaders[LIGHTING]->UniformVec3("fogColorVector",this->fogColor);
+		shaders[LIGHTING]->UniformVec3("fogColorVector", this->fogColor);
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("colorTexture"), 0);
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("posTexture"), 1);
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("normalTexture"), 2);
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("distTexture"), 3);
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("ambientTexture"), 4);
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("specularTexture"), 5);
-		
+
 
 		this->RenderQuad();
 		this->frameBuffer2->UnbindFrameBuffer();
-		
+
 
 		this->frameBuffer3->BindFrameBuffer();
 		shaders[BORDER]->Bind();
 		shaders[BORDER]->Uniform1f("width", (float)window::WIDTH);
 		shaders[BORDER]->Uniform1f("height", (float)(window::HEIGHT / 2));
-		shaders[BORDER]->Uniform1f("thresholdFloat",this->borderThreshold1);
-		shaders[BORDER]->UniformVec3("borderColor",this->borderColor1);
+		shaders[BORDER]->Uniform1f("thresholdFloat", this->borderThreshold1);
+		shaders[BORDER]->UniformVec3("borderColor", this->borderColor1);
 		this->frameBuffer2->BindTexturesToProgram(shaders[BORDER]->GetUnifromLocation("texture"), 0);
 		this->RenderQuad();
 		this->frameBuffer3->UnbindFrameBuffer();
@@ -437,7 +442,7 @@ void Scene::DrawScene() {
 		this->frameBuffer4->BindTexturesToProgram(shaders[WAVY]->GetUnifromLocation("texture"), 0);
 		this->RenderQuad();
 		this->frameBuffer5->UnbindFrameBuffer();
-		
+
 
 		shaders[PASS]->Bind();
 		this->frameBuffer5->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
@@ -497,160 +502,165 @@ void Scene::ResetScene()
 
 void Scene::HandleEvenet(SDL_Event* e) {
 
-		if (e->type == SDL_CONTROLLERDEVICEADDED)
+	if (e->type == SDL_CONTROLLERDEVICEADDED)
+	{
+		players.at(e->cdevice.which)->Update(GLPlayer::JOY_ADDED, glm::vec3((float)e->cdevice.which));
+	}
+	else if (e->type == SDL_CONTROLLERDEVICEREMOVED)
+	{
+		players.at(e->cdevice.which)->Update(GLPlayer::JOY_REMOVED, glm::vec3((float)e->cdevice.which));
+	}
+	else if (e->type == SDL_CONTROLLERAXISMOTION)
+	{
+		switch (e->caxis.axis)
 		{
-			players.at(e->cdevice.which)->Update(GLPlayer::JOY_ADDED, glm::vec3((float)e->cdevice.which));
+		case SDL_CONTROLLER_AXIS_RIGHTX:
+			players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(e->caxis.value, 0, 0));
+			break;
+		case SDL_CONTROLLER_AXIS_RIGHTY:
+			players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(0, e->caxis.value, 0));
+			break;
+		case  SDL_CONTROLLER_AXIS_LEFTX:
+			players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(e->caxis.value, 0, 0));
+			break;
+		case SDL_CONTROLLER_AXIS_LEFTY:
+			players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, e->caxis.value, 0));
+			break;
+		case SDL_CONTROLLER_AXIS_TRIGGERRIGHT:
+			players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, 0, e->caxis.value));
+			break;
+		case SDL_CONTROLLER_AXIS_TRIGGERLEFT:
+			players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, 0, -e->caxis.value));
+			break;
+		default:
+			break;
 		}
-		else if (e->type == SDL_CONTROLLERDEVICEREMOVED)
+	}
+	else if (e->type == SDL_CONTROLLERBUTTONDOWN)
+	{
+		switch (e->cbutton.button)
 		{
-			players.at(e->cdevice.which)->Update(GLPlayer::JOY_REMOVED, glm::vec3((float)e->cdevice.which));
+		case SDL_CONTROLLER_BUTTON_A:
+			players.at(e->cbutton.which)->Update(GLPlayer::PLAYER_SHOOT, glm::vec3(0));
+			break;
+		case SDL_CONTROLLER_BUTTON_B:
+			players.at(e->cbutton.which)->Update(GLPlayer::PLAYER_DASH, glm::vec3(0));
+			break;
+		default:
+			break;
 		}
-		else if (e->type == SDL_CONTROLLERAXISMOTION)
+	}
+	else if (e->type == SDL_KEYUP)
+	{
+		switch (e->key.keysym.scancode)
 		{
-			switch (e->caxis.axis)
-			{
-			case SDL_CONTROLLER_AXIS_RIGHTX:
-				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(e->caxis.value, 0, 0));
-				break;
-			case SDL_CONTROLLER_AXIS_RIGHTY:
-				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(0, e->caxis.value, 0));
-				break;
-			case  SDL_CONTROLLER_AXIS_LEFTX:
-				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(e->caxis.value, 0, 0));
-				break;
-			case SDL_CONTROLLER_AXIS_LEFTY:
-				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, e->caxis.value, 0));
-				break;
-			case SDL_CONTROLLER_AXIS_TRIGGERRIGHT:
-				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, 0, e->caxis.value));
-				break;
-			case SDL_CONTROLLER_AXIS_TRIGGERLEFT:
-				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, 0, -e->caxis.value));
-				break;
-			default:
-				break;
-			}
+		case SDL_SCANCODE_UP:
+			players.at(1)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(0, 1, 0));
+			break;
+		case SDL_SCANCODE_DOWN:
+			players.at(1)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(0, 1, 0));
+			break;
+		case SDL_SCANCODE_LEFT:
+			players.at(1)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(1, 0, 0));
+			break;
+		case SDL_SCANCODE_RIGHT:
+			players.at(1)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(1, 0, 0));
+			break;
+		case SDL_SCANCODE_W:
+			players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, 1, 0));
+			break;
+		case SDL_SCANCODE_S:
+			players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, 1, 0));
+			break;
+		case SDL_SCANCODE_A:
+			players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(1, 0, 0));
+			break;
+		case SDL_SCANCODE_D:
+			players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(1, 0, 0));
+			break;
+		case SDL_SCANCODE_LSHIFT:
+			players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, 0, 1));
+			break;
+		case SDL_SCANCODE_E:
+			players.at(1)->Update(GLPlayer::PLAYER_DASH, glm::vec3(0, 0, 1));
+			break;
+		case SDL_SCANCODE_H:
+			players.at(1)->SetPowerUp(GLPlayer::POWER_HIGH);
+			guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::HIGH);
+			break;
+		case SDL_SCANCODE_Y:
+			players.at(1)->SetPowerUp(GLPlayer::POWER_NEUTRAL);
+			guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::NOTHING);
+			break;
+		case SDL_SCANCODE_J:
+			players.at(1)->SetPowerUp(GLPlayer::POWER_BUBBLESHOTGUN);
+			guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::SHOTGUN);
+			break;
+		case SDL_SCANCODE_K:
+			players.at(1)->SetPowerUp(GLPlayer::POWER_BUBBLEBIG);
+			guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::BIG);
+			break;
+		case SDL_SCANCODE_L:
+			ResetScene();
+			break;
+		default:
+			break;
 		}
-		else if (e->type == SDL_CONTROLLERBUTTONDOWN)
+	}
+	else if (e->type == SDL_KEYDOWN)
+	{
+		switch (e->key.keysym.scancode)
 		{
-			switch (e->cbutton.button)
-			{
-			case SDL_CONTROLLER_BUTTON_A:
-				players.at(e->cbutton.which)->Update(GLPlayer::PLAYER_SHOOT, glm::vec3(0));
-				break;
-			case SDL_CONTROLLER_BUTTON_B:
-				players.at(e->cbutton.which)->Update(GLPlayer::PLAYER_DASH, glm::vec3(0));
-				break;
-			default:
-				break;
-			}
-		}
-		else if (e->type == SDL_KEYUP)
-		{
-			switch (e->key.keysym.scancode)
-			{
-			case SDL_SCANCODE_UP:
-				players.at(1)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(0, 1, 0));
-				break;
-			case SDL_SCANCODE_DOWN:
-				players.at(1)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(0, 1, 0));
-				break;
-			case SDL_SCANCODE_LEFT:
-				players.at(1)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(1, 0, 0));
-				break;
-			case SDL_SCANCODE_RIGHT:
-				players.at(1)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(1, 0, 0));
-				break;
-			case SDL_SCANCODE_W:
-				players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, 1, 0));
-				break;
-			case SDL_SCANCODE_S:
-				players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, 1, 0));
-				break;
-			case SDL_SCANCODE_A:
-				players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(1, 0, 0));
-				break;
-			case SDL_SCANCODE_D:
-				players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(1, 0, 0));
-				break;
-			case SDL_SCANCODE_LSHIFT:
-				players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, 0, 1));
-				break;
-			case SDL_SCANCODE_E:
-				players.at(1)->Update(GLPlayer::PLAYER_DASH, glm::vec3(0, 0, 1));
-				break;
-			case SDL_SCANCODE_H:
-				players.at(1)->SetPowerUp(GLPlayer::POWER_HIGH);
-				break;
-			case SDL_SCANCODE_Y:
-				players.at(1)->SetPowerUp(GLPlayer::POWER_NEUTRAL);
-				break;
-			case SDL_SCANCODE_J:
-				players.at(1)->SetPowerUp(GLPlayer::POWER_BUBBLESHOTGUN);
-				break;
-			case SDL_SCANCODE_K:
-				players.at(1)->SetPowerUp(GLPlayer::POWER_BUBBLEBIG);
-				break;
-			case SDL_SCANCODE_L:
-				ResetScene();
-				break;
-			default:
-				break;
-			}
-		}
-		else if (e->type == SDL_KEYDOWN)
-		{
-			switch (e->key.keysym.scancode)
-			{
-			case SDL_SCANCODE_SPACE:
-				players.at(1)->Update(GLPlayer::PLAYER_SHOOT, glm::vec3(0));
-				break;
-			case SDL_SCANCODE_N:
-				currentSong = (currentSong + 1) % NUM_MUSIC;
-				Mix_PlayMusic(music[currentSong], -1);
-				break;
-			}
+		case SDL_SCANCODE_SPACE:
+			players.at(1)->Update(GLPlayer::PLAYER_SHOOT, glm::vec3(0));
+			break;
+		case SDL_SCANCODE_N:
+			currentSong = (currentSong + 1) % NUM_MUSIC;
+			Mix_PlayMusic(music[currentSong], -1);
+			break;
 		}
 
-		const Uint8* keyState = SDL_GetKeyboardState(NULL);
-		if (keyState[SDL_SCANCODE_UP])
-		{
-			players.at(1)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(0, -(glm::pow(2, 15)), 0));
-		}
-		if (keyState[SDL_SCANCODE_DOWN])
-		{
-			players.at(1)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(0, (glm::pow(2, 15)), 0));
-		}
-		if (keyState[SDL_SCANCODE_LEFT])
-		{
-			players.at(1)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3((glm::pow(2, 15)), 0, 0));
-		}
-		if (keyState[SDL_SCANCODE_RIGHT])
-		{
-			players.at(1)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(-(glm::pow(2, 15)), 0, 0));
-		}
-		if (keyState[SDL_SCANCODE_W])
-		{
-			players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, (glm::pow(2, 15)), 0));
-		}
-		if (keyState[SDL_SCANCODE_A])
-		{
-			players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(-(glm::pow(2, 15)), 0, 0));
-		}
-		if (keyState[SDL_SCANCODE_S])
-		{
-			players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, -(glm::pow(2, 15)), 0));
-		}
-		if (keyState[SDL_SCANCODE_D])
-		{
-			players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3((glm::pow(2, 15)), 0, 0));
-		}
-		if (keyState[SDL_SCANCODE_E])
-		{
-			players.at(1)->Update(GLPlayer::PLAYER_DASH, glm::vec3(0, 0, (glm::pow(2, 15))));
-		}
-		if (keyState[SDL_SCANCODE_LSHIFT])
-		{
-			players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, 0, (glm::pow(2, 15))));
-		}
+	}
+
+	const Uint8* keyState = SDL_GetKeyboardState(NULL);
+	if (keyState[SDL_SCANCODE_UP])
+	{
+		players.at(1)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(0, -(glm::pow(2, 15)), 0));
+	}
+	if (keyState[SDL_SCANCODE_DOWN])
+	{
+		players.at(1)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(0, (glm::pow(2, 15)), 0));
+	}
+	if (keyState[SDL_SCANCODE_LEFT])
+	{
+		players.at(1)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3((glm::pow(2, 15)), 0, 0));
+	}
+	if (keyState[SDL_SCANCODE_RIGHT])
+	{
+		players.at(1)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(-(glm::pow(2, 15)), 0, 0));
+	}
+	if (keyState[SDL_SCANCODE_W])
+	{
+		players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, (glm::pow(2, 15)), 0));
+	}
+	if (keyState[SDL_SCANCODE_A])
+	{
+		players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(-(glm::pow(2, 15)), 0, 0));
+	}
+	if (keyState[SDL_SCANCODE_S])
+	{
+		players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, -(glm::pow(2, 15)), 0));
+	}
+	if (keyState[SDL_SCANCODE_D])
+	{
+		players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3((glm::pow(2, 15)), 0, 0));
+	}
+	if (keyState[SDL_SCANCODE_E])
+	{
+		players.at(1)->Update(GLPlayer::PLAYER_DASH, glm::vec3(0, 0, (glm::pow(2, 15))));
+	}
+	if (keyState[SDL_SCANCODE_LSHIFT])
+	{
+		players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, 0, (glm::pow(2, 15))));
+	}
 }
