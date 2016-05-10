@@ -23,7 +23,11 @@ GLPlayer::GLPlayer() : GLModel() //NEVER USE
 
 GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int projectileModelID) : GLModel(FSH_Loader, modelID)
 {
-	sound[SHOOT_SOUND] = Mix_LoadWAV("./res/Sounds/shoot.wav");
+	sound[SHOOT_SOUND] = Mix_LoadWAV("./res/Sounds/bubble.wav");
+	sound[BIG_SHOOT_SOUND] = Mix_LoadWAV("./res/Sounds/big_bubble.wav");
+	sound[SHOTGUN_SHOOT_SOUND] = Mix_LoadWAV("./res/Sounds/shotgun.wav");
+	sound[DASH_SOUND] = Mix_LoadWAV("./res/Sounds/dash_short.wav");
+	sound[MOVE_SOUND] = Mix_LoadWAV("./res/Sounds/move.wav");
 	this->m_camera;
 	this->m_projectileHandler = new GLProjectileHandler(FSH_Loader, projectileModelID, 1, 2, 20.0f);
 	this->m_velocity = glm::vec3(0);
@@ -564,7 +568,18 @@ void GLPlayer::PlayerShoot()
 {
 	if (this->m_projectileHandler->CanShoot())
 	{
-		Mix_PlayChannel(-1, sound[SHOOT_SOUND], 0);
+		switch (currentPowerUp)
+		{
+		case 0:
+			Mix_PlayChannel(-1, sound[SHOOT_SOUND], 0);
+			break;
+		case 1:
+			Mix_PlayChannel(-1, sound[SHOTGUN_SHOOT_SOUND], 0);
+			break;
+		case 2:
+			Mix_PlayChannel(-1, sound[BIG_SHOOT_SOUND], 0);
+			break;
+		}
 	}
 	this->m_projectileHandler->Shoot(GetForward(), transform->m_pos, transform->m_rot, m_velocity, GetRight(), GetUp());
 }
@@ -572,6 +587,7 @@ void GLPlayer::PlayerDash()
 {
 	if (!isDashing && !dashOnCooldown)
 	{
+		Mix_PlayChannel(-1, sound[DASH_SOUND], 0);
 		isDashing = true;
 		dashCurrentDuration = 0.0f;
 		dashCooldownCounter = 0.0f;
@@ -601,6 +617,11 @@ void GLPlayer::CalcVelocity(float& deltaTime)
 	glm::vec3 forward = this->GetForward();
 	if (m_velocity != glm::vec3(0))
 	{
+		if (!isMoving)
+		{
+			isMoving = true;
+			Mix_PlayChannel(0, sound[MOVE_SOUND], -1);
+		}
 		if (isDashing)
 		{
 			if (glm::dot(m_velocity, m_velocity) < MAX_DASHSPEED)
@@ -627,6 +648,20 @@ void GLPlayer::CalcVelocity(float& deltaTime)
 		m_velocity -= friction * deltaTime;
 
 		
+	}
+
+	if (glm::dot(m_velocity, m_velocity) > 20)
+	{
+		if (!isMoving)
+		{
+			isMoving = true;
+			Mix_PlayChannel(0, sound[MOVE_SOUND], -1);
+		}
+	}
+	else if (isMoving)
+	{
+		isMoving = false;
+		Mix_HaltChannel(0);
 	}
 	if (glm::dot(m_velocity, m_velocity) < MAX_SPEED)
 	{

@@ -11,7 +11,7 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 {
 	glm::vec3 distance;
 	float distSqrd;
-	AABB wall(glm::vec3(0), glm::vec3(125, 48, 86));
+	AABB wall(glm::vec3(0), glm::vec3(123, 48, 83));
 	for (size_t i = 0; i < players.size(); i++)
 	{
 		distance = players.at(i)->GetTransform().GetPos() - players.at(1 - i)->GetTransform().GetPos();
@@ -20,7 +20,7 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 		{
 			if (players.at(i)->GetBoundingBox().containsAABB(players.at(1-i)->GetBoundingBox()))
 			{
-				players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(1));
+
 				glm::vec3 dir = players.at(i)->GetBoundingBox().center - players.at(1 - i)->GetBoundingBox().center;
 				float center_dist = glm::dot(dir, dir);
 				glm::vec3 min_dist = players.at(i)->GetBoundingBox().halfDimension + players.at(1 - i)->GetBoundingBox().halfDimension;
