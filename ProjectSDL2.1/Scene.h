@@ -16,7 +16,6 @@
 #include "GLGUIHandler.h"
 #include "GLCollisionHandler.h"
 #include "GameState.h"
-#include "SeaWeedLeafs.h"
 #include "ParticleHandler.h"
 #include <time.h>
 #include <SDL2\SDL_mixer.h>
@@ -45,8 +44,7 @@ private:
 		GoldFish,
 		BlueTang,
 		Bubble,
-		Aquarium,
-		SeaWeedLeaf
+		Aquarium
 	};
 	int SCREEN_WIDTH = window::WIDTH;
 	int SCREEN_HEIGHT = window::HEIGHT / 2;
@@ -83,13 +81,10 @@ private:
 	//std::vector<Model> models;
 	FishBox FSH_Loader;
 	Light dirLight;
-
 	std::vector<PointLight> pointLights;
 	std::vector<GLPlayer*> players;
 	std::vector<GLNPC*> NPCs;
 	std::vector<GLModel*> staticMeshes;
-	std::vector<SpecialStaticMesh*> specialStaticMeshes;
-
 	GLShader* shaders[NUM_SHADERS];
 	GLMesh* tempMesh;
 	GLuint quadVAO = 0;

@@ -11,7 +11,7 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 {
 	glm::vec3 distance;
 	float distSqrd;
-	AABB wall(glm::vec3(0), glm::vec3(125, 48, 86));
+	AABB wall(glm::vec3(0), glm::vec3(123, 48, 83));
 	for (size_t i = 0; i < players.size(); i++)
 	{
 		distance = players.at(i)->GetTransform().GetPos() - players.at(1 - i)->GetTransform().GetPos();
@@ -20,7 +20,7 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 		{
 			if (players.at(i)->GetBoundingBox().containsAABB(players.at(1-i)->GetBoundingBox()))
 			{
-				players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(1));
+
 				glm::vec3 dir = players.at(i)->GetBoundingBox().center - players.at(1 - i)->GetBoundingBox().center;
 				float center_dist = glm::dot(dir, dir);
 				glm::vec3 min_dist = players.at(i)->GetBoundingBox().halfDimension + players.at(1 - i)->GetBoundingBox().halfDimension;
@@ -92,8 +92,8 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 				AABB NpcSeenSpace(NPCs.at(j)->GetTransform().GetPos() +(NPCs.at(j)->GetForward() *10.f), glm::vec3(10, 10, 10));
 
 				if (NPCs.at(j)->GetBoundingBox().containsAABB(players.at(i)->GetBoundingBox()))
-				{
-					if (NPCs.at(j)->GetCurrentState()!=NPC_INACTIVE && NPCs.at(j)->GetCurrentState() != NPC_BEINGEATEN)
+				{ //&& players.at(i)->GetTransform().GetScale().x >= NPCs.at(j)->GetTransform().GetScale().x
+					if (NPCs.at(j)->GetCurrentState()!=NPC_INACTIVE && NPCs.at(j)->GetCurrentState() != NPC_BEINGEATEN )
 					{
 						if (NPCs.at(j)->GetTransform().GetScale().x > 1)
 						{
