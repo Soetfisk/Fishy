@@ -11,6 +11,7 @@ GameMain::GameMain()
 	this->gameState = GLOBAL_GameState::MENU;
 	this->scene = new Scene(&this->gameState);
 	this->menu = new Menu(&this->gameState);
+	
 }
 
 GameMain::~GameMain()

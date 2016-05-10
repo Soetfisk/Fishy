@@ -4,6 +4,7 @@
 
 GLPlayer::GLPlayer() : GLModel() //NEVER USE
 {
+	sound[SHOOT_SOUND] = Mix_LoadWAV("./res/Sounds/shoot.wav");
 	this->m_camera;
 	this->m_projectileHandler = new GLProjectileHandler();
 	this->m_velocity = glm::vec3(0);
@@ -17,9 +18,12 @@ GLPlayer::GLPlayer() : GLModel() //NEVER USE
 	this->currentPowerUp = POWER_NEUTRAL;
 }
 
+	sound[SHOOT_SOUND] = Mix_LoadWAV("./res/Sounds/shoot.wav");
+	sound[SHOOT_SOUND] = Mix_LoadWAV("./res/Sounds/shoot.wav");
 
 GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int projectileModelID) : GLModel(FSH_Loader, modelID)
 {
+	sound[SHOOT_SOUND] = Mix_LoadWAV("./res/Sounds/shoot.wav");
 	this->m_camera;
 	this->m_projectileHandler = new GLProjectileHandler(FSH_Loader, projectileModelID, 1, 2, 20.0f);
 	this->m_velocity = glm::vec3(0);
@@ -39,6 +43,10 @@ GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int proj
 
 GLPlayer::~GLPlayer()
 {
+	for (int i = 0; i < NUM_SOUND; i++)
+	{
+		Mix_FreeChunk(sound[i]);
+	}
 	delete this->m_projectileHandler;
 	delete[] this->blendWeights;
 }
@@ -48,11 +56,11 @@ void GLPlayer::Update(Events state, glm::vec3 movementVec)
 {
 	switch (state)
 	{
-	case CAMERA_MOVE:
-		m_camera.SetInput((movementVec.x == 0) ? -1 : movementVec.x, (movementVec.y == 0)? -1: movementVec.y);
+	case PLAYER_MOVE_RIGHT:
+		this->PlayerMove(-1, -1, -1, (movementVec.x == 0) ? -1 : movementVec.x, (movementVec.y == 0) ? -1 : movementVec.y);
 		break;
-	case PLAYER_MOVE:
-		this->PlayerMove((movementVec.x == 0) ? -1 : movementVec.x, (movementVec.y == 0) ? -1 : movementVec.y, (movementVec.z == 0) ? -1 : movementVec.z);
+	case PLAYER_MOVE_LEFT:
+		this->PlayerMove((movementVec.x == 0) ? -1 : movementVec.x, (movementVec.y == 0) ? -1 : movementVec.y, (movementVec.z == 0) ? -1 : movementVec.z, -1, -1);
 		break;
 	case PLAYER_SHOOT:
 		this->PlayerShoot();
@@ -101,16 +109,15 @@ void GLPlayer::HandleCollision(PlayerStates state, float deltaTime, glm::vec3 mo
 	case EATING:
 		if (momentum.x > 0)
 		{
-			this->transform->SetScale(this->transform->GetScale() + (deltaTime / 4));
+			size += momentum.x;
 			totalPoints += (int)(100 * momentum.x);
 			currentPoints += (int)(100 * momentum.x);
 		}
 		if (momentum.x < 0 && (totalPoints + 100 * momentum.x) >= 0)
 		{
-			this->transform->SetScale(this->transform->GetScale() + (deltaTime / 4));
+			size += momentum.x;
 			totalPoints += (int)(100 * momentum.x);
 			currentPoints += (int)(100 * momentum.x);
-			std::cout << totalPoints << " : " << 100 * momentum.x << std::endl;
 		}
 		break;
 	case HIT:
@@ -423,21 +430,21 @@ void GLPlayer::RemoveController(int id)
 	SDL_GameControllerFromInstanceID(id);
 }
 
-void GLPlayer::PlayerMove(float x, float y, float z)
+void GLPlayer::PlayerMove(float lx, float ly, float z, float rx, float ry)
 {
-	if ((x < -DEADZONE || x > DEADZONE))
+	if ((lx < -DEADZONE || lx > DEADZONE))
 	{
-		lastHorizontal = -x;
+		lastHorizontal = -lx;
 	}
-	else if (x != -1)
+	else if (lx != -1)
 	{
 		lastHorizontal = 0;
 	}
-	if ((y < -DEADZONE || y > DEADZONE))
+	if ((ly < -DEADZONE || ly > DEADZONE))
 	{
-		lastVertical = y;
+		lastVertical = -ly;
 	}
-	else if (y != -1)
+	else if (ly != -1)
 	{
 		lastVertical = 0;
 	}
@@ -448,6 +455,22 @@ void GLPlayer::PlayerMove(float x, float y, float z)
 	else if (z != -1)
 	{
 		lastForward = 0;
+	}
+	if ((rx < -DEADZONE || rx > DEADZONE))
+	{
+		lastSide = -rx;
+	}
+	else if (rx != -1)
+	{
+		lastSide = 0;
+	}
+	if ((ry < -DEADZONE || ry > DEADZONE))
+	{
+		lastUp = ry;
+	}
+	else if (ry != -1)
+	{
+		lastUp = 0;
 	}
 }
 
@@ -504,7 +527,10 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	CalcVelocity(deltaTime);
 	HandleDash(deltaTime);
 
-	
+	if (this->GetTransform().GetScale().x < size)
+	{
+		this->transform->SetScale(this->transform->GetScale() + (deltaTime / 4));
+	}
 
 	//camera update
 	this->m_camera.Update(this->GetTransform(), deltaTime);
@@ -514,6 +540,10 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 
 void GLPlayer::PlayerShoot()
 {
+	if (this->m_projectileHandler->CanShoot())
+	{
+		Mix_PlayChannel(-1, sound[SHOOT_SOUND], 0);
+	}
 	this->m_projectileHandler->Shoot(GetForward(), transform->m_pos, transform->m_rot, m_velocity, GetRight(), GetUp());
 }
 void GLPlayer::PlayerDash()
@@ -576,10 +606,11 @@ void GLPlayer::CalcVelocity(float& deltaTime)
 
 		
 	}
-
 	if (glm::dot(m_velocity, m_velocity) < MAX_SPEED)
 	{
 		m_velocity += forward * (float)(lastForward / (MAX_INPUT));
+		m_velocity += this->GetUp() * (float)(lastUp / (MAX_INPUT));
+		m_velocity += this->GetRight() * (float)(lastSide / (MAX_INPUT));
 	}
 	m_velocity.x = (glm::abs(m_velocity.x) < MIN_SPEED) ? 0.0f : m_velocity.x;
 	m_velocity.y = (glm::abs(m_velocity.y) < MIN_SPEED) ? 0.0f : m_velocity.y;

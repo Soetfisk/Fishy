@@ -92,8 +92,8 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 				AABB NpcSeenSpace(NPCs.at(j)->GetTransform().GetPos() +(NPCs.at(j)->GetForward() *10.f), glm::vec3(10, 10, 10));
 
 				if (NPCs.at(j)->GetBoundingBox().containsAABB(players.at(i)->GetBoundingBox()))
-				{
-					if (NPCs.at(j)->GetCurrentState()!=NPC_INACTIVE && NPCs.at(j)->GetCurrentState() != NPC_BEINGEATEN)
+				{ //&& players.at(i)->GetTransform().GetScale().x >= NPCs.at(j)->GetTransform().GetScale().x
+					if (NPCs.at(j)->GetCurrentState()!=NPC_INACTIVE && NPCs.at(j)->GetCurrentState() != NPC_BEINGEATEN )
 					{
 						if (NPCs.at(j)->GetTransform().GetScale().x > 1)
 						{

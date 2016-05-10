@@ -92,6 +92,7 @@ void Scene::Init()
 	//for (int z = 0; z < 3; z++) {
 	//	particleHandler->AddEmiter(EmitterType::GOLDSTREAM, glm::vec4(2, 1, 3 + (z % 2 == 0) ? z * 2 : -z * 2, 1));
 	//}
+	
 
 }
 
@@ -200,6 +201,9 @@ void Scene::AddScore()
 }
 
 Scene::Scene(GLOBAL_GameState* gameState) {
+	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
+	Mix_VolumeMusic(20);
+	music[BACKGROUND_MUSIC] = Mix_LoadMUS("./res/Sounds/background.wav");
 	LoadModels();
 	Init();
 
@@ -250,9 +254,23 @@ Scene::~Scene(){
 
 	delete guih;
 	delete particleHandler;
+	for (int i = 0; i < NUM_MUSIC; i++)
+	{
+		Mix_FreeMusic(music[i]);
+	}
+	Mix_CloseAudio();
 }
 
 void Scene::Update(float& deltaTime) {
+
+	if (Mix_PlayingMusic() == 0)
+	{
+		srand(time(0));
+		int num = rand() % NUM_MUSIC;
+		//Play the music
+		Mix_PlayMusic(music[num], -1);
+	}
+
 	this->deltaTime = deltaTime;
 
 	guih->Update(deltaTime);
@@ -448,22 +466,22 @@ void Scene::HandleEvenet(SDL_Event* e) {
 			switch (e->caxis.axis)
 			{
 			case SDL_CONTROLLER_AXIS_RIGHTX:
-				players.at(e->caxis.which)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(e->caxis.value, 0, 0));
+				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(e->caxis.value, 0, 0));
 				break;
 			case SDL_CONTROLLER_AXIS_RIGHTY:
-				players.at(e->caxis.which)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(0, e->caxis.value, 0));
+				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(0, e->caxis.value, 0));
 				break;
 			case  SDL_CONTROLLER_AXIS_LEFTX:
-				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(e->caxis.value, 0, 0));
+				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(e->caxis.value, 0, 0));
 				break;
 			case SDL_CONTROLLER_AXIS_LEFTY:
-				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, e->caxis.value, 0));
+				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, e->caxis.value, 0));
 				break;
 			case SDL_CONTROLLER_AXIS_TRIGGERRIGHT:
-				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, 0, e->caxis.value));
+				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, 0, e->caxis.value));
 				break;
 			case SDL_CONTROLLER_AXIS_TRIGGERLEFT:
-				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, 0, -e->caxis.value));
+				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, 0, -e->caxis.value));
 				break;
 			default:
 				break;
@@ -488,31 +506,31 @@ void Scene::HandleEvenet(SDL_Event* e) {
 			switch (e->key.keysym.scancode)
 			{
 			case SDL_SCANCODE_UP:
-				players.at(1)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(0, 1, 0));
+				players.at(1)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(0, 1, 0));
 				break;
 			case SDL_SCANCODE_DOWN:
-				players.at(1)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(0, 1, 0));
+				players.at(1)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(0, 1, 0));
 				break;
 			case SDL_SCANCODE_LEFT:
-				players.at(1)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(1, 0, 0));
+				players.at(1)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(1, 0, 0));
 				break;
 			case SDL_SCANCODE_RIGHT:
-				players.at(1)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(1, 0, 0));
+				players.at(1)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(1, 0, 0));
 				break;
 			case SDL_SCANCODE_W:
-				players.at(1)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, 1, 0));
+				players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, 1, 0));
 				break;
 			case SDL_SCANCODE_S:
-				players.at(1)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, 1, 0));
+				players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, 1, 0));
 				break;
 			case SDL_SCANCODE_A:
-				players.at(1)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(1, 0, 0));
+				players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(1, 0, 0));
 				break;
 			case SDL_SCANCODE_D:
-				players.at(1)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(1, 0, 0));
+				players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(1, 0, 0));
 				break;
 			case SDL_SCANCODE_LSHIFT:
-				players.at(1)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, 0, 1));
+				players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, 0, 1));
 				break;
 			case SDL_SCANCODE_E:
 				players.at(1)->Update(GLPlayer::PLAYER_DASH, glm::vec3(0, 0, 1));
@@ -549,35 +567,35 @@ void Scene::HandleEvenet(SDL_Event* e) {
 		const Uint8* keyState = SDL_GetKeyboardState(NULL);
 		if (keyState[SDL_SCANCODE_UP])
 		{
-			players.at(1)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(0, -(glm::pow(2, 15)), 0));
+			players.at(1)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(0, -(glm::pow(2, 15)), 0));
 		}
 		if (keyState[SDL_SCANCODE_DOWN])
 		{
-			players.at(1)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(0, (glm::pow(2, 15)), 0));
+			players.at(1)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(0, (glm::pow(2, 15)), 0));
 		}
 		if (keyState[SDL_SCANCODE_LEFT])
 		{
-			players.at(1)->Update(GLPlayer::CAMERA_MOVE, glm::vec3((glm::pow(2, 15)), 0, 0));
+			players.at(1)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3((glm::pow(2, 15)), 0, 0));
 		}
 		if (keyState[SDL_SCANCODE_RIGHT])
 		{
-			players.at(1)->Update(GLPlayer::CAMERA_MOVE, glm::vec3(-(glm::pow(2, 15)), 0, 0));
+			players.at(1)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(-(glm::pow(2, 15)), 0, 0));
 		}
 		if (keyState[SDL_SCANCODE_W])
 		{
-			players.at(1)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, (glm::pow(2, 15)), 0));
+			players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, (glm::pow(2, 15)), 0));
 		}
 		if (keyState[SDL_SCANCODE_A])
 		{
-			players.at(1)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(-(glm::pow(2, 15)), 0, 0));
+			players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(-(glm::pow(2, 15)), 0, 0));
 		}
 		if (keyState[SDL_SCANCODE_S])
 		{
-			players.at(1)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, -(glm::pow(2, 15)), 0));
+			players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, -(glm::pow(2, 15)), 0));
 		}
 		if (keyState[SDL_SCANCODE_D])
 		{
-			players.at(1)->Update(GLPlayer::PLAYER_MOVE, glm::vec3((glm::pow(2, 15)), 0, 0));
+			players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3((glm::pow(2, 15)), 0, 0));
 		}
 		if (keyState[SDL_SCANCODE_E])
 		{
@@ -585,6 +603,6 @@ void Scene::HandleEvenet(SDL_Event* e) {
 		}
 		if (keyState[SDL_SCANCODE_LSHIFT])
 		{
-			players.at(1)->Update(GLPlayer::PLAYER_MOVE, glm::vec3(0, 0, (glm::pow(2, 15))));
+			players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, 0, (glm::pow(2, 15))));
 		}
 }
