@@ -4,8 +4,8 @@
 GUI::GUI()
 {
 	InitTextureAtlas(DEFAULT_FONT);
-	//InitCharacters(DEFAULT_FONT);
-	//InitBuffers();
+	InitCharacters(DEFAULT_FONT);
+	InitBuffers();
 }
 
 GUI::GUI(std::string& fontName)
@@ -123,8 +123,7 @@ void GUI::InitTextureAtlas(std::string fontName)
 		if (FT_Load_Char(face, c, FT_LOAD_RENDER))
 			std::cout << "ERROR::FREETYPE: Failed to load Glyph\n";
 		else
-		{
-
+		{	
 			chInfo[c].ax = face->glyph->advance.x >> 6;
 			chInfo[c].ay = face->glyph->advance.y >> 6;
 			chInfo[c].bw = face->glyph->bitmap.width;
@@ -133,10 +132,14 @@ void GUI::InitTextureAtlas(std::string fontName)
 			chInfo[c].bt = face->glyph->bitmap_top;
 			chInfo[c].tx = (float)x / w;
 
-			glTexSubImage2D(GL_TEXTURE_2D, 0, x, 0, face->glyph->bitmap.width, face->glyph->bitmap.rows, GL_ALPHA, GL_UNSIGNED_BYTE, face->glyph->bitmap.buffer);
+			glTexSubImage2D(GL_TEXTURE_2D, 0, x, 0, face->glyph->bitmap.width, face->glyph->bitmap.rows, GL_RED, GL_UNSIGNED_BYTE, face->glyph->bitmap.buffer);
 			x += face->glyph->bitmap.width;
 		}
 	}
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	FT_Done_Face(face);
+	FT_Done_FreeType(ft);
 }
 
 void GUI::InitBuffers()

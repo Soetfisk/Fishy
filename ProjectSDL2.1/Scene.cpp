@@ -212,7 +212,6 @@ Scene::Scene(GLOBAL_GameState* gameState) {
 
 	guih = new GLGUIHandler();
 	this->gameState = gameState;
-
 }
 
 Scene::Scene(GUI* textToScreen, GLOBAL_GameState* gameState)

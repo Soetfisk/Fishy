@@ -22,6 +22,7 @@ public:
 
 	void Update(float dt);
 	void Draw();
+	void OptimizedDraw();
 	void Reset();							// Reset everything
 
 	void Tie();
