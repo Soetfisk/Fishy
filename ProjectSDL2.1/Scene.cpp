@@ -79,6 +79,7 @@ void Scene::Init()
 	//player
 	this->currentPowerUp = GLPlayer::POWER_NEUTRAL;
 	// Ending game options
+	this->endTimer = 60;
 	this->endScore = 1000;
 
 	//particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
@@ -211,7 +212,9 @@ void Scene::AddScore()
 Scene::Scene(GLOBAL_GameState* gameState) {
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
 	Mix_VolumeMusic(20);
-	music[BACKGROUND_MUSIC] = Mix_LoadMUS("./res/Sounds/background.wav");
+	music[COMBAT_BACKGROUND_MUSIC] = Mix_LoadMUS("./res/Sounds/background.wav");
+	music[ATTACK_BACKGROUND_MUSIC] = Mix_LoadMUS("./res/Sounds/attack.wav");
+	music[ARCADE_BACKGROUND_MUSIC] = Mix_LoadMUS("./res/Sounds/arcade.wav");
 	LoadModels();
 	Init();
 
@@ -297,7 +300,7 @@ void Scene::Update(float& deltaTime) {
 
 	for (size_t i = 0; i < this->players.size(); i++) {
 		this->players.at(i)->Update(this->deltaTime);
-		this->players.at(i)->UpdateParticles(this->deltaTime);
+		//this->players.at(i)->UpdateParticles(this->deltaTime);
 	}
 		
 }
@@ -348,12 +351,12 @@ void Scene::DrawScene() {
 		}
 
 		//Drawing All Particles
-		shaders[PARTICLE]->Bind();
+		/*shaders[PARTICLE]->Bind();
 		shaders[PARTICLE]->Update(players.at(i)->GetCamera());
 		for (size_t j = 0; j < this->players.size(); j++)
 		{
 			players.at(j)->DrawParticles(shaders[PARTICLE]);
-		}
+		}*/
 		
 		//this->particleHandler->DrawParticles(shaders[PARTICLE], players.at(i)->GetCamera());
 
