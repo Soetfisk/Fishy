@@ -18,8 +18,7 @@ GLPlayer::GLPlayer() : GLModel() //NEVER USE
 	this->currentPowerUp = POWER_NEUTRAL;
 }
 
-	sound[SHOOT_SOUND] = Mix_LoadWAV("./res/Sounds/shoot.wav");
-	sound[SHOOT_SOUND] = Mix_LoadWAV("./res/Sounds/shoot.wav");
+
 
 GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int projectileModelID) : GLModel(FSH_Loader, modelID)
 {
