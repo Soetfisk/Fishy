@@ -16,6 +16,7 @@ GLPlayer::GLPlayer() : GLModel() //NEVER USE
 	this->isDashing = false;
 	this->dashOnCooldown = false;
 	this->currentPowerUp = POWER_NEUTRAL;
+	this->playEat = false;
 }
 
 
@@ -31,7 +32,8 @@ GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int proj
 	this->dashCooldownCounter = 0;
 	this->isDashing = false;
 	this->dashOnCooldown = false;
-	blendWeights = new float[NUM_ANIMATION];
+	this->blendWeights = new float[NUM_ANIMATION];
+	this->playEat = false;
 	for (int i = 0; i < NUM_ANIMATION; i++)
 	{
 		blendWeights[i] = 0.0f;
@@ -118,6 +120,7 @@ void GLPlayer::HandleCollision(PlayerStates state, float deltaTime, glm::vec3 mo
 			totalPoints += (int)(100 * momentum.x);
 			currentPoints += (int)(100 * momentum.x);
 		}
+		playEat = true;
 		break;
 	case HIT:
 		this->m_velocity += momentum;
@@ -222,20 +225,6 @@ void GLPlayer::Update(float dt)
 }
 
 
-void GLPlayer::moveAnimation(float deltaTime, float speedFactor)
-{
-	float speed = abs(deltaTime * speedFactor), y;
-
-	animationFactors[ASIX] += speed;
-
-	y = sin(animationFactors[ASIX]);
-
-	if (y > 0.0)
-		this->blendWeights[ASIX] = y;
-	if (y < 0.0)
-		this->blendWeights[ASEVEN] = abs(y);
-
-}
 
 void GLPlayer::resetMoveAnimation(float deltaTime, float speedFactor)
 {
@@ -310,6 +299,39 @@ void GLPlayer::resetHeadAnimation(float deltaTime, float speedFactor, int axis) 
 
 
 
+}
+
+
+void GLPlayer::moveAnimation(float deltaTime, float speedFactor)
+{
+	float speed = abs(deltaTime * speedFactor), y;
+
+	animationFactors[ASIX] += speed;
+
+	y = sin(animationFactors[ASIX]);
+
+	if (y > 0.0)
+		this->blendWeights[ASIX] = y;
+	if (y < 0.0)
+		this->blendWeights[ASEVEN] = abs(y);
+
+}
+
+void GLPlayer::eatAnimation(float deltaTime, float speedFactor)
+{
+	// (sin(x-(3/2))+1)/2    // sine 0 -> 1 and back
+	float speed = abs(deltaTime * speedFactor), y;
+
+	animationFactors[ASIX] += speed;
+	y = ((sin(animationFactors[ASIX] - (3 / 2))) + 1) / 2;
+		
+	blendWeights[ASIX] = animationFactors[ASIX];
+
+	if (blendWeights[ASIX] <= 0.0f)
+	{
+		playEat = false;
+		animationFactors[ASIX] = 0.0f;
+	}
 }
 
 void GLPlayer::headAnimation(float deltaTime, float speedFactor, int direction)
@@ -511,7 +533,8 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	}
 	else
 		resetHeadAnimation(deltaTime, 3.0, 1);
-
+	if (playEat)
+		eatAnimation(deltaTime, 3.0);
 
 	this->meshes[0]->GetTransform().m_rot.z -= this->meshes[0]->GetTransform().m_rot.z * deltaTime;
 	//this->meshes[1]->GetTransform().m_rot.z -= this->meshes[0]->GetTransform().m_rot.z * deltaTime;
@@ -679,5 +702,7 @@ GLPlayer::PowerUps GLPlayer::getPowerUpByNumber(int power)
 
 void GLPlayer::PlayerEating(float deltaTime)
 {
+
+
 
 }

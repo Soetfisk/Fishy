@@ -75,10 +75,7 @@ public:
 	float * GetBlendWeights() { return blendWeights; }
 	unsigned int GetBlendShapeCount() { return NUM_ANIMATION; }
 	glm::vec3& getVelocity() { return m_velocity; }
-	void moveAnimation(float deltaTime, float speedFactor);
-	void resetMoveAnimation(float deltaTime, float speedFactor);
-	void headAnimation(float deltaTime, float speedFactor, int direction);
-	void resetHeadAnimation(float deltaTime, float speedFactor, int axis);
+
 private:
 	enum
 	{
@@ -120,6 +117,7 @@ private:
 	float * blendWeights;
 	float animationFactors[NUM_ANIMATION];
 	float deltaTime = -1;
+	bool playEat;
 
 
 	Mix_Chunk *sound[NUM_SOUND];
@@ -143,6 +141,12 @@ private:
 
 	void CalcVelocity(float& deltaTime);
 	void HandleDash(float& deltaTime);
+	
+	void moveAnimation(float deltaTime, float speedFactor);
+	void resetMoveAnimation(float deltaTime, float speedFactor);
+	void headAnimation(float deltaTime, float speedFactor, int direction);
+	void resetHeadAnimation(float deltaTime, float speedFactor, int axis);
+	void eatAnimation(float deltaTime, float speedFactor);
 
 	void HandlePowerUps();
 	PowerUps getPowerUpByNumber(int power);
