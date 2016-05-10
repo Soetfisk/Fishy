@@ -20,7 +20,7 @@
 #include "ParticleHandler.h"
 #include <time.h>
 #include <SDL2\SDL_mixer.h>
-
+#include "RoundCounter.h"
 
 #define mSTATIC *shaders[MODELS]
 #define mANIMATED *shaders[BLEND_SHAPE]
@@ -109,7 +109,7 @@ private:
 	GUI* guiTest;
 	glm::mat4 projection;
 	GLGUIHandler* guih;
-
+	RoundCounter* rc;
 
 
 	// variables for border shader
