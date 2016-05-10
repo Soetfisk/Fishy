@@ -50,6 +50,22 @@ void RoundCounter::Draw()
 
 void RoundCounter::PlayerWon(RoundPlayers player)
 {
+	score[player]++;
+	if (score[player] == 1)
+		textEnd[player] = " win";
+	else
+		textEnd[player] = " wins";
+	printText[player] = std::to_string(score[player]) + textEnd[player];
+}
+
+void RoundCounter::Reset()
+{
+	for (int i = 0; i < NUM_PLAYERS; i++)
+	{
+		score[i] = 0;
+		textEnd[i] = " wins";
+		printText[i] = std::to_string(score[i]) + textEnd[i];
+	}
 }
 
 void RoundCounter::Init()

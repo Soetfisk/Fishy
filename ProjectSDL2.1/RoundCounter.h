@@ -19,6 +19,7 @@ public:
 
 	void Draw();
 	void PlayerWon(RoundPlayers player);
+	void Reset();
 
 private:
 	const float X_OFFSET = 5.0f;
@@ -29,7 +30,7 @@ private:
 	bool deleteShader, deleteGUI;
 	glm::mat4 projection;
 
-	int score[NUM_PLAYERS];					// The players score
+	int score[NUM_PLAYERS];					// The players rounds won
 	GLfloat textPos[NUM_PLAYERS][2];		// Text positions
 	GLfloat textScale[NUM_PLAYERS];			// Text scale
 	glm::vec3 textColor[NUM_PLAYERS];		// Text color

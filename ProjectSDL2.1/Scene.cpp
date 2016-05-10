@@ -79,7 +79,7 @@ void Scene::Init()
 	//player
 	this->currentPowerUp = GLPlayer::POWER_NEUTRAL;
 	// Ending game options
-	this->endTimer = 60;
+	this->endTimer = 10;
 	this->endScore = 1000;
 
 	//particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
@@ -169,9 +169,15 @@ void Scene::CheckWinner()
 		if (this->players.at(0)->GetTotalPoints() == this->players.at(1)->GetTotalPoints())
 			this->guih->Tie();
 		else if (this->players.at(0)->GetTotalPoints() > this->players.at(1)->GetTotalPoints())
+		{
 			this->guih->Player1Won();
+			this->rc->PlayerWon(RoundCounter::RoundPlayers::PLAYER1);
+		}
 		else
+		{
 			this->guih->Player2Won();
+			this->rc->PlayerWon(RoundCounter::RoundPlayers::PLAYER2);
+		}
 	}
 	
 	// if we have a winner
@@ -462,7 +468,6 @@ void Scene::ResetScene()
 	this->endSceneTimer = 0;
 	this->endGame = false;
 	this->winner = false;
-	this->guih->Reset();
 }
 
 void Scene::HandleEvenet(SDL_Event* e) {

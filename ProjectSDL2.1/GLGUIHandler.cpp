@@ -165,14 +165,14 @@ void GLGUIHandler::ResetScorePlayer2()
 
 void GLGUIHandler::ResetPlayer2()
 {
-	score[PLAYER1] = 0;
-	textPos[PLAYER1][0] = 0;
-	textPos[PLAYER1][1] = window::HEIGHT - 40;
-	textScale[PLAYER1] = 1;
-	textColor[PLAYER1] = glm::vec3(0, 1, 0);
-	textStart[PLAYER1] = "Fish1 ";
-	textEnd[PLAYER1] = " food";
-	printText[PLAYER1] = textStart[PLAYER1] + std::to_string(score[PLAYER1]) + textEnd[PLAYER1];
+	score[PLAYER2] = 0;
+	textScale[PLAYER2] = 1;
+	textColor[PLAYER2] = glm::vec3(0, 1, 0);
+	textStart[PLAYER2] = "Fish2 ";
+	textEnd[PLAYER2] = " food";
+	printText[PLAYER2] = textStart[PLAYER2] + std::to_string(score[PLAYER2]) + textEnd[PLAYER2];
+	textPos[PLAYER2][0] = window::WIDTH - gui->GetTextLenght(printText[PLAYER2], textScale[PLAYER2]);
+	textPos[PLAYER2][1] = 0;
 
 	// Player2 Power Up
 	textPos[P2POWERUP][0] = textPos[PLAYER2][0];
@@ -207,7 +207,7 @@ void GLGUIHandler::ResetTime()
 	time = 0;
 	newSec = 0;
 	printText[TIME] = textStart[TIME] + std::to_string(time) + textEnd[TIME];
-	textPos[TIME][0] = (float)((window::WIDTH * 0.5) - (gui->GetTextLenght(printText[TIME], textScale[TIME]) * 0.5));
+	textPos[TIME][0] = window::HALF_WIDTH - (gui->GetTextLenght(printText[TIME], textScale[TIME]) * 0.5);
 }
 
 int GLGUIHandler::GetTime()
