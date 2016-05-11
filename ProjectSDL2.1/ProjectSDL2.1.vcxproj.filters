@@ -76,6 +76,7 @@
     <ClCompile Include="ParticleHandler.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="GLNPC_PowerUpHandler.cpp" />
     <ClCompile Include="RoundCounter.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -177,6 +178,7 @@
     <ClInclude Include="ParticleEmitter.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="GLNPC_PowerUpHandler.h" />
     <ClInclude Include="RoundCounter.h">
       <Filter>Header</Filter>
     </ClInclude>
@@ -253,6 +255,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="ParticleTestShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="draw.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="draw.frag">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

@@ -7,19 +7,19 @@ ParticleEmitter::ParticleEmitter(EmitterType type, glm::vec4 position, FSHData::
 	this->positionEmitter = position;
 	this->texture = texture;
 	setTexture();
-	
+
 
 	instantiateVariables();
 	//instantiateSpawnBuffer();
 	this->emitterComputeShader = new ParticleComputeShader();
 	this->emitterComputeShader->Initialize(this->type, this->nrMaxParticles, this->pe_particleBuffer);
-	
-	
+
+
 	instantiateVertexData(); //neeeds to be after c_shader
 
-	//InstantiateEmitter();
+							 //InstantiateEmitter();
 
-	//InstantiateRenderShader();
+							 //InstantiateRenderShader();
 }
 
 
@@ -102,7 +102,7 @@ void ParticleEmitter::updateParticles(const float& deltaTime) {
 	this->emiterSpawnTCurrent += deltaTime;
 	this->emiterAwakeTime += deltaTime;
 	this->emiterCheckDeadTCurrent += deltaTime;
-	
+
 	if (this->emiterSpawnTCurrent >= this->emiterSpawnTDelay && this->nrActiveParticles < this->nrMaxParticles) {
 		if (!this->emiterMulitbleSpawner) {
 			this->spawnParticle();
@@ -112,19 +112,19 @@ void ParticleEmitter::updateParticles(const float& deltaTime) {
 			for (int i = 0; i < this->emiterNrToSpawnSimutan; i++) {
 				this->spawnParticle();
 				this->nrActiveParticles++;
-				
+
 			}
 		}
-		
+
 		this->emiterSpawnTCurrent = 0;
 	}
 
-	
+
 	if (nrActiveParticles > 0 && this->emiterCheckDeadTCurrent >= this->emiterCheckDeadTDelay) {
 		this->emiterCheckDeadTCurrent = 0;
 		checkDeadParticles();
 	}
-		
+
 }
 
 void ParticleEmitter::spawnParticle() {
@@ -137,7 +137,7 @@ void ParticleEmitter::spawnParticle() {
 
 	Particle tempData = generateParticleData();
 	ParticleStruct tempData2;
-	
+
 	tempData2.acceleration = tempData.p_acc;
 	tempData2.customVariables = glm::vec4(tempData.p_scale, tempData.p_lifeTime, tempData.p_speed, 1);    //x= scale, y=lifeTime, z = speed, w = is alive
 	tempData2.emiterPosition = this->positionEmitter;
@@ -150,10 +150,10 @@ void ParticleEmitter::spawnParticle() {
 	//tempParticles[0].emiterPosition = this->positionEmitter;
 	//tempParticles[0].pos = tempData.p_pos;
 	//tempParticles[0].velocity = tempData.p_vel;
-	
+
 	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 
-	
+
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 }
@@ -182,7 +182,7 @@ void ParticleEmitter::updateEmitterData(glm::vec4& pos, glm::vec4& dir, glm::vec
 	this->directionEmitter = -dir;
 
 	updateSpawnRate(rate);
-	this->emiterScale = scale/3;
+	this->emiterScale = scale / 3;
 	this->directionRightEmitter = right;
 	this->directionUpEmitter = up;
 }
@@ -212,13 +212,13 @@ Particle ParticleEmitter::generateParticleData() {
 		data.y = RNG::range(-.25f, .25f);
 		data.z = RNG::range(-.4f, .4f);
 		returnData.p_acc = this->directionEmitter + glm::vec4(returnData.p_acc.x + data.x, returnData.p_acc.y + data.y, returnData.p_acc.z + data.z, 0);
-		returnData.p_pos = (this->positionEmitter + (this->directionEmitter)) +(this->directionRightEmitter *RNG::range(-emiterScale, emiterScale)) + (this->directionUpEmitter*RNG::range(-emiterScale, emiterScale)); // + data;
+		returnData.p_pos = (this->positionEmitter + (this->directionEmitter)) + (this->directionRightEmitter *RNG::range(-emiterScale, emiterScale)) + (this->directionUpEmitter*RNG::range(-emiterScale, emiterScale)); // + data;
 
-		/*if(this->player1)
-			std::cout << "SPAWNING AT: " << glm::to_string(returnData.p_pos) << std::endl<<"Acc: "<<glm::to_string(returnData.p_acc)<<std::endl;
-*/
-		returnData.p_vel = this->directionEmitter + glm::vec4(returnData.p_vel.x + data.x, returnData.p_vel.y + data.y, returnData.p_vel.z + data.z, 0)*5;
-		returnData.p_scale = RNG::range(.1f, .15f);
+																																																						 /*if(this->player1)
+																																																						 std::cout << "SPAWNING AT: " << glm::to_string(returnData.p_pos) << std::endl<<"Acc: "<<glm::to_string(returnData.p_acc)<<std::endl;
+																																																						 */
+		returnData.p_vel = this->directionEmitter + glm::vec4(returnData.p_vel.x + data.x, returnData.p_vel.y + data.y, returnData.p_vel.z + data.z, 0) * 5;
+		returnData.p_scale = RNG::range(this->emiterScale / 4, emiterScale / 3);
 		returnData.p_lifeTime *= RNG::range(.5f, 1.5f);
 		break;
 	case EmitterType::PROJECTILE:
@@ -237,7 +237,7 @@ void ParticleEmitter::checkDeadParticles() {
 
 	ParticleStruct* temp = tempParticlesz;
 	for (int i = 0; i < nrActiveParticles; i++) {
-		
+
 
 
 		if (temp[i].customVariables.y <= 0) {
@@ -305,7 +305,7 @@ void ParticleEmitter::Draw(GLShader* shader) {
 	glDrawArrays(GL_POINTS, 0, nrActiveParticles);
 
 	glBindVertexArray(0);
-} 
+}
 
 
 
