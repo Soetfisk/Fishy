@@ -21,6 +21,7 @@
 #include <time.h>
 #include <SDL2\SDL_mixer.h>
 #include "RoundCounter.h"
+#include "SeaWeedHandler.h"
 #define mSTATIC *shaders[MODELS]
 #define mANIMATED *shaders[BLEND_SHAPE]
 
@@ -110,6 +111,7 @@ private:
 	glm::mat4 projection;
 	GLGUIHandler* guih;
 	RoundCounter* rc;
+	SeaWeedHandler* seaWeedHandler;
 
 
 	// variables for border shader

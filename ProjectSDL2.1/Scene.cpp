@@ -81,6 +81,15 @@ void Scene::Init()
 	this->endTimer = 300;
 	this->endScore = 1000;
 
+	this->seaWeedHandler = new SeaWeedHandler(&FSH_Loader, SeaWeedLeaf);
+	this->seaWeedHandler->SetXLimit(-130, 130);
+	this->seaWeedHandler->SetYLimit(-50, 50);
+	this->seaWeedHandler->SetLeafAmount(5, 60);
+	this->seaWeedHandler->SetAmountOfPlants(50);
+	this->seaWeedHandler->setScale(5, 9);
+	this->seaWeedHandler->setOffset(0, 0);
+	this->seaWeedHandler->LoadSeaWeed();
+
 	particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
 	
 
@@ -281,6 +290,7 @@ Scene::~Scene() {
 	delete guih;
 	delete rc;
 	delete particleHandler;
+	delete seaWeedHandler;
 	for (int i = 0; i < NUM_MUSIC; i++)
 	{
 		Mix_FreeMusic(music[i]);
@@ -356,6 +366,7 @@ void Scene::DrawScene() {
 		{
 			staticMeshes.at(i)->Draw(*shaders[MODELS]);
 		}
+		this->seaWeedHandler->Draw(shaders[MODELS]);
 
 		//Drawing All Particles
 		shaders[PARTICLE]->Bind();

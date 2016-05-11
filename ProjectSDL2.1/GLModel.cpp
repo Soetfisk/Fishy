@@ -80,6 +80,7 @@ GLModel::~GLModel()
 	{
 		delete meshes[i];
 	}
+	if(this->transform != nullptr)
 	delete transform;
 }
 

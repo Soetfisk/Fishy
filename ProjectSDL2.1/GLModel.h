@@ -28,7 +28,7 @@ public:
 	
 protected:
 	std::vector<GLMesh*> meshes;
-	GLTransform* transform;
+	GLTransform* transform = nullptr;
 	int modelID;
 	AABB boundingBox;
 	glm::vec3 forward;
