@@ -437,6 +437,8 @@ void Scene::DrawScene() {
 			shaders[BLEND_SHAPE]->Uniform1fv("Weights", NPCs.at(j)->GetBlendWeights());
 			NPCs.at(j)->NPCDraw(*shaders[BLEND_SHAPE]);
 		}
+		setDebugTimer(debug);
+		printDebugTimer(debug, "npc's");
 
 		shaders[MODELS]->Bind();
 		shaders[MODELS]->Update(players.at(i)->GetCamera());
@@ -451,8 +453,7 @@ void Scene::DrawScene() {
 		}
 		setDebugTimer(debug);
 		printDebugTimer(debug, "projectiles");
-		setDebugTimer(debug);
-		printDebugTimer(debug, "npc's");
+		
 		for (size_t i = 0; i < staticMeshes.size(); i++)
 		{
 			staticMeshes.at(i)->Draw(*shaders[MODELS]);
