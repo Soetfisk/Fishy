@@ -81,6 +81,7 @@ void GLNPC_GoldFish::gettingEaten(float deltaTime, GLTransform playerTransform)
 void GLNPC_GoldFish::NPCKill()
 {
 	this->currentState = NPC_INACTIVE;
+	this->isPowerUp = false;
 	if (this->isPowerUp == true)
 	{
 		//printf("i wanna be the very fish, that no one ever was");

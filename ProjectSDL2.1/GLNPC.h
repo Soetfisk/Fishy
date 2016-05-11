@@ -34,6 +34,9 @@ protected:
 	float * blendWeights;
 	float animationFactors[NUM_ANIMATION];
 
+	ParticleEmitter *npc_emitter;
+	const int updateFrames = 3;
+	int timeSinceUpdate;
 public:
 
 	int GetCurrentState();
@@ -41,6 +44,7 @@ public:
 	bool isPowerUp = false;
 
 	GLNPC(FishBox* FSH_Loader, unsigned int modelID);
+	~GLNPC();
 	virtual void NPCUpdate(float deltaTime) = 0;
 	virtual void NPCDraw(GLShader& shader) = 0;
 	virtual void gettingEaten(float deltaTime, GLTransform playerTransform) = 0;
@@ -53,6 +57,9 @@ public:
 	float * GetBlendWeights() { return blendWeights; }
 	unsigned int GetBlendShapeCount() { return NUM_ANIMATION; }
 	void moveAnimation(float deltaTime, float speedFactor);
+	void UpdateParticles(float &deltaTime);
+	void DrawParticles(GLShader* shader);
+	void AddEmitter(ParticleEmitter* emitter);
 
 	
 };

@@ -114,13 +114,75 @@ void Scene::Init()
 		}
 	}
 
+	this->collisionHandler.AddParticleHandlerReference(this->particleHandler);
+
 	//for (int i = 0; i <  players.size(); i++) {
 	//	particleHandler->AddEmiter(EmitterType::PLAYERFOLLOW, players.at(i)->getParticleFollowPlayer());
 	//}
 	//for (int z = 0; z < 3; z++) {
 	//	particleHandler->AddEmiter(EmitterType::GOLDSTREAM, glm::vec4(2, 1, 3 + (z % 2 == 0) ? z * 2 : -z * 2, 1));
 	//}
+	
+	
+}
 
+void Scene::LoadFastScene() {
+	bool enablePlayers = true;
+	bool enableNPCBlueThang = true;
+	bool enableNPCGoldFish = true;
+	bool enableProjectiles = true;
+	bool enableSeasWeed = true;
+	bool enableCollision = true;
+	bool enableAquarium = true;
+	bool enableBlueTang = true;
+
+	if (enablePlayers) {
+		FSH_Loader.LoadScene("Models/fishy.FSH"); //PlayerFish
+
+		for (int i = 0; i < 2; i++) {
+			this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));
+			this->players.at(i)->SetBoundingBox(glm::vec3(0), glm::vec3(1));
+		}
+	}
+	else
+
+	if (enableNPCBlueThang) {
+		FSH_Loader.LoadScene("Models/bluetangblend.FSH"); //BlueTang
+
+		for (int i = 0; i < 10; i++) {
+			this->NPCs.push_back(new GLNPC_BlueTang(&FSH_Loader, BlueTang));
+			this->NPCs.at(i)->SetBoundingBox(glm::vec3(0), glm::vec3(1));
+			this->NPCs.at(i)->GetTransform().SetScale(glm::vec3(2));
+		}
+	}
+
+	if (enableNPCGoldFish) {
+		FSH_Loader.LoadScene("Models/GoldFishBlend.FSH"); //GoldFish
+
+		for (int i = 0; i < 20; i++) {
+			this->NPCs.push_back(new GLNPC_GoldFish(&FSH_Loader, GoldFish));
+			this->NPCs.at(i)->SetBoundingBox(glm::vec3(0), glm::vec3(1));
+		}
+	}
+
+	if (enableProjectiles) {
+		FSH_Loader.LoadScene("Models/Bubble2.FSH"); //Bubble
+		this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
+	}
+
+	if (enableAquarium) {
+		FSH_Loader.LoadScene("Models/AquariumRedux.FSH"); //Aquarium
+
+		this->staticMeshes.push_back(new GLModel(&FSH_Loader, Aquarium));
+		this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
+	}
+
+	if (enableCollision) {
+		this->collisionHandler.AddNPC(NPCs);
+		this->collisionHandler.AddPlayer(players);
+		this->collisionHandler.AddModel(models);
+		this->collisionHandler.InitiatePowerUpHandler();
+	}
 
 }
 
@@ -157,7 +219,6 @@ void Scene::LoadModels()
 	this->collisionHandler.AddPlayer(players);
 	this->collisionHandler.AddModel(models);
 	this->collisionHandler.InitiatePowerUpHandler();
-
 }
 
 void Scene::LoadModels(char * folder)
@@ -367,13 +428,15 @@ void Scene::Update(float& deltaTime) {
 	printDebugTimer(debug, "score");
 
 	this->particleHandler->UpdateParticles(deltaTime);
-	setDebugTimer(debug);
-	printDebugTimer(debug, "particles");
-
-	for (size_t i = 0; i < this->NPCs.size(); i++)
+	for (size_t i = 0; i < this->NPCs.size(); i++) {
 		this->NPCs.at(i)->NPCUpdate(deltaTime);
+		if (this->NPCs.at(i)->isPowerUp) {
+			this->NPCs.at(i)->UpdateParticles(this->deltaTime);
+		}	
+	}
 	setDebugTimer(debug);
-	printDebugTimer(debug, "npcs");
+	printDebugTimer(debug, "Npc");
+		
 
 	for (size_t i = 0; i < this->players.size(); i++) {
 		this->players.at(i)->Update(this->deltaTime);
@@ -462,19 +525,9 @@ void Scene::DrawScene() {
 		printDebugTimer(debug, "static meshes");
 
 		//Drawing All Particles
-		shaders[PARTICLE]->Bind();
-		shaders[PARTICLE]->Update(players.at(i)->GetCamera());
+		this->DrawParticles(players.at(i)->GetCamera());
 		setDebugTimer(debug);
-		printDebugTimer(debug, "bind particles, get playercamera");
-		for (size_t j = 0; j < this->players.size(); j++)
-		{
-		players.at(j)->DrawParticles(shaders[PARTICLE]);
-		}
-		setDebugTimer(debug);
-		printDebugTimer(debug, "player particles");
-		this->particleHandler->DrawParticles(shaders[PARTICLE]);
-		setDebugTimer(debug);
-		printDebugTimer(debug, "particles");
+		printDebugTimer(debug, "Particles");
 
 		this->frameBuffer->UnbindFrameBuffer();
 		this->frameBuffer2->BindFrameBuffer();
@@ -562,6 +615,24 @@ void Scene::DrawScene() {
 	printDebugTimer(debug, "end screen loop");
 
 	//PrintAndResetCombinedDTimer(debug);
+}
+
+void Scene::DrawParticles(GLCamera& playerCamera) {
+
+	shaders[PARTICLE]->Bind();
+	shaders[PARTICLE]->Update(playerCamera);
+	for (size_t j = 0; j < this->players.size(); j++)
+	{
+		players.at(j)->DrawParticles(shaders[PARTICLE]);
+	}
+
+	for (size_t i = 0; i < NPCs.size(); i++)
+	{
+		if (this->NPCs.at(i)->isPowerUp)
+			NPCs.at(i)->DrawParticles(shaders[PARTICLE]);
+	}
+
+	this->particleHandler->DrawParticles(shaders[PARTICLE]);
 }
 
 void Scene::RenderQuad()

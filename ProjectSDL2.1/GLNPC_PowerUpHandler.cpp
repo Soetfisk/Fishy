@@ -6,15 +6,14 @@ void NpcPowerUpHandler::initiatePowerFishes()
 	{
 		AvailableFishes.push_back(FishIndex);
 	}
+}
 
+void NpcPowerUpHandler::AsssignStartPowerupFishes() {
 	assert(amountOfPowerUpFishes < NPCs.size());
 	for (size_t i = 0; i < amountOfPowerUpFishes; i++)
 	{
 		MakePowerUpFish();
 	}
-	
-
-
 }
 
 void NpcPowerUpHandler::MakePowerUpFish()
@@ -25,9 +24,10 @@ void NpcPowerUpHandler::MakePowerUpFish()
 		unsigned int Fish = AvailableFishes.at(Index); 
 		AvailableFishes.erase(AvailableFishes.begin() + Index);
 		NPCs.at(Fish)->isPowerUp = true;
-		//NPCs.at(Fish)->SetCurrentState();
-
+		//NPCs.at(Fish)->SetCurrentState();'
+		NPCs.at(Fish)->AddEmitter(pHandlerRef->CreateEmitter(EmitterType::GOLDSTREAM, glm::vec4(NPCs.at(Fish)->GetTransform().GetPos(), 1)));
 		PowerNPCs.push_back(NPCs.at(Fish));
+
 	}
 }
 
@@ -85,4 +85,8 @@ void NpcPowerUpHandler::MovePowerUpToAnotherFish(GLNPC* RemoveThisFish, unsigned
 NpcPowerUpHandler::~NpcPowerUpHandler()
 {
 	
+}
+
+void NpcPowerUpHandler::addParticleHandlerReference(ParticleHandler* pHandler) {
+	this->pHandlerRef = pHandler;
 }

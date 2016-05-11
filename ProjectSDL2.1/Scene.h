@@ -152,6 +152,7 @@ private:
 	void CheckWinner();
 	void AddScore();
 
+	void DrawParticles(GLCamera& playerCamera);
 	void setDebugTimer(bool debug);
 	void printDebugTimer(bool debug, std::string name);
 	void PrintAndResetCombinedDTimer(bool debug);
@@ -165,6 +166,7 @@ public:
 
 	void Update(float& deltaTime);
 	void LoadScene();
+	void LoadFastScene();
 	void DrawScene();
 	void RenderQuad();
 	void ResetScene();
