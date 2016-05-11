@@ -81,6 +81,15 @@ void Scene::Init()
 	this->endTimer = 300;
 	this->endScore = 1000;
 
+	this->seaWeedHandler = new SeaWeedHandler(&FSH_Loader, SeaWeedLeaf);
+	this->seaWeedHandler->SetXLimit(-130, 130);
+	this->seaWeedHandler->SetYLimit(-50, 50);
+	this->seaWeedHandler->SetLeafAmount(1, 5);
+	this->seaWeedHandler->SetAmountOfPlants(9);
+	this->seaWeedHandler->setScale(5, 9);
+	this->seaWeedHandler->setOffset(0, 0);
+	this->seaWeedHandler->LoadSeaWeed();
+
 	particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
 	
 
@@ -120,6 +129,8 @@ void Scene::LoadModels()
 	FSH_Loader.LoadScene("Models/Bubble2.FSH"); //Bubble
 	FSH_Loader.LoadScene("Models/AquariumRedux.FSH"); //Aquarium
 	FSH_Loader.LoadScene("Models/weed2.FSH"); //SeaWeedLeaf
+	FSH_Loader.LoadScene("Models/roughRock.FSH"); //roughRock
+	FSH_Loader.LoadScene("Models/smoothRock.FSH"); //smoothRock
 
 	for (int i = 0; i < 2; i++) {
 		this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));
@@ -138,8 +149,6 @@ void Scene::LoadModels()
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Aquarium));
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, BlueTang));
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
-
-	this->specialStaticMeshes.push_back(new SeaWeedLeafs(&FSH_Loader, SeaWeedLeaf));
 
 	this->collisionHandler.AddNPC(NPCs);
 	this->collisionHandler.AddPlayer(players);
@@ -283,14 +292,10 @@ Scene::~Scene() {
 	{
 		delete staticMeshes.at(i);
 	}
-	for (int i = 0; i < specialStaticMeshes.size(); i++)
-	{
-		delete specialStaticMeshes.at(i);
-	}
-
 	delete guih;
 	delete rc;
 	delete particleHandler;
+	delete seaWeedHandler;
 	for (int i = 0; i < NUM_MUSIC; i++)
 	{
 		Mix_FreeMusic(music[i]);
@@ -354,6 +359,7 @@ void Scene::DrawScene() {
 		}
 		shaders[MODELS]->Bind();
 		shaders[MODELS]->Update(players.at(i)->GetCamera());
+		this->seaWeedHandler->Draw(shaders[MODELS]);
 		for (int j = 0; j < this->players.size(); j++)
 		{
 			players.at(j)->DrawProjectile(*shaders[MODELS]);
@@ -365,11 +371,6 @@ void Scene::DrawScene() {
 		for (size_t i = 0; i < staticMeshes.size(); i++)
 		{
 			staticMeshes.at(i)->Draw(*shaders[MODELS]);
-		}
-
-		for (unsigned int i = 0; i < specialStaticMeshes.size(); i++)
-		{
-			specialStaticMeshes.at(i)->Draw(*shaders[MODELS]);
 		}
 
 		//Drawing All Particles

@@ -21,6 +21,7 @@
 #include <time.h>
 #include <SDL2\SDL_mixer.h>
 #include "RoundCounter.h"
+#include "SeaWeedHandler.h"
 #define mSTATIC *shaders[MODELS]
 #define mANIMATED *shaders[BLEND_SHAPE]
 
@@ -46,7 +47,9 @@ private:
 		BlueTang,
 		Bubble,
 		Aquarium,
-		SeaWeedLeaf
+		SeaWeedLeaf,
+		roughRock,
+		smoothRock
 	};
 	int SCREEN_WIDTH = window::WIDTH;
 	int SCREEN_HEIGHT = window::HEIGHT / 2;
@@ -88,7 +91,6 @@ private:
 	std::vector<GLPlayer*> players;
 	std::vector<GLNPC*> NPCs;
 	std::vector<GLModel*> staticMeshes;
-	std::vector<SpecialStaticMesh*> specialStaticMeshes;
 
 	GLShader* shaders[NUM_SHADERS];
 	GLMesh* tempMesh;
@@ -111,6 +113,7 @@ private:
 	glm::mat4 projection;
 	GLGUIHandler* guih;
 	RoundCounter* rc;
+	SeaWeedHandler* seaWeedHandler;
 
 
 	// variables for border shader

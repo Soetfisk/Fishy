@@ -83,6 +83,9 @@
     <ClCompile Include="GLNPC_PowerUpHandler.cpp" />
     <ClCompile Include="SeaWeedLeafs.cpp" />
     <ClCompile Include="SpecialStaticMesh.cpp" />
+    <ClCompile Include="SeaWeedHandler.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AABB.h">
@@ -183,6 +186,9 @@
     <ClInclude Include="SeaWeedLeafs.h" />
     <ClInclude Include="SpecialStaticMesh.h" />
     <ClInclude Include="SpecialStaticMeshes.h" />
+    <ClInclude Include="SeaWeedHandler.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="blueFilter.glsl">

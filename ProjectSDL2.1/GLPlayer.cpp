@@ -760,7 +760,8 @@ void GLPlayer::UpdateParticles(float &deltaTime) {
 
 		if (this->speed > 0.3f) {
 			this->player_PartcileEmitter->updateEmitterData(glm::vec4(this->transform->GetPos(), 1),
-				glm::vec4(this->forward, 0), glm::vec4(this->GetRight(), 0), glm::vec4(this->GetUp(), 0), 2 / speed, this->transform->GetScale().z);
+				glm::vec4(this->forward, 0), glm::vec4(this->GetRight(), 0),
+				glm::vec4(this->GetUp(), 0), 2 / speed, this->transform->GetScale().z);
 			//this->player_PartcileEmitter->updateDirection(glm::vec4(this->forward, 0));
 			//this->player_PartcileEmitter->updatePosition(glm::vec4(this->transform->GetPos(), 1));
 			//this->player_PartcileEmitter->updateSpawnRate(2/speed);
