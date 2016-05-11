@@ -83,6 +83,8 @@
     <None Include="blend_shape.frag" />
     <None Include="blend_shape.geom" />
     <None Include="blueFilter.glsl" />
+    <None Include="draw.frag" />
+    <None Include="draw.vert" />
     <None Include="lighting.frag" />
     <None Include="lighting.vert" />
     <None Include="blend_shape.vert" />

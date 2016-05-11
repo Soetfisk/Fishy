@@ -64,9 +64,6 @@
     <ClCompile Include="GLMeshBS.cpp">
       <Filter>Source\Models</Filter>
     </ClCompile>
-    <ClCompile Include="GLNPC_PowerUpHandler.cpp">
-      <Filter>Source\NPCs</Filter>
-    </ClCompile>
     <ClCompile Include="Menu.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -79,6 +76,7 @@
     <ClCompile Include="ParticleHandler.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="GLNPC_PowerUpHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AABB.h">
@@ -147,9 +145,6 @@
     <ClInclude Include="Menu.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="GLNPC_PowerUpHandler.h">
-      <Filter>Header\NPCs</Filter>
-    </ClInclude>
     <ClInclude Include="GameState.h">
       <Filter>Header</Filter>
     </ClInclude>
@@ -174,6 +169,7 @@
     <ClInclude Include="ParticleEmitter.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="GLNPC_PowerUpHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="blueFilter.glsl">
@@ -240,6 +236,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="ParticleTestShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="draw.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="draw.frag">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
