@@ -31,19 +31,23 @@ public:
 		return !cooldown;
 	}
 
+	void StandardProjectileSize(float size);
+
+
 	void drawParticles(GLShader *shader);
 	void updateParticles(float& deltaTime);
 	void addParticleHandlerReference(ParticleHandler* pHandlerRef);
 
 private:
 	const float SHOTGUN_OFFSET = 1.0f;
-	const float BIG_PROJECTILE_SIZE = 3.0f;
+	const float BIG_PROJECTILE_MULTIPLIER = 3.0f;
 	const float MAX_ANGLE = 0.2f;
 
 	FishBox* FSH_Loader; 
 	unsigned int modelID;
 	int projectileActiveTime;																								
 	float projectileSpeed, projectileStrength, projectileSize;
+	float standardProjectileSize;
 	float cooldownDuration, cooldownCounter;
 	bool cooldown;
 	ProjectilePowerUpState currentState;
@@ -55,10 +59,3 @@ private:
 
 	ParticleHandler *particleHandlerReference;
 };
-
-/*
-	Shotgun
-	Stora
-	Snabba
-	Starka
-*/
