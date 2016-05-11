@@ -77,6 +77,12 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="GLNPC_PowerUpHandler.cpp" />
+    <ClCompile Include="RoundCounter.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GLNPC_PowerUpHandler.cpp" />
+    <ClCompile Include="SeaWeedLeafs.cpp" />
+    <ClCompile Include="SpecialStaticMesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AABB.h">
@@ -170,6 +176,13 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="GLNPC_PowerUpHandler.h" />
+    <ClInclude Include="RoundCounter.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GLNPC_PowerUpHandler.h" />
+    <ClInclude Include="SeaWeedLeafs.h" />
+    <ClInclude Include="SpecialStaticMesh.h" />
+    <ClInclude Include="SpecialStaticMeshes.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="blueFilter.glsl">

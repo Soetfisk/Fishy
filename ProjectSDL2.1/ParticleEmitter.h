@@ -38,11 +38,11 @@ private:
 
 	glm::vec4 positionEmitter;
 	glm::vec4 directionEmitter;
+	glm::vec4 directionRightEmitter;
+	glm::vec4 directionUpEmitter;
 	GLuint pe_VertexArrayObject;
-	GLuint pe_particleBuffer, pe_particleSpawnBuffer;
+	GLuint pe_particleBuffer;
 	GLuint pe_VertexArrayBuffers[NUM_BUFFERS];
-
-	GLuint pe_posBuf, pe_scaleBuf;
 
 
 
@@ -51,9 +51,13 @@ private:
 	float emiterAwakeTime;
 	float emiterTimeSinceLastParticle;
 	float emiterSpawnTDelay;
+	float emiterSpawnTDelayStandard;
 	float emiterSpawnTCurrent;
 	float emiterCheckDeadTDelay;
 	float emiterCheckDeadTCurrent;
+	bool emiterMulitbleSpawner;
+	float emiterNrToSpawnSimutan;
+	float emiterScale;
 
 
 	void updateParticles(const float& deltaTime);
@@ -76,20 +80,23 @@ private:
 	void instantiateStaticStream();
 	void instantiateGoldStream();
 	void instantiatePlayerFollow();
-	
+	bool player1;
 	void changeDirection(glm::vec4 dir);
 
 	Particle particle;
 
-
-
+	void Reset();
 public:
-	ParticleEmitter(EmitterType type, glm::mat4*&  transformMatrix, GLuint transformMatrixLocation);
-	ParticleEmitter(EmitterType type, glm::vec4 position, GLuint transformMatrixLocation, FSHData::texture* texture);
+	ParticleEmitter(EmitterType type, glm::vec4 position, FSHData::texture* texture);
 	~ParticleEmitter();
 	void UpdateEmitter(const float& deltaTime);
 	void Draw(GLShader* shader);
 
+	void updatePosition(glm::vec4 pos);
+	void updateDirection(glm::vec4 dir);
+	void updateSpawnRate(float rate);
+
+	void updateEmitterData(glm::vec4& pos, glm::vec4& dir, glm::vec4& right, glm::vec4& up, float rate, float scale);
 };
 
 #endif

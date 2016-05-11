@@ -25,7 +25,7 @@ void NpcPowerUpHandler::MakePowerUpFish()
 		unsigned int Fish = AvailableFishes.at(Index); 
 		AvailableFishes.erase(AvailableFishes.begin() + Index);
 		NPCs.at(Fish)->isPowerUp = true;
-		NPCs.at(Fish)->SetCurrentState();
+		//NPCs.at(Fish)->SetCurrentState();
 
 		PowerNPCs.push_back(NPCs.at(Fish));
 	}

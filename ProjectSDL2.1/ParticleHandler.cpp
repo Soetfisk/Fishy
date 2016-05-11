@@ -11,6 +11,7 @@ ParticleHandler::ParticleHandler(GLShader* renderShader, FishBox *FSH_LoaderRefe
 	this->textures[EmitterType::STATICSTREAM] = this->FSH_LoaderReference->loadTexure("./res/BubbleTest.png");
 	this->textures[EmitterType::GOLDSTREAM] = this->FSH_LoaderReference->loadTexure("./res/Star.png");
 	this->textures[EmitterType::PLAYERFOLLOW] = this->FSH_LoaderReference->loadTexure("./res/BubbleTest.png");
+	this->textures[EmitterType::PROJECTILE] = this->FSH_LoaderReference->loadTexure("./res/BubbleTest.png");
 
 	
 }
@@ -28,11 +29,11 @@ ParticleHandler::~ParticleHandler(){
 	
 }
 
-void ParticleHandler::DrawParticles(GLShader* shader, GLCamera& camera) {
-	
+void ParticleHandler::DrawParticles(GLShader* shader/*, GLCamera& camera*/) {
+	//shader->Bind();
+	//shader->Update(camera);
 	for (int i = 0; i < this->emiters.size(); i++) {
-		shader->Bind();
-		shader->Update(camera);
+		
 		this->emiters.at(i)->Draw(shader);
 	}
 }
@@ -41,16 +42,16 @@ void ParticleHandler::UpdateParticles(const float& deltaTime) {
 
 	for (int i = 0; i < this->emiters.size(); i++) {
 		this->emiters.at(i)->UpdateEmitter(deltaTime);
-		
 	}
-
-	
 }
 
-void ParticleHandler::AddEmiter(EmitterType type, glm::mat4*& transformMatrix) {
-	this->emiters.push_back(new ParticleEmitter(type, transformMatrix, this->transformationLocation));
-}
+
+
 
 void ParticleHandler::AddEmiter(EmitterType type, glm::vec4 position) {
-	this->emiters.push_back(new ParticleEmitter(type, position, this->transformationLocation, this->textures[type]));
+	this->emiters.push_back(new ParticleEmitter(type, position, this->textures[type]));
+}
+
+ParticleEmitter *ParticleHandler::CreateEmitter(EmitterType type, glm::vec4 position) {
+	return new ParticleEmitter(type, position, this->textures[type]);
 }
