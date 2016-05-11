@@ -82,8 +82,8 @@ void Scene::Init()
 	this->endScore = 1000;
 
 	this->seaWeedHandler = new SeaWeedHandler(&FSH_Loader, SeaWeedLeaf);
-	this->seaWeedHandler->SetXLimit(-130, 130);
-	this->seaWeedHandler->SetYLimit(-50, 50);
+	this->seaWeedHandler->SetXLimit(-125, 125);
+	this->seaWeedHandler->SetZLimit(-70, 70);
 	this->seaWeedHandler->SetLeafAmount(1, 5);
 	this->seaWeedHandler->SetAmountOfPlants(9);
 	this->seaWeedHandler->SetScale(5, 9);
@@ -504,6 +504,7 @@ void Scene::ResetScene()
 	this->endSceneTimer = 0;
 	this->endGame = false;
 	this->winner = false;
+	this->seaWeedHandler->Reset();
 }
 
 void Scene::HandleEvenet(SDL_Event* e) {
