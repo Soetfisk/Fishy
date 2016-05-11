@@ -100,13 +100,13 @@ void SeaWeedHandler::SetAmountOfPlants(int plants)
 	this->amountOfPlants = plants;
 }
 
-void SeaWeedHandler::setScale(float min, float max)
+void SeaWeedHandler::SetScale(float min, float max)
 {
 	this->scaleMax = max;
 	this->scaleMin = min;
 }
 
-void SeaWeedHandler::setOffset(int x, int z)
+void SeaWeedHandler::SetOffset(int x, int z)
 {
 	this->offsetX = x;
 	this->offsetZ = z;

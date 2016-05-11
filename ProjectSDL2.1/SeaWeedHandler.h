@@ -20,7 +20,8 @@ public:
 	void SetXLimit(int min, int max);
 	void SetLeafAmount(int min, int max);
 	void SetAmountOfPlants(int plants);
-	void setScale(float min, float max);
-	void setOffset(int x, int z);
+	void SetScale(float min, float max);
+	void SetOffset(int x, int z);
+	void Reset();
 };
 

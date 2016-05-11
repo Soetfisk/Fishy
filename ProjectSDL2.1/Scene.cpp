@@ -86,8 +86,8 @@ void Scene::Init()
 	this->seaWeedHandler->SetYLimit(-50, 50);
 	this->seaWeedHandler->SetLeafAmount(1, 5);
 	this->seaWeedHandler->SetAmountOfPlants(9);
-	this->seaWeedHandler->setScale(5, 9);
-	this->seaWeedHandler->setOffset(0, 0);
+	this->seaWeedHandler->SetScale(5, 9);
+	this->seaWeedHandler->SetOffset(0, 0);
 	this->seaWeedHandler->LoadSeaWeed();
 
 	particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
