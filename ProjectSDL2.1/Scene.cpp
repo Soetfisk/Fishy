@@ -3,6 +3,9 @@
 
 void Scene::Init()
 {
+	//DEBUG MODE?
+	debug = false;
+
 	// set player position and rotation to the correct startpositions
 	this->players.at(1)->GetTransform().SetPos(glm::vec3(100, 0, 0));
 	this->players.at(1)->GetTransform().SetRot(glm::vec3(0, -1.58, 0));
@@ -238,6 +241,35 @@ void Scene::AddScore()
 	}
 }
 
+void Scene::setDebugTimer(bool debug)
+{
+	if (debug)
+	{
+		this->currentDTime = SDL_GetTicks();
+		this->dTime = (currentDTime - prevDTime) / 1000.0f;
+		this->prevDTime = currentDTime;
+		this->combinedDtime += dTime;
+	}
+	
+}
+
+
+
+void Scene::printDebugTimer(bool debug, std::string name)
+{
+	if (debug)
+		printf("\nTime: %f, %s", dTime, name.c_str());
+}
+
+void Scene::PrintAndResetCombinedDTimer(bool debug)
+{
+	if (debug)
+	{
+		printf("\nCombinded frame time: %f\n", combinedDtime);
+		combinedDtime = 0.0f;
+	}
+}
+
 Scene::Scene(GLOBAL_GameState* gameState) {
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
 	Mix_VolumeMusic(20);
@@ -305,6 +337,10 @@ Scene::~Scene() {
 
 void Scene::Update(float& deltaTime) {
 
+	if (debug)
+		printf("\n\n##UPDATE DEBUG##");
+
+	setDebugTimer(debug);
 	if (Mix_PlayingMusic() == 0)
 	{
 		srand(time(0));
@@ -313,21 +349,38 @@ void Scene::Update(float& deltaTime) {
 		currentSong = num;
 		Mix_PlayMusic(music[num], -1);
 	}
-
+	setDebugTimer(debug);
+	printDebugTimer(debug, "music");
+	
 	this->deltaTime = deltaTime;
 
 	guih->Update(deltaTime);
+	setDebugTimer(debug);
+	printDebugTimer(debug, "gui");
 
 	this->collisionHandler.CheckCollisions(deltaTime);
+	setDebugTimer(debug);
+	printDebugTimer(debug, "collision");
+
 	this->AddScore();
+	setDebugTimer(debug);
+	printDebugTimer(debug, "score");
+
 	this->particleHandler->UpdateParticles(deltaTime);
+	setDebugTimer(debug);
+	printDebugTimer(debug, "particles");
+
 	for (size_t i = 0; i < this->NPCs.size(); i++)
 		this->NPCs.at(i)->NPCUpdate(deltaTime);
+	setDebugTimer(debug);
+	printDebugTimer(debug, "npcs");
 
 	for (size_t i = 0; i < this->players.size(); i++) {
 		this->players.at(i)->Update(this->deltaTime);
 		this->players.at(i)->UpdateParticles(this->deltaTime);
 	}
+	setDebugTimer(debug);
+	printDebugTimer(debug, "players");
 
 }
 
@@ -338,18 +391,35 @@ void Scene::LoadScene() {
 
 //Calls the models.draw
 void Scene::DrawScene() {
+
+	if (debug)
+		printf("\n\n### DRAW DEBUG ###");
+
+	setDebugTimer(debug);
+	printDebugTimer(debug, "between draw and update");
+
 	guih->Draw();
 	rc->Draw();
+	setDebugTimer(debug);
+	printDebugTimer(debug, "gui");
+
 	for (size_t i = 0; i < this->players.size(); i++) {
 		// handle player powerup
+		if (debug)
+			printf("\n\n#SCREEN: %d:", i);
+
 		this->UpdatePlayerPowerUp(i);
 		this->HandlePlayerPowerUp();
+		setDebugTimer(debug);
+		printDebugTimer(debug, "playerpowerup");
 		//Set viewport
 		glViewport(0, 0, window::WIDTH, window::HEIGHT / 2);
 
 		shaders[BLEND_SHAPE]->Bind();
 		shaders[BLEND_SHAPE]->Update(players.at(i)->GetCamera());
 		this->frameBuffer->BindFrameBuffer();
+		setDebugTimer(debug);
+		printDebugTimer(debug, "bind blendshape, get playercamera, bind framebuffer");
 
 		for (size_t j = 0; j < this->players.size(); j++)
 		{
@@ -357,36 +427,57 @@ void Scene::DrawScene() {
 			shaders[BLEND_SHAPE]->Uniform1fv("Weights", players.at(j)->GetBlendWeights());
 			players.at(j)->TestDraw(*shaders[BLEND_SHAPE]);
 		}
+
+		setDebugTimer(debug);
+		printDebugTimer(debug, "player");
+		
 		shaders[MODELS]->Bind();
 		shaders[MODELS]->Update(players.at(i)->GetCamera());
+		setDebugTimer(debug);
+		printDebugTimer(debug, "bind models, get playercamera");
 		this->seaWeedHandler->Draw(shaders[MODELS]);
+		setDebugTimer(debug);
+		printDebugTimer(debug, "seaweed handler");
 		for (int j = 0; j < this->players.size(); j++)
 		{
 			players.at(j)->DrawProjectile(*shaders[MODELS]);
 		}
+		setDebugTimer(debug);
+		printDebugTimer(debug, "projectiles");
 		for (size_t i = 0; i < NPCs.size(); i++)
 		{
 			NPCs.at(i)->NPCDraw(*shaders[MODELS]);
 		}
+		setDebugTimer(debug);
+		printDebugTimer(debug, "npc's");
 		for (size_t i = 0; i < staticMeshes.size(); i++)
 		{
 			staticMeshes.at(i)->Draw(*shaders[MODELS]);
 		}
+		setDebugTimer(debug);
+		printDebugTimer(debug, "static meshes");
 
 		//Drawing All Particles
 		shaders[PARTICLE]->Bind();
 		shaders[PARTICLE]->Update(players.at(i)->GetCamera());
+		setDebugTimer(debug);
+		printDebugTimer(debug, "bind particles, get playercamera");
 		for (size_t j = 0; j < this->players.size(); j++)
 		{
 		players.at(j)->DrawParticles(shaders[PARTICLE]);
 		}
-
+		setDebugTimer(debug);
+		printDebugTimer(debug, "player particles");
 		this->particleHandler->DrawParticles(shaders[PARTICLE]);
+		setDebugTimer(debug);
+		printDebugTimer(debug, "particles");
 
 		this->frameBuffer->UnbindFrameBuffer();
 		this->frameBuffer2->BindFrameBuffer();
 		shaders[LIGHTING]->Bind();
 
+		setDebugTimer(debug);
+		printDebugTimer(debug, "bind lighting, framebuffer 2");
 		for (size_t i = 0; i < pointLights.size(); i++)
 		{
 			glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(i) + "].ambient"), 1, glm::value_ptr(pointLights.at(i).ambient));
@@ -415,10 +506,14 @@ void Scene::DrawScene() {
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("ambientTexture"), 4);
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("specularTexture"), 5);
 
+		setDebugTimer(debug);
+		printDebugTimer(debug, "lighting");
 
 		this->RenderQuad();
-		this->frameBuffer2->UnbindFrameBuffer();
+		setDebugTimer(debug);
+		printDebugTimer(debug, "renderQuad");
 
+		this->frameBuffer2->UnbindFrameBuffer();
 
 		this->frameBuffer3->BindFrameBuffer();
 		shaders[BORDER]->Bind();
@@ -454,8 +549,15 @@ void Scene::DrawScene() {
 		this->frameBuffer5->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
 		glViewport(0, (GLint)(window::HEIGHT - (window::HEIGHT *(.5*(i + 1)))), (GLint)window::WIDTH, (GLint)(window::HEIGHT / 2));
 		this->RenderQuad();
+
+		setDebugTimer(debug);
+		printDebugTimer(debug, "all the way to framebuffer5");
 	}
 
+	setDebugTimer(debug);
+	printDebugTimer(debug, "end screen loop");
+
+	//PrintAndResetCombinedDTimer(debug);
 }
 
 void Scene::RenderQuad()
