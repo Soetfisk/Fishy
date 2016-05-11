@@ -21,4 +21,5 @@ public:
 	void checkboarderCollision();
 	bool GetIsPowerUp();
 	void ResetFish();
+
 };

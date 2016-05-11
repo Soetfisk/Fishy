@@ -116,7 +116,7 @@ void Scene::LoadModels()
 {
 	FSH_Loader.LoadScene("Models/fishy.FSH"); //PlayerFish
 	FSH_Loader.LoadScene("Models/GoldFishBlend.FSH"); //GoldFish
-	FSH_Loader.LoadScene("Models/BlueTang.FSH"); //BlueTang
+	FSH_Loader.LoadScene("Models/bluetangblend.FSH"); //BlueTang
 	FSH_Loader.LoadScene("Models/Bubble2.FSH"); //Bubble
 	FSH_Loader.LoadScene("Models/AquariumRedux.FSH"); //Aquarium
 	FSH_Loader.LoadScene("Models/weed2.FSH"); //SeaWeedLeaf
@@ -352,16 +352,21 @@ void Scene::DrawScene() {
 			shaders[BLEND_SHAPE]->Uniform1fv("Weights", players.at(j)->GetBlendWeights());
 			players.at(j)->TestDraw(*shaders[BLEND_SHAPE]);
 		}
+
+		for (size_t j = 0; j < NPCs.size(); j++)
+		{
+			shaders[BLEND_SHAPE]->Uniform1ui("BlendShapeCount", (GLuint)NPCs.at(j)->GetBlendShapeCount());
+			shaders[BLEND_SHAPE]->Uniform1fv("Weights", NPCs.at(j)->GetBlendWeights());
+			NPCs.at(j)->NPCDraw(*shaders[BLEND_SHAPE]);
+		}
+
 		shaders[MODELS]->Bind();
 		shaders[MODELS]->Update(players.at(i)->GetCamera());
 		for (int j = 0; j < this->players.size(); j++)
 		{
 			players.at(j)->DrawProjectile(*shaders[MODELS]);
 		}
-		for (size_t i = 0; i < NPCs.size(); i++)
-		{
-			NPCs.at(i)->NPCDraw(*shaders[MODELS]);
-		}
+		
 		for (size_t i = 0; i < staticMeshes.size(); i++)
 		{
 			staticMeshes.at(i)->Draw(*shaders[MODELS]);
