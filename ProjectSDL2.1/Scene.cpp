@@ -81,11 +81,11 @@ void Scene::Init()
 	this->endTimer = 300;
 	this->endScore = 1000;
 
-	this->seaWeedHandler = new SeaWeedHandler(&FSH_Loader, Bubble);
+	this->seaWeedHandler = new SeaWeedHandler(&FSH_Loader, SeaWeedLeaf);
 	this->seaWeedHandler->SetXLimit(-130, 130);
 	this->seaWeedHandler->SetYLimit(-50, 50);
-	this->seaWeedHandler->SetLeafAmount(5, 60);
-	this->seaWeedHandler->SetAmountOfPlants(50);
+	this->seaWeedHandler->SetLeafAmount(3, 10);
+	this->seaWeedHandler->SetAmountOfPlants(5);
 	this->seaWeedHandler->setScale(5, 9);
 	this->seaWeedHandler->setOffset(0, 0);
 	this->seaWeedHandler->LoadSeaWeed();
