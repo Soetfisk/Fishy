@@ -29,6 +29,7 @@ GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int proj
 	sound[SHOTGUN_SHOOT_SOUND] = Mix_LoadWAV("./res/Sounds/shotgun.wav");
 	sound[DASH_SOUND] = Mix_LoadWAV("./res/Sounds/dash_short.wav");
 	sound[MOVE_SOUND] = Mix_LoadWAV("./res/Sounds/move.wav");
+	sound[EAT_SOUND] = Mix_LoadWAV("./res/Sounds/eat.wav");
 	this->m_camera;
 	this->m_projectileHandler = new GLProjectileHandler(FSH_Loader, projectileModelID, 1, 2, 20.0f);
 	this->m_velocity = glm::vec3(0);
@@ -117,7 +118,7 @@ void GLPlayer::HandleCollision(PlayerStates state, float deltaTime, glm::vec3 mo
 	break;
 	case EATING:
 		if (momentum.x > 0){
-		
+			Mix_PlayChannel(-1, sound[EAT_SOUND], 0);
 			size += momentum.x;
 			totalPoints += (int)(100 * momentum.x);
 			currentPoints += (int)(100 * momentum.x);
@@ -697,7 +698,6 @@ void GLPlayer::HandleDash(float & deltaTime)
 		{
 			dashOnCooldown = false;
 			dashCooldownCounter = 0.0f;
-			lastForward = 0.0f;
 		}
 	}
 }
