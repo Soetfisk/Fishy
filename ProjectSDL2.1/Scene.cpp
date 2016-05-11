@@ -123,17 +123,20 @@ void Scene::LoadModels()
 
 	for (int i = 0; i < 2; i++) {
 		this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));
+		this->players.at(i)->SetBoundingBox(glm::vec3(0), glm::vec3(1));
 	}
 	for (int i = 0; i < 20; i++) {
 		this->NPCs.push_back(new GLNPC_GoldFish(&FSH_Loader, GoldFish));
+		this->NPCs.at(i)->SetBoundingBox(glm::vec3(0), glm::vec3(1));
 	}
 	for (int i = 0; i < 10; i++) {
 		this->NPCs.push_back(new GLNPC_BlueTang(&FSH_Loader, BlueTang));
+		this->NPCs.at(i)->SetBoundingBox(glm::vec3(0), glm::vec3(1));
 		this->NPCs.at(i)->GetTransform().SetScale(glm::vec3(2));
 	}
 
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Aquarium));
-	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
+	this->staticMeshes.push_back(new GLModel(&FSH_Loader, BlueTang));
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
 
 	this->specialStaticMeshes.push_back(new SeaWeedLeafs(&FSH_Loader, SeaWeedLeaf));
