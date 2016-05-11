@@ -23,7 +23,6 @@ public:
 	void NPCKill();
 	void initiateFleeingState(glm::vec3 playerForwardVector);
 	void checkboarderCollision();
-	bool GetIsPowerUp();
 	void ResetFish();
 
 	

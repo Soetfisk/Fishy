@@ -37,11 +37,13 @@ protected:
 	ParticleEmitter *npc_emitter;
 	const int updateFrames = 3;
 	int timeSinceUpdate;
+	bool isPowerUp = false;
 public:
 
 	int GetCurrentState();
 	void SetCurrentState();
-	bool isPowerUp = false;
+	bool& GetIsPowerUp() { return isPowerUp; };
+	void makePowerUp();
 
 	GLNPC(FishBox* FSH_Loader, unsigned int modelID);
 	~GLNPC();
@@ -52,7 +54,6 @@ public:
 	virtual void initiateFleeingState(glm::vec3 playerForwardVector) = 0;
 
 	virtual void ResetFish() = 0;
-	virtual bool GetIsPowerUp() =0;
 
 	float * GetBlendWeights() { return blendWeights; }
 	unsigned int GetBlendShapeCount() { return NUM_ANIMATION; }

@@ -23,9 +23,10 @@ void NpcPowerUpHandler::MakePowerUpFish()
 		unsigned int Index = RNG::PickIndexVector(&AvailableFishes);
 		unsigned int Fish = AvailableFishes.at(Index); 
 		AvailableFishes.erase(AvailableFishes.begin() + Index);
-		NPCs.at(Fish)->isPowerUp = true;
-		//NPCs.at(Fish)->SetCurrentState();'
+
+		NPCs.at(0)->makePowerUp();
 		NPCs.at(Fish)->AddEmitter(pHandlerRef->CreateEmitter(EmitterType::GOLDSTREAM, glm::vec4(NPCs.at(Fish)->GetTransform().GetPos(), 1)));
+		
 		PowerNPCs.push_back(NPCs.at(Fish));
 
 	}
@@ -72,7 +73,7 @@ void NpcPowerUpHandler::MovePowerUpToAnotherFish(GLNPC* RemoveThisFish, unsigned
 	{
 		if (PowerNPCs.at(i) == RemoveThisFish)
 		{
-			PowerNPCs.at(i)->isPowerUp = false;
+			PowerNPCs.at(i)->GetIsPowerUp() = false;
 			PowerNPCs.erase(PowerNPCs.begin() + i);
 			AvailableFishes.push_back(Fishindex);
 			MakePowerUpFish();

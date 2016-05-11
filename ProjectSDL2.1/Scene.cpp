@@ -430,7 +430,7 @@ void Scene::Update(float& deltaTime) {
 	this->particleHandler->UpdateParticles(deltaTime);
 	for (size_t i = 0; i < this->NPCs.size(); i++) {
 		this->NPCs.at(i)->NPCUpdate(deltaTime);
-		if (this->NPCs.at(i)->isPowerUp) {
+		if (this->NPCs.at(i)->GetIsPowerUp()) {
 			this->NPCs.at(i)->UpdateParticles(this->deltaTime);
 		}	
 	}
@@ -628,7 +628,7 @@ void Scene::DrawParticles(GLCamera& playerCamera) {
 
 	for (size_t i = 0; i < NPCs.size(); i++)
 	{
-		if (this->NPCs.at(i)->isPowerUp)
+		if (this->NPCs.at(i)->GetIsPowerUp())
 			NPCs.at(i)->DrawParticles(shaders[PARTICLE]);
 	}
 

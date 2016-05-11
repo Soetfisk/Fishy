@@ -183,10 +183,7 @@ void GLNPC_GoldFish::checkboarderCollision()
 }
 
 
-bool GLNPC_GoldFish::GetIsPowerUp()
-{
-	return this->isPowerUp;
-}
+
 
 void GLNPC_GoldFish::ResetFish()
 {

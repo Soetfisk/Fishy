@@ -185,10 +185,7 @@ void GLNPC_BlueTang::checkboarderCollision()
 
 
 
-bool GLNPC_BlueTang::GetIsPowerUp()
-{
-	return isPowerUp;
-}
+
 
 void GLNPC_BlueTang::ResetFish()
 {

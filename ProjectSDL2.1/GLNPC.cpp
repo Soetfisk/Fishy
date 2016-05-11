@@ -10,6 +10,19 @@ void GLNPC::SetCurrentState()
 	this->currentState = NPC_STANDSTILL;
 }
 
+void GLNPC::makePowerUp()
+{
+	/*this->meshes.at(0)->GetMaterial()->diffuse[0] = 1.0f;
+	this->meshes.at(0)->GetMaterial()->diffuse[1] = 0.0f;
+	this->meshes.at(0)->GetMaterial()->diffuse[2] = 0.0f;
+	
+	this->meshes.at(0)->GetMaterial()->spec[0] = 1.0f;
+	this->meshes.at(0)->GetMaterial()->spec[1] = 1.0f;
+	this->meshes.at(0)->GetMaterial()->spec[2] = 1.0f;*/
+	isPowerUp = true;
+	
+}
+
 GLNPC::GLNPC(FishBox * FSH_Loader, unsigned int modelID) : GLModel(FSH_Loader,modelID)
 {
 	this->blendWeights = new float[NUM_ANIMATION];
