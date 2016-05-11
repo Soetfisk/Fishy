@@ -591,6 +591,7 @@ void GLPlayer::PlayerShoot()
 			break;
 		}
 	}
+	this->m_projectileHandler->StandardProjectileSize(transform->m_scale.x);
 	this->m_projectileHandler->Shoot(GetForward(), transform->m_pos, transform->m_rot, m_velocity, GetRight(), GetUp());
 }
 

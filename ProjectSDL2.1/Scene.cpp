@@ -81,26 +81,26 @@ void Scene::Init()
 	this->endTimer = 300;
 	this->endScore = 1000;
 
-	particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
+	/*particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
 	
 
 	for (int i = 0; i < players.size(); i++)
 	{
 		players.at(i)->addParticleHandleRefernce(particleHandler);
-	}
+	}*/
 
 	//for (int z = 0; z < 5; z++) {
 	//	for (int x = 0; x < 5; x++) {
 	//		particleHandler->AddEmiter(EmitterType::STATICSTREAM, glm::vec4((float)x* RNG::range(-4.f, 4.f), -50.f, (float)z* RNG::range(-6.f, 6.f), 1));
 	//	}
 	//}
-	for (int z = -85; z < 85; z+=40) {
+	/*for (int z = -85; z < 85; z+=40) {
 		for (int x = -125; x < 125; x+= 40) {
 			float xe = x + RNG::range(-20, 20);
 			float ze = z + RNG::range(-20, 20);
 			particleHandler->AddEmiter(EmitterType::STATICSTREAM, glm::vec4((xe>-125 && xe<125) ? xe : x, -50.f, (ze>-85 && ze<85) ? ze : z, 1));
 		}
-	}
+	}*/
 
 	//for (int i = 0; i <  players.size(); i++) {
 	//	particleHandler->AddEmiter(EmitterType::PLAYERFOLLOW, players.at(i)->getParticleFollowPlayer());
@@ -152,7 +152,46 @@ void Scene::LoadModels(char * folder)
 // update currentPowerup variable with value from player i
 void Scene::UpdatePlayerPowerUp(int player)
 {
-	this->currentPowerUp = this->players.at(player)->GetPowerUp();
+	if (this->currentPowerUp != GLPlayer::POWER_NEUTRAL)
+	{
+		this->currentPowerUp = this->players.at(player)->GetPowerUp();
+		if(this->currentPowerUp == GLPlayer::POWER_NEUTRAL)
+		{
+			if (player == 0)
+				guih->Player1SetPowerUp(GLGUIHandler::PlayerPowerUpText::NOTHING);
+			else
+				guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::NOTHING);
+		}
+	}
+	else
+	{
+		this->currentPowerUp = this->players.at(player)->GetPowerUp();
+		switch (this->currentPowerUp)
+		{
+		case GLPlayer::POWER_NEUTRAL:
+			break;
+		case GLPlayer::POWER_BUBBLESHOTGUN:
+			if (player == 0)
+				guih->Player1SetPowerUp(GLGUIHandler::PlayerPowerUpText::SHOTGUN);
+			else
+				guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::SHOTGUN);
+			break;
+		case GLPlayer::POWER_BUBBLEBIG:
+			if (player == 0)
+				guih->Player1SetPowerUp(GLGUIHandler::PlayerPowerUpText::BIG);
+			else
+				guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::BIG);
+			break;
+		case GLPlayer::POWER_HIGH:
+			if (player == 0)
+				guih->Player1SetPowerUp(GLGUIHandler::PlayerPowerUpText::HIGH);
+			else
+				guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::HIGH);
+			break;
+		default:
+			std::cout << "POWERUP ERROR: UpdatePlayerPowerup-Function\n";
+		}
+	}
 }
 
 // do stuff with curentPowerup variable
@@ -287,7 +326,7 @@ Scene::~Scene() {
 
 	delete guih;
 	delete rc;
-	delete particleHandler;
+	//delete particleHandler;
 	for (int i = 0; i < NUM_MUSIC; i++)
 	{
 		Mix_FreeMusic(music[i]);
@@ -312,13 +351,13 @@ void Scene::Update(float& deltaTime) {
 
 	this->collisionHandler.CheckCollisions(deltaTime);
 	this->AddScore();
-	this->particleHandler->UpdateParticles(deltaTime);
+	//this->particleHandler->UpdateParticles(deltaTime);
 	for (size_t i = 0; i < this->NPCs.size(); i++)
 		this->NPCs.at(i)->NPCUpdate(deltaTime);
 
 	for (size_t i = 0; i < this->players.size(); i++) {
 		this->players.at(i)->Update(this->deltaTime);
-		this->players.at(i)->UpdateParticles(this->deltaTime);
+		//this->players.at(i)->UpdateParticles(this->deltaTime);
 	}
 
 }
@@ -370,14 +409,14 @@ void Scene::DrawScene() {
 		}
 
 		//Drawing All Particles
-		shaders[PARTICLE]->Bind();
+		/*shaders[PARTICLE]->Bind();
 		shaders[PARTICLE]->Update(players.at(i)->GetCamera());
 		for (size_t j = 0; j < this->players.size(); j++)
 		{
 		players.at(j)->DrawParticles(shaders[PARTICLE]);
 		}
 
-		this->particleHandler->DrawParticles(shaders[PARTICLE]);
+		this->particleHandler->DrawParticles(shaders[PARTICLE]);*/
 
 		this->frameBuffer->UnbindFrameBuffer();
 		this->frameBuffer2->BindFrameBuffer();
@@ -478,7 +517,7 @@ void Scene::RenderQuad()
 	}
 	glBindVertexArray(quadVAO);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	glBindVertexArray(0);
+	glBindVertexArray(0); 
 }
 
 void Scene::ResetScene()
