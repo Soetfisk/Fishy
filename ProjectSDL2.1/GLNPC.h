@@ -18,9 +18,24 @@ enum NPCStates
 
 class GLNPC : public GLModel
 {
+
+public:
+
+	enum Animations
+	{
+		AONE,
+		ATWO,
+
+		NUM_ANIMATION
+	};
+
 protected:
 	unsigned int currentState;
+	float * blendWeights;
+	float animationFactors[NUM_ANIMATION];
+
 public:
+
 	int GetCurrentState();
 	void SetCurrentState();
 	bool isPowerUp = false;
@@ -34,4 +49,10 @@ public:
 
 	virtual void ResetFish() = 0;
 	virtual bool GetIsPowerUp() =0;
+
+	float * GetBlendWeights() { return blendWeights; }
+	unsigned int GetBlendShapeCount() { return NUM_ANIMATION; }
+	void moveAnimation(float deltaTime, float speedFactor);
+
+	
 };

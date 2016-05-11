@@ -56,7 +56,7 @@ void GLNPC_GoldFish::NPCUpdate(float deltaTime)
 			}
 		}
 		checkboarderCollision();
-		
+		moveAnimation(deltaTime, 1.5 * forwardSpeed);
 		
 	}
 }
@@ -178,6 +178,7 @@ void GLNPC_GoldFish::checkboarderCollision()
 	}
 
 	transform->SetPos(pos);
+	
 }
 
 

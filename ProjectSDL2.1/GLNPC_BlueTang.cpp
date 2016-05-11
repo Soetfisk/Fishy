@@ -54,9 +54,10 @@ void GLNPC_BlueTang::NPCUpdate(float deltaTime)
 			if (GetTransform().GetScale().y < 0.2)
 			{
 				NPCKill();
-			}
+			} 
 		}
 		checkboarderCollision();
+		moveAnimation(deltaTime, 1* forwardSpeed);
 	}
 }
 
