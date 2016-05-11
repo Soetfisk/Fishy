@@ -44,7 +44,11 @@
     <ClCompile Include="ParticleComputeShader.cpp" />
     <ClCompile Include="ParticleEmitter.cpp" />
     <ClCompile Include="ParticleHandler.cpp" />
+    <ClCompile Include="RoundCounter.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SeaWeedHandler.cpp" />
+    <ClCompile Include="SeaWeedLeafs.cpp" />
+    <ClCompile Include="SpecialStaticMesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLMeshBS.h" />
@@ -76,13 +80,20 @@
     <ClInclude Include="ParticleEmitter.h" />
     <ClInclude Include="ParticleHandler.h" />
     <ClInclude Include="RNG.h" />
+    <ClInclude Include="RoundCounter.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SeaWeedHandler.h" />
+    <ClInclude Include="SeaWeedLeafs.h" />
+    <ClInclude Include="SpecialStaticMesh.h" />
+    <ClInclude Include="SpecialStaticMeshes.h" />
     <ClInclude Include="SphereBS.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="blend_shape.frag" />
     <None Include="blend_shape.geom" />
     <None Include="blueFilter.glsl" />
+    <None Include="draw.frag" />
+    <None Include="draw.vert" />
     <None Include="lighting.frag" />
     <None Include="lighting.vert" />
     <None Include="blend_shape.vert" />

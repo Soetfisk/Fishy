@@ -11,6 +11,8 @@ Menu::Menu()
 	gameState = nullptr;
 
 	InitMenuTextureInfo();
+	InitModels();
+
 }
 
 Menu::Menu(GLOBAL_GameState* state)
@@ -24,6 +26,7 @@ Menu::Menu(GLOBAL_GameState* state)
 	gameState = state;
 
 	InitMenuTextureInfo();
+	InitModels();
 }
 
 Menu::Menu(GUI* gui, GLOBAL_GameState* state)
@@ -37,6 +40,7 @@ Menu::Menu(GUI* gui, GLOBAL_GameState* state)
 	gameState = state;
 
 	InitMenuTextureInfo();
+	InitModels();
 }
 
 Menu::Menu(GUI* gui, GLOBAL_GameState* state, GLShader* shader)
@@ -50,6 +54,7 @@ Menu::Menu(GUI* gui, GLOBAL_GameState* state, GLShader* shader)
 	gameState = state;
 
 	InitMenuTextureInfo();
+	InitModels();
 }
 
 Menu::~Menu()
@@ -58,16 +63,29 @@ Menu::~Menu()
 		delete menuShader;
 	if(deleteGUI)
 		delete gui;
+
+	delete modelShader;
+	delete model;
+	delete aquarium;
+	delete camera;
 }
 
 void Menu::Update(float dt)
 {
-
+	model->GetTransform().m_rot.y += dt/2;
 }
 
 void Menu::Draw()
 {
 	glViewport(0, 0, window::WIDTH, window::HEIGHT);
+	modelShader->Bind();
+	modelShader->Update(*camera);
+	model->Draw(*modelShader);
+	aquarium->Draw(*modelShader);
+
+	projection = glm::ortho(0.0f, static_cast<GLfloat>(window::WIDTH), 0.0f, static_cast<GLfloat>(window::HEIGHT));
+	menuShader->Bind();
+	glUniformMatrix4fv(menuShader->GetUnifromLocation("projection"), 1, GL_FALSE, glm::value_ptr(projection));
 	for (int i = 0; i < NUM_MENU_BUTTONS; i++)
 	{
 		gui->RenderText(*menuShader, text[i], textPos[i][0], textPos[i][1], textScale[i], textColor[i]);
@@ -87,6 +105,9 @@ void Menu::HandleEvenet(SDL_Event * e)
 			HandleDown();
 			break;
 		case SDL_SCANCODE_SPACE:
+			HandleSpace();
+			break;
+		case SDL_SCANCODE_RETURN:
 			HandleSpace();
 			break;
 		default:
@@ -234,5 +255,21 @@ void Menu::FixSelected()
 	textPos[selectedBttn][0] = (float)(window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5);
 	textPos[SELECTED][0] = (float)(window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5 - gui->GetTextLenght(text[SELECTED], textScale[SELECTED]) - 20);
 	textPos[SELECTED][1] = textPos[selectedBttn][1];
+}
+
+void Menu::InitModels()
+{
+	FSH_Loader.LoadScene("Models/fishy.FSH"); //PlayerFish
+	FSH_Loader.LoadScene("Models/GoldFishBlend.FSH"); //GoldFish
+	FSH_Loader.LoadScene("Models/BlueTang.FSH"); //BlueTang
+	FSH_Loader.LoadScene("Models/AquariumRedux.FSH"); //Aquarium
+
+	srand(time(0));
+	model = new GLModel(&FSH_Loader, rand() % 3);
+	aquarium = new GLModel(&FSH_Loader, Aquarium);
+	model->GetTransform().m_pos.z = 5;
+
+	modelShader = new GLShader("draw");
+	camera = new GLCamera(glm::vec3(0), 70, window::WIDTH/window::HEIGHT, 0.01f, 1000.0f);
 }
 

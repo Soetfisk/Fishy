@@ -64,9 +64,6 @@
     <ClCompile Include="GLMeshBS.cpp">
       <Filter>Source\Models</Filter>
     </ClCompile>
-    <ClCompile Include="GLNPC_PowerUpHandler.cpp">
-      <Filter>Source\NPCs</Filter>
-    </ClCompile>
     <ClCompile Include="Menu.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -77,6 +74,16 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="ParticleHandler.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GLNPC_PowerUpHandler.cpp" />
+    <ClCompile Include="RoundCounter.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GLNPC_PowerUpHandler.cpp" />
+    <ClCompile Include="SeaWeedLeafs.cpp" />
+    <ClCompile Include="SpecialStaticMesh.cpp" />
+    <ClCompile Include="SeaWeedHandler.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -147,9 +154,6 @@
     <ClInclude Include="Menu.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="GLNPC_PowerUpHandler.h">
-      <Filter>Header\NPCs</Filter>
-    </ClInclude>
     <ClInclude Include="GameState.h">
       <Filter>Header</Filter>
     </ClInclude>
@@ -172,6 +176,17 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="ParticleEmitter.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GLNPC_PowerUpHandler.h" />
+    <ClInclude Include="RoundCounter.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GLNPC_PowerUpHandler.h" />
+    <ClInclude Include="SeaWeedLeafs.h" />
+    <ClInclude Include="SpecialStaticMesh.h" />
+    <ClInclude Include="SpecialStaticMeshes.h" />
+    <ClInclude Include="SeaWeedHandler.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>
@@ -240,6 +255,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="ParticleTestShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="draw.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="draw.frag">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

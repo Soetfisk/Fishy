@@ -80,6 +80,7 @@ GLModel::~GLModel()
 	{
 		delete meshes[i];
 	}
+	if(this->transform != nullptr)
 	delete transform;
 }
 
@@ -142,9 +143,10 @@ glm::vec3 GLModel::GetUp()
 
 AABB GLModel::GetBoundingBox()
 {
-	this->boundingBox.center = this->transform->GetPos();
-	this->boundingBox.halfDimension = this->transform->GetScale()/2.f;
-	return this->boundingBox;
+	AABB aabb;
+	aabb.center = this->boundingBox.center = this->transform->GetPos();
+	aabb.halfDimension = this->boundingBox.halfDimension * this->transform->GetScale().x;
+	return aabb;
 }
 
 void GLModel::SetBoundingBox(glm::vec3 center, glm::vec3 extents)

@@ -16,10 +16,12 @@
 #include "GLGUIHandler.h"
 #include "GLCollisionHandler.h"
 #include "GameState.h"
+#include "SeaWeedLeafs.h"
 #include "ParticleHandler.h"
 #include <time.h>
 #include <SDL2\SDL_mixer.h>
-
+#include "RoundCounter.h"
+#include "SeaWeedHandler.h"
 #define mSTATIC *shaders[MODELS]
 #define mANIMATED *shaders[BLEND_SHAPE]
 
@@ -44,7 +46,8 @@ private:
 		GoldFish,
 		BlueTang,
 		Bubble,
-		Aquarium
+		Aquarium,
+		SeaWeedLeaf
 	};
 	int SCREEN_WIDTH = window::WIDTH;
 	int SCREEN_HEIGHT = window::HEIGHT / 2;
@@ -75,16 +78,18 @@ private:
 
 		NUM_MUSIC
 	};
-	
+
 	Mix_Music *music[NUM_MUSIC];
 	//todo implement
 	//std::vector<Model> models;
 	FishBox FSH_Loader;
 	Light dirLight;
+
 	std::vector<PointLight> pointLights;
 	std::vector<GLPlayer*> players;
 	std::vector<GLNPC*> NPCs;
 	std::vector<GLModel*> staticMeshes;
+
 	GLShader* shaders[NUM_SHADERS];
 	GLMesh* tempMesh;
 	GLuint quadVAO = 0;
@@ -97,15 +102,16 @@ private:
 	FrameBuffer* frameBuffer4;
 	FrameBuffer* frameBuffer5;
 	GLProjectile* testProj;
-	float count[2] = {0,0};
+	float count[2] = { 0,0 };
 	FilterComputeShader* filterComputeShader;
 	float deltaTime;
 	GLCollisionHandler collisionHandler;
-	
+
 	GUI* guiTest;
 	glm::mat4 projection;
 	GLGUIHandler* guih;
-
+	RoundCounter* rc;
+	SeaWeedHandler* seaWeedHandler;
 
 
 	// variables for border shader

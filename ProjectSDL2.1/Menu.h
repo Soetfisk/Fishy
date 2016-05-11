@@ -2,6 +2,9 @@
 
 #include "GUI.h"
 #include "GameState.h"
+#include "GLModel.h"
+#include "GLCamera.h"
+#include <time.h>
 
 class Menu
 {
@@ -26,8 +29,20 @@ private:
 
 		NUM_MENU_BUTTONS
 	};
+	enum
+	{
+		PlayerFish,
+		GoldFish,
+		BlueTang,
+		Aquarium
+	};
 
+	GLCamera* camera;
+	FishBox FSH_Loader;
+	GLModel* model;
+	GLModel* aquarium;
 	GLShader* menuShader;
+	GLShader* modelShader;
 	GUI* gui;
 	glm::mat4 projection;
 	MenuButtons selectedBttn;
@@ -44,5 +59,6 @@ private:
 	void HandleDown();
 	void HandleSpace();
 	void FixSelected();
+	void InitModels();
 };
 

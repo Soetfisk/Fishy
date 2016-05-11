@@ -56,7 +56,8 @@ GLPlayer::~GLPlayer()
 	}
 	delete this->m_projectileHandler;
 	delete[] this->blendWeights;
-	//delete this->player_PartcileEmitter;
+	if(this->player_PartcileEmitter != nullptr)
+		delete this->player_PartcileEmitter;
 }
 
 //handles events sent too the player // movement.x = deltaTime
@@ -634,34 +635,17 @@ void GLPlayer::CalcVelocity(float& deltaTime)
 			isMoving = true;
 			Mix_PlayChannel(0, sound[MOVE_SOUND], -1);
 		}
-		if (isDashing)
+		this->transform->m_pos += (m_velocity  * deltaTime);
+		glm::vec3 friction = (m_velocity * MOVEMENT_FRICTION);
+		m_velocity -= friction * deltaTime;
+	}
+	if (isDashing)
 		{
 			if (glm::dot(m_velocity, m_velocity) < MAX_DASHSPEED)
 			{
 				m_velocity += forward * DASH_SCALE;
 			}
-			// If VALUE > MAX_SPEED set it to MAX_SPEED else if VALUE < -MAX_SPEED set it to -MAX_SPEED else keep VALUE
-			//m_velocity.x = (m_velocity.x > MAX_DASHSPEED) ? MAX_DASHSPEED : (m_velocity.x < -MAX_DASHSPEED) ? -MAX_DASHSPEED : m_velocity.x;
-			//m_velocity.y = (m_velocity.y > MAX_DASHSPEED) ? MAX_DASHSPEED : (m_velocity.y < -MAX_DASHSPEED) ? -MAX_DASHSPEED : m_velocity.y;
-			//m_velocity.z = (m_velocity.z > MAX_DASHSPEED) ? MAX_DASHSPEED : (m_velocity.z < -MAX_DASHSPEED) ? -MAX_DASHSPEED : m_velocity.z;
 		}
-		else if(!isDashing)
-		{
-			// If VALUE > MAX_SPEED set it to MAX_SPEED else if VALUE < -MAX_SPEED set it to -MAX_SPEED else keep VALUE
-			//m_velocity.x = (m_velocity.x > MAX_SPEED) ? MAX_SPEED : (m_velocity.x < -MAX_SPEED) ? -MAX_SPEED : m_velocity.x;
-			//m_velocity.y = (m_velocity.y > MAX_SPEED) ? MAX_SPEED : (m_velocity.y < -MAX_SPEED) ? -MAX_SPEED : m_velocity.y;
-			//m_velocity.z = (m_velocity.z > MAX_SPEED) ? MAX_SPEED : (m_velocity.z < -MAX_SPEED) ? -MAX_SPEED : m_velocity.z;
-			
-		}
-		
-
-		this->transform->m_pos += (m_velocity  * deltaTime);
-		glm::vec3 friction = (m_velocity * MOVEMENT_FRICTION);
-		m_velocity -= friction * deltaTime;
-
-		
-	}
-
 	if (glm::dot(m_velocity, m_velocity) > 20)
 	{
 		if (!isMoving)
