@@ -62,6 +62,7 @@ void GLNPC::AddEmitter(ParticleEmitter* emitter) {
 }
 
 GLNPC::~GLNPC() {
+	delete blendWeights;
 	if (this->npc_emitter != nullptr)
 		delete npc_emitter;
 }
