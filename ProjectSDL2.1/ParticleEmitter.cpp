@@ -218,7 +218,7 @@ Particle ParticleEmitter::generateParticleData() {
 			std::cout << "SPAWNING AT: " << glm::to_string(returnData.p_pos) << std::endl<<"Acc: "<<glm::to_string(returnData.p_acc)<<std::endl;
 */
 		returnData.p_vel = this->directionEmitter + glm::vec4(returnData.p_vel.x + data.x, returnData.p_vel.y + data.y, returnData.p_vel.z + data.z, 0)*5;
-		returnData.p_scale = RNG::range(this->emiterScale/4 , emiterScale/3);
+		returnData.p_scale = RNG::range(.1f, .15f);
 		returnData.p_lifeTime *= RNG::range(.5f, 1.5f);
 		break;
 	case EmitterType::PROJECTILE:

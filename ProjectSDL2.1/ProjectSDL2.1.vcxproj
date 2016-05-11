@@ -44,7 +44,10 @@
     <ClCompile Include="ParticleComputeShader.cpp" />
     <ClCompile Include="ParticleEmitter.cpp" />
     <ClCompile Include="ParticleHandler.cpp" />
+    <ClCompile Include="RoundCounter.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SeaWeedLeafs.cpp" />
+    <ClCompile Include="SpecialStaticMesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLMeshBS.h" />
@@ -76,7 +79,11 @@
     <ClInclude Include="ParticleEmitter.h" />
     <ClInclude Include="ParticleHandler.h" />
     <ClInclude Include="RNG.h" />
+    <ClInclude Include="RoundCounter.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SeaWeedLeafs.h" />
+    <ClInclude Include="SpecialStaticMesh.h" />
+    <ClInclude Include="SpecialStaticMeshes.h" />
     <ClInclude Include="SphereBS.h" />
   </ItemGroup>
   <ItemGroup>
