@@ -47,7 +47,9 @@ private:
 		BlueTang,
 		Bubble,
 		Aquarium,
-		SeaWeedLeaf
+		SeaWeedLeaf,
+		roughRock,
+		smoothRock
 	};
 	int SCREEN_WIDTH = window::WIDTH;
 	int SCREEN_HEIGHT = window::HEIGHT / 2;

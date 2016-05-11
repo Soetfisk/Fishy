@@ -129,6 +129,8 @@ void Scene::LoadModels()
 	FSH_Loader.LoadScene("Models/Bubble2.FSH"); //Bubble
 	FSH_Loader.LoadScene("Models/AquariumRedux.FSH"); //Aquarium
 	FSH_Loader.LoadScene("Models/weed2.FSH"); //SeaWeedLeaf
+	FSH_Loader.LoadScene("Models/roughRock.FSH"); //roughRock
+	FSH_Loader.LoadScene("Models/smoothRock.FSH"); //smoothRock
 
 	for (int i = 0; i < 2; i++) {
 		this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));
