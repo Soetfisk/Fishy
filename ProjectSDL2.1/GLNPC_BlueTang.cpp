@@ -58,6 +58,7 @@ void GLNPC_BlueTang::NPCUpdate(float deltaTime)
 		}
 		checkboarderCollision();
 		moveAnimation(deltaTime, 1* forwardSpeed);
+		
 	}
 }
 
