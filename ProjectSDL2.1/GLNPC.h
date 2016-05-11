@@ -20,12 +20,16 @@ class GLNPC : public GLModel
 {
 protected:
 	unsigned int currentState;
+	ParticleEmitter *npc_emitter;
+	const int updateFrames = 3;
+	int timeSinceUpdate;
 public:
 	int GetCurrentState();
 	void SetCurrentState();
 	bool isPowerUp = false;
 
 	GLNPC(FishBox* FSH_Loader, unsigned int modelID);
+	~GLNPC();
 	virtual void NPCUpdate(float deltaTime) = 0;
 	virtual void NPCDraw(GLShader& shader) = 0;
 	virtual void gettingEaten(float deltaTime, GLTransform playerTransform) = 0;
@@ -34,4 +38,8 @@ public:
 
 	virtual void ResetFish() = 0;
 	virtual bool GetIsPowerUp() =0;
+
+	void UpdateParticles(float &deltaTime);
+	void DrawParticles(GLShader* shader);
+	void AddEmitter(ParticleEmitter* emitter);
 };

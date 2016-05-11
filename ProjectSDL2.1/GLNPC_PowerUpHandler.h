@@ -1,6 +1,6 @@
 #pragma once
 #include "GLNPC.h"
-
+#include "ParticleHandler.h"
 
 class NpcPowerUpHandler
 {
@@ -14,6 +14,7 @@ private:
 	unsigned int amountOfPowerUpFishes = 10;
 	void initiatePowerFishes();
 	void MakePowerUpFish();
+	ParticleHandler* pHandlerRef;
 
 public:
 	NpcPowerUpHandler(std::vector<GLNPC*>);
@@ -23,5 +24,7 @@ public:
 	void RemovePowerUpFish(GLNPC*, unsigned int Fishindex);
 	void RemoveAvailableFish(unsigned int Fishindex);
 	void MovePowerUpToAnotherFish(GLNPC* RemoveThisFish, unsigned int Fishindex); //not sure if will be used
-	
+	void AsssignStartPowerupFishes();
+
+	void addParticleHandlerReference(ParticleHandler* pHandler);
 };

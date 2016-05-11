@@ -143,6 +143,7 @@ private:
 	void HandlePlayerPowerUp();
 	void CheckWinner();
 	void AddScore();
+	void DrawParticles(GLCamera& playerCamera);
 public:
 	Scene(GLOBAL_GameState* gameState);
 	Scene(GUI* textToScreen, GLOBAL_GameState* gameState);

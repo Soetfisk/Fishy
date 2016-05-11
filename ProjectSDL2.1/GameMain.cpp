@@ -12,6 +12,12 @@ GameMain::GameMain()
 	this->scene = new Scene(&this->gameState);
 	this->menu = new Menu(&this->gameState);
 	
+
+	char *GL_version = (char *)glGetString(GL_VERSION);
+	char *GL_vendor = (char *)glGetString(GL_VENDOR);
+	char *GL_renderer = (char *)glGetString(GL_RENDERER);
+	//return 0;
+	int k = 0;
 }
 
 GameMain::~GameMain()

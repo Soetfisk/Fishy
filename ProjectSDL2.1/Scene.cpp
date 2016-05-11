@@ -102,14 +102,16 @@ void Scene::Init()
 		}
 	}
 
+	this->collisionHandler.AddParticleHandlerReference(this->particleHandler);
+
 	//for (int i = 0; i <  players.size(); i++) {
 	//	particleHandler->AddEmiter(EmitterType::PLAYERFOLLOW, players.at(i)->getParticleFollowPlayer());
 	//}
 	//for (int z = 0; z < 3; z++) {
 	//	particleHandler->AddEmiter(EmitterType::GOLDSTREAM, glm::vec4(2, 1, 3 + (z % 2 == 0) ? z * 2 : -z * 2, 1));
 	//}
-
-
+	
+	
 }
 
 void Scene::LoadModels()
@@ -313,8 +315,14 @@ void Scene::Update(float& deltaTime) {
 	this->collisionHandler.CheckCollisions(deltaTime);
 	this->AddScore();
 	this->particleHandler->UpdateParticles(deltaTime);
-	for (size_t i = 0; i < this->NPCs.size(); i++)
+	for (size_t i = 0; i < this->NPCs.size(); i++) {
 		this->NPCs.at(i)->NPCUpdate(deltaTime);
+		if (this->NPCs.at(i)->isPowerUp) {
+			this->NPCs.at(i)->UpdateParticles(this->deltaTime);
+		}
+			
+	}
+		
 
 	for (size_t i = 0; i < this->players.size(); i++) {
 		this->players.at(i)->Update(this->deltaTime);
@@ -370,14 +378,7 @@ void Scene::DrawScene() {
 		}
 
 		//Drawing All Particles
-		shaders[PARTICLE]->Bind();
-		shaders[PARTICLE]->Update(players.at(i)->GetCamera());
-		for (size_t j = 0; j < this->players.size(); j++)
-		{
-		players.at(j)->DrawParticles(shaders[PARTICLE]);
-		}
-
-		this->particleHandler->DrawParticles(shaders[PARTICLE]);
+		this->DrawParticles(players.at(i)->GetCamera());
 
 		this->frameBuffer->UnbindFrameBuffer();
 		this->frameBuffer2->BindFrameBuffer();
@@ -452,6 +453,23 @@ void Scene::DrawScene() {
 		this->RenderQuad();
 	}
 
+}
+
+void Scene::DrawParticles(GLCamera& playerCamera) {
+	shaders[PARTICLE]->Bind();
+	shaders[PARTICLE]->Update(playerCamera);
+	for (size_t j = 0; j < this->players.size(); j++)
+	{
+		players.at(j)->DrawParticles(shaders[PARTICLE]);
+	}
+
+	for (size_t i = 0; i < NPCs.size(); i++)
+	{
+		if (this->NPCs.at(i)->isPowerUp)
+			NPCs.at(i)->DrawParticles(shaders[PARTICLE]);
+	}
+
+	this->particleHandler->DrawParticles(shaders[PARTICLE]);
 }
 
 void Scene::RenderQuad()
