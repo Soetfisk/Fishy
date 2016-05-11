@@ -56,7 +56,8 @@ GLPlayer::~GLPlayer()
 	}
 	delete this->m_projectileHandler;
 	delete[] this->blendWeights;
-	//delete this->player_PartcileEmitter;
+	if(this->player_PartcileEmitter != nullptr)
+		delete this->player_PartcileEmitter;
 }
 
 //handles events sent too the player // movement.x = deltaTime
