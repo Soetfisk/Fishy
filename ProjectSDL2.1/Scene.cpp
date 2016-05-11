@@ -136,8 +136,6 @@ void Scene::LoadModels()
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
 
-	this->specialStaticMeshes.push_back(new SeaWeedLeafs(&FSH_Loader, SeaWeedLeaf));
-
 	this->collisionHandler.AddNPC(NPCs);
 	this->collisionHandler.AddPlayer(players);
 	this->collisionHandler.AddModel(models);
@@ -280,11 +278,6 @@ Scene::~Scene() {
 	{
 		delete staticMeshes.at(i);
 	}
-	for (int i = 0; i < specialStaticMeshes.size(); i++)
-	{
-		delete specialStaticMeshes.at(i);
-	}
-
 	delete guih;
 	delete rc;
 	delete particleHandler;
@@ -362,11 +355,6 @@ void Scene::DrawScene() {
 		for (size_t i = 0; i < staticMeshes.size(); i++)
 		{
 			staticMeshes.at(i)->Draw(*shaders[MODELS]);
-		}
-
-		for (unsigned int i = 0; i < specialStaticMeshes.size(); i++)
-		{
-			specialStaticMeshes.at(i)->Draw(*shaders[MODELS]);
 		}
 
 		//Drawing All Particles

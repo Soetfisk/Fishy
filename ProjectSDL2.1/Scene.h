@@ -88,7 +88,6 @@ private:
 	std::vector<GLPlayer*> players;
 	std::vector<GLNPC*> NPCs;
 	std::vector<GLModel*> staticMeshes;
-	std::vector<SpecialStaticMesh*> specialStaticMeshes;
 
 	GLShader* shaders[NUM_SHADERS];
 	GLMesh* tempMesh;
