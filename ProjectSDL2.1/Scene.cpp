@@ -100,7 +100,6 @@ void Scene::Init()
 	{
 		players.at(i)->addParticleHandleRefernce(particleHandler);
 	}
-	}
 
 	//for (int z = 0; z < 5; z++) {
 	//	for (int x = 0; x < 5; x++) {
