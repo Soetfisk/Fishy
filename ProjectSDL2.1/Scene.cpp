@@ -81,7 +81,7 @@ void Scene::Init()
 	this->endTimer = 300;
 	this->endScore = 1000;
 
-	this->seaWeedHandler = new SeaWeedHandler(&FSH_Loader, SeaWeedLeaf);
+	this->seaWeedHandler = new SeaWeedHandler(&FSH_Loader, Bubble);
 	this->seaWeedHandler->SetXLimit(-130, 130);
 	this->seaWeedHandler->SetYLimit(-50, 50);
 	this->seaWeedHandler->SetLeafAmount(5, 60);
@@ -354,6 +354,7 @@ void Scene::DrawScene() {
 		}
 		shaders[MODELS]->Bind();
 		shaders[MODELS]->Update(players.at(i)->GetCamera());
+		this->seaWeedHandler->Draw(shaders[MODELS]);
 		for (int j = 0; j < this->players.size(); j++)
 		{
 			players.at(j)->DrawProjectile(*shaders[MODELS]);
@@ -366,7 +367,6 @@ void Scene::DrawScene() {
 		{
 			staticMeshes.at(i)->Draw(*shaders[MODELS]);
 		}
-		this->seaWeedHandler->Draw(shaders[MODELS]);
 
 		//Drawing All Particles
 		shaders[PARTICLE]->Bind();
