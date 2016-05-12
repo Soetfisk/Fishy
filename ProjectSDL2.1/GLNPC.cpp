@@ -72,6 +72,9 @@ void GLNPC::moveAnimation(float deltaTime, float speedFactor)
 }
 void GLNPC::AddEmitter(ParticleEmitter* emitter) {
 	this->npc_emitter = emitter;
+
+	this->npc_emitter->updateEmitterData(glm::vec4(this->transform->GetPos(), 1),
+		glm::vec4(this->forward, 0), glm::vec4(this->GetRight(), 0), glm::vec4(this->GetUp(), 0), this->transform->GetScale().z);
 }
 
 GLNPC::~GLNPC() {

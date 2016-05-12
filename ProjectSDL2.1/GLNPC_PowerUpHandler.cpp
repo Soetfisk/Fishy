@@ -24,7 +24,7 @@ void NpcPowerUpHandler::MakePowerUpFish()
 		unsigned int Fish = AvailableFishes.at(Index); 
 		AvailableFishes.erase(AvailableFishes.begin() + Index);
 
-		NPCs.at(0)->makePowerUp();
+		NPCs.at(Fish)->makePowerUp();
 		NPCs.at(Fish)->AddEmitter(pHandlerRef->CreateEmitter(EmitterType::GOLDSTREAM, glm::vec4(NPCs.at(Fish)->GetTransform().GetPos(), 1)));
 		
 		PowerNPCs.push_back(NPCs.at(Fish));

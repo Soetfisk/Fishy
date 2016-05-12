@@ -104,21 +104,25 @@ void ParticleEmitter::updateParticles(const float& deltaTime) {
 	this->emiterCheckDeadTCurrent += deltaTime;
 
 	if (this->emiterSpawnTCurrent >= this->emiterSpawnTDelay && this->nrActiveParticles < this->nrMaxParticles) {
-		if (!this->emiterMulitbleSpawner) {
+		switch (this->type) {
+		case EmitterType::GOLDSTREAM:
 			this->spawnParticle();
 			this->nrActiveParticles++;
-		}
-		else {
+			break;
+		case EmitterType::PLAYERFOLLOW:
 			for (int i = 0; i < this->emiterNrToSpawnSimutan; i++) {
 				this->spawnParticle();
 				this->nrActiveParticles++;
 
 			}
+			break;
+		default:
+			this->spawnParticle();
+			this->nrActiveParticles++;
+			break;
 		}
-
 		this->emiterSpawnTCurrent = 0;
 	}
-
 
 	if (nrActiveParticles > 0 && this->emiterCheckDeadTCurrent >= this->emiterCheckDeadTDelay) {
 		this->emiterCheckDeadTCurrent = 0;
