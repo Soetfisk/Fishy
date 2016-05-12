@@ -164,14 +164,15 @@ void Scene::LoadModels()
 		this->NPCs.push_back(new GLNPC_GoldFish(&FSH_Loader, GoldFish));
 		this->NPCs.at(i)->SetBoundingBox(glm::vec3(0), glm::vec3(1));
 	}
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 1; i++) {
 		this->NPCs.push_back(new GLNPC_BlueTang(&FSH_Loader, BlueTang));
-		this->NPCs.at(i)->SetBoundingBox(glm::vec3(0), glm::vec3(1.25));
-		this->NPCs.at(i)->GetTransform().SetScale(glm::vec3(2));
+		this->NPCs.at(NPCs.size()-1)->SetBoundingBox(glm::vec3(0), glm::vec3(1.25));
 	}
 
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Aquarium));
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, BlueTang));
+	this->staticMeshes.at(1)->GetTransform().SetScale(glm::vec3(2));
+	this->staticMeshes.at(1)->SetBoundingBox(glm::vec3(0), glm::vec3(1.25));
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
 
 	this->collisionHandler.AddNPC(NPCs);
