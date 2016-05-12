@@ -86,6 +86,7 @@ void GLNPC_BlueTang::NPCKill()
 	this->currentState = NPC_INACTIVE;
 	if (this->isPowerUp == true)
 	{
+		this->isPowerUp = false;
 		;//printf("i wanna be the very fish, that no one ever was");
 	}
 }
