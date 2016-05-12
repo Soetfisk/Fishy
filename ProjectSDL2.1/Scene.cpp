@@ -94,13 +94,22 @@ void Scene::Init()
 	this->seaWeedHandler->LoadSeaWeed();
 
 	this->stoneHandler = new SeaWeedHandler(&FSH_Loader, roughRock);
-	this->stoneHandler->SetXLimit(-100, 100);
-	this->stoneHandler->SetZLimit(-70, 70);
-	this->stoneHandler->SetLeafAmount(3, 6);
+	this->stoneHandler->SetXLimit(-90, 90);
+	this->stoneHandler->SetZLimit(-50, 50);
+	this->stoneHandler->SetLeafAmount(1, 6);
 	this->stoneHandler->SetAmountOfPlants(9);
-	this->stoneHandler->SetScale(1, 9);
-	this->stoneHandler->SetOffset(50, 50);
+	this->stoneHandler->SetScale(3, 9);
+	this->stoneHandler->SetOffset(40, 40);
 	this->stoneHandler->LoadSeaWeed();
+
+	this->stoneHandler2 = new SeaWeedHandler(&FSH_Loader, smoothRock);
+	this->stoneHandler2->SetXLimit(-90, 90);
+	this->stoneHandler2->SetZLimit(-50, 50);
+	this->stoneHandler2->SetLeafAmount(1, 3);
+	this->stoneHandler2->SetAmountOfPlants(15);
+	this->stoneHandler2->SetScale(1, 9);
+	this->stoneHandler2->SetOffset(30, 30);
+	this->stoneHandler2->LoadSeaWeed();
 
 	particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
 	
@@ -399,6 +408,7 @@ Scene::~Scene() {
 	delete particleHandler;
 	delete seaWeedHandler;
 	delete stoneHandler;
+	delete stoneHandler2;
 	for (int i = 0; i < NUM_MUSIC; i++)
 	{
 		Mix_FreeMusic(music[i]);
@@ -519,6 +529,7 @@ void Scene::DrawScene() {
 		printDebugTimer(debug, "bind models, get playercamera");
 		this->seaWeedHandler->Draw(shaders[MODELS]);
 		this->stoneHandler->Draw(shaders[MODELS]);
+		this->stoneHandler2->Draw(shaders[MODELS]);
 		setDebugTimer(debug);
 		printDebugTimer(debug, "seaweed handler");
 		for (int j = 0; j < this->players.size(); j++)
@@ -694,6 +705,7 @@ void Scene::ResetScene()
 	this->winner = false;
 	this->seaWeedHandler->Reset();
 	this->stoneHandler->Reset();
+	this->stoneHandler2->Reset();
 }
 
 void Scene::HandleEvenet(SDL_Event* e) {
