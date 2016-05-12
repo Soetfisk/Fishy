@@ -25,5 +25,6 @@ public:
 	void reset();
 	void SetScale(float min, float max);
 	void SetOffset(int x, int y);
+	void Reset();
 
 };

@@ -85,13 +85,31 @@ void Scene::Init()
 	this->endScore = 1000;
 
 	this->seaWeedHandler = new SeaWeedHandler(&FSH_Loader, SeaWeedLeaf);
-	this->seaWeedHandler->SetXLimit(-130, 130);
-	this->seaWeedHandler->SetYLimit(-50, 50);
-	this->seaWeedHandler->SetLeafAmount(1, 5);
+	this->seaWeedHandler->SetXLimit(-110, 110);
+	this->seaWeedHandler->SetZLimit(-70, 70);
+	this->seaWeedHandler->SetLeafAmount(2, 5);
 	this->seaWeedHandler->SetAmountOfPlants(9);
-	this->seaWeedHandler->setScale(5, 9);
-	this->seaWeedHandler->setOffset(0, 0);
+	this->seaWeedHandler->SetScale(5, 9);
+	this->seaWeedHandler->SetOffset(0, 0);
 	this->seaWeedHandler->LoadSeaWeed();
+
+	this->stoneHandler = new SeaWeedHandler(&FSH_Loader, roughRock);
+	this->stoneHandler->SetXLimit(-90, 90);
+	this->stoneHandler->SetZLimit(-50, 50);
+	this->stoneHandler->SetLeafAmount(1, 6);
+	this->stoneHandler->SetAmountOfPlants(9);
+	this->stoneHandler->SetScale(3, 9);
+	this->stoneHandler->SetOffset(40, 40);
+	this->stoneHandler->LoadSeaWeed();
+
+	this->stoneHandler2 = new SeaWeedHandler(&FSH_Loader, smoothRock);
+	this->stoneHandler2->SetXLimit(-90, 90);
+	this->stoneHandler2->SetZLimit(-50, 50);
+	this->stoneHandler2->SetLeafAmount(1, 3);
+	this->stoneHandler2->SetAmountOfPlants(15);
+	this->stoneHandler2->SetScale(1, 9);
+	this->stoneHandler2->SetOffset(30, 30);
+	this->stoneHandler2->LoadSeaWeed();
 
 	particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
 	
@@ -330,6 +348,8 @@ Scene::~Scene() {
 	delete rc;
 	delete particleHandler;
 	delete seaWeedHandler;
+	delete stoneHandler;
+	delete stoneHandler2;
 	for (int i = 0; i < NUM_MUSIC; i++)
 	{
 		Mix_FreeMusic(music[i]);
@@ -453,6 +473,8 @@ void Scene::DrawScene() {
 		setDebugTimer(debug);
 		printDebugTimer(debug, "bind models, get playercamera");
 		this->seaWeedHandler->Draw(shaders[MODELS]);
+		this->stoneHandler->Draw(shaders[MODELS]);
+		this->stoneHandler2->Draw(shaders[MODELS]);
 		setDebugTimer(debug);
 		printDebugTimer(debug, "seaweed handler");
 		for (int j = 0; j < this->players.size(); j++)
@@ -626,6 +648,9 @@ void Scene::ResetScene()
 	this->endSceneTimer = 0;
 	this->endGame = false;
 	this->winner = false;
+	this->seaWeedHandler->Reset();
+	this->stoneHandler->Reset();
+	this->stoneHandler2->Reset();
 }
 
 void Scene::HandleEvenet(SDL_Event* e) {

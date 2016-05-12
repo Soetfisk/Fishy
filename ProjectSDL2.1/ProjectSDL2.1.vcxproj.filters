@@ -179,15 +179,15 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="GLNPC_PowerUpHandler.h" />
-    <ClInclude Include="RoundCounter.h">
-      <Filter>Header</Filter>
-    </ClInclude>
     <ClInclude Include="GLNPC_PowerUpHandler.h" />
     <ClInclude Include="SeaWeedLeafs.h" />
     <ClInclude Include="SpecialStaticMesh.h" />
     <ClInclude Include="SpecialStaticMeshes.h" />
     <ClInclude Include="SeaWeedHandler.h">
       <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RoundCounter.h">
+      <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
