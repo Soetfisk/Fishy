@@ -90,6 +90,15 @@ void Scene::Init()
 	this->seaWeedHandler->SetOffset(0, 0);
 	this->seaWeedHandler->LoadSeaWeed();
 
+	this->stoneHandler = new SeaWeedHandler(&FSH_Loader, roughRock);
+	this->stoneHandler->SetXLimit(-100, 100);
+	this->stoneHandler->SetZLimit(-70, 70);
+	this->stoneHandler->SetLeafAmount(3, 6);
+	this->stoneHandler->SetAmountOfPlants(9);
+	this->stoneHandler->SetScale(1, 9);
+	this->stoneHandler->SetOffset(50, 50);
+	this->stoneHandler->LoadSeaWeed();
+
 	particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
 	
 
@@ -296,6 +305,7 @@ Scene::~Scene() {
 	delete rc;
 	delete particleHandler;
 	delete seaWeedHandler;
+	delete stoneHandler;
 	for (int i = 0; i < NUM_MUSIC; i++)
 	{
 		Mix_FreeMusic(music[i]);
@@ -360,6 +370,7 @@ void Scene::DrawScene() {
 		shaders[MODELS]->Bind();
 		shaders[MODELS]->Update(players.at(i)->GetCamera());
 		this->seaWeedHandler->Draw(shaders[MODELS]);
+		this->stoneHandler->Draw(shaders[MODELS]);
 		for (int j = 0; j < this->players.size(); j++)
 		{
 			players.at(j)->DrawProjectile(*shaders[MODELS]);
@@ -505,6 +516,7 @@ void Scene::ResetScene()
 	this->endGame = false;
 	this->winner = false;
 	this->seaWeedHandler->Reset();
+	this->stoneHandler->Reset();
 }
 
 void Scene::HandleEvenet(SDL_Event* e) {
