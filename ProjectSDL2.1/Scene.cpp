@@ -85,9 +85,9 @@ void Scene::Init()
 	this->endScore = 1000;
 
 	this->seaWeedHandler = new SeaWeedHandler(&FSH_Loader, SeaWeedLeaf);
-	this->seaWeedHandler->SetXLimit(-125, 125);
+	this->seaWeedHandler->SetXLimit(-110, 110);
 	this->seaWeedHandler->SetZLimit(-70, 70);
-	this->seaWeedHandler->SetLeafAmount(1, 5);
+	this->seaWeedHandler->SetLeafAmount(2, 5);
 	this->seaWeedHandler->SetAmountOfPlants(9);
 	this->seaWeedHandler->SetScale(5, 9);
 	this->seaWeedHandler->SetOffset(0, 0);
