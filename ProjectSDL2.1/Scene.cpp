@@ -586,20 +586,24 @@ void Scene::DrawScene() {
 
 void Scene::DrawParticles(GLCamera& playerCamera) {
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	shaders[PARTICLE]->Bind();
 	shaders[PARTICLE]->Update(playerCamera);
 	for (size_t j = 0; j < this->players.size(); j++)
 	{
 		players.at(j)->DrawParticles(shaders[PARTICLE]);
 	}
-
 	for (size_t i = 0; i < NPCs.size(); i++)
 	{
+
 		if (this->NPCs.at(i)->GetIsPowerUp())
 			NPCs.at(i)->DrawParticles(shaders[PARTICLE]);
 	}
 
 	this->particleHandler->DrawParticles(shaders[PARTICLE]);
+
+	glDisable(GL_BLEND);
 }
 
 void Scene::RenderQuad()
