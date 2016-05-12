@@ -142,7 +142,7 @@ void Scene::LoadModels()
 	}
 	for (int i = 0; i < 10; i++) {
 		this->NPCs.push_back(new GLNPC_BlueTang(&FSH_Loader, BlueTang));
-		this->NPCs.at(i)->SetBoundingBox(glm::vec3(0), glm::vec3(1));
+		this->NPCs.at(i)->SetBoundingBox(glm::vec3(0), glm::vec3(1.25));
 		this->NPCs.at(i)->GetTransform().SetScale(glm::vec3(2));
 	}
 
@@ -327,6 +327,10 @@ void Scene::Update(float& deltaTime) {
 	for (size_t i = 0; i < this->players.size(); i++) {
 		this->players.at(i)->Update(this->deltaTime);
 		this->players.at(i)->UpdateParticles(this->deltaTime);
+		if (this->players.at(i)->GetBoundingBox().containsAABB(staticMeshes.at(1)->GetBoundingBox()))
+		{
+			std::cout << "HIT" << std::endl;
+		}
 	}
 
 }
