@@ -12,8 +12,11 @@ public:
 	GUI();
 	GUI(std::string& fontName);
 	virtual ~GUI();
+	
 	void RenderText(GLShader& shader, std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
+	void TestRenderText(GLShader& shader, std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
 	void OptimizedRenderText(GLShader& shader, const std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
+	
 	GLfloat GetTextLenght(std::string& text, GLfloat& scale);
 	GLfloat GetTextHeight(std::string& text, GLfloat& scale);
 

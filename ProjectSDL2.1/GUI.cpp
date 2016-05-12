@@ -200,6 +200,18 @@ void GUI::RenderText(GLShader& shader, std::string text, GLfloat x, GLfloat y, G
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+void GUI::TestRenderText(GLShader & shader, std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color)
+{
+	shader.Bind();
+	glUniform3f(shader.GetUnifromLocation("textColor"), color.x, color.y, color.z);
+
+	std::string::const_iterator c;
+	for (c = text.begin(); c != text.end(); c++)
+	{
+		Character ch = characters[*c];
+	}
+}
+
 void GUI::OptimizedRenderText(GLShader & shader, const std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color)
 {
 	Point* coords = new Point[6 * text.length()];
@@ -215,7 +227,7 @@ void GUI::OptimizedRenderText(GLShader & shader, const std::string text, GLfloat
 	for (c = text.begin(); c != text.end(); c++)
 	{
 		float x2 = x + chInfo[*c].bl * scale;
-		float y2 = -y + chInfo[*c].bt * scale;
+		float y2 = -y - chInfo[*c].bt * scale;
 		float w = chInfo[*c].bw * scale;
 		float h = chInfo[*c].bh * scale;
 
