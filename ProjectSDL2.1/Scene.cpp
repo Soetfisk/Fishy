@@ -202,6 +202,9 @@ void Scene::UpdatePlayerPowerUp(int player)
 		case GLPlayer::POWER_BUBBLESHOTGUN:
 			guih->Player1SetPowerUp(GLGUIHandler::PlayerPowerUpText::SHOTGUN);
 			break;
+		case GLPlayer::POWER_HIGH:
+			guih->Player1SetPowerUp(GLGUIHandler::PlayerPowerUpText::HIGH);
+			break;
 		default:
 			guih->Player1SetPowerUp(GLGUIHandler::PlayerPowerUpText::NOTHING);
 			break;
@@ -219,6 +222,9 @@ void Scene::UpdatePlayerPowerUp(int player)
 			break;
 		case GLPlayer::POWER_BUBBLESHOTGUN:
 			guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::SHOTGUN);
+			break;
+		case GLPlayer::POWER_HIGH:
+			guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::HIGH);
 			break;
 		default:
 			guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::NOTHING);
