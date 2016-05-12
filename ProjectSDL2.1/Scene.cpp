@@ -111,12 +111,12 @@ void Scene::Init()
 	this->stoneHandler2->SetOffset(30, 30);
 	this->stoneHandler2->LoadSeaWeed();
 
-	particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
+	//particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
 	
 
 	for (int i = 0; i < players.size(); i++)
 	{
-		players.at(i)->addParticleHandleRefernce(particleHandler);
+		//players.at(i)->addParticleHandleRefernce(particleHandler);
 	}
 
 	//for (int z = 0; z < 5; z++) {
@@ -128,11 +128,11 @@ void Scene::Init()
 		for (int x = -125; x < 125; x+= 40) {
 			float xe = x + RNG::range(-20, 20);
 			float ze = z + RNG::range(-20, 20);
-			particleHandler->AddEmiter(EmitterType::STATICSTREAM, glm::vec4((xe>-125 && xe<125) ? xe : x, -50.f, (ze>-85 && ze<85) ? ze : z, 1));
+			//particleHandler->AddEmiter(EmitterType::STATICSTREAM, glm::vec4((xe>-125 && xe<125) ? xe : x, -50.f, (ze>-85 && ze<85) ? ze : z, 1));
 		}
 	}
 
-	this->collisionHandler.AddParticleHandlerReference(this->particleHandler);
+	//this->collisionHandler.AddParticleHandlerReference(this->particleHandler);
 
 	//for (int i = 0; i <  players.size(); i++) {
 	//	particleHandler->AddEmiter(EmitterType::PLAYERFOLLOW, players.at(i)->getParticleFollowPlayer());
@@ -222,15 +222,9 @@ void Scene::CheckWinner()
 		if (this->players.at(0)->GetTotalPoints() == this->players.at(1)->GetTotalPoints())
 			this->guih->Tie();
 		else if (this->players.at(0)->GetTotalPoints() > this->players.at(1)->GetTotalPoints())
-		{
 			this->guih->Player1Won();
-			this->rc->PlayerWon(RoundCounter::RoundPlayers::PLAYER1);
-		}
 		else
-		{
 			this->guih->Player2Won();
-			this->rc->PlayerWon(RoundCounter::RoundPlayers::PLAYER2);
-		}
 	}
 
 	// if we have a winner
@@ -271,7 +265,6 @@ void Scene::setDebugTimer(bool debug)
 		this->prevDTime = currentDTime;
 		this->combinedDtime += dTime;
 	}
-	
 }
 
 
@@ -301,7 +294,6 @@ Scene::Scene(GLOBAL_GameState* gameState) {
 	Init();
 
 	guih = new GLGUIHandler();
-	rc = new RoundCounter();
 	this->gameState = gameState;
 }
 
@@ -311,7 +303,6 @@ Scene::Scene(GUI* textToScreen, GLOBAL_GameState* gameState)
 	Init();
 
 	guih = new GLGUIHandler(shaders[TEXT], textToScreen);
-	rc = new RoundCounter(shaders[TEXT], textToScreen);
 	this->gameState = gameState;
 }
 
@@ -346,8 +337,7 @@ Scene::~Scene() {
 		delete staticMeshes.at(i);
 	}
 	delete guih;
-	delete rc;
-	delete particleHandler;
+	//delete particleHandler;
 	delete seaWeedHandler;
 	delete stoneHandler;
 	delete stoneHandler2;
@@ -389,11 +379,11 @@ void Scene::Update(float& deltaTime) {
 	setDebugTimer(debug);
 	printDebugTimer(debug, "score");
 
-	this->particleHandler->UpdateParticles(deltaTime);
+	//this->particleHandler->UpdateParticles(deltaTime);
 	for (size_t i = 0; i < this->NPCs.size(); i++) {
 		this->NPCs.at(i)->NPCUpdate(deltaTime);
 		if (this->NPCs.at(i)->GetIsPowerUp()) {
-			this->NPCs.at(i)->UpdateParticles(this->deltaTime);
+			//this->NPCs.at(i)->UpdateParticles(this->deltaTime);
 		}	
 	}
 	setDebugTimer(debug);
@@ -402,7 +392,7 @@ void Scene::Update(float& deltaTime) {
 
 	for (size_t i = 0; i < this->players.size(); i++) {
 		this->players.at(i)->Update(this->deltaTime);
-		this->players.at(i)->UpdateParticles(this->deltaTime);
+		//this->players.at(i)->UpdateParticles(this->deltaTime);
 		if (this->players.at(i)->GetBoundingBox().containsAABB(staticMeshes.at(1)->GetBoundingBox()))
 		{
 			std::cout << "HIT" << std::endl;
@@ -428,7 +418,6 @@ void Scene::DrawScene() {
 	printDebugTimer(debug, "between draw and update");
 
 	guih->Draw();
-	rc->Draw();
 	setDebugTimer(debug);
 	printDebugTimer(debug, "gui");
 
@@ -493,7 +482,7 @@ void Scene::DrawScene() {
 		printDebugTimer(debug, "static meshes");
 
 		//Drawing All Particles
-		this->DrawParticles(players.at(i)->GetCamera());
+		//this->DrawParticles(players.at(i)->GetCamera());
 		setDebugTimer(debug);
 		printDebugTimer(debug, "Particles");
 
