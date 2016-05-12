@@ -126,65 +126,6 @@ void Scene::Init()
 	
 }
 
-void Scene::LoadFastScene() {
-	bool enablePlayers = true;
-	bool enableNPCBlueThang = true;
-	bool enableNPCGoldFish = true;
-	bool enableProjectiles = true;
-	bool enableSeasWeed = true;
-	bool enableCollision = true;
-	bool enableAquarium = true;
-	bool enableBlueTang = true;
-
-	if (enablePlayers) {
-		FSH_Loader.LoadScene("Models/fishy.FSH"); //PlayerFish
-
-		for (int i = 0; i < 2; i++) {
-			this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));
-			this->players.at(i)->SetBoundingBox(glm::vec3(0), glm::vec3(1));
-		}
-	}
-	else
-
-	if (enableNPCBlueThang) {
-		FSH_Loader.LoadScene("Models/bluetangblend.FSH"); //BlueTang
-
-		for (int i = 0; i < 10; i++) {
-			this->NPCs.push_back(new GLNPC_BlueTang(&FSH_Loader, BlueTang));
-			this->NPCs.at(i)->SetBoundingBox(glm::vec3(0), glm::vec3(1));
-			this->NPCs.at(i)->GetTransform().SetScale(glm::vec3(2));
-		}
-	}
-
-	if (enableNPCGoldFish) {
-		FSH_Loader.LoadScene("Models/GoldFishBlend.FSH"); //GoldFish
-
-		for (int i = 0; i < 20; i++) {
-			this->NPCs.push_back(new GLNPC_GoldFish(&FSH_Loader, GoldFish));
-			this->NPCs.at(i)->SetBoundingBox(glm::vec3(0), glm::vec3(1));
-		}
-	}
-
-	if (enableProjectiles) {
-		FSH_Loader.LoadScene("Models/Bubble2.FSH"); //Bubble
-		this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
-	}
-
-	if (enableAquarium) {
-		FSH_Loader.LoadScene("Models/AquariumRedux.FSH"); //Aquarium
-
-		this->staticMeshes.push_back(new GLModel(&FSH_Loader, Aquarium));
-		this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
-	}
-
-	if (enableCollision) {
-		this->collisionHandler.AddNPC(NPCs);
-		this->collisionHandler.AddPlayer(players);
-		this->collisionHandler.AddModel(models);
-		this->collisionHandler.InitiatePowerUpHandler();
-	}
-
-}
 
 void Scene::LoadModels()
 {
