@@ -187,6 +187,9 @@ void GLPlayer::ResetPlayer()
 	this->lastVertical = 0;
 
 	this->powerUpTimer = 0.0f;
+
+	this->size = 1.0f;
+	this->transform->SetScale(glm::vec3(1));
 }
 
 int GLPlayer::GetPoints()

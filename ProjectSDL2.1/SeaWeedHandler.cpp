@@ -15,8 +15,8 @@ SeaWeedHandler::SeaWeedHandler(FishBox* FSH_Loader, unsigned int modelID)
 	//Where the plants can spawn
 	this->xMin = -50;
 	this->xMax = 50;
-	this->yMin = -50;
-	this->yMax = 50;
+	this->zMin = -50;
+	this->zMax = 50;
 
 	//scale
 	this->scaleMin = 1;
@@ -39,7 +39,7 @@ void SeaWeedHandler::LoadSeaWeed()
 	for (size_t i = 0; i < amountOfPlants; i++)
 	{
 		this->limitPosX = RNG::range(this->xMin, this->xMax);
-		this->limitPosZ = RNG::range(this->yMin, this->yMax);
+		this->limitPosZ = RNG::range(this->zMin, this->zMax);
 		leafs = RNG::range(this->leafsMin,this->leafsMax);
 		this->specialStaticMeshes.push_back(new SeaWeedLeafs(this->FSH_Loader, this->modelID, this->limitPosX, this->PosY, this->limitPosZ,leafs));
 		this->specialStaticMeshes.at(i)->SetScale(this->scaleMin, this->scaleMax);
@@ -77,10 +77,10 @@ void SeaWeedHandler::Draw(GLShader * shader)
 	}
 }
 
-void SeaWeedHandler::SetYLimit(int min, int max)
+void SeaWeedHandler::SetZLimit(int min, int max)
 {
-	this->yMin = min;
-	this->yMax = max;
+	this->zMin = min;
+	this->zMax = max;
 }
 
 void SeaWeedHandler::SetXLimit(int min, int max)
@@ -100,14 +100,22 @@ void SeaWeedHandler::SetAmountOfPlants(int plants)
 	this->amountOfPlants = plants;
 }
 
-void SeaWeedHandler::setScale(float min, float max)
+void SeaWeedHandler::SetScale(float min, float max)
 {
 	this->scaleMax = max;
 	this->scaleMin = min;
 }
 
-void SeaWeedHandler::setOffset(int x, int z)
+void SeaWeedHandler::SetOffset(int x, int z)
 {
 	this->offsetX = x;
 	this->offsetZ = z;
+}
+
+void SeaWeedHandler::Reset()
+{
+	for (size_t i = 0; i < this->amountOfPlants; i++)
+	{
+		this->specialStaticMeshes.at(i)->Reset();
+	}
 }
