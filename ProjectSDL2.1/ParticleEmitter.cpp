@@ -187,6 +187,15 @@ void ParticleEmitter::updateEmitterData(glm::vec4& pos, glm::vec4& dir, glm::vec
 	this->directionUpEmitter = up;
 }
 
+void ParticleEmitter::updateEmitterData(glm::vec4& pos, glm::vec4& dir, glm::vec4& right, glm::vec4& up, float scale) {
+	this->positionEmitter = pos;
+	this->directionEmitter = -dir;
+
+	this->emiterScale = scale / 3;
+	this->directionRightEmitter = right;
+	this->directionUpEmitter = up;
+}
+
 Particle ParticleEmitter::generateParticleData() {
 	Particle returnData;
 	returnData = this->particle;
