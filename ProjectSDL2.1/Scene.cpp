@@ -188,6 +188,44 @@ void Scene::LoadModels(char * folder)
 void Scene::UpdatePlayerPowerUp(int player)
 {
 	this->currentPowerUp = this->players.at(player)->GetPowerUp();
+	// fix gui powerup text
+	if (player == 0)
+	{
+		switch (this->currentPowerUp)
+		{
+		case GLPlayer::POWER_NEUTRAL:
+			guih->Player1SetPowerUp(GLGUIHandler::PlayerPowerUpText::NOTHING);
+			break;
+		case GLPlayer::POWER_BUBBLEBIG:
+			guih->Player1SetPowerUp(GLGUIHandler::PlayerPowerUpText::BIG);
+			break;
+		case GLPlayer::POWER_BUBBLESHOTGUN:
+			guih->Player1SetPowerUp(GLGUIHandler::PlayerPowerUpText::SHOTGUN);
+			break;
+		default:
+			guih->Player1SetPowerUp(GLGUIHandler::PlayerPowerUpText::NOTHING);
+			break;
+		}
+	}
+	else
+	{
+		switch (this->currentPowerUp)
+		{
+		case GLPlayer::POWER_NEUTRAL:
+			guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::NOTHING);
+			break;
+		case GLPlayer::POWER_BUBBLEBIG:
+			guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::BIG);
+			break;
+		case GLPlayer::POWER_BUBBLESHOTGUN:
+			guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::SHOTGUN);
+			break;
+		default:
+			guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::NOTHING);
+			break;
+		}
+
+	}
 }
 
 // do stuff with curentPowerup variable
