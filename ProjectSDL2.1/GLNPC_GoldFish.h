@@ -6,7 +6,7 @@ class GLNPC_GoldFish : public GLNPC
 {
 private:
 
-	const int DEADZONEX = 125, DEADZONEY = 48, DEADZONEZ = 86;
+	
 	float fleeingTimer, TimeUntilChange, scaleChange, forwardSpeed;
 	glm::vec3 rotationChange;
 

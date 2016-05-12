@@ -7,7 +7,7 @@ class GLNPC_BlueTang : public GLNPC
 {
 private:
 
-	const int DEADZONEX = 125, DEADZONEY = 48, DEADZONEZ = 86;
+	
 	float fleeingTimer, TimeUntilChange, forwardSpeed;
 	glm::vec3 rotationChange;
 	float FishSpeedMultiplier=1.5;

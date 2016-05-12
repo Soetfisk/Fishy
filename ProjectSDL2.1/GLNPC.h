@@ -38,6 +38,8 @@ protected:
 	const int updateFrames = 3;
 	int timeSinceUpdate;
 	bool isPowerUp = false;
+
+	const int DEADZONEX = 124, DEADZONEY = 48, DEADZONEZ = 84;
 public:
 
 	int GetCurrentState();
