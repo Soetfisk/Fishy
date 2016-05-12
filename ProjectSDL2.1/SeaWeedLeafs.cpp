@@ -74,7 +74,6 @@ void SeaWeedLeafs::LoadMesh()
 		Leafs.at(i)->GetTransform().SetRot(randomRotationVector);
 		Leafs.at(i)->GetTransform().SetScale(glm::vec3(randScale));
 		Leafs.at(i)->GetTransform().SetPos(glm::vec3(posX + this->GetRandOffsetX(), posY, posZ + this->getRandOffsetZ()));
-		//this->GetTransform().SetPos(glm::vec3(10,10,10));
 
 	}
 }
@@ -100,4 +99,19 @@ void SeaWeedLeafs::SetOffset(int x, int y)
 {
 	this->offsetX = x;
 	this->offsetZ = y;
+}
+
+void SeaWeedLeafs::Reset()
+{
+	int randScale;
+	for (size_t i = 0; i < this->leafsAmount; i++)
+	{
+		randScale = RNG::range(this->scaleMin, this->scaleMax);
+
+		glm::vec3 randomRotationVector = glm::vec3(RNG::range(-0.8f, 0.8f), RNG::range(0.0f, 3.14f), RNG::range(-0.8f, 0.8f));
+		Leafs.at(i)->GetTransform().SetRot(randomRotationVector);
+		Leafs.at(i)->GetTransform().SetScale(glm::vec3(randScale));
+		Leafs.at(i)->GetTransform().SetPos(glm::vec3(posX + this->GetRandOffsetX(), posY, posZ + this->getRandOffsetZ()));
+
+	}
 }

@@ -118,6 +118,8 @@ private:
 	GLGUIHandler* guih;
 	RoundCounter* rc;
 	SeaWeedHandler* seaWeedHandler;
+	SeaWeedHandler* stoneHandler;
+	SeaWeedHandler* stoneHandler2;
 
 
 	// variables for border shader

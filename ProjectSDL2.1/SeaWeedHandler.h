@@ -6,7 +6,7 @@ private:
 	std::vector<SeaWeedLeafs*> specialStaticMeshes;
 	int amountOfPlants, modelID;
 	float  limitPosX, limitPosZ, PosY, leafsMin, leafsMax, scaleMin, scaleMax;
-	int xMin, xMax, yMin, yMax;
+	int xMin, xMax, zMin, zMax;
 	int offsetX, offsetZ;
 	FishBox* FSH_Loader;
 
@@ -16,11 +16,12 @@ public:
 	void LoadSeaWeed();
 	virtual ~SeaWeedHandler();
 	void Draw(GLShader* shader);
-	void SetYLimit(int min, int max);
+	void SetZLimit(int min, int max);
 	void SetXLimit(int min, int max);
 	void SetLeafAmount(int min, int max);
 	void SetAmountOfPlants(int plants);
-	void setScale(float min, float max);
-	void setOffset(int x, int z);
+	void SetScale(float min, float max);
+	void SetOffset(int x, int z);
+	void Reset();
 };
 
