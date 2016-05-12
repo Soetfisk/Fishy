@@ -67,12 +67,13 @@ void SeaWeedLeafs::LoadMesh()
 	int randScale;
 	for (size_t i = 0; i < this->leafsAmount; i++)
 	{
-		randScale = RNG::range(this->scaleMin, this->scaleMax);
+
+		//randScale = RNG::range(this->scaleMin, this->scaleMax);
 		this->Leafs.push_back(new GLModel(this->FSH_Loader, this->modelID));
 
-		glm::vec3 randomRotationVector = glm::vec3(RNG::range(-0.8f, 0.8f), RNG::range(0.0f, 3.14f), RNG::range(-0.8f, 0.8f));
-		Leafs.at(i)->GetTransform().SetRot(randomRotationVector);
-		Leafs.at(i)->GetTransform().SetScale(glm::vec3(randScale));
+		//glm::vec3 randomRotationVector = glm::vec3(RNG::range(-0.8f, 0.8f), RNG::range(0.0f, 3.14f), RNG::range(-0.8f, 0.8f));
+		//Leafs.at(i)->GetTransform().SetRot(randomRotationVector);
+		//Leafs.at(i)->GetTransform().SetScale(glm::vec3(randScale));
 		Leafs.at(i)->GetTransform().SetPos(glm::vec3(posX + this->GetRandOffsetX(), posY, posZ + this->getRandOffsetZ()));
 
 	}
