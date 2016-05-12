@@ -141,7 +141,7 @@ void Scene::Init()
 	//	particleHandler->AddEmiter(EmitterType::GOLDSTREAM, glm::vec4(2, 1, 3 + (z % 2 == 0) ? z * 2 : -z * 2, 1));
 	//}
 	
-	
+	//this->FSH_Loader.freeTextures();
 }
 
 
