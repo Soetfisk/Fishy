@@ -436,6 +436,7 @@ void Scene::Update(float& deltaTime) {
 	this->particleHandler->UpdateParticles(deltaTime);
 	for (size_t i = 0; i < this->NPCs.size(); i++) {
 		this->NPCs.at(i)->NPCUpdate(deltaTime);
+		this->NPCs.at(i)->UpdateModel();
 		if (this->NPCs.at(i)->GetIsPowerUp()) {
 			this->NPCs.at(i)->UpdateParticles(this->deltaTime);
 		}	
@@ -446,6 +447,7 @@ void Scene::Update(float& deltaTime) {
 
 	for (size_t i = 0; i < this->players.size(); i++) {
 		this->players.at(i)->Update(this->deltaTime);
+		this->players.at(i)->UpdateModel();
 		this->players.at(i)->UpdateParticles(this->deltaTime);
 		if (this->players.at(i)->GetBoundingBox().containsAABB(staticMeshes.at(1)->GetBoundingBox()))
 		{
