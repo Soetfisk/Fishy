@@ -592,6 +592,7 @@ void GLPlayer::PlayerShoot()
 			break;
 		}
 	}
+	this->m_projectileHandler->StandardProjectileSize(transform->m_scale.x);
 	this->m_projectileHandler->Shoot(GetForward(), transform->m_pos, transform->m_rot, m_velocity, GetRight(), GetUp());
 }
 
@@ -758,10 +759,9 @@ void GLPlayer::UpdateParticles(float &deltaTime) {
 
 	if (this->player_PartcileEmitter != nullptr) {
 
-		if (this->speed > 0.3f) {
+		if (this->speed > 1.f) {
 			this->player_PartcileEmitter->updateEmitterData(glm::vec4(this->transform->GetPos(), 1),
-				glm::vec4(this->forward, 0), glm::vec4(this->GetRight(), 0),
-				glm::vec4(this->GetUp(), 0), 2 / speed, this->transform->GetScale().z);
+				glm::vec4(this->forward, 0), glm::vec4(this->GetRight(), 0), glm::vec4(this->GetUp(), 0), 2 / ((speed >= 60) ? 60 : speed), this->transform->GetScale().z);
 			//this->player_PartcileEmitter->updateDirection(glm::vec4(this->forward, 0));
 			//this->player_PartcileEmitter->updatePosition(glm::vec4(this->transform->GetPos(), 1));
 			//this->player_PartcileEmitter->updateSpawnRate(2/speed);

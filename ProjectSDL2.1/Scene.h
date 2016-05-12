@@ -107,6 +107,10 @@ private:
 	float count[2] = { 0,0 };
 	FilterComputeShader* filterComputeShader;
 	float deltaTime;
+	float dTime;
+	float combinedDtime = 0;
+	int prevDTime;
+	int currentDTime;
 	GLCollisionHandler collisionHandler;
 
 	GUI* guiTest;
@@ -138,6 +142,7 @@ private:
 
 	ParticleHandler* particleHandler;
 
+	bool debug;
 private:
 	void Init();
 	void LoadModels();
@@ -146,6 +151,12 @@ private:
 	void HandlePlayerPowerUp();
 	void CheckWinner();
 	void AddScore();
+
+	void DrawParticles(GLCamera& playerCamera);
+	void setDebugTimer(bool debug);
+	void printDebugTimer(bool debug, std::string name);
+	void PrintAndResetCombinedDTimer(bool debug);
+
 public:
 	Scene(GLOBAL_GameState* gameState);
 	Scene(GUI* textToScreen, GLOBAL_GameState* gameState);
@@ -155,6 +166,7 @@ public:
 
 	void Update(float& deltaTime);
 	void LoadScene();
+	void LoadFastScene();
 	void DrawScene();
 	void RenderQuad();
 	void ResetScene();

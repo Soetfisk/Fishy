@@ -82,14 +82,14 @@ void ParticleEmitter::instantiateGoldStream() {
 	this->nrMaxParticles = 10;
 	this->emiterSpawnTDelay = 1;
 	this->emiterSpawnTDelayStandard = emiterSpawnTDelay;
-	this->emiterMulitbleSpawner = false;
+	this->emiterMulitbleSpawner = true;
 
 	this->particle.p_pos = this->positionEmitter;
 	this->particle.p_lifeTime = 4;
-	this->particle.p_acc = glm::vec4(0, -1, 0, 0);
-	this->particle.p_scale = 3;
-	this->particle.p_speed = 1;
-	this->particle.p_vel = glm::vec4(0, 1, 0, 0);
+	this->particle.p_acc = glm::vec4(0, 0, 0, 0);
+	this->particle.p_scale = 5.f;
+	this->particle.p_speed = 1.f;
+	this->particle.p_vel = glm::vec4(0, 0, 0, 0);
 
 	this->directionEmitter = glm::vec4(1, 0, 0, 1);
 }
@@ -206,6 +206,7 @@ Particle ParticleEmitter::generateParticleData() {
 		break;
 	case EmitterType::GOLDSTREAM:
 		returnData.p_acc = glm::vec4(RNG::range(-.5f, .5f), returnData.p_acc.y, RNG::range(-.5f, .5f), 0);
+		returnData.p_pos = this->positionEmitter;
 		break;
 	case EmitterType::PLAYERFOLLOW:
 		data.x = RNG::range(-.4f, .4f);
