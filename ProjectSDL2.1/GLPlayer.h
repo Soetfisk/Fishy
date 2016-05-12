@@ -91,6 +91,7 @@ private:
 		SHOTGUN_SHOOT_SOUND,
 		DASH_SOUND,
 		MOVE_SOUND,
+		EAT_SOUND,
 
 		NUM_SOUND
 	};

@@ -202,3 +202,8 @@ void GLCollisionHandler::InitiatePowerUpHandler()
 {
 	this->PowerUpHandler = new NpcPowerUpHandler(this->NPCs);
 }
+
+void GLCollisionHandler::AddParticleHandlerReference(ParticleHandler* pHandlerRef) {
+	this->PowerUpHandler->addParticleHandlerReference(pHandlerRef);
+	this->PowerUpHandler->AsssignStartPowerupFishes();
+}

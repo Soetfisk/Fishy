@@ -3,6 +3,9 @@
 
 void Scene::Init()
 {
+	//DEBUG MODE?
+	debug = false;
+
 	// set player position and rotation to the correct startpositions
 	this->players.at(1)->GetTransform().SetPos(glm::vec3(100, 0, 0));
 	this->players.at(1)->GetTransform().SetRot(glm::vec3(0, -1.58, 0));
@@ -120,13 +123,75 @@ void Scene::Init()
 		}
 	}
 
+	this->collisionHandler.AddParticleHandlerReference(this->particleHandler);
+
 	//for (int i = 0; i <  players.size(); i++) {
 	//	particleHandler->AddEmiter(EmitterType::PLAYERFOLLOW, players.at(i)->getParticleFollowPlayer());
 	//}
 	//for (int z = 0; z < 3; z++) {
 	//	particleHandler->AddEmiter(EmitterType::GOLDSTREAM, glm::vec4(2, 1, 3 + (z % 2 == 0) ? z * 2 : -z * 2, 1));
 	//}
+	
+	
+}
 
+void Scene::LoadFastScene() {
+	bool enablePlayers = true;
+	bool enableNPCBlueThang = true;
+	bool enableNPCGoldFish = true;
+	bool enableProjectiles = true;
+	bool enableSeasWeed = true;
+	bool enableCollision = true;
+	bool enableAquarium = true;
+	bool enableBlueTang = true;
+
+	if (enablePlayers) {
+		FSH_Loader.LoadScene("Models/fishy.FSH"); //PlayerFish
+
+		for (int i = 0; i < 2; i++) {
+			this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));
+			this->players.at(i)->SetBoundingBox(glm::vec3(0), glm::vec3(1));
+		}
+	}
+	else
+
+	if (enableNPCBlueThang) {
+		FSH_Loader.LoadScene("Models/bluetangblend.FSH"); //BlueTang
+
+		for (int i = 0; i < 10; i++) {
+			this->NPCs.push_back(new GLNPC_BlueTang(&FSH_Loader, BlueTang));
+			this->NPCs.at(i)->SetBoundingBox(glm::vec3(0), glm::vec3(1));
+			this->NPCs.at(i)->GetTransform().SetScale(glm::vec3(2));
+		}
+	}
+
+	if (enableNPCGoldFish) {
+		FSH_Loader.LoadScene("Models/GoldFishBlend.FSH"); //GoldFish
+
+		for (int i = 0; i < 20; i++) {
+			this->NPCs.push_back(new GLNPC_GoldFish(&FSH_Loader, GoldFish));
+			this->NPCs.at(i)->SetBoundingBox(glm::vec3(0), glm::vec3(1));
+		}
+	}
+
+	if (enableProjectiles) {
+		FSH_Loader.LoadScene("Models/Bubble2.FSH"); //Bubble
+		this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
+	}
+
+	if (enableAquarium) {
+		FSH_Loader.LoadScene("Models/AquariumRedux.FSH"); //Aquarium
+
+		this->staticMeshes.push_back(new GLModel(&FSH_Loader, Aquarium));
+		this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
+	}
+
+	if (enableCollision) {
+		this->collisionHandler.AddNPC(NPCs);
+		this->collisionHandler.AddPlayer(players);
+		this->collisionHandler.AddModel(models);
+		this->collisionHandler.InitiatePowerUpHandler();
+	}
 
 }
 
@@ -134,7 +199,7 @@ void Scene::LoadModels()
 {
 	FSH_Loader.LoadScene("Models/fishy.FSH"); //PlayerFish
 	FSH_Loader.LoadScene("Models/GoldFishBlend.FSH"); //GoldFish
-	FSH_Loader.LoadScene("Models/BlueTang.FSH"); //BlueTang
+	FSH_Loader.LoadScene("Models/bluetangblend.FSH"); //BlueTang
 	FSH_Loader.LoadScene("Models/Bubble2.FSH"); //Bubble
 	FSH_Loader.LoadScene("Models/AquariumRedux.FSH"); //Aquarium
 	FSH_Loader.LoadScene("Models/weed2.FSH"); //SeaWeedLeaf
@@ -163,7 +228,6 @@ void Scene::LoadModels()
 	this->collisionHandler.AddPlayer(players);
 	this->collisionHandler.AddModel(models);
 	this->collisionHandler.InitiatePowerUpHandler();
-
 }
 
 void Scene::LoadModels(char * folder)
@@ -247,6 +311,35 @@ void Scene::AddScore()
 	}
 }
 
+void Scene::setDebugTimer(bool debug)
+{
+	if (debug)
+	{
+		this->currentDTime = SDL_GetTicks();
+		this->dTime = (currentDTime - prevDTime) / 1000.0f;
+		this->prevDTime = currentDTime;
+		this->combinedDtime += dTime;
+	}
+	
+}
+
+
+
+void Scene::printDebugTimer(bool debug, std::string name)
+{
+	if (debug)
+		printf("\nTime: %f, %s", dTime, name.c_str());
+}
+
+void Scene::PrintAndResetCombinedDTimer(bool debug)
+{
+	if (debug)
+	{
+		printf("\nCombinded frame time: %f\n", combinedDtime);
+		combinedDtime = 0.0f;
+	}
+}
+
 Scene::Scene(GLOBAL_GameState* gameState) {
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
 	Mix_VolumeMusic(20);
@@ -315,6 +408,10 @@ Scene::~Scene() {
 
 void Scene::Update(float& deltaTime) {
 
+	if (debug)
+		printf("\n\n##UPDATE DEBUG##");
+
+	setDebugTimer(debug);
 	if (Mix_PlayingMusic() == 0)
 	{
 		srand(time(0));
@@ -323,21 +420,40 @@ void Scene::Update(float& deltaTime) {
 		currentSong = num;
 		Mix_PlayMusic(music[num], -1);
 	}
-
+	setDebugTimer(debug);
+	printDebugTimer(debug, "music");
+	
 	this->deltaTime = deltaTime;
 
 	guih->Update(deltaTime);
+	setDebugTimer(debug);
+	printDebugTimer(debug, "gui");
 
 	this->collisionHandler.CheckCollisions(deltaTime);
+	setDebugTimer(debug);
+	printDebugTimer(debug, "collision");
+
 	this->AddScore();
+	setDebugTimer(debug);
+	printDebugTimer(debug, "score");
+
 	this->particleHandler->UpdateParticles(deltaTime);
-	for (size_t i = 0; i < this->NPCs.size(); i++)
+	for (size_t i = 0; i < this->NPCs.size(); i++) {
 		this->NPCs.at(i)->NPCUpdate(deltaTime);
+		if (this->NPCs.at(i)->GetIsPowerUp()) {
+			this->NPCs.at(i)->UpdateParticles(this->deltaTime);
+		}	
+	}
+	setDebugTimer(debug);
+	printDebugTimer(debug, "Npc");
+		
 
 	for (size_t i = 0; i < this->players.size(); i++) {
 		this->players.at(i)->Update(this->deltaTime);
 		this->players.at(i)->UpdateParticles(this->deltaTime);
 	}
+	setDebugTimer(debug);
+	printDebugTimer(debug, "players");
 
 }
 
@@ -348,18 +464,35 @@ void Scene::LoadScene() {
 
 //Calls the models.draw
 void Scene::DrawScene() {
+
+	if (debug)
+		printf("\n\n### DRAW DEBUG ###");
+
+	setDebugTimer(debug);
+	printDebugTimer(debug, "between draw and update");
+
 	guih->Draw();
 	rc->Draw();
+	setDebugTimer(debug);
+	printDebugTimer(debug, "gui");
+
 	for (size_t i = 0; i < this->players.size(); i++) {
 		// handle player powerup
+		if (debug)
+			printf("\n\n#SCREEN: %d:", i);
+
 		this->UpdatePlayerPowerUp(i);
 		this->HandlePlayerPowerUp();
+		setDebugTimer(debug);
+		printDebugTimer(debug, "playerpowerup");
 		//Set viewport
 		glViewport(0, 0, window::WIDTH, window::HEIGHT / 2);
 
 		shaders[BLEND_SHAPE]->Bind();
 		shaders[BLEND_SHAPE]->Update(players.at(i)->GetCamera());
 		this->frameBuffer->BindFrameBuffer();
+		setDebugTimer(debug);
+		printDebugTimer(debug, "bind blendshape, get playercamera, bind framebuffer");
 
 		for (size_t j = 0; j < this->players.size(); j++)
 		{
@@ -367,37 +500,52 @@ void Scene::DrawScene() {
 			shaders[BLEND_SHAPE]->Uniform1fv("Weights", players.at(j)->GetBlendWeights());
 			players.at(j)->TestDraw(*shaders[BLEND_SHAPE]);
 		}
+
+		setDebugTimer(debug);
+		printDebugTimer(debug, "player");
+		
+		for (size_t j = 0; j < NPCs.size(); j++)
+		{
+			shaders[BLEND_SHAPE]->Uniform1ui("BlendShapeCount", (GLuint)NPCs.at(j)->GetBlendShapeCount());
+			shaders[BLEND_SHAPE]->Uniform1fv("Weights", NPCs.at(j)->GetBlendWeights());
+			NPCs.at(j)->NPCDraw(*shaders[BLEND_SHAPE]);
+		}
+		setDebugTimer(debug);
+		printDebugTimer(debug, "npc's");
+
 		shaders[MODELS]->Bind();
 		shaders[MODELS]->Update(players.at(i)->GetCamera());
+		setDebugTimer(debug);
+		printDebugTimer(debug, "bind models, get playercamera");
 		this->seaWeedHandler->Draw(shaders[MODELS]);
 		this->stoneHandler->Draw(shaders[MODELS]);
+		setDebugTimer(debug);
+		printDebugTimer(debug, "seaweed handler");
 		for (int j = 0; j < this->players.size(); j++)
 		{
 			players.at(j)->DrawProjectile(*shaders[MODELS]);
 		}
-		for (size_t i = 0; i < NPCs.size(); i++)
-		{
-			NPCs.at(i)->NPCDraw(*shaders[MODELS]);
-		}
+		setDebugTimer(debug);
+		printDebugTimer(debug, "projectiles");
+		
 		for (size_t i = 0; i < staticMeshes.size(); i++)
 		{
 			staticMeshes.at(i)->Draw(*shaders[MODELS]);
 		}
+		setDebugTimer(debug);
+		printDebugTimer(debug, "static meshes");
 
 		//Drawing All Particles
-		shaders[PARTICLE]->Bind();
-		shaders[PARTICLE]->Update(players.at(i)->GetCamera());
-		for (size_t j = 0; j < this->players.size(); j++)
-		{
-		players.at(j)->DrawParticles(shaders[PARTICLE]);
-		}
-
-		this->particleHandler->DrawParticles(shaders[PARTICLE]);
+		this->DrawParticles(players.at(i)->GetCamera());
+		setDebugTimer(debug);
+		printDebugTimer(debug, "Particles");
 
 		this->frameBuffer->UnbindFrameBuffer();
 		this->frameBuffer2->BindFrameBuffer();
 		shaders[LIGHTING]->Bind();
 
+		setDebugTimer(debug);
+		printDebugTimer(debug, "bind lighting, framebuffer 2");
 		for (size_t i = 0; i < pointLights.size(); i++)
 		{
 			glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(i) + "].ambient"), 1, glm::value_ptr(pointLights.at(i).ambient));
@@ -426,10 +574,14 @@ void Scene::DrawScene() {
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("ambientTexture"), 4);
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("specularTexture"), 5);
 
+		setDebugTimer(debug);
+		printDebugTimer(debug, "lighting");
 
 		this->RenderQuad();
-		this->frameBuffer2->UnbindFrameBuffer();
+		setDebugTimer(debug);
+		printDebugTimer(debug, "renderQuad");
 
+		this->frameBuffer2->UnbindFrameBuffer();
 
 		this->frameBuffer3->BindFrameBuffer();
 		shaders[BORDER]->Bind();
@@ -465,8 +617,33 @@ void Scene::DrawScene() {
 		this->frameBuffer5->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
 		glViewport(0, (GLint)(window::HEIGHT - (window::HEIGHT *(.5*(i + 1)))), (GLint)window::WIDTH, (GLint)(window::HEIGHT / 2));
 		this->RenderQuad();
+
+		setDebugTimer(debug);
+		printDebugTimer(debug, "all the way to framebuffer5");
 	}
 
+	setDebugTimer(debug);
+	printDebugTimer(debug, "end screen loop");
+
+	//PrintAndResetCombinedDTimer(debug);
+}
+
+void Scene::DrawParticles(GLCamera& playerCamera) {
+
+	shaders[PARTICLE]->Bind();
+	shaders[PARTICLE]->Update(playerCamera);
+	for (size_t j = 0; j < this->players.size(); j++)
+	{
+		players.at(j)->DrawParticles(shaders[PARTICLE]);
+	}
+
+	for (size_t i = 0; i < NPCs.size(); i++)
+	{
+		if (this->NPCs.at(i)->GetIsPowerUp())
+			NPCs.at(i)->DrawParticles(shaders[PARTICLE]);
+	}
+
+	this->particleHandler->DrawParticles(shaders[PARTICLE]);
 }
 
 void Scene::RenderQuad()
