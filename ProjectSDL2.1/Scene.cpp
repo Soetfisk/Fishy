@@ -96,8 +96,8 @@ void Scene::Init()
 	this->stoneHandler = new SeaWeedHandler(&FSH_Loader, roughRock);
 	this->stoneHandler->SetXLimit(-90, 90);
 	this->stoneHandler->SetZLimit(-50, 50);
-	this->stoneHandler->SetLeafAmount(1, 6);
-	this->stoneHandler->SetAmountOfPlants(9);
+	this->stoneHandler->SetLeafAmount(1, 4);
+	this->stoneHandler->SetAmountOfPlants(10);
 	this->stoneHandler->SetScale(3, 9);
 	this->stoneHandler->SetOffset(40, 40);
 	this->stoneHandler->LoadSeaWeed();
@@ -107,8 +107,9 @@ void Scene::Init()
 	this->stoneHandler2->SetZLimit(-50, 50);
 	this->stoneHandler2->SetLeafAmount(1, 3);
 	this->stoneHandler2->SetAmountOfPlants(15);
-	this->stoneHandler2->SetScale(1, 9);
+	this->stoneHandler2->SetScale(1, 5);
 	this->stoneHandler2->SetOffset(30, 30);
+	this->stoneHandler2->SetRandomRotation(0.3f);
 	this->stoneHandler2->LoadSeaWeed();
 
 	this->collisionHandler.AddModel(this->stoneHandler->GetMeshes());
@@ -162,11 +163,11 @@ void Scene::LoadModels()
 		this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));
 		this->players.at(i)->SetBoundingBox(glm::vec3(0), glm::vec3(1));
 	}
-	for (int i = 0; i < 20; i++) {
+	for (int i = 0; i < 10; i++) {
 		this->NPCs.push_back(new GLNPC_GoldFish(&FSH_Loader, GoldFish));
 		this->NPCs.at(i)->SetBoundingBox(glm::vec3(0), glm::vec3(1));
 	}
-	for (int i = 0; i < 1; i++) {
+	for (int i = 0; i < 10; i++) {
 		this->NPCs.push_back(new GLNPC_BlueTang(&FSH_Loader, BlueTang));
 		this->NPCs.at(NPCs.size()-1)->SetBoundingBox(glm::vec3(0), glm::vec3(1.25));
 	}
@@ -191,6 +192,50 @@ void Scene::LoadModels(char * folder)
 void Scene::UpdatePlayerPowerUp(int player)
 {
 	this->currentPowerUp = this->players.at(player)->GetPowerUp();
+	// fix gui powerup text
+	if (player == 0)
+	{
+		switch (this->currentPowerUp)
+		{
+		case GLPlayer::POWER_NEUTRAL:
+			guih->Player1SetPowerUp(GLGUIHandler::PlayerPowerUpText::NOTHING);
+			break;
+		case GLPlayer::POWER_BUBBLEBIG:
+			guih->Player1SetPowerUp(GLGUIHandler::PlayerPowerUpText::BIG);
+			break;
+		case GLPlayer::POWER_BUBBLESHOTGUN:
+			guih->Player1SetPowerUp(GLGUIHandler::PlayerPowerUpText::SHOTGUN);
+			break;
+		case GLPlayer::POWER_HIGH:
+			guih->Player1SetPowerUp(GLGUIHandler::PlayerPowerUpText::HIGH);
+			break;
+		default:
+			guih->Player1SetPowerUp(GLGUIHandler::PlayerPowerUpText::NOTHING);
+			break;
+		}
+	}
+	else
+	{
+		switch (this->currentPowerUp)
+		{
+		case GLPlayer::POWER_NEUTRAL:
+			guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::NOTHING);
+			break;
+		case GLPlayer::POWER_BUBBLEBIG:
+			guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::BIG);
+			break;
+		case GLPlayer::POWER_BUBBLESHOTGUN:
+			guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::SHOTGUN);
+			break;
+		case GLPlayer::POWER_HIGH:
+			guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::HIGH);
+			break;
+		default:
+			guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::NOTHING);
+			break;
+		}
+
+	}
 }
 
 // do stuff with curentPowerup variable
@@ -394,6 +439,7 @@ void Scene::Update(float& deltaTime) {
 	this->particleHandler->UpdateParticles(deltaTime);
 	for (size_t i = 0; i < this->NPCs.size(); i++) {
 		this->NPCs.at(i)->NPCUpdate(deltaTime);
+		this->NPCs.at(i)->UpdateModel();
 		if (this->NPCs.at(i)->GetIsPowerUp()) {
 			this->NPCs.at(i)->UpdateParticles(this->deltaTime);
 		}	
@@ -437,6 +483,7 @@ void Scene::DrawScene() {
 
 		this->UpdatePlayerPowerUp(i);
 		this->HandlePlayerPowerUp();
+		this->players.at(i)->UpdateModel();
 		setDebugTimer(debug);
 		printDebugTimer(debug, "playerpowerup");
 		//Set viewport

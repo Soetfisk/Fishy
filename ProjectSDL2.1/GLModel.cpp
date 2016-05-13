@@ -38,6 +38,7 @@ GLModel::GLModel(FishBox* FSH_Loader, char* filePath) //DEPRICATED USE AT OWN RI
 				FSH_Loader->meshTexture(modelID, i))
 				);
 	}
+	this->UpdateModel();
 }
 
 GLModel::GLModel(FishBox* FSH_Loader, unsigned int modelID)
@@ -71,6 +72,7 @@ GLModel::GLModel(FishBox* FSH_Loader, unsigned int modelID)
 	}
 
 	FSHData::material * test = FSH_Loader->meshMaterial(modelID, 0);
+	this->UpdateModel();
 }
 
 
@@ -97,8 +99,14 @@ void GLModel::Draw(GLShader& shader)
 	}
 }
 
-void GLModel::Update(float & dt)
+void GLModel::UpdateModel()
 {
+	transform->UpdateModel();
+
+	for (size_t i = 0; i < meshes.size(); i++)
+	{
+		meshes[i]->GetTransform().UpdateModel();
+	}
 	//transform->m_pos += glm::vec3(0, 0.001 , 0);
 	//transform->m_rot += glm::vec3(0.001, 0.001, 0);
 	////transform->m_scale += 0.00001f;
