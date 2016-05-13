@@ -15,6 +15,7 @@ private:
 	std::vector<SeaWeedLeafs*> specialStaticMeshes;
 	int amountOfPlants, modelID;
 	float  limitPosX, limitPosZ, PosY, leafsMin, leafsMax, scaleMin, scaleMax;
+	float randomRot = 0.8f;
 	int xMin, xMax, zMin, zMax;
 	int offsetX, offsetZ;
 	FishBox* FSH_Loader;
@@ -40,6 +41,7 @@ public:
 	void SetOffset(int x, int z);
 	void Reset();
 	
+	void SetRandomRotation(float radian);
 	//blendshape
 	void SetIsBlendShape(bool TF) { this->isBlendShape = TF; };
 	bool GetIsBlendShape(bool TF) { return this->isBlendShape; };

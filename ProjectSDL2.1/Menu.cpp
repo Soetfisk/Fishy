@@ -73,6 +73,7 @@ Menu::~Menu()
 void Menu::Update(float dt)
 {
 	model->GetTransform().m_rot.y += dt/2;
+	model->UpdateModel();
 }
 
 void Menu::Draw()
