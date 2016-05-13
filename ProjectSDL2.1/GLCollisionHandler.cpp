@@ -17,7 +17,7 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 	{
 		distance = players.at(i)->GetTransform().GetPos() - players.at(1 - i)->GetTransform().GetPos();
 		distSqrd = glm::dot(distance,distance);
-		if (distSqrd < 50)
+		if (distSqrd < 100)
 		{
 			//checks if players collide and if so it pushes the player out of the other player
 			if (players.at(i)->GetBoundingBox().containsAABB(players.at(1-i)->GetBoundingBox()))
@@ -40,11 +40,12 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 				}
 			}
 		}
-		for (int j = 0; i < models.size(); i++)
+
+		for (int j = 0; j < models.size(); j++)
 		{
 			distance = players.at(i)->GetTransform().GetPos() - this->models.at(j)->GetTransform().GetPos();
 			distSqrd = glm::dot(distance, distance);
-			if (distSqrd < 50)
+			if (distSqrd < 100)
 			{
 				//checks if players collide and if so it pushes the player out of the other player
 				if (players.at(i)->GetBoundingBox().containsAABB(this->models.at(j)->GetBoundingBox()))

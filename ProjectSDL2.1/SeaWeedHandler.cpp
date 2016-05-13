@@ -119,3 +119,16 @@ void SeaWeedHandler::Reset()
 		this->specialStaticMeshes.at(i)->Reset();
 	}
 }
+
+std::vector<GLModel*> SeaWeedHandler::GetMeshes()
+{
+	std::vector<GLModel*> finalModels;
+
+	for (int i = 0; i < this->specialStaticMeshes.size(); i++)
+	{
+		finalModels.insert(finalModels.end(), this->specialStaticMeshes.at(i)->GetModels().begin(), this->specialStaticMeshes.at(i)->GetModels().end());
+	}
+
+	return finalModels;
+}
+

@@ -111,6 +111,8 @@ void Scene::Init()
 	this->stoneHandler2->SetOffset(30, 30);
 	this->stoneHandler2->LoadSeaWeed();
 
+	this->collisionHandler.AddModel(this->stoneHandler->GetMeshes());
+
 	particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
 	
 
@@ -177,7 +179,7 @@ void Scene::LoadModels()
 
 	this->collisionHandler.AddNPC(NPCs);
 	this->collisionHandler.AddPlayer(players);
-	this->collisionHandler.AddModel(models);
+	//this->collisionHandler.AddModel(models);
 	this->collisionHandler.InitiatePowerUpHandler();
 }
 

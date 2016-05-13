@@ -23,5 +23,6 @@ public:
 	void SetScale(float min, float max);
 	void SetOffset(int x, int z);
 	void Reset();
+	std::vector<GLModel*> GetMeshes();
 };
 

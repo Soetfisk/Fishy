@@ -6,6 +6,7 @@ GLProjectile::GLProjectile() : GLModel()
 	timeActive = 0.0;
 	forward = glm::vec3(0);
 	currentState = INACTIVE;
+	SetBoundingBox(glm::vec3(0), glm::vec3(0.5));
 }
 
 GLProjectile::GLProjectile(int maxDist) : GLModel()
@@ -18,6 +19,7 @@ GLProjectile::GLProjectile(int maxDist) : GLModel()
 	forward = glm::vec3();
 	forwardVel = glm::vec3();
 	currentState = INACTIVE;
+	SetBoundingBox(glm::vec3(0), glm::vec3(0.5));
 }
 
 GLProjectile::GLProjectile(FishBox* FSH_Loader, char* filePath, int projectileActiveTime, float projectileSpeed) : GLModel(FSH_Loader, filePath)
@@ -30,6 +32,7 @@ GLProjectile::GLProjectile(FishBox* FSH_Loader, char* filePath, int projectileAc
 	forward = glm::vec3();
 	forwardVel = glm::vec3();
 	currentState = INACTIVE;
+	SetBoundingBox(glm::vec3(0), glm::vec3(0.5));
 }
 
 GLProjectile::GLProjectile(FishBox* FSH_Loader, unsigned int modelID, int projectileActiveTime, float projectileSpeed, float projectileStrength, float projectileSize) : GLModel(FSH_Loader, modelID)
@@ -43,6 +46,7 @@ GLProjectile::GLProjectile(FishBox* FSH_Loader, unsigned int modelID, int projec
 	forward = glm::vec3();
 	forwardVel = glm::vec3();
 	currentState = INACTIVE;
+	SetBoundingBox(glm::vec3(0), glm::vec3(0.5));
 }
 
 GLProjectile::~GLProjectile()
