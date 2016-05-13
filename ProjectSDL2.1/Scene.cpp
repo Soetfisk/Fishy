@@ -97,10 +97,11 @@ void Scene::Init()
 	this->TallSeaWeedHandler->SetIsBlendShape(true);
 	this->TallSeaWeedHandler->SetXLimit(-110, 110);
 	this->TallSeaWeedHandler->SetZLimit(-70, 70);
-	this->TallSeaWeedHandler->SetLeafAmount(1, 2);
+	this->TallSeaWeedHandler->SetLeafAmount(1, 4);
 	this->TallSeaWeedHandler->SetAmountOfPlants(9);
-	this->TallSeaWeedHandler->SetScale(1.5f, 4.0f);
-	this->TallSeaWeedHandler->SetOffset(0, 0);
+	this->TallSeaWeedHandler->SetScale(2.0f, 5.0f);
+	this->TallSeaWeedHandler->SetOffset(4,10 );
+	this->TallSeaWeedHandler->SetRandomRotation(0);
 	this->TallSeaWeedHandler->LoadSeaWeed();
 
 	this->stoneHandler = new SeaWeedHandler(&FSH_Loader, roughRock);
@@ -725,6 +726,7 @@ void Scene::ResetScene()
 	this->seaWeedHandler->Reset();
 	this->stoneHandler->Reset();
 	this->stoneHandler2->Reset();
+	this->TallSeaWeedHandler->Reset();
 }
 
 void Scene::HandleEvenet(SDL_Event* e) {
