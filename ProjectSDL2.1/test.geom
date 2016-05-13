@@ -16,7 +16,7 @@ void main()
 {
 	vec3 vt = normalize(geom_ViewPos[0] - geom_worldpos[0]);
 
-	if(dot(vt, geom_normal[0]) >= -0.0)
+	if(dot(vt, geom_normal[0]) >= -0.2)
 	{
 		for(int i = 0; i < 3; i++)
 		{

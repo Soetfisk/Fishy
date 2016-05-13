@@ -170,7 +170,7 @@ void Scene::LoadModels()
 	}
 
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Aquarium));
-	this->staticMeshes.push_back(new GLModel(&FSH_Loader, BlueTang));
+	this->staticMeshes.push_back(new GLModel(&FSH_Loader, roughRock));
 	this->staticMeshes.at(1)->GetTransform().SetScale(glm::vec3(2));
 	this->staticMeshes.at(1)->SetBoundingBox(glm::vec3(0), glm::vec3(1.25));
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
@@ -403,10 +403,6 @@ void Scene::Update(float& deltaTime) {
 	for (size_t i = 0; i < this->players.size(); i++) {
 		this->players.at(i)->Update(this->deltaTime);
 		this->players.at(i)->UpdateParticles(this->deltaTime);
-		if (this->players.at(i)->GetBoundingBox().containsAABB(staticMeshes.at(1)->GetBoundingBox()))
-		{
-			std::cout << "HIT" << std::endl;
-		}
 	}
 	setDebugTimer(debug);
 	printDebugTimer(debug, "players");
