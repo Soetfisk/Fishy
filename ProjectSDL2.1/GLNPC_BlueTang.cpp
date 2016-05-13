@@ -54,9 +54,11 @@ void GLNPC_BlueTang::NPCUpdate(float deltaTime)
 			if (GetTransform().GetScale().y < 0.2)
 			{
 				NPCKill();
-			}
+			} 
 		}
 		checkboarderCollision();
+		moveAnimation(deltaTime, 1* forwardSpeed);
+		
 	}
 }
 
@@ -84,6 +86,7 @@ void GLNPC_BlueTang::NPCKill()
 	this->currentState = NPC_INACTIVE;
 	if (this->isPowerUp == true)
 	{
+		this->isPowerUp = false;
 		;//printf("i wanna be the very fish, that no one ever was");
 	}
 }
@@ -183,10 +186,7 @@ void GLNPC_BlueTang::checkboarderCollision()
 
 
 
-bool GLNPC_BlueTang::GetIsPowerUp()
-{
-	return isPowerUp;
-}
+
 
 void GLNPC_BlueTang::ResetFish()
 {

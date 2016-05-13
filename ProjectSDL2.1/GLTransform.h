@@ -2,6 +2,17 @@
 #include "GLUtil.h"
 class GLTransform
 {
+private:
+	glm::mat4 posMatrix;
+	glm::mat4 rotXMatrix;
+	glm::mat4 rotYMatrix;
+	glm::mat4 rotZMatrix;
+	glm::mat4 scaleMatrix;
+	glm::mat4 rotMatrix;
+	glm::mat4 modelMatrix;
+	glm::vec3 vecX = glm::vec3(1, 0, 0);
+	glm::vec3 vecY = glm::vec3(0, 1, 0);
+	glm::vec3 vecZ = glm::vec3(0, 0, 1);
 public:
 	GLTransform(const glm::vec3& pos = glm::vec3(), const glm::vec3& rot = glm::vec3(), const glm::vec3& scale = glm::vec3(1.0f, 1.0f, 1.0f))
 	{
@@ -10,19 +21,27 @@ public:
 		m_scale = scale;
 	}
 
-	glm::mat4 GetModel() const
+	void UpdateModel()
 	{
-		glm::mat4 posMatrix = glm::translate(m_pos);
+		posMatrix = glm::translate(m_pos);
 
-		glm::mat4 rotXMatrix = glm::rotate(m_rot.x, glm::vec3(1, 0, 0));
-		glm::mat4 rotYMatrix = glm::rotate(m_rot.y, glm::vec3(0, 1, 0));
-		glm::mat4 rotZMatrix = glm::rotate(m_rot.z, glm::vec3(0, 0, 1));
+		rotXMatrix = glm::rotate(m_rot.x, vecX);
+		rotYMatrix = glm::rotate(m_rot.y, vecY);
+		rotZMatrix = glm::rotate(m_rot.z, vecZ);
 
-		glm::mat4 scaleMatrix = glm::scale(m_scale);
+		scaleMatrix = glm::scale(m_scale);
 
-		glm::mat4 rotMatrix = rotZMatrix * rotYMatrix * rotXMatrix;
+		rotMatrix = rotZMatrix * rotYMatrix * rotXMatrix;
 
-		return posMatrix * rotMatrix * scaleMatrix;
+		modelMatrix = posMatrix * rotMatrix * scaleMatrix;
+	}
+
+
+	glm::mat4& GetModel() 
+	{
+
+
+		return modelMatrix;
 	}
 
 	glm::vec3& GetPos() { return m_pos; }

@@ -85,13 +85,44 @@ void Scene::Init()
 	this->endScore = 1000;
 
 	this->seaWeedHandler = new SeaWeedHandler(&FSH_Loader, SeaWeedLeaf);
-	this->seaWeedHandler->SetXLimit(-130, 130);
-	this->seaWeedHandler->SetYLimit(-50, 50);
-	this->seaWeedHandler->SetLeafAmount(1, 5);
+	this->seaWeedHandler->SetXLimit(-110, 110);
+	this->seaWeedHandler->SetZLimit(-70, 70);
+	this->seaWeedHandler->SetLeafAmount(2, 5);
 	this->seaWeedHandler->SetAmountOfPlants(9);
-	this->seaWeedHandler->setScale(5, 9);
-	this->seaWeedHandler->setOffset(0, 0);
+	this->seaWeedHandler->SetScale(3, 6);
+	this->seaWeedHandler->SetOffset(0, 0);
 	this->seaWeedHandler->LoadSeaWeed();
+
+	this->TallSeaWeedHandler = new SeaWeedHandler(&FSH_Loader, SeaWeedTall);
+	this->TallSeaWeedHandler->SetIsBlendShape(true);
+	this->TallSeaWeedHandler->SetXLimit(-110, 110);
+	this->TallSeaWeedHandler->SetZLimit(-70, 70);
+	this->TallSeaWeedHandler->SetLeafAmount(1, 4);
+	this->TallSeaWeedHandler->SetAmountOfPlants(9);
+	this->TallSeaWeedHandler->SetScale(2.0f, 5.0f);
+	this->TallSeaWeedHandler->SetOffset(4,10 );
+	this->TallSeaWeedHandler->SetRandomRotation(0);
+	this->TallSeaWeedHandler->LoadSeaWeed();
+
+	this->stoneHandler = new SeaWeedHandler(&FSH_Loader, roughRock);
+	this->stoneHandler->SetXLimit(-90, 90);
+	this->stoneHandler->SetZLimit(-50, 50);
+	this->stoneHandler->SetLeafAmount(1, 4);
+	this->stoneHandler->SetAmountOfPlants(10);
+	this->stoneHandler->SetScale(2, 6);
+	this->stoneHandler->SetOffset(40, 40);
+	this->stoneHandler->LoadSeaWeed();
+
+	this->stoneHandler2 = new SeaWeedHandler(&FSH_Loader, smoothRock);
+	this->stoneHandler2->SetXLimit(-90, 90);
+	this->stoneHandler2->SetZLimit(-50, 50);
+	this->stoneHandler2->SetLeafAmount(1, 3);
+	this->stoneHandler2->SetAmountOfPlants(15);
+	this->stoneHandler2->SetScale(1, 5);
+	this->stoneHandler2->SetOffset(30, 30);
+	this->stoneHandler2->SetRandomRotation(0.3f);
+	this->stoneHandler2->LoadSeaWeed();
+
 
 	particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
 	
@@ -114,24 +145,31 @@ void Scene::Init()
 		}
 	}
 
+	this->collisionHandler.AddParticleHandlerReference(this->particleHandler);
+
 	//for (int i = 0; i <  players.size(); i++) {
 	//	particleHandler->AddEmiter(EmitterType::PLAYERFOLLOW, players.at(i)->getParticleFollowPlayer());
 	//}
 	//for (int z = 0; z < 3; z++) {
 	//	particleHandler->AddEmiter(EmitterType::GOLDSTREAM, glm::vec4(2, 1, 3 + (z % 2 == 0) ? z * 2 : -z * 2, 1));
 	//}
-
-
+	
+	//this->FSH_Loader.freeTextures();
 }
+
 
 void Scene::LoadModels()
 {
+
+	printf("%f", RNG::range(2.0f, 1.0f));
+
 	FSH_Loader.LoadScene("Models/fishy.FSH"); //PlayerFish
 	FSH_Loader.LoadScene("Models/GoldFishBlend.FSH"); //GoldFish
-	FSH_Loader.LoadScene("Models/BlueTang.FSH"); //BlueTang
+	FSH_Loader.LoadScene("Models/bluetangblend.FSH"); //BlueTang
 	FSH_Loader.LoadScene("Models/Bubble2.FSH"); //Bubble
 	FSH_Loader.LoadScene("Models/AquariumRedux.FSH"); //Aquarium
 	FSH_Loader.LoadScene("Models/weed2.FSH"); //SeaWeedLeaf
+	FSH_Loader.LoadScene("Models/seaweed1Blend.FSH");//SeaWeedTall
 	FSH_Loader.LoadScene("Models/roughRock.FSH"); //roughRock
 	FSH_Loader.LoadScene("Models/smoothRock.FSH"); //smoothRock
 	FSH_Loader.LoadScene("Models/castle.FSH"); //castle
@@ -140,25 +178,29 @@ void Scene::LoadModels()
 		this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));
 		this->players.at(i)->SetBoundingBox(glm::vec3(0), glm::vec3(1));
 	}
-	for (int i = 0; i < 20; i++) {
+	for (int i = 0; i < 10; i++) {
 		this->NPCs.push_back(new GLNPC_GoldFish(&FSH_Loader, GoldFish));
 		this->NPCs.at(i)->SetBoundingBox(glm::vec3(0), glm::vec3(1));
 	}
 	for (int i = 0; i < 10; i++) {
 		this->NPCs.push_back(new GLNPC_BlueTang(&FSH_Loader, BlueTang));
-		this->NPCs.at(i)->SetBoundingBox(glm::vec3(0), glm::vec3(1));
-		this->NPCs.at(i)->GetTransform().SetScale(glm::vec3(2));
+		this->NPCs.at(NPCs.size()-1)->SetBoundingBox(glm::vec3(0), glm::vec3(1.25));
 	}
 
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Aquarium));
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, castle));
+	//this->staticMeshes.push_back(new GLModel(&FSH_Loader, SeaWeedTall));
+	//staticMeshes.at(0)->GetTransform().SetPos(glm::vec3(3, 3, 3));
+	//staticMeshes.at(0)->GetTransform().SetScale(glm::vec3(1, -1, 1));
+	
+	//this->staticMeshes.at(1)->GetTransform().SetScale(glm::vec3(2));
+	//this->staticMeshes.at(1)->SetBoundingBox(glm::vec3(0), glm::vec3(1.25));
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
 
 	this->collisionHandler.AddNPC(NPCs);
 	this->collisionHandler.AddPlayer(players);
 	this->collisionHandler.AddModel(models);
 	this->collisionHandler.InitiatePowerUpHandler();
-
 }
 
 void Scene::LoadModels(char * folder)
@@ -169,6 +211,50 @@ void Scene::LoadModels(char * folder)
 void Scene::UpdatePlayerPowerUp(int player)
 {
 	this->currentPowerUp = this->players.at(player)->GetPowerUp();
+	// fix gui powerup text
+	if (player == 0)
+	{
+		switch (this->currentPowerUp)
+		{
+		case GLPlayer::POWER_NEUTRAL:
+			guih->Player1SetPowerUp(GLGUIHandler::PlayerPowerUpText::NOTHING);
+			break;
+		case GLPlayer::POWER_BUBBLEBIG:
+			guih->Player1SetPowerUp(GLGUIHandler::PlayerPowerUpText::BIG);
+			break;
+		case GLPlayer::POWER_BUBBLESHOTGUN:
+			guih->Player1SetPowerUp(GLGUIHandler::PlayerPowerUpText::SHOTGUN);
+			break;
+		case GLPlayer::POWER_HIGH:
+			guih->Player1SetPowerUp(GLGUIHandler::PlayerPowerUpText::HIGH);
+			break;
+		default:
+			guih->Player1SetPowerUp(GLGUIHandler::PlayerPowerUpText::NOTHING);
+			break;
+		}
+	}
+	else
+	{
+		switch (this->currentPowerUp)
+		{
+		case GLPlayer::POWER_NEUTRAL:
+			guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::NOTHING);
+			break;
+		case GLPlayer::POWER_BUBBLEBIG:
+			guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::BIG);
+			break;
+		case GLPlayer::POWER_BUBBLESHOTGUN:
+			guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::SHOTGUN);
+			break;
+		case GLPlayer::POWER_HIGH:
+			guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::HIGH);
+			break;
+		default:
+			guih->Player2SetPowerUp(GLGUIHandler::PlayerPowerUpText::NOTHING);
+			break;
+		}
+
+	}
 }
 
 // do stuff with curentPowerup variable
@@ -329,6 +415,9 @@ Scene::~Scene() {
 	delete rc;
 	delete particleHandler;
 	delete seaWeedHandler;
+	delete TallSeaWeedHandler;
+	delete stoneHandler;
+	delete stoneHandler2;
 	for (int i = 0; i < NUM_MUSIC; i++)
 	{
 		Mix_FreeMusic(music[i]);
@@ -368,17 +457,25 @@ void Scene::Update(float& deltaTime) {
 	printDebugTimer(debug, "score");
 
 	this->particleHandler->UpdateParticles(deltaTime);
-	setDebugTimer(debug);
-	printDebugTimer(debug, "particles");
-
-	for (size_t i = 0; i < this->NPCs.size(); i++)
+	for (size_t i = 0; i < this->NPCs.size(); i++) {
 		this->NPCs.at(i)->NPCUpdate(deltaTime);
+		this->NPCs.at(i)->UpdateModel();
+		if (this->NPCs.at(i)->GetIsPowerUp()) {
+			this->NPCs.at(i)->UpdateParticles(this->deltaTime);
+		}	
+	}
+	TallSeaWeedHandler->Update(deltaTime);//OskarAddsSeaWeedUpdate
 	setDebugTimer(debug);
-	printDebugTimer(debug, "npcs");
+	printDebugTimer(debug, "Npc");
+		
 
 	for (size_t i = 0; i < this->players.size(); i++) {
 		this->players.at(i)->Update(this->deltaTime);
 		this->players.at(i)->UpdateParticles(this->deltaTime);
+		if (this->players.at(i)->GetBoundingBox().containsAABB(staticMeshes.at(1)->GetBoundingBox()))
+		{
+			std::cout << "HIT" << std::endl;
+		}
 	}
 	setDebugTimer(debug);
 	printDebugTimer(debug, "players");
@@ -411,6 +508,7 @@ void Scene::DrawScene() {
 
 		this->UpdatePlayerPowerUp(i);
 		this->HandlePlayerPowerUp();
+		this->players.at(i)->UpdateModel();
 		setDebugTimer(debug);
 		printDebugTimer(debug, "playerpowerup");
 		//Set viewport
@@ -432,11 +530,27 @@ void Scene::DrawScene() {
 		setDebugTimer(debug);
 		printDebugTimer(debug, "player");
 		
+		for (size_t j = 0; j < NPCs.size(); j++)
+		{
+			shaders[BLEND_SHAPE]->Uniform1ui("BlendShapeCount", (GLuint)NPCs.at(j)->GetBlendShapeCount());
+			shaders[BLEND_SHAPE]->Uniform1fv("Weights", NPCs.at(j)->GetBlendWeights());
+			NPCs.at(j)->NPCDraw(*shaders[BLEND_SHAPE]);
+		}
+		setDebugTimer(debug);
+		printDebugTimer(debug, "npc's");
+
+		shaders[BLEND_SHAPE]->Uniform1ui("BlendShapeCount", (GLuint)TallSeaWeedHandler->GetBlendShapeCount());
+		shaders[BLEND_SHAPE]->Uniform1fv("Weights", TallSeaWeedHandler->GetBlendWeights());
+		TallSeaWeedHandler->Draw(shaders[BLEND_SHAPE]);
+
 		shaders[MODELS]->Bind();
 		shaders[MODELS]->Update(players.at(i)->GetCamera());
 		setDebugTimer(debug);
 		printDebugTimer(debug, "bind models, get playercamera");
 		this->seaWeedHandler->Draw(shaders[MODELS]);
+		this->stoneHandler->Draw(shaders[MODELS]);
+		this->stoneHandler2->Draw(shaders[MODELS]);
+		
 		setDebugTimer(debug);
 		printDebugTimer(debug, "seaweed handler");
 		for (int j = 0; j < this->players.size(); j++)
@@ -445,12 +559,7 @@ void Scene::DrawScene() {
 		}
 		setDebugTimer(debug);
 		printDebugTimer(debug, "projectiles");
-		for (size_t i = 0; i < NPCs.size(); i++)
-		{
-			NPCs.at(i)->NPCDraw(*shaders[MODELS]);
-		}
-		setDebugTimer(debug);
-		printDebugTimer(debug, "npc's");
+		
 		for (size_t i = 0; i < staticMeshes.size(); i++)
 		{
 			staticMeshes.at(i)->Draw(*shaders[MODELS]);
@@ -459,19 +568,9 @@ void Scene::DrawScene() {
 		printDebugTimer(debug, "static meshes");
 
 		//Drawing All Particles
-		shaders[PARTICLE]->Bind();
-		shaders[PARTICLE]->Update(players.at(i)->GetCamera());
+		this->DrawParticles(players.at(i)->GetCamera());
 		setDebugTimer(debug);
-		printDebugTimer(debug, "bind particles, get playercamera");
-		for (size_t j = 0; j < this->players.size(); j++)
-		{
-		players.at(j)->DrawParticles(shaders[PARTICLE]);
-		}
-		setDebugTimer(debug);
-		printDebugTimer(debug, "player particles");
-		this->particleHandler->DrawParticles(shaders[PARTICLE]);
-		setDebugTimer(debug);
-		printDebugTimer(debug, "particles");
+		printDebugTimer(debug, "Particles");
 
 		this->frameBuffer->UnbindFrameBuffer();
 		this->frameBuffer2->BindFrameBuffer();
@@ -561,6 +660,24 @@ void Scene::DrawScene() {
 	//PrintAndResetCombinedDTimer(debug);
 }
 
+void Scene::DrawParticles(GLCamera& playerCamera) {
+
+	shaders[PARTICLE]->Bind();
+	shaders[PARTICLE]->Update(playerCamera);
+	for (size_t j = 0; j < this->players.size(); j++)
+	{
+		players.at(j)->DrawParticles(shaders[PARTICLE]);
+	}
+
+	for (size_t i = 0; i < NPCs.size(); i++)
+	{
+		if (this->NPCs.at(i)->GetIsPowerUp())
+			NPCs.at(i)->DrawParticles(shaders[PARTICLE]);
+	}
+
+	this->particleHandler->DrawParticles(shaders[PARTICLE]);
+}
+
 void Scene::RenderQuad()
 {
 	if (quadVAO == 0) //init
@@ -607,6 +724,10 @@ void Scene::ResetScene()
 	this->endSceneTimer = 0;
 	this->endGame = false;
 	this->winner = false;
+	this->seaWeedHandler->Reset();
+	this->stoneHandler->Reset();
+	this->stoneHandler2->Reset();
+	this->TallSeaWeedHandler->Reset();
 }
 
 void Scene::HandleEvenet(SDL_Event* e) {

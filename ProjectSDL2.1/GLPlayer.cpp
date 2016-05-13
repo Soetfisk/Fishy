@@ -29,6 +29,7 @@ GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int proj
 	sound[SHOTGUN_SHOOT_SOUND] = Mix_LoadWAV("./res/Sounds/shotgun.wav");
 	sound[DASH_SOUND] = Mix_LoadWAV("./res/Sounds/dash_short.wav");
 	sound[MOVE_SOUND] = Mix_LoadWAV("./res/Sounds/move.wav");
+	sound[EAT_SOUND] = Mix_LoadWAV("./res/Sounds/eat.wav");
 	this->m_camera;
 	this->m_projectileHandler = new GLProjectileHandler(FSH_Loader, projectileModelID, 1, 2, 20.0f);
 	this->m_velocity = glm::vec3(0);
@@ -100,7 +101,7 @@ GLCamera GLPlayer::GetCamera()
 void GLPlayer::TestDraw(GLShader & shader)
 {
 	this->Draw(shader);
-	
+	//this->UpdateModel();
 }
 
 void GLPlayer::DrawProjectile(GLShader & shader)
@@ -117,7 +118,7 @@ void GLPlayer::HandleCollision(PlayerStates state, float deltaTime, glm::vec3 mo
 	break;
 	case EATING:
 		if (momentum.x > 0){
-		
+			Mix_PlayChannel(-1, sound[EAT_SOUND], 0);
 			size += momentum.x;
 			totalPoints += (int)(100 * momentum.x);
 			currentPoints += (int)(100 * momentum.x);
@@ -186,6 +187,9 @@ void GLPlayer::ResetPlayer()
 	this->lastVertical = 0;
 
 	this->powerUpTimer = 0.0f;
+
+	this->size = 1.0f;
+	this->transform->SetScale(glm::vec3(1));
 }
 
 int GLPlayer::GetPoints()
@@ -591,6 +595,7 @@ void GLPlayer::PlayerShoot()
 			break;
 		}
 	}
+	this->m_projectileHandler->StandardProjectileSize(transform->m_scale.x);
 	this->m_projectileHandler->Shoot(GetForward(), transform->m_pos, transform->m_rot, m_velocity, GetRight(), GetUp());
 }
 
@@ -615,7 +620,7 @@ void GLPlayer::PowerUpCoolDown()
 		this->powerUpTimer += this->deltaTime;
 
 
-		if (this->powerUpTimer >= 5)
+		if (this->powerUpTimer >= POWERUP_DURATION)
 		{
 			int k = 0;
 			this->currentPowerUp = PowerUps::POWER_NEUTRAL;
@@ -697,7 +702,6 @@ void GLPlayer::HandleDash(float & deltaTime)
 		{
 			dashOnCooldown = false;
 			dashCooldownCounter = 0.0f;
-			lastForward = 0.0f;
 		}
 	}
 }
@@ -758,10 +762,9 @@ void GLPlayer::UpdateParticles(float &deltaTime) {
 
 	if (this->player_PartcileEmitter != nullptr) {
 
-		if (this->speed > 0.3f) {
+		if (this->speed > 1.f) {
 			this->player_PartcileEmitter->updateEmitterData(glm::vec4(this->transform->GetPos(), 1),
-				glm::vec4(this->forward, 0), glm::vec4(this->GetRight(), 0),
-				glm::vec4(this->GetUp(), 0), 2 / speed, this->transform->GetScale().z);
+				glm::vec4(this->forward, 0), glm::vec4(this->GetRight(), 0), glm::vec4(this->GetUp(), 0), 2 / ((speed >= 60) ? 60 : speed), this->transform->GetScale().z);
 			//this->player_PartcileEmitter->updateDirection(glm::vec4(this->forward, 0));
 			//this->player_PartcileEmitter->updatePosition(glm::vec4(this->transform->GetPos(), 1));
 			//this->player_PartcileEmitter->updateSpawnRate(2/speed);

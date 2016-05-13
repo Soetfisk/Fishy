@@ -15,6 +15,7 @@ GLProjectileHandler::GLProjectileHandler(FishBox* FSH_Loader, unsigned int model
 	this->projectileSpeed = projectileSpeed;
 	this->projectileStrength = 10.0f;
 	this->projectileSize = 1.0f;
+	standardProjectileSize = 1.0f;
 	this->cooldownDuration = cooldown;
 	this->cooldownCounter = 0.0f;
 	this->cooldown = false;
@@ -62,19 +63,19 @@ void GLProjectileHandler::ChangeStateTo(ProjectilePowerUpState state)
 	switch (state)
 	{
 	case REGULAR:
-		projectileSize = 1.0f;
+		projectileSize = standardProjectileSize;
 		break;
 	case SHOTGUN:
-		projectileSize = 1.0f;
+		projectileSize = standardProjectileSize;
 		break;
 	case BIG:
- 		projectileSize = BIG_PROJECTILE_SIZE;
+ 		projectileSize = standardProjectileSize * BIG_PROJECTILE_MULTIPLIER;
 		break;
 	case FAST:
-		projectileSize = 1.0f;
+		projectileSize = standardProjectileSize;
 		break;
 	case STRONG:
-		projectileSize = 1.0f;
+		projectileSize = standardProjectileSize;
 		break;
 	default:
 		break;
@@ -86,7 +87,11 @@ void GLProjectileHandler::Update(float& dt)
 {
 	GLProjectile* temp = nullptr;
 	for (size_t i = 0; i < projectiles.size(); i++)
+	{
 		projectiles.at(i)->TestUpdate(dt);
+		projectiles.at(i)->UpdateModel();
+	}
+		
 	if (cooldown)
 	{
 		cooldownCounter += dt;
@@ -185,7 +190,7 @@ void GLProjectileHandler::ShotgunShoot(glm::vec3 forward, glm::vec3 pos, glm::ve
 				tempForward = glm::vec3(forward.x + RNG::range(-angle, angle),
 										forward.y + RNG::range(-angle, angle),
 										forward.z + RNG::range(-angle, angle));
-			} while (glm::dot(forward, tempForward) < 1);
+			} while (glm::dot(forward, tempForward) < 0.8);
 			glm::normalize(tempForward);
 
 			if (x != 0)
@@ -210,6 +215,15 @@ void GLProjectileHandler::ShotgunShoot(glm::vec3 forward, glm::vec3 pos, glm::ve
 			//projectilePtr->addParticleEmitter(this->particleHandlerReference->CreateEmitter(EmitterType::PROJECTILE, glm::vec4(pos + tempRight, 1)));
 		}
 	}
+}
+
+void GLProjectileHandler::StandardProjectileSize(float size)
+{
+	standardProjectileSize = size;
+	if (currentState == BIG)
+		projectileSize = standardProjectileSize * BIG_PROJECTILE_MULTIPLIER;
+	else
+		projectileSize = standardProjectileSize;
 }
 
 void GLProjectileHandler::drawParticles(GLShader *shader) {

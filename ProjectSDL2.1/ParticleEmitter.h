@@ -97,6 +97,7 @@ public:
 	void updateSpawnRate(float rate);
 
 	void updateEmitterData(glm::vec4& pos, glm::vec4& dir, glm::vec4& right, glm::vec4& up, float rate, float scale);
+	void updateEmitterData(glm::vec4& pos, glm::vec4& dir, glm::vec4& right, glm::vec4& up, float scale);
 };
 
 #endif

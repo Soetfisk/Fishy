@@ -1,0 +1,15 @@
+#pragma once
+
+enum ShaderType {
+	MODELS,
+	//PARTICLES,
+	//BLUR,
+	PASS,
+	LIGHTING,
+	TEXT,
+	WAVY,
+	BORDER,
+	BLEND_SHAPE,
+	PARTICLE,
+	NUM_SHADERS
+};

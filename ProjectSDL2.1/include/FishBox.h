@@ -175,6 +175,7 @@ private:
 	FSHScene(void);
 public:
 
+	void setTextureList(std::vector<texture*> textures, std::vector<std::string> textureNames);
 	FSHScene(char * filePath);
 	unsigned int GetMeshCount();
 	std::vector<FSHMesh*> GetMeshList();
@@ -198,6 +199,13 @@ private:
 private: //varaibles
 	std::vector<FSHScene> SceneList;
 	std::vector<texture*> extraTextures;
+	std::vector<texture*> textures;
+	std::vector<std::string> textureNames;
+
+	//functions
+	void LoadTextures();
+
+
 public: //variables
 
 
@@ -205,6 +213,7 @@ public: //functions
 	FishBox(void);
 	FishBox::~FishBox();
 	void clean();
+	void freeTextures();
 
 	void release();
 	void Test();

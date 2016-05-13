@@ -15,8 +15,8 @@ SeaWeedHandler::SeaWeedHandler(FishBox* FSH_Loader, unsigned int modelID)
 	//Where the plants can spawn
 	this->xMin = -50;
 	this->xMax = 50;
-	this->yMin = -50;
-	this->yMax = 50;
+	this->zMin = -50;
+	this->zMax = 50;
 
 	//scale
 	this->scaleMin = 1;
@@ -27,8 +27,17 @@ SeaWeedHandler::SeaWeedHandler(FishBox* FSH_Loader, unsigned int modelID)
 	this->offsetZ = 1;
 
 
+
 	this->FSH_Loader = FSH_Loader;
 	this->modelID = modelID;
+
+	//blendShapes
+	this->blendWeights = new float[SW_NUM_ANIMATION];
+	for (int i = 0; i < SW_NUM_ANIMATION; i++)
+	{
+		blendWeights[i] = 0.0f;
+		animationFactors[i] = 0.0f;
+	}
 
 }
 
@@ -39,11 +48,12 @@ void SeaWeedHandler::LoadSeaWeed()
 	for (size_t i = 0; i < amountOfPlants; i++)
 	{
 		this->limitPosX = RNG::range(this->xMin, this->xMax);
-		this->limitPosZ = RNG::range(this->yMin, this->yMax);
+		this->limitPosZ = RNG::range(this->zMin, this->zMax);
 		leafs = RNG::range(this->leafsMin,this->leafsMax);
 		this->specialStaticMeshes.push_back(new SeaWeedLeafs(this->FSH_Loader, this->modelID, this->limitPosX, this->PosY, this->limitPosZ,leafs));
 		this->specialStaticMeshes.at(i)->SetScale(this->scaleMin, this->scaleMax);
 		this->specialStaticMeshes.at(i)->SetOffset(this->offsetX, this->offsetZ);
+		this->specialStaticMeshes.at(i)->SetRotation(this->randomRot);
 		//if (SeaWeedLeafs* temp = dynamic_cast<SeaWeedLeafs*>(this->specialStaticMeshes.at(i))) // if we have a seaweed fix scale and offset
 		//{
 		//	temp->SetScale(this->scaleMin, this->scaleMax);
@@ -63,6 +73,7 @@ void SeaWeedHandler::LoadSeaWeed()
 
 SeaWeedHandler::~SeaWeedHandler()
 {
+	delete blendWeights;
 	for (size_t i = 0; i < specialStaticMeshes.size(); i++)
 	{
 		delete specialStaticMeshes.at(i);
@@ -77,10 +88,10 @@ void SeaWeedHandler::Draw(GLShader * shader)
 	}
 }
 
-void SeaWeedHandler::SetYLimit(int min, int max)
+void SeaWeedHandler::SetZLimit(int min, int max)
 {
-	this->yMin = min;
-	this->yMax = max;
+	this->zMin = min;
+	this->zMax = max;
 }
 
 void SeaWeedHandler::SetXLimit(int min, int max)
@@ -100,14 +111,51 @@ void SeaWeedHandler::SetAmountOfPlants(int plants)
 	this->amountOfPlants = plants;
 }
 
-void SeaWeedHandler::setScale(float min, float max)
+void SeaWeedHandler::SetScale(float min, float max)
 {
 	this->scaleMax = max;
 	this->scaleMin = min;
 }
 
-void SeaWeedHandler::setOffset(int x, int z)
+void SeaWeedHandler::SetOffset(int x, int z)
 {
 	this->offsetX = x;
 	this->offsetZ = z;
 }
+
+void SeaWeedHandler::Reset()
+{
+	for (size_t i = 0; i < this->amountOfPlants; i++)
+	{
+		this->specialStaticMeshes.at(i)->Reset();
+	}
+}
+
+void SeaWeedHandler::moveAnimation(float deltaTime, float speedFactor)
+{
+	float speed = abs(deltaTime * speedFactor), y;
+
+	animationFactors[SWONE] += speed;
+
+	y = sin(animationFactors[SWONE]);
+
+	if (y > 0.0)
+		this->blendWeights[SWONE] = y;
+	if (y < 0.0)
+		this->blendWeights[SWTWO] = abs(y);
+}
+
+void SeaWeedHandler::Update(float deltaTime)
+{
+	if (this->isBlendShape == true)
+	{
+		moveAnimation(deltaTime, 0.5f);
+	}
+}
+
+void SeaWeedHandler::SetRandomRotation(float radian)
+{
+	this->randomRot = radian;
+}
+
+

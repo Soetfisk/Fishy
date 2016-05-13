@@ -22,24 +22,13 @@
 #include <SDL2\SDL_mixer.h>
 #include "RoundCounter.h"
 #include "SeaWeedHandler.h"
+#include "EnumShaderType.h"
 #define mSTATIC *shaders[MODELS]
 #define mANIMATED *shaders[BLEND_SHAPE]
 
 class Scene {
 private:
-	enum ShaderType {
-		MODELS,
-		//PARTICLES,
-		//BLUR,
-		PASS,
-		LIGHTING,
-		TEXT,
-		WAVY,
-		BORDER,
-		BLEND_SHAPE,
-		PARTICLE,
-		NUM_SHADERS
-	};
+	
 	enum
 	{
 		PlayerFish,
@@ -48,6 +37,7 @@ private:
 		Bubble,
 		Aquarium,
 		SeaWeedLeaf,
+		SeaWeedTall,
 		roughRock,
 		smoothRock,
 		castle
@@ -119,6 +109,9 @@ private:
 	GLGUIHandler* guih;
 	RoundCounter* rc;
 	SeaWeedHandler* seaWeedHandler;
+	SeaWeedHandler* TallSeaWeedHandler;
+	SeaWeedHandler* stoneHandler;
+	SeaWeedHandler* stoneHandler2;
 
 
 	// variables for border shader
@@ -153,6 +146,7 @@ private:
 	void CheckWinner();
 	void AddScore();
 
+	void DrawParticles(GLCamera& playerCamera);
 	void setDebugTimer(bool debug);
 	void printDebugTimer(bool debug, std::string name);
 	void PrintAndResetCombinedDTimer(bool debug);
@@ -166,6 +160,7 @@ public:
 
 	void Update(float& deltaTime);
 	void LoadScene();
+	void LoadFastScene();
 	void DrawScene();
 	void RenderQuad();
 	void ResetScene();

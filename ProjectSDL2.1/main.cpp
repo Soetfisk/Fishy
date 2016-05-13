@@ -19,6 +19,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	srand((unsigned int)time(NULL));
 	InitDosConsole();
 
+
+
+
 	//Project Setup:
 	// C/C++ -> General -> Additional Include Directories = .\include
 	// Linker -> General -> Additional Library Directories = .\lib

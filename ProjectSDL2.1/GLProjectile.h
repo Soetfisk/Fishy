@@ -37,7 +37,7 @@ public:
 	void updateParticleEmitter(float& deltaTime);
 	void drawParticles(GLShader* shader);
 private:
-	const float MIN_PROJECTILE_SPEED = 20;
+	const float MIN_PROJECTILE_SPEED = 30;
 	const float MIN_SPEED = 0.5f;
 
 	int maxActiveTime;				// The max distance the projecitle is allowed to travel
