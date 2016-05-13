@@ -89,17 +89,18 @@ void Scene::Init()
 	this->seaWeedHandler->SetZLimit(-70, 70);
 	this->seaWeedHandler->SetLeafAmount(2, 5);
 	this->seaWeedHandler->SetAmountOfPlants(9);
-	this->seaWeedHandler->SetScale(5, 9);
+	this->seaWeedHandler->SetScale(3, 6);
 	this->seaWeedHandler->SetOffset(0, 0);
 	this->seaWeedHandler->LoadSeaWeed();
 
 	this->TallSeaWeedHandler = new SeaWeedHandler(&FSH_Loader, SeaWeedTall);
+	this->TallSeaWeedHandler->IsRotateEnabled(false);
 	this->TallSeaWeedHandler->SetIsBlendShape(true);
-	this->TallSeaWeedHandler->SetXLimit(0, 1);
-	this->TallSeaWeedHandler->SetZLimit(0,1);
+	this->TallSeaWeedHandler->SetXLimit(-110, 110);
+	this->TallSeaWeedHandler->SetZLimit(-70, 70);
 	this->TallSeaWeedHandler->SetLeafAmount(1, 2);
 	this->TallSeaWeedHandler->SetAmountOfPlants(9);
-	this->TallSeaWeedHandler->SetScale(0.5f, 1.5f);
+	this->TallSeaWeedHandler->SetScale(1.5f, 4.0f);
 	this->TallSeaWeedHandler->SetOffset(0, 0);
 	this->TallSeaWeedHandler->LoadSeaWeed();
 
@@ -108,7 +109,7 @@ void Scene::Init()
 	this->stoneHandler->SetZLimit(-50, 50);
 	this->stoneHandler->SetLeafAmount(1, 6);
 	this->stoneHandler->SetAmountOfPlants(9);
-	this->stoneHandler->SetScale(3, 9);
+	this->stoneHandler->SetScale(2, 6);
 	this->stoneHandler->SetOffset(40, 40);
 	this->stoneHandler->LoadSeaWeed();
 
@@ -117,7 +118,7 @@ void Scene::Init()
 	this->stoneHandler2->SetZLimit(-50, 50);
 	this->stoneHandler2->SetLeafAmount(1, 3);
 	this->stoneHandler2->SetAmountOfPlants(15);
-	this->stoneHandler2->SetScale(1, 9);
+	this->stoneHandler2->SetScale(1, 5);
 	this->stoneHandler2->SetOffset(30, 30);
 	this->stoneHandler2->LoadSeaWeed();
 
@@ -181,7 +182,7 @@ void Scene::LoadModels()
 		this->NPCs.at(NPCs.size()-1)->SetBoundingBox(glm::vec3(0), glm::vec3(1.25));
 	}
 
-	//this->staticMeshes.push_back(new GLModel(&FSH_Loader, Aquarium));
+	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Aquarium));
 	//this->staticMeshes.push_back(new GLModel(&FSH_Loader, SeaWeedTall));
 	//staticMeshes.at(0)->GetTransform().SetPos(glm::vec3(3, 3, 3));
 	//staticMeshes.at(0)->GetTransform().SetScale(glm::vec3(1, -1, 1));
