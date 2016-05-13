@@ -73,6 +73,7 @@ void SeaWeedHandler::LoadSeaWeed()
 
 SeaWeedHandler::~SeaWeedHandler()
 {
+	delete blendWeights;
 	for (size_t i = 0; i < specialStaticMeshes.size(); i++)
 	{
 		delete specialStaticMeshes.at(i);
