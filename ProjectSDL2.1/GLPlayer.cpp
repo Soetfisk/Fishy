@@ -101,7 +101,7 @@ GLCamera GLPlayer::GetCamera()
 void GLPlayer::TestDraw(GLShader & shader)
 {
 	this->Draw(shader);
-	this->UpdateModel();
+	//this->UpdateModel();
 }
 
 void GLPlayer::DrawProjectile(GLShader & shader)

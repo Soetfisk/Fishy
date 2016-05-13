@@ -96,8 +96,8 @@ void Scene::Init()
 	this->stoneHandler = new SeaWeedHandler(&FSH_Loader, roughRock);
 	this->stoneHandler->SetXLimit(-90, 90);
 	this->stoneHandler->SetZLimit(-50, 50);
-	this->stoneHandler->SetLeafAmount(1, 6);
-	this->stoneHandler->SetAmountOfPlants(9);
+	this->stoneHandler->SetLeafAmount(1, 4);
+	this->stoneHandler->SetAmountOfPlants(10);
 	this->stoneHandler->SetScale(3, 9);
 	this->stoneHandler->SetOffset(40, 40);
 	this->stoneHandler->LoadSeaWeed();
@@ -107,8 +107,9 @@ void Scene::Init()
 	this->stoneHandler2->SetZLimit(-50, 50);
 	this->stoneHandler2->SetLeafAmount(1, 3);
 	this->stoneHandler2->SetAmountOfPlants(15);
-	this->stoneHandler2->SetScale(1, 9);
+	this->stoneHandler2->SetScale(1, 5);
 	this->stoneHandler2->SetOffset(30, 30);
+	this->stoneHandler2->SetRandomRotation(0.3f);
 	this->stoneHandler2->LoadSeaWeed();
 
 	particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
@@ -447,7 +448,6 @@ void Scene::Update(float& deltaTime) {
 
 	for (size_t i = 0; i < this->players.size(); i++) {
 		this->players.at(i)->Update(this->deltaTime);
-		//this->players.at(i)->UpdateModel();
 		this->players.at(i)->UpdateParticles(this->deltaTime);
 		if (this->players.at(i)->GetBoundingBox().containsAABB(staticMeshes.at(1)->GetBoundingBox()))
 		{
@@ -485,6 +485,7 @@ void Scene::DrawScene() {
 
 		this->UpdatePlayerPowerUp(i);
 		this->HandlePlayerPowerUp();
+		this->players.at(i)->UpdateModel();
 		setDebugTimer(debug);
 		printDebugTimer(debug, "playerpowerup");
 		//Set viewport
@@ -501,7 +502,6 @@ void Scene::DrawScene() {
 			shaders[BLEND_SHAPE]->Uniform1ui("BlendShapeCount", (GLuint)players.at(j)->GetBlendShapeCount());
 			shaders[BLEND_SHAPE]->Uniform1fv("Weights", players.at(j)->GetBlendWeights());
 			players.at(j)->TestDraw(*shaders[BLEND_SHAPE]);
-			//this->players.at(j)->UpdateModel();
 		}
 
 		setDebugTimer(debug);

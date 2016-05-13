@@ -44,6 +44,7 @@ void SeaWeedHandler::LoadSeaWeed()
 		this->specialStaticMeshes.push_back(new SeaWeedLeafs(this->FSH_Loader, this->modelID, this->limitPosX, this->PosY, this->limitPosZ,leafs));
 		this->specialStaticMeshes.at(i)->SetScale(this->scaleMin, this->scaleMax);
 		this->specialStaticMeshes.at(i)->SetOffset(this->offsetX, this->offsetZ);
+		this->specialStaticMeshes.at(i)->SetRotation(this->randomRot);
 		//if (SeaWeedLeafs* temp = dynamic_cast<SeaWeedLeafs*>(this->specialStaticMeshes.at(i))) // if we have a seaweed fix scale and offset
 		//{
 		//	temp->SetScale(this->scaleMin, this->scaleMax);
@@ -119,3 +120,10 @@ void SeaWeedHandler::Reset()
 		this->specialStaticMeshes.at(i)->Reset();
 	}
 }
+
+void SeaWeedHandler::SetRandomRotation(float radian)
+{
+	this->randomRot = radian;
+}
+
+
