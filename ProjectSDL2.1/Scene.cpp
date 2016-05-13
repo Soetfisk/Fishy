@@ -379,11 +379,11 @@ void Scene::Update(float& deltaTime) {
 	setDebugTimer(debug);
 	printDebugTimer(debug, "score");
 
-	this->particleHandler->UpdateParticles(deltaTime);
+	//this->particleHandler->UpdateParticles(deltaTime);
 	for (size_t i = 0; i < this->NPCs.size(); i++) {
 		this->NPCs.at(i)->NPCUpdate(deltaTime);
 		if (this->NPCs.at(i)->GetIsPowerUp()) {
-			this->NPCs.at(i)->UpdateParticles(this->deltaTime);
+			//this->NPCs.at(i)->UpdateParticles(this->deltaTime);
 		}	
 	}
 	setDebugTimer(debug);
@@ -392,7 +392,7 @@ void Scene::Update(float& deltaTime) {
 
 	for (size_t i = 0; i < this->players.size(); i++) {
 		this->players.at(i)->Update(this->deltaTime);
-		this->players.at(i)->UpdateParticles(this->deltaTime);
+		//this->players.at(i)->UpdateParticles(this->deltaTime);
 		if (this->players.at(i)->GetBoundingBox().containsAABB(staticMeshes.at(1)->GetBoundingBox()))
 		{
 			std::cout << "HIT" << std::endl;
@@ -482,7 +482,7 @@ void Scene::DrawScene() {
 		printDebugTimer(debug, "static meshes");
 
 		//Drawing All Particles
-		this->DrawParticles(players.at(i)->GetCamera());
+		//this->DrawParticles(players.at(i)->GetCamera());
 		setDebugTimer(debug);
 		printDebugTimer(debug, "Particles");
 
