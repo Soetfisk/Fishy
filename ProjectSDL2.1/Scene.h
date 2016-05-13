@@ -40,7 +40,9 @@ private:
 		SeaWeedTall,
 		roughRock,
 		smoothRock,
-		castle
+		castle,
+		orangeKorall,
+		rosaKorall
 	};
 	int SCREEN_WIDTH = window::WIDTH;
 	int SCREEN_HEIGHT = window::HEIGHT / 2;
@@ -112,7 +114,9 @@ private:
 	SeaWeedHandler* TallSeaWeedHandler;
 	SeaWeedHandler* stoneHandler;
 	SeaWeedHandler* stoneHandler2;
-
+	SeaWeedHandler* castleHandler;
+	SeaWeedHandler* korallHandler;
+	SeaWeedHandler* korallHandler2;
 
 	// variables for border shader
 	float borderThreshold1, borderThreshold2;

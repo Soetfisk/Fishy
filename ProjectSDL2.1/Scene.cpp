@@ -123,6 +123,33 @@ void Scene::Init()
 	this->stoneHandler2->SetRandomRotation(0.3f);
 	this->stoneHandler2->LoadSeaWeed();
 
+	this->castleHandler = new SeaWeedHandler(&FSH_Loader, castle);
+	this->castleHandler->SetXLimit(-90, 90);
+	this->castleHandler->SetZLimit(-50, 50);
+	this->castleHandler->SetLeafAmount(2, 2);
+	this->castleHandler->SetAmountOfPlants(1);
+	this->castleHandler->SetScale(3, 5);
+	this->castleHandler->SetOffset(70, 50);
+	this->castleHandler->SetRandomRotation(0.05f);
+	this->castleHandler->LoadSeaWeed();
+
+	this->korallHandler = new SeaWeedHandler(&FSH_Loader, rosaKorall);
+	this->korallHandler->SetXLimit(-110, 110);
+	this->korallHandler->SetZLimit(-70, 70);
+	this->korallHandler->SetLeafAmount(2, 5);
+	this->korallHandler->SetAmountOfPlants(9);
+	this->korallHandler->SetScale(3, 6);
+	this->korallHandler->SetOffset(0, 0);
+	this->korallHandler->LoadSeaWeed();
+
+	this->korallHandler2 = new SeaWeedHandler(&FSH_Loader, orangeKorall);
+	this->korallHandler2->SetXLimit(-110, 110);
+	this->korallHandler2->SetZLimit(-70, 70);
+	this->korallHandler2->SetLeafAmount(2, 5);
+	this->korallHandler2->SetAmountOfPlants(9);
+	this->korallHandler2->SetScale(3, 6);
+	this->korallHandler2->SetOffset(0, 0);
+	this->korallHandler2->LoadSeaWeed();
 
 	particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
 	
@@ -173,6 +200,8 @@ void Scene::LoadModels()
 	FSH_Loader.LoadScene("Models/roughRock.FSH"); //roughRock
 	FSH_Loader.LoadScene("Models/smoothRock.FSH"); //smoothRock
 	FSH_Loader.LoadScene("Models/castle.FSH"); //castle
+	FSH_Loader.LoadScene("Models/orangekorall.FSH"); //rosaKorall
+	FSH_Loader.LoadScene("Models/rosakorall.FSH"); //orangeKorall
 
 	for (int i = 0; i < 2; i++) {
 		this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));
@@ -188,14 +217,15 @@ void Scene::LoadModels()
 	}
 
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Aquarium));
-	this->staticMeshes.push_back(new GLModel(&FSH_Loader, castle));
 	//this->staticMeshes.push_back(new GLModel(&FSH_Loader, SeaWeedTall));
 	//staticMeshes.at(0)->GetTransform().SetPos(glm::vec3(3, 3, 3));
 	//staticMeshes.at(0)->GetTransform().SetScale(glm::vec3(1, -1, 1));
 	
+	//this->staticMeshes.push_back(new GLModel(&FSH_Loader, castle));
 	//this->staticMeshes.at(1)->GetTransform().SetScale(glm::vec3(2));
 	//this->staticMeshes.at(1)->SetBoundingBox(glm::vec3(0), glm::vec3(1.25));
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
+
 
 	this->collisionHandler.AddNPC(NPCs);
 	this->collisionHandler.AddPlayer(players);
@@ -418,6 +448,9 @@ Scene::~Scene() {
 	delete TallSeaWeedHandler;
 	delete stoneHandler;
 	delete stoneHandler2;
+	delete castleHandler;
+	delete korallHandler;
+	delete korallHandler2;
 	for (int i = 0; i < NUM_MUSIC; i++)
 	{
 		Mix_FreeMusic(music[i]);
@@ -550,7 +583,10 @@ void Scene::DrawScene() {
 		this->seaWeedHandler->Draw(shaders[MODELS]);
 		this->stoneHandler->Draw(shaders[MODELS]);
 		this->stoneHandler2->Draw(shaders[MODELS]);
-		
+		this->castleHandler->Draw(shaders[MODELS]);
+		this->korallHandler->Draw(shaders[MODELS]);
+		this->korallHandler2->Draw(shaders[MODELS]);
+
 		setDebugTimer(debug);
 		printDebugTimer(debug, "seaweed handler");
 		for (int j = 0; j < this->players.size(); j++)
@@ -728,6 +764,9 @@ void Scene::ResetScene()
 	this->stoneHandler->Reset();
 	this->stoneHandler2->Reset();
 	this->TallSeaWeedHandler->Reset();
+	this->castleHandler->Reset();
+	this->korallHandler->Reset();
+	this->korallHandler2->Reset();
 }
 
 void Scene::HandleEvenet(SDL_Event* e) {
