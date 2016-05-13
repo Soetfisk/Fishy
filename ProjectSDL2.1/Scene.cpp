@@ -161,8 +161,6 @@ void Scene::Init()
 void Scene::LoadModels()
 {
 
-	printf("%f", RNG::range(2.0f, 1.0f));
-
 	FSH_Loader.LoadScene("Models/fishy.FSH"); //PlayerFish
 	FSH_Loader.LoadScene("Models/GoldFishBlend.FSH"); //GoldFish
 	FSH_Loader.LoadScene("Models/bluetangblend.FSH"); //BlueTang
