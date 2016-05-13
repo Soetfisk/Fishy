@@ -134,6 +134,7 @@ void Scene::LoadModels()
 	FSH_Loader.LoadScene("Models/weed2.FSH"); //SeaWeedLeaf
 	FSH_Loader.LoadScene("Models/roughRock.FSH"); //roughRock
 	FSH_Loader.LoadScene("Models/smoothRock.FSH"); //smoothRock
+	FSH_Loader.LoadScene("Models/castle.FSH"); //castle
 
 	for (int i = 0; i < 2; i++) {
 		this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));
@@ -150,7 +151,7 @@ void Scene::LoadModels()
 	}
 
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Aquarium));
-	this->staticMeshes.push_back(new GLModel(&FSH_Loader, BlueTang));
+	this->staticMeshes.push_back(new GLModel(&FSH_Loader, castle));
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
 
 	this->collisionHandler.AddNPC(NPCs);
