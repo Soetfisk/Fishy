@@ -620,7 +620,7 @@ void GLPlayer::PowerUpCoolDown()
 		this->powerUpTimer += this->deltaTime;
 
 
-		if (this->powerUpTimer >= 5)
+		if (this->powerUpTimer >= POWERUP_DURATION)
 		{
 			int k = 0;
 			this->currentPowerUp = PowerUps::POWER_NEUTRAL;
