@@ -47,14 +47,6 @@ SeaWeedLeafs::~SeaWeedLeafs()
 
 void SeaWeedLeafs::Draw(GLShader & shader)
 {
-	for (int i = 0; i < meshes.size(); i++)
-	{
-		glUniform3fv(shader.GetUnifromLocation("diffuse"), 1, glm::value_ptr(glm::vec3(meshes[i]->GetMaterial()->diffuse[0], meshes[i]->GetMaterial()->diffuse[1], meshes[i]->GetMaterial()->diffuse[2])));
-		glUniform3fv(shader.GetUnifromLocation("ambient"), 1, glm::value_ptr(glm::vec3(meshes[i]->GetMaterial()->ambient[0], meshes[i]->GetMaterial()->ambient[1], meshes[i]->GetMaterial()->ambient[2])));
-		glUniform3fv(shader.GetUnifromLocation("specular"), 1, glm::value_ptr(glm::vec3(meshes[i]->GetMaterial()->spec[0], meshes[i]->GetMaterial()->spec[1], meshes[i]->GetMaterial()->spec[2])));
-		glUniform1f(shader.GetUnifromLocation("shininess"), meshes[i]->GetMaterial()->shinyness);
-		meshes[i]->Draw(shader, *transform);
-	}
 
 	for (size_t i = 0; i < Leafs.size(); i++)
 	{
@@ -74,6 +66,7 @@ void SeaWeedLeafs::LoadMesh()
 		Leafs.at(i)->GetTransform().SetRot(randomRotationVector);
 		Leafs.at(i)->GetTransform().SetScale(glm::vec3(randScale));
 		Leafs.at(i)->GetTransform().SetPos(glm::vec3(posX + this->GetRandOffsetX(), posY, posZ + this->getRandOffsetZ()));
+		Leafs.at(i)->UpdateModel();
 
 	}
 }
@@ -112,6 +105,7 @@ void SeaWeedLeafs::Reset()
 		Leafs.at(i)->GetTransform().SetRot(randomRotationVector);
 		Leafs.at(i)->GetTransform().SetScale(glm::vec3(randScale));
 		Leafs.at(i)->GetTransform().SetPos(glm::vec3(posX + this->GetRandOffsetX(), posY, posZ + this->getRandOffsetZ()));
+		Leafs.at(i)->UpdateModel();
 
 	}
 }
