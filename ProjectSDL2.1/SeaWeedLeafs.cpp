@@ -109,7 +109,7 @@ void SeaWeedLeafs::Reset()
 		Leafs.at(i)->UpdateModel();
 	}
 }
-}
+
 std::vector<GLModel*>& SeaWeedLeafs::GetModels()
 {
 	return Leafs;

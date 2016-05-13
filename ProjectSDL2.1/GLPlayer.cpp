@@ -30,6 +30,7 @@ GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int proj
 	sound[DASH_SOUND] = Mix_LoadWAV("./res/Sounds/dash_short.wav");
 	sound[MOVE_SOUND] = Mix_LoadWAV("./res/Sounds/move.wav");
 	sound[EAT_SOUND] = Mix_LoadWAV("./res/Sounds/eat.wav");
+	sound[HIGH_SOUND] = Mix_LoadWAV("./res/Sounds/funny.wav");
 	this->m_camera;
 	this->m_projectileHandler = new GLProjectileHandler(FSH_Loader, projectileModelID, 1, 2, 20.0f);
 	this->m_velocity = glm::vec3(0);
@@ -118,7 +119,7 @@ void GLPlayer::HandleCollision(PlayerStates state, float deltaTime, glm::vec3 mo
 	break;
 	case EATING:
 		if (momentum.x > 0){
-			Mix_PlayChannel(-1, sound[EAT_SOUND], 0);
+			Mix_PlayChannel(2, sound[EAT_SOUND], 0);
 			size += momentum.x;
 			totalPoints += (int)(100 * momentum.x);
 			currentPoints += (int)(100 * momentum.x);
@@ -564,7 +565,7 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	CalcVelocity(deltaTime);
 	HandleDash(deltaTime);
 
-	if (this->GetTransform().GetScale().x < size)
+	if (this->GetTransform().GetScale().x < size || this->GetTransform().GetScale().x > size)
 	{
 		this->transform->SetScale(this->transform->GetScale() + (deltaTime / 4));
 	}
@@ -585,13 +586,13 @@ void GLPlayer::PlayerShoot()
 		switch (currentPowerUp)
 		{
 		case 0:
-			Mix_PlayChannel(-1, sound[SHOOT_SOUND], 0);
+			Mix_PlayChannel(2, sound[SHOOT_SOUND], 0);
 			break;
 		case 1:
-			Mix_PlayChannel(-1, sound[SHOTGUN_SHOOT_SOUND], 0);
+			Mix_PlayChannel(2, sound[SHOTGUN_SHOOT_SOUND], 0);
 			break;
 		case 2:
-			Mix_PlayChannel(-1, sound[BIG_SHOOT_SOUND], 0);
+			Mix_PlayChannel(2, sound[BIG_SHOOT_SOUND], 0);
 			break;
 		}
 	}
@@ -605,7 +606,7 @@ void GLPlayer::PlayerDash()
 {
 	if (!isDashing && !dashOnCooldown)
 	{
-		Mix_PlayChannel(-1, sound[DASH_SOUND], 0);
+		Mix_PlayChannel(0, sound[DASH_SOUND], 0);
 		isDashing = true;
 		dashCurrentDuration = 0.0f;
 		dashCooldownCounter = 0.0f;
@@ -635,11 +636,6 @@ void GLPlayer::CalcVelocity(float& deltaTime)
 	glm::vec3 forward = this->GetForward();
 	if (m_velocity != glm::vec3(0))
 	{
-		if (!isMoving)
-		{
-			isMoving = true;
-			Mix_PlayChannel(0, sound[MOVE_SOUND], -1);
-		}
 		this->transform->m_pos += (m_velocity  * deltaTime);
 		glm::vec3 friction = (m_velocity * MOVEMENT_FRICTION);
 		m_velocity -= friction * deltaTime;
@@ -712,6 +708,11 @@ void GLPlayer::HandlePowerUps()
 		this->m_projectileHandler->ChangeStateTo(ProjectilePowerUpState::SHOTGUN);
 	else if (this->currentPowerUp == GLPlayer::POWER_BUBBLEBIG)
 		this->m_projectileHandler->ChangeStateTo(ProjectilePowerUpState::BIG);
+	else if (this->currentPowerUp == GLPlayer::POWER_HIGH)
+	{
+		Mix_PlayChannel(1, sound[HIGH_SOUND], 0);
+		this->m_projectileHandler->ChangeStateTo(ProjectilePowerUpState::REGULAR);
+	}
 	else
 		this->m_projectileHandler->ChangeStateTo(ProjectilePowerUpState::REGULAR);
 }

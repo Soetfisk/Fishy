@@ -92,6 +92,7 @@ private:
 		DASH_SOUND,
 		MOVE_SOUND,
 		EAT_SOUND,
+		HIGH_SOUND,
 
 		NUM_SOUND
 	};
