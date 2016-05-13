@@ -123,6 +123,7 @@ void Scene::Init()
 	this->stoneHandler2->SetRandomRotation(0.3f);
 	this->stoneHandler2->LoadSeaWeed();
 
+	this->collisionHandler.AddModel(this->stoneHandler->GetMeshes());
 
 	particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
 	
@@ -191,14 +192,13 @@ void Scene::LoadModels()
 	//staticMeshes.at(0)->GetTransform().SetPos(glm::vec3(3, 3, 3));
 	//staticMeshes.at(0)->GetTransform().SetScale(glm::vec3(1, -1, 1));
 	
-	this->staticMeshes.push_back(new GLModel(&FSH_Loader, BlueTang));
 	//this->staticMeshes.at(1)->GetTransform().SetScale(glm::vec3(2));
 	//this->staticMeshes.at(1)->SetBoundingBox(glm::vec3(0), glm::vec3(1.25));
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
 
 	this->collisionHandler.AddNPC(NPCs);
 	this->collisionHandler.AddPlayer(players);
-	this->collisionHandler.AddModel(models);
+	//this->collisionHandler.AddModel(models);
 	this->collisionHandler.InitiatePowerUpHandler();
 }
 
@@ -471,10 +471,6 @@ void Scene::Update(float& deltaTime) {
 	for (size_t i = 0; i < this->players.size(); i++) {
 		this->players.at(i)->Update(this->deltaTime);
 		this->players.at(i)->UpdateParticles(this->deltaTime);
-		if (this->players.at(i)->GetBoundingBox().containsAABB(staticMeshes.at(1)->GetBoundingBox()))
-		{
-			std::cout << "HIT" << std::endl;
-		}
 	}
 	setDebugTimer(debug);
 	printDebugTimer(debug, "players");

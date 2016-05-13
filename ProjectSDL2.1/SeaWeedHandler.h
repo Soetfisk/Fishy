@@ -40,7 +40,7 @@ public:
 	void SetScale(float min, float max);
 	void SetOffset(int x, int z);
 	void Reset();
-	
+	std::vector<GLModel*> GetMeshes();
 	void SetRandomRotation(float radian);
 	//blendshape
 	void SetIsBlendShape(bool TF) { this->isBlendShape = TF; };
