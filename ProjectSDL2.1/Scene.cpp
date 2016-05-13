@@ -94,7 +94,6 @@ void Scene::Init()
 	this->seaWeedHandler->LoadSeaWeed();
 
 	this->TallSeaWeedHandler = new SeaWeedHandler(&FSH_Loader, SeaWeedTall);
-	this->TallSeaWeedHandler->IsRotateEnabled(false);
 	this->TallSeaWeedHandler->SetIsBlendShape(true);
 	this->TallSeaWeedHandler->SetXLimit(-110, 110);
 	this->TallSeaWeedHandler->SetZLimit(-70, 70);
