@@ -27,6 +27,7 @@ public:
 	void SetVelocity(glm::vec3 velocity);
 	void Shoot(glm::vec3 startPos, glm::vec3 forward, glm::vec3 velocity, glm::vec3 rot);
 	void SetScale(float scale);
+	void setMaxActiveTime(int Time); //Not used
 	void SetSpeed(float& speed);		// 
 	void SetStrength(float strength);
 	void Activate();					// Activates the projectile 
@@ -40,7 +41,7 @@ private:
 	const float MIN_PROJECTILE_SPEED = 30;
 	const float MIN_SPEED = 0.5f;
 
-	int maxActiveTime;				// The max distance the projecitle is allowed to travel
+	int maxActiveTime, MaxActiveTimeUnaltered;				// The max distance the projecitle is allowed to travel
 	float timeActive;				// Keeping track of how long the projectile has traveled 
 	float speed;					// The speed the bullet travels at
 	float strength;
