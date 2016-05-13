@@ -189,6 +189,9 @@
     <ClInclude Include="RoundCounter.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="EnumShaderType.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="blueFilter.glsl">
