@@ -35,6 +35,7 @@ void NpcPowerUpHandler::MakePowerUpFish()
 NpcPowerUpHandler::NpcPowerUpHandler(std::vector<GLNPC*> NPCList)
 {
 	this->NPCs = NPCList;
+	amountOfPowerUpFishes = 6;
 	initiatePowerFishes();
 }
 
