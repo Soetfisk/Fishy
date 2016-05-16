@@ -30,7 +30,7 @@ public:
 	};
 
 protected:
-	FSHData::material* powerUpMaterial;
+	FSHData::material* originalMaterial;
 	unsigned int currentState;
 	float * blendWeights;
 	float animationFactors[NUM_ANIMATION];
@@ -38,6 +38,9 @@ protected:
 	ParticleEmitter *npc_emitter;
 	const int updateFrames = 3;
 	int timeSinceUpdate;
+	float timeUntilRespawn;
+	void RespawnCountdown(float deltaTime);
+
 	bool isPowerUp = false;
 
 	const int DEADZONEX = 124, DEADZONEY = 48, DEADZONEZ = 84;
@@ -46,7 +49,7 @@ public:
 	int GetCurrentState();
 	void SetCurrentState();
 	bool& GetIsPowerUp() { return isPowerUp; };
-	void makePowerUp();
+	void makePowerUp(FSHData::material* powerMaterial);
 
 	GLNPC(FishBox* FSH_Loader, unsigned int modelID);
 	~GLNPC();
@@ -64,6 +67,7 @@ public:
 	void UpdateParticles(float &deltaTime);
 	void DrawParticles(GLShader* shader);
 	void AddEmitter(ParticleEmitter* emitter);
+	
 
 	
 };
