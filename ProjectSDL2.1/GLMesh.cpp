@@ -47,7 +47,12 @@ GLMesh::~GLMesh()
 
 bool GLMesh::Draw(GLShader& shader, GLTransform& modelTrans)
 {
-	trans =  modelTrans.GetModel() * m_transfrom.GetModel();
+	if (this->test != modelTrans.GetModel())
+	{
+		this->test = modelTrans.GetModel();
+		trans = modelTrans.GetModel() * m_transfrom.GetModel();
+	}
+	
 	glUniformMatrix4fv(shader.GetUnifromLocation("TransformMatrix"), 1, GL_FALSE, glm::value_ptr(trans));
 
 	
