@@ -12,14 +12,22 @@ public:
 	GUI();
 	GUI(std::string& fontName);
 	virtual ~GUI();
+	
 	void RenderText(GLShader& shader, std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
+	void TestRenderText(GLShader& shader, std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
 	void OptimizedRenderText(GLShader& shader, const std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
+	
+	void RenderAtlasTexture(GLShader& shader);
+
+
 	GLfloat GetTextLenght(std::string& text, GLfloat& scale);
 	GLfloat GetTextHeight(std::string& text, GLfloat& scale);
 
 private:
 	const std::string DEFAULT_FONT = "Starjedi.ttf";
 
+
+	// TEST
 	struct Point
 	{
 		GLfloat x;
@@ -44,6 +52,8 @@ private:
 	int atlasWidth, atlasHeight;
 	GLuint atlasTexture;
 
+
+	// WORKING
 	struct Character
 	{
 		GLuint textureID;	// ID handle of the glyph texture
@@ -62,5 +72,6 @@ private:
 	void InitCharacters(std::string fontName);
 	void InitTextureAtlas(std::string fontName);
 	void InitBuffers();
+	void InitTestBuffers();
 };
 

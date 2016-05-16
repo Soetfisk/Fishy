@@ -187,7 +187,7 @@ void Scene::LoadModels()
 		this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));
 		this->players.at(i)->SetBoundingBox(glm::vec3(0), glm::vec3(1));
 	}
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 20; i++) {
 		this->NPCs.push_back(new GLNPC_GoldFish(&FSH_Loader, GoldFish));
 		this->NPCs.at(i)->SetBoundingBox(glm::vec3(0), glm::vec3(1));
 	}
@@ -297,15 +297,9 @@ void Scene::CheckWinner()
 		if (this->players.at(0)->GetTotalPoints() == this->players.at(1)->GetTotalPoints())
 			this->guih->Tie();
 		else if (this->players.at(0)->GetTotalPoints() > this->players.at(1)->GetTotalPoints())
-		{
 			this->guih->Player1Won();
-			this->rc->PlayerWon(RoundCounter::RoundPlayers::PLAYER1);
-		}
 		else
-		{
 			this->guih->Player2Won();
-			this->rc->PlayerWon(RoundCounter::RoundPlayers::PLAYER2);
-		}
 	}
 
 	// if we have a winner
@@ -346,7 +340,6 @@ void Scene::setDebugTimer(bool debug)
 		this->prevDTime = currentDTime;
 		this->combinedDtime += dTime;
 	}
-	
 }
 
 
@@ -376,7 +369,6 @@ Scene::Scene(GLOBAL_GameState* gameState) {
 	Init();
 
 	guih = new GLGUIHandler();
-	rc = new RoundCounter();
 	this->gameState = gameState;
 }
 
@@ -386,7 +378,6 @@ Scene::Scene(GUI* textToScreen, GLOBAL_GameState* gameState)
 	Init();
 
 	guih = new GLGUIHandler(shaders[TEXT], textToScreen);
-	rc = new RoundCounter(shaders[TEXT], textToScreen);
 	this->gameState = gameState;
 }
 
@@ -421,7 +412,6 @@ Scene::~Scene() {
 		delete staticMeshes.at(i);
 	}
 	delete guih;
-	delete rc;
 	delete particleHandler;
 	delete seaWeedHandler;
 	delete TallSeaWeedHandler;
@@ -506,7 +496,6 @@ void Scene::DrawScene() {
 	printDebugTimer(debug, "between draw and update");
 
 	guih->Draw();
-	rc->Draw();
 	setDebugTimer(debug);
 	printDebugTimer(debug, "gui");
 
@@ -725,6 +714,7 @@ void Scene::ResetScene()
 	{
 		players.at(i)->ResetPlayer();
 	}
+	this->collisionHandler.resetPowerUpHandler();
 	this->players.at(1)->GetTransform().SetPos(glm::vec3(100, 0, 0));
 	this->players.at(1)->GetTransform().SetRot(glm::vec3(0, -1.58, 0));
 	this->players.at(0)->GetTransform().SetPos(glm::vec3(-100, 0, 0));

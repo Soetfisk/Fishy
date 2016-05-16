@@ -19,6 +19,12 @@ public:
 	void HandleEvenet(SDL_Event* e);
 
 private:
+	enum MenuState
+	{
+		MENU,
+		SHOW_CONTROLS,
+		NUM_MENU_STATES
+	};
 	enum MenuButtons
 	{
 		TITLE,
@@ -46,8 +52,14 @@ private:
 	GUI* gui;
 	glm::mat4 projection;
 	MenuButtons selectedBttn;
+	MenuState currentMState;
 	GLOBAL_GameState* gameState;
 	bool deleteShader, deleteGUI;
+
+	GLShader* textureToQuadShader;
+	GLuint quadVAO, quadVBO;
+	GLuint cTextureID;
+	FSHData::texture* controlsTexture;
 
 	GLfloat textPos[NUM_MENU_BUTTONS][2];
 	GLfloat textScale[NUM_MENU_BUTTONS];
@@ -60,5 +72,7 @@ private:
 	void HandleSpace();
 	void FixSelected();
 	void InitModels();
+
+	void RenderQuad();
 };
 

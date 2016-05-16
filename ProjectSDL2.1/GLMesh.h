@@ -44,5 +44,6 @@ protected:
 	Material m_material;
 	FSHData::texture * texture;
 	glm::mat4 trans;
+	glm::mat4 test;
 };
 

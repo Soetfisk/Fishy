@@ -68,6 +68,10 @@ Menu::~Menu()
 	delete model;
 	delete aquarium;
 	delete camera;
+	FSH_Loader.clean();
+	delete controlsTexture;
+	delete textureToQuadShader;
+	glDeleteTextures(1, &cTextureID);
 }
 
 void Menu::Update(float dt)
@@ -79,17 +83,27 @@ void Menu::Update(float dt)
 void Menu::Draw()
 {
 	glViewport(0, 0, window::WIDTH, window::HEIGHT);
+	
 	modelShader->Bind();
 	modelShader->Update(*camera);
 	model->Draw(*modelShader);
 	aquarium->Draw(*modelShader);
 
-	projection = glm::ortho(0.0f, static_cast<GLfloat>(window::WIDTH), 0.0f, static_cast<GLfloat>(window::HEIGHT));
-	menuShader->Bind();
-	glUniformMatrix4fv(menuShader->GetUnifromLocation("projection"), 1, GL_FALSE, glm::value_ptr(projection));
-	for (int i = 0; i < NUM_MENU_BUTTONS; i++)
+	if (currentMState == MENU)
 	{
-		gui->RenderText(*menuShader, text[i], textPos[i][0], textPos[i][1], textScale[i], textColor[i]);
+		projection = glm::ortho(0.0f, static_cast<GLfloat>(window::WIDTH), 0.0f, static_cast<GLfloat>(window::HEIGHT));
+		menuShader->Bind();
+		glUniformMatrix4fv(menuShader->GetUnifromLocation("projection"), 1, GL_FALSE, glm::value_ptr(projection));
+		for (int i = 0; i < NUM_MENU_BUTTONS; i++)
+			gui->RenderText(*menuShader, text[i], textPos[i][0], textPos[i][1], textScale[i], textColor[i]);
+	}
+	else
+	{
+		textureToQuadShader->Bind();
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, cTextureID);
+		RenderQuad();
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 }
 
@@ -97,6 +111,8 @@ void Menu::HandleEvenet(SDL_Event * e)
 {
 	if (e->type == SDL_KEYDOWN)
 	{
+		if (currentMState == SHOW_CONTROLS)
+			currentMState = MENU;
 		switch (e->key.keysym.scancode)
 		{
 		case SDL_SCANCODE_UP:
@@ -125,6 +141,18 @@ void Menu::InitMenuTextureInfo()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDisable(GL_BLEND);
+
+	quadVAO = 0;
+	textureToQuadShader = new GLShader("pass");
+	controlsTexture = FSH_Loader.loadTexure("./res/Controls.png");
+	glGenTextures(1, &cTextureID);
+	glBindTexture(GL_TEXTURE_2D, cTextureID);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, controlsTexture->width, controlsTexture->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, controlsTexture->textureData);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glUniform1i(textureToQuadShader->GetUnifromLocation("texture"), 0);
+
+	currentMState = MENU;
 
 	float tempY = window::QUARTER_HEIGHT;
 	float extraOffset = 20;
@@ -239,7 +267,8 @@ void Menu::HandleSpace()
 		*gameState = GLOBAL_GameState::GAME;
 		break;
 	case CONTROLS:
-		*gameState = GLOBAL_GameState::CONTROLS;
+		currentMState = SHOW_CONTROLS;
+		//*gameState = GLOBAL_GameState::CONTROLS;
 		break;
 	case EXIT:
 		*gameState = GLOBAL_GameState::EXIT;
@@ -274,3 +303,29 @@ void Menu::InitModels()
 	camera = new GLCamera(glm::vec3(0), 70, window::WIDTH/window::HEIGHT, 0.01f, 1000.0f);
 }
 
+void Menu::RenderQuad()
+{
+	if (quadVAO == 0) //init
+	{
+		GLfloat quadVertices[] = {
+			// Positions        // Texture Coords
+			-1.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+			-1.0f, -1.0f, 0.0f, 0.0f, 1.0f,
+			1.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+			1.0f, -1.0f, 0.0f, 1.0f, 1.0f,
+		};
+		// Setup plane VAO
+		glGenVertexArrays(1, &quadVAO);
+		glGenBuffers(1, &quadVBO);
+		glBindVertexArray(quadVAO);
+		glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	}
+	glBindVertexArray(quadVAO);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	glBindVertexArray(0);
+}
