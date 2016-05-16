@@ -16,9 +16,15 @@ int GLNPC::GetCurrentState()
 	return currentState;
 }
 
-void GLNPC::SetCurrentState()
+void GLNPC::SetCurrentState(unsigned int state)
 {
-	this->currentState = NPC_STANDSTILL;
+	this->currentState = state;
+}
+
+void GLNPC::SetBeingEatenState(GLPlayer * InteractingPlayer)
+{
+	this->InteractingPlayer = InteractingPlayer;
+	currentState = NPC_BEINGEATEN;
 }
 
 void GLNPC::makePowerUp(FSHData::material* powerMaterial)

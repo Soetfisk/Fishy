@@ -1,6 +1,7 @@
 #pragma once
 
-#include "GLModel.h" 
+#include "GLModel.h"
+#include "GLPlayer.h"
 #include "RNG.h"
 //#include "GLNPC_PowerUpHandler.h"
 
@@ -30,6 +31,8 @@ public:
 	};
 
 protected:
+	GLPlayer* InteractingPlayer;
+
 	FSHData::material* originalMaterial;
 	unsigned int currentState;
 	float * blendWeights;
@@ -49,10 +52,11 @@ protected:
 public:
 
 	int GetCurrentState();
-	void SetCurrentState();
+	void SetCurrentState(unsigned int state); //depricated use at own risk
+	void SetBeingEatenState(GLPlayer* InteractingPlayer);
 	bool& GetIsPowerUp() { return isPowerUp; };
 	void makePowerUp(FSHData::material* powerMaterial);
-
+	float GetFishSize() {return this->fishSize; };
 	GLNPC(FishBox* FSH_Loader, unsigned int modelID);
 	~GLNPC();
 	virtual void NPCUpdate(float deltaTime) = 0;

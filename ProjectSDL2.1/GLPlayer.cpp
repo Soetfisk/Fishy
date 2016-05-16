@@ -566,7 +566,7 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 
 	if (this->GetTransform().GetScale().x < size)
 	{
-		this->transform->SetScale(this->transform->GetScale() + (deltaTime / 4));
+		this->transform->SetScale(this->transform->GetScale() + (deltaTime / 20));
 	}
 
 	//camera update
