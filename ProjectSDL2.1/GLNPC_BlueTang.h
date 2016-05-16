@@ -10,7 +10,7 @@ private:
 	
 	float fleeingTimer, TimeUntilChange, forwardSpeed;
 	glm::vec3 rotationChange;
-	float FishSpeedMultiplier=1.5;
+	
 
 
 public:
@@ -24,6 +24,7 @@ public:
 	void initiateFleeingState(glm::vec3 playerForwardVector);
 	void checkboarderCollision();
 	void ResetFish();
+	void ResetFish(float size);
 
 	
 

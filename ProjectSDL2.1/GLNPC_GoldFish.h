@@ -20,5 +20,6 @@ public:
 	void initiateFleeingState(glm::vec3 playerForwardVector);
 	void checkboarderCollision();
 	void ResetFish();
+	void ResetFish(float size);
 
 };
