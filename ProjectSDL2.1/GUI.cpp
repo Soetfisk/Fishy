@@ -3,8 +3,8 @@
 
 GUI::GUI()
 {
-	InitTextureAtlas(DEFAULT_FONT);
-	//InitCharacters(DEFAULT_FONT);
+	//InitTextureAtlas(DEFAULT_FONT);
+	InitCharacters(DEFAULT_FONT);
 	InitBuffers();
 
 	//InitTestBuffers();
