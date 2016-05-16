@@ -16,6 +16,11 @@ GLNPC_BlueTang::GLNPC_BlueTang(FishBox * FSH_Loader, unsigned int modelID) : GLN
 
 void GLNPC_BlueTang::NPCUpdate(float deltaTime)
 {
+
+	if (currentState == NPC_INACTIVE)
+	{
+		this->RespawnCountdown(deltaTime);
+	}
 	if (currentState != NPC_INACTIVE)
 	{
 		TimeUntilChange -= deltaTime;

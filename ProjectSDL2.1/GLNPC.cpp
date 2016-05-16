@@ -1,5 +1,16 @@
 #include "GLNPC.h"
 
+void GLNPC::RespawnCountdown(float deltaTime)
+{
+	timeUntilRespawn -= deltaTime;
+	if (timeUntilRespawn < 0)
+	{
+		timeUntilRespawn = 10.0f;
+		this->ResetFish();
+		printf("reseted");
+	}
+}
+
 int GLNPC::GetCurrentState()
 {
 	return currentState;
@@ -29,6 +40,7 @@ GLNPC::GLNPC(FishBox * FSH_Loader, unsigned int modelID) : GLModel(FSH_Loader,mo
 	}
 	this->npc_emitter = nullptr;
 	this->timeSinceUpdate = 0;
+	this->timeUntilRespawn = 10.0f;
 }
 
 void GLNPC::UpdateParticles(float &deltaTime) {

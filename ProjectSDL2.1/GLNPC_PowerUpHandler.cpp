@@ -11,7 +11,11 @@ void NpcPowerUpHandler::initiatePowerFishes()
 }
 
 void NpcPowerUpHandler::AsssignStartPowerupFishes() {
-	assert(amountOfPowerUpFishes < NPCs.size());
+	if(amountOfPowerUpFishes > NPCs.size())
+	{
+		amountOfPowerUpFishes = NPCs.size();
+		
+	}
 	for (size_t i = 0; i < amountOfPowerUpFishes; i++)
 	{
 		MakePowerUpFish();
@@ -37,7 +41,7 @@ void NpcPowerUpHandler::MakePowerUpFish()
 NpcPowerUpHandler::NpcPowerUpHandler(std::vector<GLNPC*> NPCList)
 {
 	this->NPCs = NPCList;
-	amountOfPowerUpFishes = 6;
+	amountOfPowerUpFishes = 4;
 	initiatePowerFishes();
 
 	this->powerUpMaterial = new FSHData::material;

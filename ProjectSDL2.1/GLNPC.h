@@ -38,6 +38,9 @@ protected:
 	ParticleEmitter *npc_emitter;
 	const int updateFrames = 3;
 	int timeSinceUpdate;
+	float timeUntilRespawn;
+	void RespawnCountdown(float deltaTime);
+
 	bool isPowerUp = false;
 
 	const int DEADZONEX = 124, DEADZONEY = 48, DEADZONEZ = 84;
