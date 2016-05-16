@@ -96,6 +96,7 @@ public:
 	void updatePosition(glm::vec4 pos);
 	void updateDirection(glm::vec4 dir);
 	void updateSpawnRate(float rate);
+	void updateScale(const float &scale);
 
 	void updateEmitterData(glm::vec4& pos, glm::vec4& dir, glm::vec4& right, glm::vec4& up, float rate, float scale);
 	void updateEmitterData(glm::vec4& pos, glm::vec4& dir, glm::vec4& right, glm::vec4& up, float scale);

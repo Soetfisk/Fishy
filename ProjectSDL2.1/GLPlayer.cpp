@@ -757,7 +757,7 @@ void GLPlayer::DrawParticles(GLShader* shader) {
 		this->player_PartcileEmitter->Draw(shader);
 
 	//Draw Projectiles
-	//this->m_projectileHandler->drawParticles(shader);
+	this->m_projectileHandler->drawParticles(shader);
 	
 }
 
@@ -781,7 +781,7 @@ void GLPlayer::UpdateParticles(float &deltaTime) {
 		//this->m_projectileHandler->updateParticles(deltaTime);
 	}
 
-	//this->m_projectileHandler->updateParticles(deltaTime);
+	this->m_projectileHandler->updateParticles(deltaTime);
 
 	
 }

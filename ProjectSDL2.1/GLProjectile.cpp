@@ -87,6 +87,7 @@ void GLProjectile::TestUpdate(float& dt)
 		}
 		else
 			transform->m_pos += forward * speed * dt;	// Move Projectile forward
+
 		break;
 	case INACTIVE:
 		break;
@@ -165,8 +166,14 @@ bool GLProjectile::IsActive()
 }
 
 void GLProjectile::addParticleEmitter(ParticleEmitter* emitter) {
-	if(this->projectileEmitter == nullptr)
+	if (this->projectileEmitter == nullptr) {
 		this->projectileEmitter = emitter;
+		
+	}
+
+	this->projectileEmitter->updateEmitterData(glm::vec4(this->transform->GetPos(), 1),
+		glm::vec4(this->forward, 0), glm::vec4(this->GetRight(), 0), glm::vec4(this->GetUp(), 0), this->transform->GetScale().z);
+		
 	
 }
 
@@ -175,6 +182,9 @@ void GLProjectile::updateParticleEmitter(float& deltaTime) {
 	{
 	case ACTIVE:
 		this->projectileEmitter->UpdateEmitter(deltaTime);
+
+		this->projectileEmitter->updatePosition(glm::vec4(this->transform->GetPos(), 1));
+		this->projectileEmitter->updateScale(this->transform->GetScale().z);
 		break;
 	}
 	
@@ -190,5 +200,5 @@ void GLProjectile::drawParticles(GLShader* shader) {
 }
 
 bool GLProjectile::hasParticleEmitter() {
-	return this->projectileEmitter == nullptr;
+	return this->projectileEmitter != nullptr;
 }
