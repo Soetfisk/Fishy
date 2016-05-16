@@ -31,7 +31,7 @@ public:
 	};
 
 protected:
-	GLPlayer* InteractingPlayer;
+	GLPlayer* InteractingPlayer=nullptr;
 
 	FSHData::material* originalMaterial;
 	unsigned int currentState;

@@ -56,6 +56,11 @@ void GLNPC_BlueTang::NPCUpdate(float deltaTime)
 		}
 		else if (currentState == NPC_BEINGEATEN)
 		{
+			if(this->InteractingPlayer!=nullptr)
+			{
+				this->transform->m_pos = InteractingPlayer->GetTransform().GetPos();
+			}
+			
 			glm::vec3 reduce = this->transform->GetScale() - deltaTime / 2;
 			this->transform->SetScale(reduce);
 			if (GetTransform().GetScale().y < 0.2)
