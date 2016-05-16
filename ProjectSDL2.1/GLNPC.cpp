@@ -7,7 +7,6 @@ void GLNPC::RespawnCountdown(float deltaTime)
 	{
 		timeUntilRespawn = 10.0f;
 		this->ResetFish();
-		printf("reseted");
 	}
 }
 
