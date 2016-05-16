@@ -37,7 +37,9 @@ protected:
 
 	ParticleEmitter *npc_emitter;
 	const int updateFrames = 3;
-	int timeSinceUpdate;
+	int timeSinceUpdate; 
+	float fishSize=1.0f;
+	float FishSpeedMultiplier;
 	float timeUntilRespawn;
 	void RespawnCountdown(float deltaTime);
 
@@ -60,6 +62,7 @@ public:
 	virtual void initiateFleeingState(glm::vec3 playerForwardVector) = 0;
 
 	virtual void ResetFish() = 0;
+	virtual void ResetFish(float scale) = 0;
 
 	float * GetBlendWeights() { return blendWeights; }
 	unsigned int GetBlendShapeCount() { return NUM_ANIMATION; }

@@ -94,7 +94,7 @@ void Scene::Init()
 	this->currentPowerUp = GLPlayer::POWER_NEUTRAL;
 	// Ending game options
 	this->endTimer = 300;
-	this->endScore = 1000;
+	this->endScore = 2000;
 
 	this->seaWeedHandler = new SeaWeedHandler(&FSH_Loader, SeaWeedLeaf);
 	this->seaWeedHandler->SetXLimit(-110, 110);
