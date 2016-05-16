@@ -297,15 +297,9 @@ void Scene::CheckWinner()
 		if (this->players.at(0)->GetTotalPoints() == this->players.at(1)->GetTotalPoints())
 			this->guih->Tie();
 		else if (this->players.at(0)->GetTotalPoints() > this->players.at(1)->GetTotalPoints())
-		{
 			this->guih->Player1Won();
-			this->rc->PlayerWon(RoundCounter::RoundPlayers::PLAYER1);
-		}
 		else
-		{
 			this->guih->Player2Won();
-			this->rc->PlayerWon(RoundCounter::RoundPlayers::PLAYER2);
-		}
 	}
 
 	// if we have a winner
@@ -346,7 +340,6 @@ void Scene::setDebugTimer(bool debug)
 		this->prevDTime = currentDTime;
 		this->combinedDtime += dTime;
 	}
-	
 }
 
 
@@ -376,7 +369,6 @@ Scene::Scene(GLOBAL_GameState* gameState) {
 	Init();
 
 	guih = new GLGUIHandler();
-	rc = new RoundCounter();
 	this->gameState = gameState;
 }
 
@@ -386,7 +378,6 @@ Scene::Scene(GUI* textToScreen, GLOBAL_GameState* gameState)
 	Init();
 
 	guih = new GLGUIHandler(shaders[TEXT], textToScreen);
-	rc = new RoundCounter(shaders[TEXT], textToScreen);
 	this->gameState = gameState;
 }
 
@@ -421,7 +412,6 @@ Scene::~Scene() {
 		delete staticMeshes.at(i);
 	}
 	delete guih;
-	delete rc;
 	delete particleHandler;
 	delete seaWeedHandler;
 	delete TallSeaWeedHandler;
@@ -506,7 +496,6 @@ void Scene::DrawScene() {
 	printDebugTimer(debug, "between draw and update");
 
 	guih->Draw();
-	rc->Draw();
 	setDebugTimer(debug);
 	printDebugTimer(debug, "gui");
 

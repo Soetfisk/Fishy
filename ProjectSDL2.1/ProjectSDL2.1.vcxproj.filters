@@ -76,10 +76,16 @@
     <ClCompile Include="ParticleHandler.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="RoundCounter.cpp">
+    <ClCompile Include="SeaWeedHandler.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="SeaWeedHandler.cpp">
+    <ClCompile Include="GLNPC_PowerUpHandler.cpp">
+      <Filter>Source\Models\NPCs</Filter>
+    </ClCompile>
+    <ClCompile Include="SeaWeedLeafs.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecialStaticMesh.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="GLNPC_PowerUpHandler.cpp">
@@ -189,18 +195,19 @@
     <ClInclude Include="SeaWeedHandler.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="RoundCounter.h">
-      <Filter>Source</Filter>
+    <ClInclude Include="GLNPC_PowerUpHandler.h">
+      <Filter>Header\Models\NPCs</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecialStaticMeshes.h">
+      <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="EnumShaderType.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="GLNPC_PowerUpHandler.h">
-      <Filter>Header\Models\NPCs</Filter>
-    </ClInclude>
     <ClInclude Include="SeaWeedLeafs.h">
       <Filter>Header</Filter>
     </ClInclude>
+
     <ClInclude Include="SpecialStaticMesh.h">
       <Filter>Header</Filter>
     </ClInclude>

@@ -20,7 +20,6 @@
 #include "ParticleHandler.h"
 #include <time.h>
 #include <SDL2\SDL_mixer.h>
-#include "RoundCounter.h"
 #include "SeaWeedHandler.h"
 #include "EnumShaderType.h"
 #define mSTATIC *shaders[MODELS]
@@ -106,7 +105,6 @@ private:
 	GUI* guiTest;
 	glm::mat4 projection;
 	GLGUIHandler* guih;
-	RoundCounter* rc;
 	SeaWeedHandler* seaWeedHandler;
 	SeaWeedHandler* TallSeaWeedHandler;
 	SeaWeedHandler* stoneHandler;
