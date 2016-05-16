@@ -74,6 +74,8 @@ private:
 		NUM_MUSIC
 	};
 
+	debugger debugger;
+
 	Mix_Music *music[NUM_MUSIC];
 	//todo implement
 	//std::vector<Model> models;
@@ -151,9 +153,6 @@ private:
 	void AddScore();
 
 	void DrawParticles(GLCamera& playerCamera);
-	void setDebugTimer(bool debug);
-	void printDebugTimer(bool debug, std::string name);
-	void PrintAndResetCombinedDTimer(bool debug);
 
 public:
 	Scene(GLOBAL_GameState* gameState);

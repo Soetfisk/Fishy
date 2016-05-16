@@ -14,7 +14,15 @@ public:
 		FSHData::texture * texture, 
 		FSHData::blendShape ** blendShapes
 		);
-
+	GLMeshBS
+		(
+			FSHData::mesh * meshData,
+			FSHData::vertexData * vertices,
+			unsigned int * indices,
+			FSHData::material* material,
+			GLuint textureID,
+			FSHData::blendShape ** blendShapes
+			);
 private:
 	enum
 	{
