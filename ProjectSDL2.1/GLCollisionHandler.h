@@ -26,6 +26,7 @@ public:
 	void RemoveModel(GLModel* model);
 
 	void InitiatePowerUpHandler();
+	void resetPowerUpHandler();
 
 	void AddParticleHandlerReference(ParticleHandler* pHandlerRef);
 private:

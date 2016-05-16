@@ -2,6 +2,8 @@
 
 void NpcPowerUpHandler::initiatePowerFishes()
 {
+	AvailableFishes.clear();
+	PowerNPCs.clear();
 	for (unsigned int FishIndex = 0; FishIndex < NPCs.size(); FishIndex++)
 	{
 		AvailableFishes.push_back(FishIndex);

@@ -201,4 +201,11 @@ void GLNPC_BlueTang::ResetFish()
 	this->isPowerUp = false;
 	this->meshes.at(0)->SetMaterial(originalMaterial);
 
+	if (this->npc_emitter != nullptr)
+	{
+		delete npc_emitter;
+		this->npc_emitter = nullptr;
+	}
+
+
 }
