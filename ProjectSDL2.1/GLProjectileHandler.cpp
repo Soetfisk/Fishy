@@ -87,7 +87,11 @@ void GLProjectileHandler::Update(float& dt)
 {
 	GLProjectile* temp = nullptr;
 	for (size_t i = 0; i < projectiles.size(); i++)
+	{
 		projectiles.at(i)->TestUpdate(dt);
+		projectiles.at(i)->UpdateModel();
+	}
+		
 	if (cooldown)
 	{
 		cooldownCounter += dt;

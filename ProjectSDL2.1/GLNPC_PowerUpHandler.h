@@ -8,10 +8,11 @@ class NpcPowerUpHandler
 
 private:
 
+	GLMesh::Material PowerUpMaterial;
 	std::vector<unsigned int> AvailableFishes; //vector of potential powerUpFishes
 	std::vector<GLNPC*> NPCs; 
 
-	unsigned int amountOfPowerUpFishes = 10;
+	unsigned int amountOfPowerUpFishes;
 	void initiatePowerFishes();
 	void MakePowerUpFish();
 	ParticleHandler* pHandlerRef;
@@ -19,6 +20,7 @@ private:
 public:
 	NpcPowerUpHandler(std::vector<GLNPC*>);
 	~NpcPowerUpHandler();
+
 
 	std::vector<GLNPC*> PowerNPCs; //Vector of npc with powerups
 	void RemovePowerUpFish(GLNPC*, unsigned int Fishindex);

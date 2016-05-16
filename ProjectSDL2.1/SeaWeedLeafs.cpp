@@ -47,14 +47,6 @@ SeaWeedLeafs::~SeaWeedLeafs()
 
 void SeaWeedLeafs::Draw(GLShader & shader)
 {
-	for (int i = 0; i < meshes.size(); i++)
-	{
-		glUniform3fv(shader.GetUnifromLocation("diffuse"), 1, glm::value_ptr(glm::vec3(meshes[i]->GetMaterial()->diffuse[0], meshes[i]->GetMaterial()->diffuse[1], meshes[i]->GetMaterial()->diffuse[2])));
-		glUniform3fv(shader.GetUnifromLocation("ambient"), 1, glm::value_ptr(glm::vec3(meshes[i]->GetMaterial()->ambient[0], meshes[i]->GetMaterial()->ambient[1], meshes[i]->GetMaterial()->ambient[2])));
-		glUniform3fv(shader.GetUnifromLocation("specular"), 1, glm::value_ptr(glm::vec3(meshes[i]->GetMaterial()->spec[0], meshes[i]->GetMaterial()->spec[1], meshes[i]->GetMaterial()->spec[2])));
-		glUniform1f(shader.GetUnifromLocation("shininess"), meshes[i]->GetMaterial()->shinyness);
-		meshes[i]->Draw(shader, *transform);
-	}
 
 	for (size_t i = 0; i < Leafs.size(); i++)
 	{
@@ -67,13 +59,15 @@ void SeaWeedLeafs::LoadMesh()
 	int randScale;
 	for (size_t i = 0; i < this->leafsAmount; i++)
 	{
+
 		randScale = RNG::range(this->scaleMin, this->scaleMax);
 		this->Leafs.push_back(new GLModel(this->FSH_Loader, this->modelID));
 
-		glm::vec3 randomRotationVector = glm::vec3(RNG::range(-0.8f, 0.8f), RNG::range(0.0f, 3.14f), RNG::range(-0.8f, 0.8f));
+		glm::vec3 randomRotationVector = glm::vec3(RNG::range(-this->rotation, this->rotation), RNG::range(0.0f, 3.14f), RNG::range(-this->rotation, this->rotation));
 		Leafs.at(i)->GetTransform().SetRot(randomRotationVector);
 		Leafs.at(i)->GetTransform().SetScale(glm::vec3(randScale));
 		Leafs.at(i)->GetTransform().SetPos(glm::vec3(posX + this->GetRandOffsetX(), posY, posZ + this->getRandOffsetZ()));
+		Leafs.at(i)->UpdateModel();
 
 	}
 }
@@ -108,10 +102,17 @@ void SeaWeedLeafs::Reset()
 	{
 		randScale = RNG::range(this->scaleMin, this->scaleMax);
 
-		glm::vec3 randomRotationVector = glm::vec3(RNG::range(-0.8f, 0.8f), RNG::range(0.0f, 3.14f), RNG::range(-0.8f, 0.8f));
+		glm::vec3 randomRotationVector = glm::vec3(RNG::range(-this->rotation, this->rotation), RNG::range(0.0f, 3.14f), RNG::range(-this->rotation, this->rotation));
 		Leafs.at(i)->GetTransform().SetRot(randomRotationVector);
 		Leafs.at(i)->GetTransform().SetScale(glm::vec3(randScale));
 		Leafs.at(i)->GetTransform().SetPos(glm::vec3(posX + this->GetRandOffsetX(), posY, posZ + this->getRandOffsetZ()));
+		Leafs.at(i)->UpdateModel();
 
 	}
+}
+
+// The random rotation in radians
+void SeaWeedLeafs::SetRotation(float X_Z)
+{
+	this->rotation = X_Z;
 }

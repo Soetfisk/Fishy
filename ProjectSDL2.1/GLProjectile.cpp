@@ -23,6 +23,7 @@ GLProjectile::GLProjectile(int maxDist) : GLModel()
 GLProjectile::GLProjectile(FishBox* FSH_Loader, char* filePath, int projectileActiveTime, float projectileSpeed) : GLModel(FSH_Loader, filePath)
 {
 	maxActiveTime = projectileActiveTime;
+	MaxActiveTimeUnaltered = projectileActiveTime;
 	timeActive = 0.0f;
 	this->speed = projectileSpeed;
 	strength = 10.0f;
@@ -35,6 +36,7 @@ GLProjectile::GLProjectile(FishBox* FSH_Loader, char* filePath, int projectileAc
 GLProjectile::GLProjectile(FishBox* FSH_Loader, unsigned int modelID, int projectileActiveTime, float projectileSpeed, float projectileStrength, float projectileSize) : GLModel(FSH_Loader, modelID)
 {
 	maxActiveTime = projectileActiveTime;
+	MaxActiveTimeUnaltered = projectileActiveTime;
 	timeActive = 0.0f;
 	this->speed = projectileSpeed;
 	strength = projectileStrength;
@@ -71,8 +73,11 @@ void GLProjectile::TestUpdate(float& dt)
 	{
 	case ACTIVE:
 		timeActive += dt;						
-		if (timeActive >= maxActiveTime)			// Check if maxActiveTime was reached
+		if (timeActive >= maxActiveTime)
+		{			// Check if maxActiveTime was reached
 			currentState = INACTIVE;
+			//printf("MaxTimePassed\n");
+		}
 		else
 			transform->m_pos += forward * speed * dt;	// Move Projectile forward
 		break;
@@ -101,6 +106,7 @@ void GLProjectile::SetVelocity(glm::vec3 velocity)
 
 void GLProjectile::Shoot(glm::vec3 startPos, glm::vec3 forward, glm::vec3 velocity, glm::vec3 rot)
 {
+	this->maxActiveTime = MaxActiveTimeUnaltered * (this->GetTransform().GetScale().x);
 	transform->m_pos = startPos;
 	transform->m_rot = rot;
 	timeActive = 0.0f;
@@ -116,6 +122,11 @@ void GLProjectile::Shoot(glm::vec3 startPos, glm::vec3 forward, glm::vec3 veloci
 void GLProjectile::SetScale(float scale)
 {
 	transform->m_scale = glm::vec3(scale);
+}
+
+void GLProjectile::setMaxActiveTime(int Time)
+{
+	this->maxActiveTime = Time;
 }
 
 void GLProjectile::SetSpeed(float& speed)

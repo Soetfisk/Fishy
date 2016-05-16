@@ -16,6 +16,7 @@ private:
 	float offsetX, offsetZ;
 	float GetRandOffsetX();
 	float getRandOffsetZ();
+	float rotation = 3.1f;
 
 public:
 	SeaWeedLeafs(FishBox* FSH_Loader, unsigned int modelID, float posX, float posY, float posZ, int leafs);
@@ -26,5 +27,6 @@ public:
 	void SetScale(float min, float max);
 	void SetOffset(int x, int y);
 	void Reset();
+	void SetRotation(float X_Z);
 
 };

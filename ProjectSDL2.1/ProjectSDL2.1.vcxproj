@@ -51,6 +51,7 @@
     <ClCompile Include="SpecialStaticMesh.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EnumShaderType.h" />
     <ClInclude Include="GLMeshBS.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GLNPC_BlueTang.h" />
@@ -85,7 +86,6 @@
     <ClInclude Include="SeaWeedHandler.h" />
     <ClInclude Include="SeaWeedLeafs.h" />
     <ClInclude Include="SpecialStaticMesh.h" />
-    <ClInclude Include="SpecialStaticMeshes.h" />
     <ClInclude Include="SphereBS.h" />
   </ItemGroup>
   <ItemGroup>

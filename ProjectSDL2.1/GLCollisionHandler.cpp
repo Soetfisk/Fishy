@@ -86,15 +86,16 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 		}
 
 		for (unsigned int j = 0; j < this->NPCs.size(); j++) {
-
  			distance = players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos();
 			distSqrd = glm::dot(distance, distance);
 			if (distSqrd < 60)
 			{
+				
 				AABB NpcSeenSpace(NPCs.at(j)->GetTransform().GetPos() +(NPCs.at(j)->GetForward() *10.f), glm::vec3(10, 10, 10));
 				//check if player collides with a fish if so it will eat a part of it and gets score
 				if (NPCs.at(j)->GetBoundingBox().containsAABB(players.at(i)->GetBoundingBox()))
 				{ //&& players.at(i)->GetTransform().GetScale().x >= NPCs.at(j)->GetTransform().GetScale().x
+					
 					if (NPCs.at(j)->GetCurrentState()!=NPC_INACTIVE && NPCs.at(j)->GetCurrentState() != NPC_BEINGEATEN )
 					{
 						if (NPCs.at(j)->GetTransform().GetScale().x >= 2)

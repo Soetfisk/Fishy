@@ -101,7 +101,7 @@ GLCamera GLPlayer::GetCamera()
 void GLPlayer::TestDraw(GLShader & shader)
 {
 	this->Draw(shader);
-	
+	//this->UpdateModel();
 }
 
 void GLPlayer::DrawProjectile(GLShader & shader)
@@ -620,7 +620,7 @@ void GLPlayer::PowerUpCoolDown()
 		this->powerUpTimer += this->deltaTime;
 
 
-		if (this->powerUpTimer >= 5)
+		if (this->powerUpTimer >= POWERUP_DURATION)
 		{
 			int k = 0;
 			this->currentPowerUp = PowerUps::POWER_NEUTRAL;
