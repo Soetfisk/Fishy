@@ -24,7 +24,7 @@ void NpcPowerUpHandler::MakePowerUpFish()
 		unsigned int Fish = AvailableFishes.at(Index); 
 		AvailableFishes.erase(AvailableFishes.begin() + Index);
 
-		NPCs.at(Fish)->makePowerUp();
+		NPCs.at(Fish)->makePowerUp(powerUpMaterial);
 		NPCs.at(Fish)->AddEmitter(pHandlerRef->CreateEmitter(EmitterType::GOLDSTREAM, glm::vec4(NPCs.at(Fish)->GetTransform().GetPos(), 1)));
 		
 		PowerNPCs.push_back(NPCs.at(Fish));
@@ -37,6 +37,21 @@ NpcPowerUpHandler::NpcPowerUpHandler(std::vector<GLNPC*> NPCList)
 	this->NPCs = NPCList;
 	amountOfPowerUpFishes = 6;
 	initiatePowerFishes();
+
+	this->powerUpMaterial = new FSHData::material;
+
+	this->powerUpMaterial->diffuse[0] = 1;
+	this->powerUpMaterial->diffuse[1] = 1;
+	this->powerUpMaterial->diffuse[2] = 0.4;
+
+	this->powerUpMaterial->ambient[0] = 0.7f;
+	this->powerUpMaterial->ambient[1] = 0.3f;
+	this->powerUpMaterial->ambient[2] = 0;
+
+	this->powerUpMaterial->shinyness = 100;
+	this->powerUpMaterial->spec[0] = 1;
+	this->powerUpMaterial->spec[1] = 0.2f;
+	this->powerUpMaterial->spec[2] = 0.2f;
 }
 
 void NpcPowerUpHandler::RemovePowerUpFish(GLNPC* RemoveThisFish, unsigned int Fishindex)
@@ -86,7 +101,7 @@ void NpcPowerUpHandler::MovePowerUpToAnotherFish(GLNPC* RemoveThisFish, unsigned
 
 NpcPowerUpHandler::~NpcPowerUpHandler()
 {
-	
+	delete powerUpMaterial;
 }
 
 void NpcPowerUpHandler::addParticleHandlerReference(ParticleHandler* pHandler) {

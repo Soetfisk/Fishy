@@ -8,7 +8,7 @@ class NpcPowerUpHandler
 
 private:
 
-	GLMesh::Material PowerUpMaterial;
+	FSHData::material* powerUpMaterial;
 	std::vector<unsigned int> AvailableFishes; //vector of potential powerUpFishes
 	std::vector<GLNPC*> NPCs; 
 

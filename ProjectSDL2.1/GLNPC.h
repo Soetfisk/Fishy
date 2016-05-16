@@ -30,7 +30,7 @@ public:
 	};
 
 protected:
-	FSHData::material* powerUpMaterial;
+	FSHData::material* originalMaterial;
 	unsigned int currentState;
 	float * blendWeights;
 	float animationFactors[NUM_ANIMATION];
@@ -46,7 +46,7 @@ public:
 	int GetCurrentState();
 	void SetCurrentState();
 	bool& GetIsPowerUp() { return isPowerUp; };
-	void makePowerUp();
+	void makePowerUp(FSHData::material* powerMaterial);
 
 	GLNPC(FishBox* FSH_Loader, unsigned int modelID);
 	~GLNPC();
@@ -64,6 +64,7 @@ public:
 	void UpdateParticles(float &deltaTime);
 	void DrawParticles(GLShader* shader);
 	void AddEmitter(ParticleEmitter* emitter);
+	
 
 	
 };

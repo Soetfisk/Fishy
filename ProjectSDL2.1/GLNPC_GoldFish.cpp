@@ -81,10 +81,11 @@ void GLNPC_GoldFish::gettingEaten(float deltaTime, GLTransform playerTransform)
 void GLNPC_GoldFish::NPCKill()
 {
 	this->currentState = NPC_INACTIVE;
-	this->isPowerUp = false;
+	
 	if (this->isPowerUp == true)
 	{
-		//printf("i wanna be the very fish, that no one ever was");
+		this->isPowerUp = false;
+		this->meshes[0]->SetMaterial(originalMaterial);
 	}
 }
 
@@ -194,4 +195,7 @@ void GLNPC_GoldFish::ResetFish()
 	this->scaleChange = RNG::range(-0.02f, 0.02f);
 	this->forwardSpeed = RNG::range(0.0f, 3.3f);
 	this->rotationChange = glm::vec3(0, RNG::range(-1.0f, 1.0f), 0);
+	
+	this->isPowerUp = false;
+	this->meshes.at(0)->SetMaterial(originalMaterial);
 }
