@@ -50,6 +50,7 @@
     <ClCompile Include="SpecialStaticMesh.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="debug.h" />
     <ClInclude Include="EnumShaderType.h" />
     <ClInclude Include="GLMeshBS.h" />
     <ClInclude Include="GameState.h" />

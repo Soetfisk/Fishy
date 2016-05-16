@@ -38,7 +38,10 @@ private:
 		SeaWeedLeaf,
 		SeaWeedTall,
 		roughRock,
-		smoothRock
+		smoothRock,
+		castle,
+		orangeKorall,
+		rosaKorall
 	};
 	int SCREEN_WIDTH = window::WIDTH;
 	int SCREEN_HEIGHT = window::HEIGHT / 2;
@@ -69,6 +72,8 @@ private:
 
 		NUM_MUSIC
 	};
+
+	debugger debugger;
 
 	Mix_Music *music[NUM_MUSIC];
 	//todo implement
@@ -109,7 +114,9 @@ private:
 	SeaWeedHandler* TallSeaWeedHandler;
 	SeaWeedHandler* stoneHandler;
 	SeaWeedHandler* stoneHandler2;
-
+	SeaWeedHandler* castleHandler;
+	SeaWeedHandler* korallHandler;
+	SeaWeedHandler* korallHandler2;
 
 	// variables for border shader
 	float borderThreshold1, borderThreshold2;
@@ -144,9 +151,6 @@ private:
 	void AddScore();
 
 	void DrawParticles(GLCamera& playerCamera);
-	void setDebugTimer(bool debug);
-	void printDebugTimer(bool debug, std::string name);
-	void PrintAndResetCombinedDTimer(bool debug);
 
 public:
 	Scene(GLOBAL_GameState* gameState);

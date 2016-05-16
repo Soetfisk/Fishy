@@ -135,6 +135,33 @@ void Scene::Init()
 	this->stoneHandler2->SetRandomRotation(0.3f);
 	this->stoneHandler2->LoadSeaWeed();
 
+	this->castleHandler = new SeaWeedHandler(&FSH_Loader, castle);
+	this->castleHandler->SetXLimit(-90, 90);
+	this->castleHandler->SetZLimit(-50, 50);
+	this->castleHandler->SetLeafAmount(2, 2);
+	this->castleHandler->SetAmountOfPlants(1);
+	this->castleHandler->SetScale(3, 5);
+	this->castleHandler->SetOffset(70, 50);
+	this->castleHandler->SetRandomRotation(0.05f);
+	this->castleHandler->LoadSeaWeed();
+
+	this->korallHandler = new SeaWeedHandler(&FSH_Loader, rosaKorall);
+	this->korallHandler->SetXLimit(-110, 110);
+	this->korallHandler->SetZLimit(-70, 70);
+	this->korallHandler->SetLeafAmount(2, 5);
+	this->korallHandler->SetAmountOfPlants(9);
+	this->korallHandler->SetScale(3, 6);
+	this->korallHandler->SetOffset(0, 0);
+	this->korallHandler->LoadSeaWeed();
+
+	this->korallHandler2 = new SeaWeedHandler(&FSH_Loader, orangeKorall);
+	this->korallHandler2->SetXLimit(-110, 110);
+	this->korallHandler2->SetZLimit(-70, 70);
+	this->korallHandler2->SetLeafAmount(2, 5);
+	this->korallHandler2->SetAmountOfPlants(9);
+	this->korallHandler2->SetScale(3, 6);
+	this->korallHandler2->SetOffset(0, 0);
+	this->korallHandler2->LoadSeaWeed();
 
 	particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
 	
@@ -182,6 +209,9 @@ void Scene::LoadModels()
 	FSH_Loader.LoadScene("Models/seaweed1Blend.FSH");//SeaWeedTall
 	FSH_Loader.LoadScene("Models/roughRock.FSH"); //roughRock
 	FSH_Loader.LoadScene("Models/smoothRock.FSH"); //smoothRock
+	FSH_Loader.LoadScene("Models/castle.FSH"); //castle
+	FSH_Loader.LoadScene("Models/orangekorall.FSH"); //rosaKorall
+	FSH_Loader.LoadScene("Models/rosakorall.FSH"); //orangeKorall
 
 	for (int i = 0; i < 2; i++) {
 		this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));
@@ -201,10 +231,11 @@ void Scene::LoadModels()
 	//staticMeshes.at(0)->GetTransform().SetPos(glm::vec3(3, 3, 3));
 	//staticMeshes.at(0)->GetTransform().SetScale(glm::vec3(1, -1, 1));
 	
-	this->staticMeshes.push_back(new GLModel(&FSH_Loader, BlueTang));
+	//this->staticMeshes.push_back(new GLModel(&FSH_Loader, castle));
 	//this->staticMeshes.at(1)->GetTransform().SetScale(glm::vec3(2));
 	//this->staticMeshes.at(1)->SetBoundingBox(glm::vec3(0), glm::vec3(1.25));
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
+
 
 	this->collisionHandler.AddNPC(NPCs);
 	this->collisionHandler.AddPlayer(players);
@@ -331,33 +362,6 @@ void Scene::AddScore()
 	}
 }
 
-void Scene::setDebugTimer(bool debug)
-{
-	if (debug)
-	{
-		this->currentDTime = SDL_GetTicks();
-		this->dTime = (currentDTime - prevDTime) / 1000.0f;
-		this->prevDTime = currentDTime;
-		this->combinedDtime += dTime;
-	}
-}
-
-
-
-void Scene::printDebugTimer(bool debug, std::string name)
-{
-	if (debug)
-		printf("\nTime: %f, %s", dTime, name.c_str());
-}
-
-void Scene::PrintAndResetCombinedDTimer(bool debug)
-{
-	if (debug)
-	{
-		printf("\nCombinded frame time: %f\n", combinedDtime);
-		combinedDtime = 0.0f;
-	}
-}
 
 Scene::Scene(GLOBAL_GameState* gameState) {
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
@@ -417,6 +421,9 @@ Scene::~Scene() {
 	delete TallSeaWeedHandler;
 	delete stoneHandler;
 	delete stoneHandler2;
+	delete castleHandler;
+	delete korallHandler;
+	delete korallHandler2;
 	for (int i = 0; i < NUM_MUSIC; i++)
 	{
 		Mix_FreeMusic(music[i]);
@@ -429,7 +436,7 @@ void Scene::Update(float& deltaTime) {
 	if (debug)
 		printf("\n\n##UPDATE DEBUG##");
 
-	setDebugTimer(debug);
+	debugger.setDebugTimer(debug);
 	if (Mix_PlayingMusic() == 0)
 	{
 		srand(time(0));
@@ -438,22 +445,22 @@ void Scene::Update(float& deltaTime) {
 		currentSong = num;
 		Mix_PlayMusic(music[num], -1);
 	}
-	setDebugTimer(debug);
-	printDebugTimer(debug, "music");
+	debugger.setDebugTimer(debug);
+	debugger.printDebugTimer(debug, "music");
 	
 	this->deltaTime = deltaTime;
 
 	guih->Update(deltaTime);
-	setDebugTimer(debug);
-	printDebugTimer(debug, "gui");
+	debugger.setDebugTimer(debug);
+	debugger.printDebugTimer(debug, "gui");
 
 	this->collisionHandler.CheckCollisions(deltaTime);
-	setDebugTimer(debug);
-	printDebugTimer(debug, "collision");
+	debugger.setDebugTimer(debug);
+	debugger.printDebugTimer(debug, "collision");
 
 	this->AddScore();
-	setDebugTimer(debug);
-	printDebugTimer(debug, "score");
+	debugger.setDebugTimer(debug);
+	debugger.printDebugTimer(debug, "score");
 
 	this->particleHandler->UpdateParticles(deltaTime);
 	for (size_t i = 0; i < this->NPCs.size(); i++) {
@@ -464,8 +471,8 @@ void Scene::Update(float& deltaTime) {
 		}	
 	}
 	TallSeaWeedHandler->Update(deltaTime);//OskarAddsSeaWeedUpdate
-	setDebugTimer(debug);
-	printDebugTimer(debug, "Npc");
+	debugger.setDebugTimer(debug);
+	debugger.printDebugTimer(debug, "Npc");
 		
 
 	for (size_t i = 0; i < this->players.size(); i++) {
@@ -476,8 +483,8 @@ void Scene::Update(float& deltaTime) {
 			std::cout << "HIT" << std::endl;
 		}
 	}
-	setDebugTimer(debug);
-	printDebugTimer(debug, "players");
+	debugger.setDebugTimer(debug);
+	debugger.printDebugTimer(debug, "players");
 
 }
 
@@ -492,12 +499,12 @@ void Scene::DrawScene() {
 	if (debug)
 		printf("\n\n### DRAW DEBUG ###");
 
-	setDebugTimer(debug);
-	printDebugTimer(debug, "between draw and update");
+	debugger.setDebugTimer(debug);
+	debugger.printDebugTimer(debug, "between draw and update");
 
 	guih->Draw();
-	setDebugTimer(debug);
-	printDebugTimer(debug, "gui");
+	debugger.setDebugTimer(debug);
+	debugger.printDebugTimer(debug, "gui");
 
 	for (size_t i = 0; i < this->players.size(); i++) {
 		// handle player powerup
@@ -507,16 +514,16 @@ void Scene::DrawScene() {
 		this->UpdatePlayerPowerUp(i);
 		this->HandlePlayerPowerUp();
 		this->players.at(i)->UpdateModel();
-		setDebugTimer(debug);
-		printDebugTimer(debug, "playerpowerup");
+		debugger.setDebugTimer(debug);
+		debugger.printDebugTimer(debug, "playerpowerup");
 		//Set viewport
 		glViewport(0, 0, window::WIDTH, window::HEIGHT / 2);
 
 		shaders[BLEND_SHAPE]->Bind();
 		shaders[BLEND_SHAPE]->Update(players.at(i)->GetCamera());
 		this->frameBuffer->BindFrameBuffer();
-		setDebugTimer(debug);
-		printDebugTimer(debug, "bind blendshape, get playercamera, bind framebuffer");
+		debugger.setDebugTimer(debug);
+		debugger.printDebugTimer(debug, "bind blendshape, get playercamera, bind framebuffer");
 
 		for (size_t j = 0; j < this->players.size(); j++)
 		{
@@ -525,8 +532,8 @@ void Scene::DrawScene() {
 			players.at(j)->TestDraw(*shaders[BLEND_SHAPE]);
 		}
 
-		setDebugTimer(debug);
-		printDebugTimer(debug, "player");
+		debugger.setDebugTimer(debug);
+		debugger.printDebugTimer(debug, "player");
 		
 		for (size_t j = 0; j < NPCs.size(); j++)
 		{
@@ -534,8 +541,8 @@ void Scene::DrawScene() {
 			shaders[BLEND_SHAPE]->Uniform1fv("Weights", NPCs.at(j)->GetBlendWeights());
 			NPCs.at(j)->NPCDraw(*shaders[BLEND_SHAPE]);
 		}
-		setDebugTimer(debug);
-		printDebugTimer(debug, "npc's");
+		debugger.setDebugTimer(debug);
+		debugger.printDebugTimer(debug, "npc's");
 
 		shaders[BLEND_SHAPE]->Uniform1ui("BlendShapeCount", (GLuint)TallSeaWeedHandler->GetBlendShapeCount());
 		shaders[BLEND_SHAPE]->Uniform1fv("Weights", TallSeaWeedHandler->GetBlendWeights());
@@ -543,39 +550,42 @@ void Scene::DrawScene() {
 
 		shaders[MODELS]->Bind();
 		shaders[MODELS]->Update(players.at(i)->GetCamera());
-		setDebugTimer(debug);
-		printDebugTimer(debug, "bind models, get playercamera");
+		debugger.setDebugTimer(debug);
+		debugger.printDebugTimer(debug, "bind models, get playercamera");
 		this->seaWeedHandler->Draw(shaders[MODELS]);
 		this->stoneHandler->Draw(shaders[MODELS]);
 		this->stoneHandler2->Draw(shaders[MODELS]);
-		
-		setDebugTimer(debug);
-		printDebugTimer(debug, "seaweed handler");
+		this->castleHandler->Draw(shaders[MODELS]);
+		this->korallHandler->Draw(shaders[MODELS]);
+		this->korallHandler2->Draw(shaders[MODELS]);
+
+		debugger.setDebugTimer(debug);
+		debugger.printDebugTimer(debug, "seaweed handler");
 		for (int j = 0; j < this->players.size(); j++)
 		{
 			players.at(j)->DrawProjectile(*shaders[MODELS]);
 		}
-		setDebugTimer(debug);
-		printDebugTimer(debug, "projectiles");
+		debugger.setDebugTimer(debug);
+		debugger.printDebugTimer(debug, "projectiles");
 		
 		for (size_t i = 0; i < staticMeshes.size(); i++)
 		{
 			staticMeshes.at(i)->Draw(*shaders[MODELS]);
 		}
-		setDebugTimer(debug);
-		printDebugTimer(debug, "static meshes");
+		debugger.setDebugTimer(debug);
+		debugger.printDebugTimer(debug, "static meshes");
 
 		//Drawing All Particles
 		this->DrawParticles(players.at(i)->GetCamera());
-		setDebugTimer(debug);
-		printDebugTimer(debug, "Particles");
+		debugger.setDebugTimer(debug);
+		debugger.printDebugTimer(debug, "Particles");
 
 		this->frameBuffer->UnbindFrameBuffer();
 		this->frameBuffer2->BindFrameBuffer();
 		shaders[LIGHTING]->Bind();
 
-		setDebugTimer(debug);
-		printDebugTimer(debug, "bind lighting, framebuffer 2");
+		debugger.setDebugTimer(debug);
+		debugger.printDebugTimer(debug, "bind lighting, framebuffer 2");
 		for (size_t i = 0; i < pointLights.size(); i++)
 		{
 			glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(i) + "].ambient"), 1, glm::value_ptr(pointLights.at(i).ambient));
@@ -604,12 +614,12 @@ void Scene::DrawScene() {
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("ambientTexture"), 4);
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("specularTexture"), 5);
 
-		setDebugTimer(debug);
-		printDebugTimer(debug, "lighting");
+		debugger.setDebugTimer(debug);
+		debugger.printDebugTimer(debug, "lighting");
 
 		this->RenderQuad();
-		setDebugTimer(debug);
-		printDebugTimer(debug, "renderQuad");
+		debugger.setDebugTimer(debug);
+		debugger.printDebugTimer(debug, "renderQuad");
 
 		this->frameBuffer2->UnbindFrameBuffer();
 
@@ -648,12 +658,12 @@ void Scene::DrawScene() {
 		glViewport(0, (GLint)(window::HEIGHT - (window::HEIGHT *(.5*(i + 1)))), (GLint)window::WIDTH, (GLint)(window::HEIGHT / 2));
 		this->RenderQuad();
 
-		setDebugTimer(debug);
-		printDebugTimer(debug, "all the way to framebuffer5");
+		debugger.setDebugTimer(debug);
+		debugger.printDebugTimer(debug, "all the way to framebuffer5");
 	}
 
-	setDebugTimer(debug);
-	printDebugTimer(debug, "end screen loop");
+	debugger.setDebugTimer(debug);
+	debugger.printDebugTimer(debug, "end screen loop");
 
 	//PrintAndResetCombinedDTimer(debug);
 }
@@ -727,6 +737,9 @@ void Scene::ResetScene()
 	this->stoneHandler->Reset();
 	this->stoneHandler2->Reset();
 	this->TallSeaWeedHandler->Reset();
+	this->castleHandler->Reset();
+	this->korallHandler->Reset();
+	this->korallHandler2->Reset();
 }
 
 void Scene::HandleEvenet(SDL_Event* e) {

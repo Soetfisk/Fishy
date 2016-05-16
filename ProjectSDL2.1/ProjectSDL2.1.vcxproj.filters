@@ -94,12 +94,6 @@
     <ClCompile Include="SeaWeedLeafs.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="SpecialStaticMesh.cpp">
-      <Filter>Source\Models</Filter>
-    </ClCompile>
-    <ClCompile Include="GLNPC_PowerUpHandler.cpp">
-      <Filter>Source\Models\NPCs</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AABB.h">
@@ -192,6 +186,8 @@
     <ClInclude Include="ParticleEmitter.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="GLNPC_PowerUpHandler.h" />
+    <ClInclude Include="SpecialStaticMesh.h" />
     <ClInclude Include="SeaWeedHandler.h">
       <Filter>Header</Filter>
     </ClInclude>
@@ -208,12 +204,7 @@
       <Filter>Header</Filter>
     </ClInclude>
 
-    <ClInclude Include="SpecialStaticMesh.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="GLNPC_PowerUpHandler.h">
-      <Filter>Header\Models\NPCs</Filter>
-    </ClInclude>
+    <ClInclude Include="debug.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="blueFilter.glsl">
