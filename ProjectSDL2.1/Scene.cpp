@@ -478,10 +478,10 @@ void Scene::Update(float& deltaTime) {
 	for (size_t i = 0; i < this->players.size(); i++) {
 		this->players.at(i)->Update(this->deltaTime);
 		this->players.at(i)->UpdateParticles(this->deltaTime);
-		if (this->players.at(i)->GetBoundingBox().containsAABB(staticMeshes.at(1)->GetBoundingBox()))
-		{
-			std::cout << "HIT" << std::endl;
-		}
+		//if (this->players.at(i)->GetBoundingBox().containsAABB(staticMeshes.at(1)->GetBoundingBox()))
+		//{
+		//	std::cout << "HIT" << std::endl;
+		//}
 	}
 	debugger.setDebugTimer(debug);
 	debugger.printDebugTimer(debug, "players");
