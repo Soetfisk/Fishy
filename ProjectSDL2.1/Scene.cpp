@@ -59,7 +59,19 @@ void Scene::Init()
 	light1.linear = 0.045f;
 	light1.quadratic = 0.0075f;
 
+	
+
+	PointLight light2;
+	light2.ambient = glm::vec3(0.0f, 0.1f, 0.0f);
+	light2.diffuse = glm::vec3(1.0f, 1.0f, 1.0f);
+	light2.position = glm::vec3(0, 0, 0);
+	light2.specular = glm::vec3(0.5f, 0.0f, 0.0f);
+	light2.constant = 1.0f;
+	light2.linear = 0.045f;
+	light2.quadratic = 0.0075f;
+
 	this->pointLights.push_back(light1);
+	this->pointLights.push_back(light2);
 
 	dirLight.ambient = glm::vec3(0.25, 0.61, 1);
 	dirLight.diffuse = glm::vec3(0.25, 0.61, 1);

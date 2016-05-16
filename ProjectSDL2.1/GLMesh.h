@@ -25,7 +25,8 @@ public:
 	bool Draw(GLShader& shader, GLTransform& modelTrans);
 	GLTransform& GetTransform();
 	FSHData::material* GetMaterial() {	return material;}
-	FSHData::texture * GetTexture() { return texture; }
+	void SetMaterial(FSHData::material* NewMaterial) { material = NewMaterial; }
+	FSHData::texture* GetTexture() { return texture; }
 protected:
 
 	GLuint m_vertexArrayObject;
