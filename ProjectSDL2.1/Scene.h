@@ -21,24 +21,13 @@
 #include <time.h>
 #include <SDL2\SDL_mixer.h>
 #include "SeaWeedHandler.h"
+#include "EnumShaderType.h"
 #define mSTATIC *shaders[MODELS]
 #define mANIMATED *shaders[BLEND_SHAPE]
 
 class Scene {
 private:
-	enum ShaderType {
-		MODELS,
-		//PARTICLES,
-		//BLUR,
-		PASS,
-		LIGHTING,
-		TEXT,
-		WAVY,
-		BORDER,
-		BLEND_SHAPE,
-		PARTICLE,
-		NUM_SHADERS
-	};
+	
 	enum
 	{
 		PlayerFish,
@@ -47,6 +36,7 @@ private:
 		Bubble,
 		Aquarium,
 		SeaWeedLeaf,
+		SeaWeedTall,
 		roughRock,
 		smoothRock
 	};
@@ -116,6 +106,7 @@ private:
 	glm::mat4 projection;
 	GLGUIHandler* guih;
 	SeaWeedHandler* seaWeedHandler;
+	SeaWeedHandler* TallSeaWeedHandler;
 	SeaWeedHandler* stoneHandler;
 	SeaWeedHandler* stoneHandler2;
 

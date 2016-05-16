@@ -30,6 +30,7 @@ public:
 	};
 
 protected:
+	FSHData::material* powerUpMaterial;
 	unsigned int currentState;
 	float * blendWeights;
 	float animationFactors[NUM_ANIMATION];

@@ -15,7 +15,7 @@ public:
 	~GLModel();
 
 	virtual void Draw(GLShader& shader);
-	virtual void Update(float& dt);
+	virtual void UpdateModel();
 
 	GLTransform& GetTransform();
 	glm::vec3 GetForward();
