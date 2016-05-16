@@ -36,6 +36,8 @@ enum EmitterType
 	NREMITERTYPE
 };
 
+//debug
+#include "debug.h"
 
 //WINDOW
 

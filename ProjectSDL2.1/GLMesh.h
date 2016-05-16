@@ -17,7 +17,7 @@ public:
 		GLTexture* texture;
 	};
 
-
+	GLMesh(FSHData::mesh * meshData, FSHData::vertexData * vertices, unsigned int * indices, FSHData::material* material, GLuint textureID);
 	GLMesh(FSHData::mesh * meshData, FSHData::vertexData * vertices, unsigned int * indices, FSHData::material* material, FSHData::texture * texture);
 	GLMesh() {};
 	~GLMesh();
@@ -44,5 +44,6 @@ protected:
 	Material m_material;
 	FSHData::texture * texture;
 	glm::mat4 trans;
+	glm::mat4 test;
 };
 

@@ -20,7 +20,6 @@
 #include "ParticleHandler.h"
 #include <time.h>
 #include <SDL2\SDL_mixer.h>
-#include "RoundCounter.h"
 #include "SeaWeedHandler.h"
 #include "EnumShaderType.h"
 #define mSTATIC *shaders[MODELS]
@@ -39,7 +38,10 @@ private:
 		SeaWeedLeaf,
 		SeaWeedTall,
 		roughRock,
-		smoothRock
+		smoothRock,
+		castle,
+		orangeKorall,
+		rosaKorall
 	};
 	int SCREEN_WIDTH = window::WIDTH;
 	int SCREEN_HEIGHT = window::HEIGHT / 2;
@@ -70,6 +72,8 @@ private:
 
 		NUM_MUSIC
 	};
+
+	debugger debugger;
 
 	Mix_Music *music[NUM_MUSIC];
 	//todo implement
@@ -106,12 +110,13 @@ private:
 	GUI* guiTest;
 	glm::mat4 projection;
 	GLGUIHandler* guih;
-	RoundCounter* rc;
 	SeaWeedHandler* seaWeedHandler;
 	SeaWeedHandler* TallSeaWeedHandler;
 	SeaWeedHandler* stoneHandler;
 	SeaWeedHandler* stoneHandler2;
-
+	SeaWeedHandler* castleHandler;
+	SeaWeedHandler* korallHandler;
+	SeaWeedHandler* korallHandler2;
 
 	// variables for border shader
 	float borderThreshold1, borderThreshold2;
@@ -146,9 +151,6 @@ private:
 	void AddScore();
 
 	void DrawParticles(GLCamera& playerCamera);
-	void setDebugTimer(bool debug);
-	void printDebugTimer(bool debug, std::string name);
-	void PrintAndResetCombinedDTimer(bool debug);
 
 public:
 	Scene(GLOBAL_GameState* gameState);

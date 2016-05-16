@@ -7,14 +7,21 @@ GLNPC_GoldFish::GLNPC_GoldFish(FishBox * FSH_Loader, unsigned int modelID) : GLN
 	this->currentState = NPC_MOVE;
 	transform->SetPos(glm::vec3(RNG::range(-DEADZONEX, DEADZONEX), RNG::range(-DEADZONEY, DEADZONEY), RNG::range(-DEADZONEZ, DEADZONEZ)));
 
+	glm::vec3 scale = glm::vec3(RNG::range(1.0f, 1.5f));
+	transform->SetScale(scale);
 	this->TimeUntilChange = RNG::range(0.2f, 3.0f);
-	this->scaleChange = RNG::range(-0.02f, 0.02f);
 	this->forwardSpeed = RNG::range(0.0f, 3.3f); 
 	this->rotationChange = glm::vec3(0, RNG::range(-1.0f, 1.0f), 0);
 }
 
 void GLNPC_GoldFish::NPCUpdate(float deltaTime)
 {
+
+	if (currentState == NPC_INACTIVE)
+	{
+		this->RespawnCountdown(deltaTime);
+	} 
+
 	if (currentState != NPC_INACTIVE)
 	{
 		TimeUntilChange -= deltaTime;
@@ -81,10 +88,11 @@ void GLNPC_GoldFish::gettingEaten(float deltaTime, GLTransform playerTransform)
 void GLNPC_GoldFish::NPCKill()
 {
 	this->currentState = NPC_INACTIVE;
-	this->isPowerUp = false;
+	
 	if (this->isPowerUp == true)
 	{
-		//printf("i wanna be the very fish, that no one ever was");
+		this->isPowerUp = false;
+		this->meshes[0]->SetMaterial(originalMaterial);
 	}
 }
 
@@ -190,8 +198,19 @@ void GLNPC_GoldFish::ResetFish()
 	this->currentState = NPC_MOVE;
 	transform->SetPos(glm::vec3(RNG::range(-DEADZONEX, DEADZONEX), RNG::range(-DEADZONEY, DEADZONEY), RNG::range(-DEADZONEZ, DEADZONEZ)));
 
+	glm::vec3 scale = glm::vec3(RNG::range(1.0f, 1.5f));
+	transform->SetScale(scale);
+
 	this->TimeUntilChange = RNG::range(0.2f, 3.0f);
-	this->scaleChange = RNG::range(-0.02f, 0.02f);
 	this->forwardSpeed = RNG::range(0.0f, 3.3f);
 	this->rotationChange = glm::vec3(0, RNG::range(-1.0f, 1.0f), 0);
+	
+	this->isPowerUp = false;
+	this->meshes.at(0)->SetMaterial(originalMaterial);
+
+	/*if (this->npc_emitter != nullptr)
+	{
+		delete npc_emitter;
+		this->npc_emitter=nullptr;
+	}*/
 }

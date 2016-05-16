@@ -1,5 +1,15 @@
 #include "GLNPC.h"
 
+void GLNPC::RespawnCountdown(float deltaTime)
+{
+	timeUntilRespawn -= deltaTime;
+	if (timeUntilRespawn < 0)
+	{
+		timeUntilRespawn = 10.0f;
+		this->ResetFish();
+	}
+}
+
 int GLNPC::GetCurrentState()
 {
 	return currentState;
@@ -10,28 +20,17 @@ void GLNPC::SetCurrentState()
 	this->currentState = NPC_STANDSTILL;
 }
 
-void GLNPC::makePowerUp()
+void GLNPC::makePowerUp(FSHData::material* powerMaterial)
 {
-	/*this->meshes.at(0)->GetMaterial()->diffuse[0] = 1.0f;
-	this->meshes.at(0)->GetMaterial()->diffuse[1] = 0.0f;
-	this->meshes.at(0)->GetMaterial()->diffuse[2] = 0.0f;
+	this->meshes.at(0)->SetMaterial(powerMaterial);
 	
-	this->meshes.at(0)->GetMaterial()->spec[0] = 1.0f;
-	this->meshes.at(0)->GetMaterial()->spec[1] = 1.0f;
-	this->meshes.at(0)->GetMaterial()->spec[2] = 1.0f;*/
-	
-	
-
-	//this->powerUpMaterial = this->meshes.at(0)->GetMaterial();
-
-	this->meshes.at(0)->SetMaterial(this->powerUpMaterial);
-	//printf("%d\n", this->meshes.at(0)->GetMaterial().spec[0]);
 	isPowerUp = true;
 	
 }
 
 GLNPC::GLNPC(FishBox * FSH_Loader, unsigned int modelID) : GLModel(FSH_Loader,modelID)
 {
+	originalMaterial = this->meshes[0]->GetMaterial();
 	this->blendWeights = new float[NUM_ANIMATION];
 	for (int i = 0; i < NUM_ANIMATION; i++)
 	{
@@ -40,28 +39,7 @@ GLNPC::GLNPC(FishBox * FSH_Loader, unsigned int modelID) : GLModel(FSH_Loader,mo
 	}
 	this->npc_emitter = nullptr;
 	this->timeSinceUpdate = 0;
-	
-	
-	
-	
-	this->powerUpMaterial = new FSHData::material;
-
-	this->powerUpMaterial->diffuse[0] = 1;
-	this->powerUpMaterial->diffuse[1] = 1;
-	this->powerUpMaterial->diffuse[2] = 0.4;
-
-	this->powerUpMaterial->ambient[0] = 0.7f;
-	this->powerUpMaterial->ambient[1] = 0.3f;
-	this->powerUpMaterial->ambient[2] = 0;
-
-	this->powerUpMaterial->shinyness = 100;
-	this->powerUpMaterial->spec[0] = 1;
-	this->powerUpMaterial->spec[1] = 0.2f;
-	this->powerUpMaterial->spec[2] = 0.2f;
-
-	
-
-	//this->powerUpMaterial->materialName = "Power";
+	this->timeUntilRespawn = 10.0f;
 }
 
 void GLNPC::UpdateParticles(float &deltaTime) {
@@ -108,7 +86,6 @@ void GLNPC::AddEmitter(ParticleEmitter* emitter) {
 
 GLNPC::~GLNPC() {
 	delete blendWeights;
-	delete powerUpMaterial;
 	if (this->npc_emitter != nullptr)
 		delete npc_emitter;
 }
