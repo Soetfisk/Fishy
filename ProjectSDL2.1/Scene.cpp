@@ -757,7 +757,7 @@ void Scene::HandleEvenet(SDL_Event* e) {
 		switch (e->caxis.axis)
 		{
 		case SDL_CONTROLLER_AXIS_RIGHTX:
-			players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(e->caxis.value, 0, 0));
+			players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(-e->caxis.value, 0, 0));
 			break;
 		case SDL_CONTROLLER_AXIS_RIGHTY:
 			players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE_RIGHT, glm::vec3(0, e->caxis.value, 0));
