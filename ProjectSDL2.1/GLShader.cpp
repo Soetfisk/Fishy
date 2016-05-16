@@ -21,7 +21,7 @@ GLShader::GLShader(const std::string& fileName, const bool& geometry)
 		m_shaders[1] = CreateShader(LoadShader(fileName + ".frag"), GL_FRAGMENT_SHADER);
 	}		
 
-	for (unsigned int i = 0; i < nrOfShaders; i++)
+	for (int i = 0; i < nrOfShaders; i++)
 	{
 		glAttachShader(m_program, m_shaders[i]);
 	}
@@ -30,7 +30,10 @@ GLShader::GLShader(const std::string& fileName, const bool& geometry)
 	CheckShaderError(m_program, GL_LINK_STATUS, true);
 
 	m_uniforms[TRANSFROM_U] =	glGetUniformLocation(m_program, "TransformMatrix");
-	m_uniforms[PROJVIEW_U] =	glGetUniformLocation(m_program, "ProjectionViewMatrix");
+	//m_uniforms[PROJECTIONVIEW_U] = glGetUniformLocation(m_program, "ProjectionViewMatrix");
+	
+	m_uniforms[PROJECTION_U] = glGetUniformLocation(m_program, "ProjectionMatrix");
+	m_uniforms[VIEW_U] = glGetUniformLocation(m_program, "ViewMatrix");
 	m_uniforms[VIEWPOS_U] =		glGetUniformLocation(m_program, "ViewPos");
 	GLuint d = glGetUniformLocation(m_program, "diffuseTexture");
 
@@ -46,22 +49,27 @@ void GLShader::Bind()
 
 void GLShader::Update(GLCamera& camera)
 {
-	glm::mat4 projView = camera.GetViewProjectionMatrix();
+
+	glm::mat4 view_matrix = camera.GetViewMatrix();
+	glm::mat4 proj_matrix = camera.GetProjectionMatrix();
+	//glm::mat4 view_proj_matrix = camera.GetViewProjectionMatrix();
 	glm::vec3 viewPos = camera.Position();
-	glUniformMatrix4fv(m_uniforms[PROJVIEW_U], 1, GL_FALSE, glm::value_ptr(projView));
+	glUniformMatrix4fv(m_uniforms[VIEW_U], 1, GL_FALSE, glm::value_ptr(view_matrix));
+	glUniformMatrix4fv(m_uniforms[PROJECTION_U], 1, GL_FALSE, glm::value_ptr(proj_matrix));
+	//glUniformMatrix4fv(m_uniforms[PROJECTIONVIEW_U], 1, GL_FALSE, glm::value_ptr(view_proj_matrix));
+
 	glUniform3fv(m_uniforms[VIEWPOS_U], 1, glm::value_ptr(viewPos));
 }
 
 
-GLuint& GLShader::GetUnifromLocation(std::string name)
+GLuint GLShader::GetUnifromLocation(std::string name)
 {
-	GLuint unifrom = glGetUniformLocation(m_program, name.c_str());
-	return unifrom;
+	return glGetUniformLocation(m_program, name.c_str());
 }
 
 GLShader::~GLShader()
 {
-	for (unsigned int i = 0; i < nrOfShaders; i++)
+	for (int i = 0; i < nrOfShaders; i++)
 	{
 		glDetachShader(m_program, m_shaders[i]);
 		glDeleteShader(m_shaders[i]);
@@ -140,9 +148,24 @@ std::string GLShader::LoadShader(const std::string & fileName)
 void GLShader::Uniform1f(std::string name, float number)
 {
 	glUniform1f(glGetUniformLocation(this->m_program, name.c_str()), number);
+	
 }
+
 
 void GLShader::UniformVec3(std::string name, glm::vec3 vector)
 {
 	glUniform3fv(glGetUniformLocation(this->m_program, name.c_str()), 1, &vector[0]);
+}
+
+void GLShader::Uniform1ui(std::string name, GLuint number)
+{
+	//printf("\n%d", glGetUniformLocation(this->m_program, name.c_str()));
+	glUniform1i(glGetUniformLocation(this->m_program, name.c_str()), number);
+
+}
+
+void GLShader::Uniform1fv(std::string name, float number[10])
+{
+	//printf("\n%d", glGetUniformLocation(this->m_program, name.c_str()));
+	glUniform1fv(glGetUniformLocation(this->m_program, name.c_str()), 10, number);
 }

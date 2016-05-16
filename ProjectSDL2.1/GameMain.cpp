@@ -9,8 +9,15 @@ GameMain::GameMain()
 	this->window = new GLWindow(window::WIDTH, window::HEIGHT, "Survival of the fishest");
 	this->textToScreen = new GUI();
 	this->gameState = GLOBAL_GameState::MENU;
-	this->scene = new Scene();
+	this->scene = new Scene(&this->gameState);
 	this->menu = new Menu(&this->gameState);
+	
+
+	char *GL_version = (char *)glGetString(GL_VERSION);
+	char *GL_vendor = (char *)glGetString(GL_VENDOR);
+	char *GL_renderer = (char *)glGetString(GL_RENDERER);
+	//return 0;
+	int k = 0;
 }
 
 GameMain::~GameMain()
@@ -36,6 +43,7 @@ void GameMain::HandleUpdateDraw()
 	case GLOBAL_GameState::GAME:
 		this->scene->Update(this->deltaTime);
 		this->scene->DrawScene();
+
 		break;
 	case GLOBAL_GameState::MENU:
 		this->menu->Update(this->deltaTime);
@@ -91,6 +99,14 @@ void GameMain::GameLoop()
 				this->gameOn = false;
 			else if (e.type == SDL_KEYDOWN && e.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
 				this->gameOn = false;
+			else if (e.type == SDL_CONTROLLERDEVICEADDED)
+			{
+				this->scene->HandleEvenet(&e);
+			}
+			else if (e.type == SDL_CONTROLLERDEVICEREMOVED)
+			{
+				this->scene->HandleEvenet(&e);
+			}
 			else
 			{
 				HandleEvents();

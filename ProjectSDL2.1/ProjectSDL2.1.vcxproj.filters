@@ -19,15 +19,6 @@
     <ClCompile Include="GLGUIHandler.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="GLMesh.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="GLModel.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="GLPlayer.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="GLProjectile.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -53,19 +44,55 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="GLNPC.cpp">
-      <Filter>Source\NPCs</Filter>
+      <Filter>Source\Models\NPCs</Filter>
     </ClCompile>
     <ClCompile Include="GLNPC_GoldFish.cpp">
-      <Filter>Source\NPCs</Filter>
+      <Filter>Source\Models\NPCs</Filter>
     </ClCompile>
     <ClCompile Include="GLNPC_BlueTang.cpp">
-      <Filter>Source\NPCs</Filter>
+      <Filter>Source\Models\NPCs</Filter>
     </ClCompile>
-    <ClCompile Include="GLNPC_PowerUpHandler.cpp">
-      <Filter>Source\NPCs</Filter>
+    <ClCompile Include="GLMesh.cpp">
+      <Filter>Source\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="GLModel.cpp">
+      <Filter>Source\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="GLPlayer.cpp">
+      <Filter>Source\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="GLMeshBS.cpp">
+      <Filter>Source\Models</Filter>
     </ClCompile>
     <ClCompile Include="Menu.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleComputeShader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleEmitter.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleHandler.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RoundCounter.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SeaWeedHandler.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GLNPC_PowerUpHandler.cpp">
+      <Filter>Source\Models\NPCs</Filter>
+    </ClCompile>
+    <ClCompile Include="SeaWeedLeafs.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecialStaticMesh.cpp">
+      <Filter>Source\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="GLNPC_PowerUpHandler.cpp">
+      <Filter>Source\Models\NPCs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -88,15 +115,6 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="GLGUIHandler.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="GLMesh.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="GLModel.h">
-      <Filter>Header</Filter>
-    </ClInclude>
-    <ClInclude Include="GLPlayer.h">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="GLProjectile.h">
@@ -123,9 +141,6 @@
     <ClInclude Include="GUI.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="obj_loader.h">
-      <Filter>Header</Filter>
-    </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Header</Filter>
     </ClInclude>
@@ -133,13 +148,13 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="GLNPC.h">
-      <Filter>Header\NPCs</Filter>
+      <Filter>Header\Models\NPCs</Filter>
     </ClInclude>
     <ClInclude Include="GLNPC_GoldFish.h">
-      <Filter>Header\NPCs</Filter>
+      <Filter>Header\Models\NPCs</Filter>
     </ClInclude>
     <ClInclude Include="GLNPC_BlueTang.h">
-      <Filter>Header\NPCs</Filter>
+      <Filter>Header\Models\NPCs</Filter>
     </ClInclude>
     <ClInclude Include="RNG.h">
       <Filter>Header</Filter>
@@ -147,11 +162,50 @@
     <ClInclude Include="Menu.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="GLNPC_PowerUpHandler.h">
-      <Filter>Header\NPCs</Filter>
-    </ClInclude>
     <ClInclude Include="GameState.h">
       <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GLPlayer.h">
+      <Filter>Header\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="GLModel.h">
+      <Filter>Header\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="GLMesh.h">
+      <Filter>Header\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="GLMeshBS.h">
+      <Filter>Header\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleHandler.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleComputeShader.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleEmitter.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="SeaWeedHandler.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RoundCounter.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumShaderType.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GLNPC_PowerUpHandler.h">
+      <Filter>Header\Models\NPCs</Filter>
+    </ClInclude>
+    <ClInclude Include="SeaWeedLeafs.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecialStaticMesh.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GLNPC_PowerUpHandler.h">
+      <Filter>Header\Models\NPCs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -197,6 +251,36 @@
     <None Include="lighting.vert">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="blend_shape.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="blend_shape.geom">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="blend_shape.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Particle.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Particle.geom">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Particle.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="ParticleProjectileComputeShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="ParticleTestShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="draw.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="draw.frag">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header">
@@ -208,11 +292,17 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{e8b73c92-61ec-434a-a513-1770d8b81781}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header\NPCs">
-      <UniqueIdentifier>{5002fbc4-4a56-453b-acbd-d7a222fdeda4}</UniqueIdentifier>
+    <Filter Include="Source\Models">
+      <UniqueIdentifier>{fba40bd5-0733-4eb6-ba57-835b28623e99}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\NPCs">
+    <Filter Include="Source\Models\NPCs">
       <UniqueIdentifier>{3b6a892c-3bcf-4b61-bdaf-e7fd1fb1baa9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header\Models">
+      <UniqueIdentifier>{0c8e3f4e-e62f-44ee-9192-3b7a9ba3e85a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header\Models\NPCs">
+      <UniqueIdentifier>{5002fbc4-4a56-453b-acbd-d7a222fdeda4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -11,6 +11,8 @@ Menu::Menu()
 	gameState = nullptr;
 
 	InitMenuTextureInfo();
+	InitModels();
+
 }
 
 Menu::Menu(GLOBAL_GameState* state)
@@ -24,6 +26,7 @@ Menu::Menu(GLOBAL_GameState* state)
 	gameState = state;
 
 	InitMenuTextureInfo();
+	InitModels();
 }
 
 Menu::Menu(GUI* gui, GLOBAL_GameState* state)
@@ -37,6 +40,7 @@ Menu::Menu(GUI* gui, GLOBAL_GameState* state)
 	gameState = state;
 
 	InitMenuTextureInfo();
+	InitModels();
 }
 
 Menu::Menu(GUI* gui, GLOBAL_GameState* state, GLShader* shader)
@@ -50,6 +54,7 @@ Menu::Menu(GUI* gui, GLOBAL_GameState* state, GLShader* shader)
 	gameState = state;
 
 	InitMenuTextureInfo();
+	InitModels();
 }
 
 Menu::~Menu()
@@ -58,16 +63,30 @@ Menu::~Menu()
 		delete menuShader;
 	if(deleteGUI)
 		delete gui;
+
+	delete modelShader;
+	delete model;
+	delete aquarium;
+	delete camera;
 }
 
 void Menu::Update(float dt)
 {
-
+	model->GetTransform().m_rot.y += dt/2;
+	model->UpdateModel();
 }
 
 void Menu::Draw()
 {
 	glViewport(0, 0, window::WIDTH, window::HEIGHT);
+	modelShader->Bind();
+	modelShader->Update(*camera);
+	model->Draw(*modelShader);
+	aquarium->Draw(*modelShader);
+
+	projection = glm::ortho(0.0f, static_cast<GLfloat>(window::WIDTH), 0.0f, static_cast<GLfloat>(window::HEIGHT));
+	menuShader->Bind();
+	glUniformMatrix4fv(menuShader->GetUnifromLocation("projection"), 1, GL_FALSE, glm::value_ptr(projection));
 	for (int i = 0; i < NUM_MENU_BUTTONS; i++)
 	{
 		gui->RenderText(*menuShader, text[i], textPos[i][0], textPos[i][1], textScale[i], textColor[i]);
@@ -87,6 +106,9 @@ void Menu::HandleEvenet(SDL_Event * e)
 			HandleDown();
 			break;
 		case SDL_SCANCODE_SPACE:
+			HandleSpace();
+			break;
+		case SDL_SCANCODE_RETURN:
 			HandleSpace();
 			break;
 		default:
@@ -111,7 +133,7 @@ void Menu::InitMenuTextureInfo()
 	text[TITLE] = "Survival of the fishest";
 	textScale[TITLE] = 1.4f;
 	textColor[TITLE] = glm::vec3(0, 1, 0);
-	textPos[TITLE][0] = window::HALF_WIDTH - (gui->GetTextLenght(text[TITLE], textScale[TITLE]) * 0.5);
+	textPos[TITLE][0] = (float)(window::HALF_WIDTH - (gui->GetTextLenght(text[TITLE], textScale[TITLE]) * 0.5));
 	tempY += gui->GetTextHeight(text[TITLE], textScale[TITLE]) + extraOffset;
 	textPos[TITLE][1] = window::HEIGHT - tempY;
 
@@ -119,7 +141,7 @@ void Menu::InitMenuTextureInfo()
 	text[START_GAME] = "Start Game";
 	textScale[START_GAME] = 1.0f;
 	textColor[START_GAME] = glm::vec3(0, 1, 0);
-	textPos[START_GAME][0] = window::HALF_WIDTH - (gui->GetTextLenght(text[START_GAME], textScale[START_GAME]) * 0.5);
+	textPos[START_GAME][0] = (float)(window::HALF_WIDTH - (gui->GetTextLenght(text[START_GAME], textScale[START_GAME]) * 0.5));
 	tempY += gui->GetTextHeight(text[TITLE], textScale[TITLE]) + extraOffset;
 	textPos[START_GAME][1] = window::HEIGHT - tempY;
 
@@ -127,7 +149,7 @@ void Menu::InitMenuTextureInfo()
 	text[CONTROLS] = "Controls";
 	textScale[CONTROLS] = 1.0f;
 	textColor[CONTROLS] = glm::vec3(0, 1, 0);
-	textPos[CONTROLS][0] = window::HALF_WIDTH - (gui->GetTextLenght(text[CONTROLS], textScale[CONTROLS]) * 0.5);
+	textPos[CONTROLS][0] = (float)(window::HALF_WIDTH - (gui->GetTextLenght(text[CONTROLS], textScale[CONTROLS]) * 0.5));
 	tempY += gui->GetTextHeight(text[TITLE], textScale[TITLE]) + extraOffset;
 	textPos[CONTROLS][1] = window::HEIGHT - tempY;
 
@@ -135,7 +157,7 @@ void Menu::InitMenuTextureInfo()
 	text[EXIT] = "Exit";
 	textScale[EXIT] = 1.0f;
 	textColor[EXIT] = glm::vec3(0, 1, 0);
-	textPos[EXIT][0] = window::HALF_WIDTH - (gui->GetTextLenght(text[EXIT], textScale[EXIT]) * 0.5);
+	textPos[EXIT][0] = (float)(window::HALF_WIDTH - (gui->GetTextLenght(text[EXIT], textScale[EXIT]) * 0.5));
 	tempY += gui->GetTextHeight(text[TITLE], textScale[TITLE]) + extraOffset;
 	textPos[EXIT][1] = window::HEIGHT - tempY;
 
@@ -143,7 +165,7 @@ void Menu::InitMenuTextureInfo()
 	text[SELECTED] = "$";
 	textScale[SELECTED] = 1.0f;
 	textColor[SELECTED] = glm::vec3(0, 1, 0);
-	textPos[SELECTED][0] = window::HALF_WIDTH - gui->GetTextLenght(text[START_GAME], textScale[START_GAME]) * 0.5 - gui->GetTextLenght(text[SELECTED], textScale[SELECTED]) - 20;
+	textPos[SELECTED][0] = (float)(window::HALF_WIDTH - gui->GetTextLenght(text[START_GAME], textScale[START_GAME]) * 0.5 - gui->GetTextLenght(text[SELECTED], textScale[SELECTED]) - 20);
 
 	textPos[SELECTED][1] = textPos[START_GAME][1];
 	selectedBttn = START_GAME;
@@ -155,19 +177,19 @@ void Menu::HandleUp()
 	{
 	case START_GAME:
 		textScale[selectedBttn] = 1.0f;
-		textPos[selectedBttn][0] = window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5;
+		textPos[selectedBttn][0] = (float)(window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5);
 
 		selectedBttn = EXIT;
 		break;
 	case CONTROLS:
 		textScale[selectedBttn] = 1.0f;
-		textPos[selectedBttn][0] = window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5;
+		textPos[selectedBttn][0] = (float)(window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5);
 
 		selectedBttn = START_GAME;
 		break;
 	case EXIT:
 		textScale[selectedBttn] = 1.0f;
-		textPos[selectedBttn][0] = window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5;
+		textPos[selectedBttn][0] = (float)(window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5);
 
 		selectedBttn = CONTROLS;
 		break;
@@ -185,19 +207,19 @@ void Menu::HandleDown()
 	{
 	case START_GAME:
 		textScale[selectedBttn] = 1.0f;
-		textPos[selectedBttn][0] = window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5;
+		textPos[selectedBttn][0] = (float)(window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5);
 
 		selectedBttn = CONTROLS;
 		break;
 	case CONTROLS:
 		textScale[selectedBttn] = 1.0f;
-		textPos[selectedBttn][0] = window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5;
+		textPos[selectedBttn][0] = (float)(window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5);
 
 		selectedBttn = EXIT;
 		break;
 	case EXIT:
 		textScale[selectedBttn] = 1.0f;
-		textPos[selectedBttn][0] = window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5;
+		textPos[selectedBttn][0] = (float)(window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5);
 
 		selectedBttn = START_GAME;
 		break;
@@ -231,8 +253,24 @@ void Menu::HandleSpace()
 void Menu::FixSelected()
 {
 	textScale[selectedBttn] = 1.2f;
-	textPos[selectedBttn][0] = window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5;
-	textPos[SELECTED][0] = window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5 - gui->GetTextLenght(text[SELECTED], textScale[SELECTED]) - 20;;
+	textPos[selectedBttn][0] = (float)(window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5);
+	textPos[SELECTED][0] = (float)(window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5 - gui->GetTextLenght(text[SELECTED], textScale[SELECTED]) - 20);
 	textPos[SELECTED][1] = textPos[selectedBttn][1];
+}
+
+void Menu::InitModels()
+{
+	FSH_Loader.LoadScene("Models/fishy.FSH"); //PlayerFish
+	FSH_Loader.LoadScene("Models/GoldFishBlend.FSH"); //GoldFish
+	FSH_Loader.LoadScene("Models/BlueTang.FSH"); //BlueTang
+	FSH_Loader.LoadScene("Models/AquariumRedux.FSH"); //Aquarium
+
+	srand(time(0));
+	model = new GLModel(&FSH_Loader, rand() % 3);
+	aquarium = new GLModel(&FSH_Loader, Aquarium);
+	model->GetTransform().m_pos.z = 5;
+
+	modelShader = new GLShader("draw");
+	camera = new GLCamera(glm::vec3(0), 70, window::WIDTH/window::HEIGHT, 0.01f, 1000.0f);
 }
 

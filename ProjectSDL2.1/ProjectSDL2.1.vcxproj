@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GLMeshBS.cpp" />
     <ClCompile Include="GLNPC_BlueTang.cpp" />
     <ClCompile Include="FilterComputeShader.cpp" />
     <ClCompile Include="GLGUIHandler.cpp" />
@@ -40,9 +41,18 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="obj_loader.cpp" />
+    <ClCompile Include="ParticleComputeShader.cpp" />
+    <ClCompile Include="ParticleEmitter.cpp" />
+    <ClCompile Include="ParticleHandler.cpp" />
+    <ClCompile Include="RoundCounter.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SeaWeedHandler.cpp" />
+    <ClCompile Include="SeaWeedLeafs.cpp" />
+    <ClCompile Include="SpecialStaticMesh.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EnumShaderType.h" />
+    <ClInclude Include="GLMeshBS.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GLNPC_BlueTang.h" />
     <ClInclude Include="AABB.h" />
@@ -67,15 +77,31 @@
     <ClInclude Include="GLWindow.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="Menu.h" />
-    <ClInclude Include="obj_loader.h" />
+    <ClInclude Include="ParticleComputeShader.h" />
+    <ClInclude Include="ParticleEmitter.h" />
+    <ClInclude Include="ParticleHandler.h" />
     <ClInclude Include="RNG.h" />
+    <ClInclude Include="RoundCounter.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SeaWeedHandler.h" />
+    <ClInclude Include="SeaWeedLeafs.h" />
+    <ClInclude Include="SpecialStaticMesh.h" />
     <ClInclude Include="SphereBS.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="blend_shape.frag" />
+    <None Include="blend_shape.geom" />
     <None Include="blueFilter.glsl" />
+    <None Include="draw.frag" />
+    <None Include="draw.vert" />
     <None Include="lighting.frag" />
     <None Include="lighting.vert" />
+    <None Include="blend_shape.vert" />
+    <None Include="Particle.frag" />
+    <None Include="Particle.geom" />
+    <None Include="Particle.vert" />
+    <None Include="ParticleProjectileComputeShader.glsl" />
+    <None Include="ParticleTestShader.glsl" />
     <None Include="pass.frag" />
     <None Include="pass.vert" />
     <None Include="post.frag" />
@@ -150,7 +176,9 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>.\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>freetype262.lib;FishBox.lib;glew32.lib;glew32s.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;OpenGL32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freetype262.lib;FishBox.lib;glew32.lib;glew32s.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;SDL2_mixer.lib;OpenGL32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <AdditionalOptions>/NODEFAULTLIB:MSVCRT %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -182,7 +210,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>.\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>freetype262.lib;FishBox.lib;glew32.lib;glew32s.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;OpenGL32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freetype262.lib;FishBox.lib;glew32.lib;glew32s.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;SDL2_mixer.lib;OpenGL32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

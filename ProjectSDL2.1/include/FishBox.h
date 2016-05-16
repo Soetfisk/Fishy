@@ -25,13 +25,11 @@
 #include <vector>
 
 //OpenGL Includes
-#include <gl\glew.h>
+
 #include <glm\glm.hpp>
 #include <gl\GL.h>
-#include <glm\gtx\transform.hpp>
 
-//SDL Includes
-#include <SDL2\SDL.h>
+
 
 
 //#include "GLUtil.h"
@@ -59,9 +57,9 @@ namespace FSHData
 	};
 	struct vertexData
 	{
-		float pos[3];
-		float normal[3];
-		float uv[2];
+		glm::vec3 pos;
+		glm::vec3 normal;
+		glm::vec2 uv;
 	};
 	struct index
 	{
@@ -69,7 +67,7 @@ namespace FSHData
 	};
 	struct blendShape
 	{
-		float pos[3];
+		glm::vec3 pos;
 	};
 	struct material
 	{
@@ -128,10 +126,12 @@ private: //variables
 	mesh meshHEADER;
 	unsigned int* indices = nullptr;
 	vertexData * vertices = nullptr;
+	blendShape ** blendShapes = nullptr;
 
 private: //functions
 	void loadVertexData();
 	void loadIndices();
+	void loadBlendshapes();
 
 public: //functiuons
 	FSHMesh(void);
@@ -143,8 +143,8 @@ public: //functiuons
 	vertexData * GetVertices();
 	unsigned int getVertexCount();
 	unsigned int getIndexCount();
-
-
+	blendShape ** GetBlendShapes();
+	
 	//getUVs();
 	//getMaterial();
 	//getTexture();
@@ -175,6 +175,7 @@ private:
 	FSHScene(void);
 public:
 
+	void setTextureList(std::vector<texture*> textures, std::vector<std::string> textureNames);
 	FSHScene(char * filePath);
 	unsigned int GetMeshCount();
 	std::vector<FSHMesh*> GetMeshList();
@@ -198,6 +199,13 @@ private:
 private: //varaibles
 	std::vector<FSHScene> SceneList;
 	std::vector<texture*> extraTextures;
+	std::vector<texture*> textures;
+	std::vector<std::string> textureNames;
+
+	//functions
+	void LoadTextures();
+
+
 public: //variables
 
 
@@ -205,6 +213,7 @@ public: //functions
 	FishBox(void);
 	FishBox::~FishBox();
 	void clean();
+	void freeTextures();
 
 	void release();
 	void Test();
@@ -218,8 +227,9 @@ public: //functions
 	unsigned int * IndexData(unsigned int model, unsigned int mesh);
 	unsigned int ModelMeshCount(unsigned int model);
 	FSHData::material * meshMaterial(unsigned int model, unsigned int mesh);
-	texture* meshTexture(unsigned int model, unsigned int mesh);
-	
+	FSHData::texture* meshTexture(unsigned int model, unsigned int mesh);
+	FSHData::blendShape** meshBlendShapes(unsigned int model, unsigned int mesh);
+
 	//extra functions
 	texture * loadTexure(char* filepath);
 };

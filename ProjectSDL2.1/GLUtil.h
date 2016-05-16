@@ -19,11 +19,23 @@
 
 //SDL Includes
 #include <SDL2\SDL.h>
+#include <SDL2\SDL_mixer.h>
 
 //FSH includes
 #include <FishBox.h>
 
 //Structs
+
+//Particle
+enum EmitterType
+{
+	STATICSTREAM,
+	GOLDSTREAM,
+	PLAYERFOLLOW,
+	PROJECTILE,
+	NREMITERTYPE
+};
+
 
 //WINDOW
 

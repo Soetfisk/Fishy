@@ -3,7 +3,7 @@
 
 GLProjectileHandler::GLProjectileHandler()
 {
-	projectileActiveTime = 0.0f;
+	projectileActiveTime = 0;
 	projectileSpeed = 0.0f;
 }
 
@@ -15,6 +15,7 @@ GLProjectileHandler::GLProjectileHandler(FishBox* FSH_Loader, unsigned int model
 	this->projectileSpeed = projectileSpeed;
 	this->projectileStrength = 10.0f;
 	this->projectileSize = 1.0f;
+	standardProjectileSize = 1.0f;
 	this->cooldownDuration = cooldown;
 	this->cooldownCounter = 0.0f;
 	this->cooldown = false;
@@ -25,7 +26,7 @@ GLProjectileHandler::GLProjectileHandler(FishBox* FSH_Loader, unsigned int model
 
 GLProjectileHandler::~GLProjectileHandler()
 {
-	for (int i = 0; i < projectiles.size(); i++)
+	for (size_t i = 0; i < projectiles.size(); i++)
 		delete projectiles.at(i);
 }
 
@@ -62,19 +63,19 @@ void GLProjectileHandler::ChangeStateTo(ProjectilePowerUpState state)
 	switch (state)
 	{
 	case REGULAR:
-		projectileSize = 1.0f;
+		projectileSize = standardProjectileSize;
 		break;
 	case SHOTGUN:
-		projectileSize = 1.0f;
+		projectileSize = standardProjectileSize;
 		break;
 	case BIG:
- 		projectileSize = BIG_PROJECTILE_SIZE;
+ 		projectileSize = standardProjectileSize * BIG_PROJECTILE_MULTIPLIER;
 		break;
 	case FAST:
-		projectileSize = 1.0f;
+		projectileSize = standardProjectileSize;
 		break;
 	case STRONG:
-		projectileSize = 1.0f;
+		projectileSize = standardProjectileSize;
 		break;
 	default:
 		break;
@@ -85,8 +86,12 @@ void GLProjectileHandler::ChangeStateTo(ProjectilePowerUpState state)
 void GLProjectileHandler::Update(float& dt)
 {
 	GLProjectile* temp = nullptr;
-	for (int i = 0; i < projectiles.size(); i++)
+	for (size_t i = 0; i < projectiles.size(); i++)
+	{
 		projectiles.at(i)->TestUpdate(dt);
+		projectiles.at(i)->UpdateModel();
+	}
+		
 	if (cooldown)
 	{
 		cooldownCounter += dt;
@@ -100,7 +105,7 @@ void GLProjectileHandler::Update(float& dt)
 
 void GLProjectileHandler::Draw(GLShader& shader)
 {
-	for (int i = 0; i < projectiles.size(); i++)
+	for (size_t i = 0; i < projectiles.size(); i++)
 		projectiles.at(i)->TestDraw(shader);
 }
 
@@ -113,7 +118,7 @@ std::vector<GLProjectile*> GLProjectileHandler::GetActiveProjectiles()
 {
 	std::vector<GLProjectile*> result;
 
-	for (int i = 0; i < projectiles.size(); i++)
+	for (size_t i = 0; i < projectiles.size(); i++)
 	{
 		if (projectiles.at(i)->IsActive())
 		{
@@ -127,7 +132,7 @@ std::vector<GLProjectile*> GLProjectileHandler::GetActiveProjectiles()
 GLProjectile* GLProjectileHandler::GetInactiveProjectile()
 {
 	GLProjectile* projectilePtr = nullptr;
-	for (int i = 0; i < projectiles.size(); i++)
+	for (size_t i = 0; i < projectiles.size(); i++)
 	{
 		if (!projectiles.at(i)->IsActive())
 		{
@@ -151,6 +156,7 @@ void GLProjectileHandler::RegularShoot(glm::vec3 forward, glm::vec3 pos, glm::ve
 	float size = glm::length(projectilePtr->GetBoundingBox().halfDimension) * SHOTGUN_OFFSET;
 	pos = pos + forward * size;
 	projectilePtr->Shoot(pos, forward, velocity, rot);
+	//projectilePtr->addParticleEmitter(this->particleHandlerReference->CreateEmitter(EmitterType::PROJECTILE, glm::vec4(pos,1)));
 }
 
 void GLProjectileHandler::ShotgunShoot(glm::vec3 forward, glm::vec3 pos, glm::vec3 rot, glm::vec3 velocity, glm::vec3 right, glm::vec3 up)
@@ -184,7 +190,7 @@ void GLProjectileHandler::ShotgunShoot(glm::vec3 forward, glm::vec3 pos, glm::ve
 				tempForward = glm::vec3(forward.x + RNG::range(-angle, angle),
 										forward.y + RNG::range(-angle, angle),
 										forward.z + RNG::range(-angle, angle));
-			} while (glm::dot(forward, tempForward) < 1);
+			} while (glm::dot(forward, tempForward) < 0.8);
 			glm::normalize(tempForward);
 
 			if (x != 0)
@@ -206,6 +212,30 @@ void GLProjectileHandler::ShotgunShoot(glm::vec3 forward, glm::vec3 pos, glm::ve
 			// Set scale and shoot from new start pos(startPos + tempRight + tempUp)
 			projectilePtr->SetScale(projectileSize);
 			projectilePtr->Shoot(pos + tempRight + tempUp, tempForward, velocity, rot);
+			//projectilePtr->addParticleEmitter(this->particleHandlerReference->CreateEmitter(EmitterType::PROJECTILE, glm::vec4(pos + tempRight, 1)));
 		}
 	}
+}
+
+void GLProjectileHandler::StandardProjectileSize(float size)
+{
+	standardProjectileSize = size;
+	if (currentState == BIG)
+		projectileSize = standardProjectileSize * BIG_PROJECTILE_MULTIPLIER;
+	else
+		projectileSize = standardProjectileSize;
+}
+
+void GLProjectileHandler::drawParticles(GLShader *shader) {
+	for (size_t i = 0; i < projectiles.size(); i++)
+		projectiles.at(i)->drawParticles(shader);
+}
+
+void GLProjectileHandler::updateParticles(float& deltaTime) {
+	for (size_t i = 0; i < projectiles.size(); i++)
+		projectiles.at(i)->updateParticleEmitter(deltaTime);
+}
+
+void GLProjectileHandler::addParticleHandlerReference(ParticleHandler* pHandlerRef) {
+	this->particleHandlerReference = pHandlerRef;
 }

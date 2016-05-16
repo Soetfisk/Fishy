@@ -15,9 +15,11 @@ public:
 	void Update(GLCamera& camera);
 	void Uniform1f(std::string name, float number);
 	void UniformVec3(std::string name, glm::vec3 vector);
+	void Uniform1fv(std::string name, float number[10]);
+	void Uniform1ui(std::string name, GLuint number);
 	/*void Update(GLMesh& mesh, GLCamera& camera);
 	void Update(GLTransform& tranform, GLCamera& camera);*/
-	GLuint& GetUnifromLocation(std::string name);
+	GLuint GetUnifromLocation(std::string name);
 
 	virtual ~GLShader();
 private:
@@ -26,7 +28,9 @@ private:
 	enum
 	{
 		TRANSFROM_U,
-		PROJVIEW_U,
+		//PROJECTIONVIEW_U,
+		PROJECTION_U,
+		VIEW_U,
 		VIEWPOS_U,
 
 		NUM_UNIFORMS

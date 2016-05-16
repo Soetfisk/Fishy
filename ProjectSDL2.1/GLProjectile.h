@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GLModel.h"
+#include "ParticleHandler.h"
 
 enum ProjectileStates
 {
@@ -26,17 +27,21 @@ public:
 	void SetVelocity(glm::vec3 velocity);
 	void Shoot(glm::vec3 startPos, glm::vec3 forward, glm::vec3 velocity, glm::vec3 rot);
 	void SetScale(float scale);
+	void setMaxActiveTime(int Time); //Not used
 	void SetSpeed(float& speed);		// 
 	void SetStrength(float strength);
 	void Activate();					// Activates the projectile 
 	void Inactivate();					// Deactivates the projectile
 	bool IsActive();					// Returns true if the projectile is active
 
+	void addParticleEmitter(ParticleEmitter* emitter);
+	void updateParticleEmitter(float& deltaTime);
+	void drawParticles(GLShader* shader);
 private:
-	const float MIN_PROJECTILE_SPEED = 20;
+	const float MIN_PROJECTILE_SPEED = 30;
 	const float MIN_SPEED = 0.5f;
 
-	int maxActiveTime;				// The max distance the projecitle is allowed to travel
+	int maxActiveTime, MaxActiveTimeUnaltered;				// The max distance the projecitle is allowed to travel
 	float timeActive;				// Keeping track of how long the projectile has traveled 
 	float speed;					// The speed the bullet travels at
 	float strength;
@@ -44,6 +49,7 @@ private:
 	glm::vec3 forward;				// The direction the projectile will travel
 	glm::vec3 forwardVel;
 	ProjectileStates currentState;	// The current state
+	ParticleEmitter* projectileEmitter;
 };
 
 /*

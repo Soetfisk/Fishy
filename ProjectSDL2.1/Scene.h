@@ -15,27 +15,31 @@
 #include "GUI.h"
 #include "GLGUIHandler.h"
 #include "GLCollisionHandler.h"
+#include "GameState.h"
+#include "SeaWeedLeafs.h"
+#include "ParticleHandler.h"
+#include <time.h>
+#include <SDL2\SDL_mixer.h>
+#include "RoundCounter.h"
+#include "SeaWeedHandler.h"
+#include "EnumShaderType.h"
+#define mSTATIC *shaders[MODELS]
+#define mANIMATED *shaders[BLEND_SHAPE]
 
 class Scene {
 private:
-	enum ShaderType {
-		MODELS,
-		//PARTICLES,
-		//BLUR,
-		PASS,
-		LIGHTING,
-		TEXT,
-		WAVY,
-		BORDER,
-		NUM_SHADERS
-	};
+	
 	enum
 	{
 		PlayerFish,
 		GoldFish,
 		BlueTang,
 		Bubble,
-		Aquarium
+		Aquarium,
+		SeaWeedLeaf,
+		SeaWeedTall,
+		roughRock,
+		smoothRock
 	};
 	int SCREEN_WIDTH = window::WIDTH;
 	int SCREEN_HEIGHT = window::HEIGHT / 2;
@@ -58,14 +62,26 @@ private:
 		glm::vec3 diffuse;
 		glm::vec3 specular;
 	};
+	enum
+	{
+		COMBAT_BACKGROUND_MUSIC,
+		ATTACK_BACKGROUND_MUSIC,
+		ARCADE_BACKGROUND_MUSIC,
+
+		NUM_MUSIC
+	};
+
+	Mix_Music *music[NUM_MUSIC];
 	//todo implement
 	//std::vector<Model> models;
 	FishBox FSH_Loader;
 	Light dirLight;
+
 	std::vector<PointLight> pointLights;
 	std::vector<GLPlayer*> players;
 	std::vector<GLNPC*> NPCs;
 	std::vector<GLModel*> staticMeshes;
+
 	GLShader* shaders[NUM_SHADERS];
 	GLMesh* tempMesh;
 	GLuint quadVAO = 0;
@@ -78,20 +94,25 @@ private:
 	FrameBuffer* frameBuffer4;
 	FrameBuffer* frameBuffer5;
 	GLProjectile* testProj;
-	float count[2] = {0,0};
+	float count[2] = { 0,0 };
 	FilterComputeShader* filterComputeShader;
 	float deltaTime;
+	float dTime;
+	float combinedDtime = 0;
+	int prevDTime;
+	int currentDTime;
 	GLCollisionHandler collisionHandler;
-	
+
 	GUI* guiTest;
 	glm::mat4 projection;
 	GLGUIHandler* guih;
+	RoundCounter* rc;
+	SeaWeedHandler* seaWeedHandler;
+	SeaWeedHandler* TallSeaWeedHandler;
+	SeaWeedHandler* stoneHandler;
+	SeaWeedHandler* stoneHandler2;
 
-private:
-	void LoadModels();
-	void LoadModels(char* folder);
-	void UpdatePlayerPowerUp(int player);
-	void HandlePlayerPowerUp();
+
 	// variables for border shader
 	float borderThreshold1, borderThreshold2;
 	glm::vec3 borderColor1;
@@ -103,15 +124,42 @@ private:
 	glm::vec3 fogColor;
 	// Player
 	GLPlayer::PowerUps currentPowerUp;
+	// Timer
+	float endTimer; // when we end game
+	float endScore; // reach this amount of points and game end
+	float endSceneTimer = 0; // private time that is used for ending the game
+	bool endGame = false;
+	bool winner = false;
+	GLOBAL_GameState* gameState;
+	int currentSong = 0;
+
+	ParticleHandler* particleHandler;
+
+	bool debug;
+private:
+	void Init();
+	void LoadModels();
+	void LoadModels(char* folder);
+	void UpdatePlayerPowerUp(int player);
+	void HandlePlayerPowerUp();
+	void CheckWinner();
+	void AddScore();
+
+	void DrawParticles(GLCamera& playerCamera);
+	void setDebugTimer(bool debug);
+	void printDebugTimer(bool debug, std::string name);
+	void PrintAndResetCombinedDTimer(bool debug);
+
 public:
-	Scene();
-	Scene(GUI* textToScreen);
+	Scene(GLOBAL_GameState* gameState);
+	Scene(GUI* textToScreen, GLOBAL_GameState* gameState);
 	~Scene();
 
 	void HandleEvenet(SDL_Event* e);
 
 	void Update(float& deltaTime);
 	void LoadScene();
+	void LoadFastScene();
 	void DrawScene();
 	void RenderQuad();
 	void ResetScene();

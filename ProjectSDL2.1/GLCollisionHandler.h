@@ -27,6 +27,7 @@ public:
 
 	void InitiatePowerUpHandler();
 
+	void AddParticleHandlerReference(ParticleHandler* pHandlerRef);
 private:
 	std::vector<GLPlayer*> players;
 	std::vector<GLNPC*> NPCs;
