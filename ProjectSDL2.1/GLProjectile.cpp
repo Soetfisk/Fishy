@@ -6,6 +6,7 @@ GLProjectile::GLProjectile() : GLModel()
 	timeActive = 0.0;
 	forward = glm::vec3(0);
 	currentState = INACTIVE;
+	this->projectileEmitter = nullptr;
 }
 
 GLProjectile::GLProjectile(int maxDist) : GLModel()
@@ -18,6 +19,7 @@ GLProjectile::GLProjectile(int maxDist) : GLModel()
 	forward = glm::vec3();
 	forwardVel = glm::vec3();
 	currentState = INACTIVE;
+	this->projectileEmitter = nullptr;
 }
 
 GLProjectile::GLProjectile(FishBox* FSH_Loader, char* filePath, int projectileActiveTime, float projectileSpeed) : GLModel(FSH_Loader, filePath)
@@ -31,24 +33,29 @@ GLProjectile::GLProjectile(FishBox* FSH_Loader, char* filePath, int projectileAc
 	forward = glm::vec3();
 	forwardVel = glm::vec3();
 	currentState = INACTIVE;
+	this->projectileEmitter = nullptr;
 }
 
 GLProjectile::GLProjectile(FishBox* FSH_Loader, unsigned int modelID, int projectileActiveTime, float projectileSpeed, float projectileStrength, float projectileSize) : GLModel(FSH_Loader, modelID)
 {
-	maxActiveTime = projectileActiveTime;
-	MaxActiveTimeUnaltered = projectileActiveTime;
+	maxActiveTime = projectileActiveTime/2;
+	MaxActiveTimeUnaltered = projectileActiveTime/2;
 	timeActive = 0.0f;
-	this->speed = projectileSpeed;
+	this->speed = projectileSpeed*2;
 	strength = projectileStrength;
 	transform->m_scale = glm::vec3(projectileSize);
 	velocity = glm::vec3();
 	forward = glm::vec3();
 	forwardVel = glm::vec3();
 	currentState = INACTIVE;
+
+	this->projectileEmitter = nullptr;
 }
 
 GLProjectile::~GLProjectile()
 {
+	if(this->projectileEmitter != nullptr)
+		delete this->projectileEmitter;
 }
 
 void GLProjectile::TestDraw(GLShader & shader)
@@ -158,14 +165,30 @@ bool GLProjectile::IsActive()
 }
 
 void GLProjectile::addParticleEmitter(ParticleEmitter* emitter) {
-	this->projectileEmitter = emitter;
+	if(this->projectileEmitter == nullptr)
+		this->projectileEmitter = emitter;
 	
 }
 
 void GLProjectile::updateParticleEmitter(float& deltaTime) {
-	this->projectileEmitter->UpdateEmitter(deltaTime);
+	switch (currentState)
+	{
+	case ACTIVE:
+		this->projectileEmitter->UpdateEmitter(deltaTime);
+		break;
+	}
+	
 }
 
 void GLProjectile::drawParticles(GLShader* shader) {
-	this->projectileEmitter->Draw(shader);
+	switch (currentState)
+	{
+	case ACTIVE:
+		this->projectileEmitter->Draw(shader);
+		break;
+	}
+}
+
+bool GLProjectile::hasParticleEmitter() {
+	return this->projectileEmitter == nullptr;
 }

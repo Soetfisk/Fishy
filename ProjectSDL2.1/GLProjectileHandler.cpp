@@ -156,7 +156,11 @@ void GLProjectileHandler::RegularShoot(glm::vec3 forward, glm::vec3 pos, glm::ve
 	float size = glm::length(projectilePtr->GetBoundingBox().halfDimension) * SHOTGUN_OFFSET;
 	pos = pos + forward * size;
 	projectilePtr->Shoot(pos, forward, velocity, rot);
-	//projectilePtr->addParticleEmitter(this->particleHandlerReference->CreateEmitter(EmitterType::PROJECTILE, glm::vec4(pos,1)));
+	projectilePtr->addParticleEmitter(this->particleHandlerReference->CreateEmitter(EmitterType::PROJECTILE, glm::vec4(pos,1)));
+}
+
+void GLProjectileHandler::addEmitterToProjectile(GLProjectile* projectile, glm::vec3 pos) {
+	projectile->addParticleEmitter(this->particleHandlerReference->CreateEmitter(EmitterType::PROJECTILE, glm::vec4(pos, 1)));
 }
 
 void GLProjectileHandler::ShotgunShoot(glm::vec3 forward, glm::vec3 pos, glm::vec3 rot, glm::vec3 velocity, glm::vec3 right, glm::vec3 up)
@@ -212,7 +216,7 @@ void GLProjectileHandler::ShotgunShoot(glm::vec3 forward, glm::vec3 pos, glm::ve
 			// Set scale and shoot from new start pos(startPos + tempRight + tempUp)
 			projectilePtr->SetScale(projectileSize);
 			projectilePtr->Shoot(pos + tempRight + tempUp, tempForward, velocity, rot);
-			//projectilePtr->addParticleEmitter(this->particleHandlerReference->CreateEmitter(EmitterType::PROJECTILE, glm::vec4(pos + tempRight, 1)));
+			projectilePtr->addParticleEmitter(this->particleHandlerReference->CreateEmitter(EmitterType::PROJECTILE, glm::vec4(pos + tempRight, 1)));
 		}
 	}
 }

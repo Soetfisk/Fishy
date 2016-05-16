@@ -149,10 +149,10 @@ void Scene::Init()
 	//		particleHandler->AddEmiter(EmitterType::STATICSTREAM, glm::vec4((float)x* RNG::range(-4.f, 4.f), -50.f, (float)z* RNG::range(-6.f, 6.f), 1));
 	//	}
 	//}
-	for (int z = -85; z < 85; z+=40) {
-		for (int x = -125; x < 125; x+= 40) {
-			float xe = x + RNG::range(-20, 20);
-			float ze = z + RNG::range(-20, 20);
+	for (int z = -85; z < 85; z+=60) {
+		for (int x = -125; x < 125; x+= 60) {
+			float xe = x + RNG::range(-25, 25);
+			float ze = z + RNG::range(-25, 25);
 			particleHandler->AddEmiter(EmitterType::STATICSTREAM, glm::vec4((xe>-125 && xe<125) ? xe : x, -50.f, (ze>-85 && ze<85) ? ze : z, 1));
 		}
 	}

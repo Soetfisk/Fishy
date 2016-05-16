@@ -64,14 +64,14 @@ float isEdge(in vec2 uv)
 void main()
 {
 	
-
-	if(isEdge(frag_uv) > 0)
+	color = vec3(texture2D(texture, frag_uv));
+	if( isEdge(frag_uv) > 0)
 	{
 		color = borderColor;
 	}
-	else
-	{
-		color = vec3(texture2D(texture, frag_uv));
-		//color = vec3(1,1,1);
-	}
+	//else
+	//{
+	//	color = vec3(texture2D(texture, frag_uv));
+	//	//color = vec3(1,1,1);
+	//}
 }

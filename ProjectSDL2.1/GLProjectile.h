@@ -37,6 +37,8 @@ public:
 	void addParticleEmitter(ParticleEmitter* emitter);
 	void updateParticleEmitter(float& deltaTime);
 	void drawParticles(GLShader* shader);
+
+	bool hasParticleEmitter();
 private:
 	const float MIN_PROJECTILE_SPEED = 30;
 	const float MIN_SPEED = 0.5f;

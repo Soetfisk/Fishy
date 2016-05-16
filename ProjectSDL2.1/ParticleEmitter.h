@@ -80,6 +80,7 @@ private:
 	void instantiateStaticStream();
 	void instantiateGoldStream();
 	void instantiatePlayerFollow();
+	void instantiateProjectileFollow();
 	bool player1;
 	void changeDirection(glm::vec4 dir);
 
@@ -87,7 +88,7 @@ private:
 
 	void Reset();
 public:
-	ParticleEmitter(EmitterType type, glm::vec4 position, FSHData::texture* texture);
+	ParticleEmitter(EmitterType type, glm::vec4 position, GLfloat textureID);
 	~ParticleEmitter();
 	void UpdateEmitter(const float& deltaTime);
 	void Draw(GLShader* shader);
