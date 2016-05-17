@@ -17,7 +17,7 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 	{
 		distance = players.at(i)->GetTransform().GetPos() - players.at(1 - i)->GetTransform().GetPos();
 		distSqrd = glm::dot(distance,distance);
-		if (distSqrd < 50)
+		if (distSqrd < 100)
 		{
 			//checks if players collide and if so it pushes the player out of the other player
 			if (players.at(i)->GetBoundingBox().containsAABB(players.at(1-i)->GetBoundingBox()))
@@ -37,6 +37,35 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 				if (center_dist < min_dist.z*min_dist.z)
 				{
 					players.at(i)->GetTransform().m_pos.z += glm::normalize(dir).z * (min_dist.z - sqrt(center_dist));
+				}
+			}
+		}
+
+		for (int j = 0; j < models.size(); j++)
+		{
+			distance = players.at(i)->GetTransform().GetPos() - this->models.at(j)->GetTransform().GetPos();
+			distSqrd = glm::dot(distance, distance);
+			if (distSqrd < 100)
+			{
+				//checks if players collide and if so it pushes the player out of the other player
+				if (players.at(i)->GetBoundingBox().containsAABB(this->models.at(j)->GetBoundingBox()))
+				{
+
+					glm::vec3 dir = players.at(i)->GetBoundingBox().center - this->models.at(j)->GetBoundingBox().center;
+					float center_dist = glm::dot(dir, dir);
+					glm::vec3 min_dist = players.at(i)->GetBoundingBox().halfDimension + this->models.at(j)->GetBoundingBox().halfDimension;
+					if (center_dist < min_dist.x*min_dist.x)
+					{
+						players.at(i)->GetTransform().m_pos.x += glm::normalize(dir).x * (min_dist.x - sqrt(center_dist));
+					}
+					if (center_dist < min_dist.y*min_dist.y)
+					{
+						players.at(i)->GetTransform().m_pos.y += glm::normalize(dir).y * (min_dist.y - sqrt(center_dist));
+					}
+					if (center_dist < min_dist.z*min_dist.z)
+					{
+						players.at(i)->GetTransform().m_pos.z += glm::normalize(dir).z * (min_dist.z - sqrt(center_dist));
+					}
 				}
 			}
 		}
@@ -93,8 +122,8 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 				
 				AABB NpcSeenSpace(NPCs.at(j)->GetTransform().GetPos() +(NPCs.at(j)->GetForward() *10.f), glm::vec3(10, 10, 10));
 				//check if player collides with a fish if so it will eat a part of it and gets score
-				if (NPCs.at(j)->GetBoundingBox().containsAABB(players.at(i)->GetBoundingBox()))
-				{ //&& players.at(i)->GetTransform().GetScale().x >= NPCs.at(j)->GetTransform().GetScale().x
+				if (NPCs.at(j)->GetBoundingBox().containsAABB(players.at(i)->GetBoundingBox()) && players.at(i)->GetTransform().GetScale().x + 0.5f >= NPCs.at(j)->GetTransform().GetScale().x)
+				{ //
 					
 					if (NPCs.at(j)->GetCurrentState()!=NPC_INACTIVE && NPCs.at(j)->GetCurrentState() != NPC_BEINGEATEN )
 					{

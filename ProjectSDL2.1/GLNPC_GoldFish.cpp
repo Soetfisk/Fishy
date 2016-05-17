@@ -82,7 +82,6 @@ void GLNPC_GoldFish::gettingEaten(float deltaTime, GLTransform playerTransform)
 {
 	if (this->currentState != NPC_INACTIVE)
 	{
-		this->transform->SetPos(playerTransform.GetPos());
 		this->currentState = NPC_BEINGEATEN;
 	}
 }

@@ -135,6 +135,7 @@ void Scene::Init()
 	this->stoneHandler2->SetRandomRotation(0.3f);
 	this->stoneHandler2->LoadSeaWeed();
 
+	this->collisionHandler.AddModel(this->stoneHandler->GetMeshes());
 	this->castleHandler = new SeaWeedHandler(&FSH_Loader, castle);
 	this->castleHandler->SetXLimit(-90, 90);
 	this->castleHandler->SetZLimit(-50, 50);
@@ -239,7 +240,7 @@ void Scene::LoadModels()
 
 	this->collisionHandler.AddNPC(NPCs);
 	this->collisionHandler.AddPlayer(players);
-	this->collisionHandler.AddModel(models);
+	//this->collisionHandler.AddModel(models);
 	this->collisionHandler.InitiatePowerUpHandler();
 }
 
@@ -432,6 +433,8 @@ Scene::~Scene() {
 }
 
 void Scene::Update(float& deltaTime) {
+
+	//guih->Player1Won();
 
 	if (debug)
 		printf("\n\n##UPDATE DEBUG##");
@@ -744,6 +747,11 @@ void Scene::ResetScene()
 	this->castleHandler->Reset();
 	this->korallHandler->Reset();
 	this->korallHandler2->Reset();
+}
+
+void Scene::ResetRounds()
+{
+	guih->ResetRounds();
 }
 
 void Scene::HandleEvenet(SDL_Event* e) {

@@ -67,8 +67,8 @@ void SeaWeedLeafs::LoadMesh()
 		Leafs.at(i)->GetTransform().SetRot(randomRotationVector);
 		Leafs.at(i)->GetTransform().SetScale(glm::vec3(randScale));
 		Leafs.at(i)->GetTransform().SetPos(glm::vec3(posX + this->GetRandOffsetX(), posY, posZ + this->getRandOffsetZ()));
+		Leafs.at(i)->SetBoundingBox(glm::vec3(0), glm::vec3(1.25));
 		Leafs.at(i)->UpdateModel();
-
 	}
 }
 
@@ -106,11 +106,15 @@ void SeaWeedLeafs::Reset()
 		Leafs.at(i)->GetTransform().SetRot(randomRotationVector);
 		Leafs.at(i)->GetTransform().SetScale(glm::vec3(randScale));
 		Leafs.at(i)->GetTransform().SetPos(glm::vec3(posX + this->GetRandOffsetX(), posY, posZ + this->getRandOffsetZ()));
+		Leafs.at(i)->SetBoundingBox(glm::vec3(0), glm::vec3(1.25));
 		Leafs.at(i)->UpdateModel();
-
 	}
 }
 
+std::vector<GLModel*>& SeaWeedLeafs::GetModels()
+{
+	return Leafs;
+}
 // The random rotation in radians
 void SeaWeedLeafs::SetRotation(float X_Z)
 {
