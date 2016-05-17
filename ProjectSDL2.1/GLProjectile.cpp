@@ -86,6 +86,8 @@ void GLProjectile::TestUpdate(float& dt)
 		if (timeActive >= maxActiveTime)
 		{			// Check if maxActiveTime was reached
 			currentState = INACTIVE;
+			if (this->projectileEmitter != nullptr)
+				this->projectileEmitter->clean();
 			//printf("MaxTimePassed\n");
 		}
 		else

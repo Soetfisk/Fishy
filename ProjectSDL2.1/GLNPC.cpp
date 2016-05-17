@@ -90,3 +90,7 @@ GLNPC::~GLNPC() {
 	if (this->npc_emitter != nullptr)
 		delete npc_emitter;
 }
+
+bool GLNPC::hasEmitter() {
+	return this->npc_emitter != nullptr;
+}
