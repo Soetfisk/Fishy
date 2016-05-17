@@ -48,6 +48,7 @@ void GameMain::HandleUpdateDraw()
 		//this->scene->ResetScene();
 		this->scene->ResetRounds();
 		this->gameState = GLOBAL_GameState::GAME;
+		this->menu->Draw();
 		break;
 	case GLOBAL_GameState::MENU:
 		this->menu->Update(this->deltaTime);
