@@ -53,6 +53,7 @@ GLProjectile::GLProjectile(FishBox* FSH_Loader, unsigned int modelID, int projec
 	currentState = INACTIVE;
 	SetBoundingBox(glm::vec3(0), glm::vec3(0.5));
 	this->projectileEmitter = nullptr;
+	checkForOutOfBoundsValue = 0.0f;
 }
 
 GLProjectile::~GLProjectile()
@@ -92,7 +93,11 @@ void GLProjectile::TestUpdate(float& dt)
 		}
 		else
 			transform->m_pos += forward * speed * dt;	// Move Projectile forward
-
+		if (timeActive >= checkForOutOfBoundsValue)
+		{
+			CheckIfOutOfBounds();
+			checkForOutOfBoundsValue += 0.5f;
+		}
 		break;
 	case INACTIVE:
 		break;
@@ -130,6 +135,7 @@ void GLProjectile::Shoot(glm::vec3 startPos, glm::vec3 forward, glm::vec3 veloci
 	forwardVel = forward * speed;
 	forwardVel *= ((temp >= 1) ? temp : 1.0f);
 	currentState = ACTIVE;
+	checkForOutOfBoundsValue = 0.0f;
 }
 
 void GLProjectile::SetScale(float scale)
@@ -160,6 +166,8 @@ void GLProjectile::Activate()
 void GLProjectile::Inactivate()
 {
 	currentState = INACTIVE;
+	if (this->projectileEmitter != nullptr)
+		this->projectileEmitter->clean();
 }
 
 bool GLProjectile::IsActive()
@@ -192,7 +200,6 @@ void GLProjectile::updateParticleEmitter(float& deltaTime) {
 		this->projectileEmitter->updateScale(this->transform->GetScale().z);
 		break;
 	}
-	
 }
 
 void GLProjectile::drawParticles(GLShader* shader) {
@@ -207,3 +214,26 @@ void GLProjectile::drawParticles(GLShader* shader) {
 bool GLProjectile::hasParticleEmitter() {
 	return this->projectileEmitter != nullptr;
 }
+
+void GLProjectile::CheckIfOutOfBounds()
+{
+	if (transform->m_pos.x > bounds::MAX_X || transform->m_pos.x < bounds::MIN_X)
+	{
+		currentState = INACTIVE;
+		if (this->projectileEmitter != nullptr)
+			this->projectileEmitter->clean();
+	}
+	else if (transform->m_pos.y > bounds::MAX_Y || transform->m_pos.y < bounds::MIN_Y)
+	{
+		currentState = INACTIVE;
+		if (this->projectileEmitter != nullptr)
+			this->projectileEmitter->clean();
+	}
+	else if (transform->m_pos.z > bounds::MAX_Z || transform->m_pos.z < bounds::MIN_Z)
+	{
+		currentState = INACTIVE;
+		if (this->projectileEmitter != nullptr)
+			this->projectileEmitter->clean();
+	}
+}
+
