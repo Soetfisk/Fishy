@@ -165,6 +165,7 @@ public:
 	void DrawScene();
 	void RenderQuad();
 	void ResetScene();
+	void ResetRounds();
 };
 
 #endif
