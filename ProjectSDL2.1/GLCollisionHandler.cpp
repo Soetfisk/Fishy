@@ -19,11 +19,11 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 	for (size_t i = 0; i < players.size(); i++)
 	{
 		distance = players.at(i)->GetTransform().GetPos() - players.at(1 - i)->GetTransform().GetPos();
-		distSqrd = glm::dot(distance,distance);
+		distSqrd = glm::dot(distance, distance);
 		if (distSqrd < 100)
 		{
 			//checks if players collide and if so it pushes the player out of the other player
-			if (players.at(i)->GetBoundingBox().containsAABB(players.at(1-i)->GetBoundingBox()))
+			if (players.at(i)->GetBoundingBox().containsAABB(players.at(1 - i)->GetBoundingBox()))
 			{
 
 				glm::vec3 dir = players.at(i)->GetBoundingBox().center - players.at(1 - i)->GetBoundingBox().center;
@@ -75,36 +75,36 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 		//checks if the player is out of bounds and if so pushes the player back in
 		//if (!players.at(i)->GetBoundingBox().containsAABB(wall))
 		//{
-			
-			glm::vec3 dir = players.at(i)->GetBoundingBox().center - wall.center;
-			float center_dist = glm::dot(dir, dir);
-			glm::vec3 min_dist =  wall.halfDimension - players.at(i)->GetBoundingBox().halfDimension;
-			glm::vec3 normal(0);
-			if (dir.x < -min_dist.x && players.at(i)->getVelocity().x < 0)
-			{
-				normal += glm::vec3(1, 0, 0);
-			}
-			else if (dir.x > min_dist.x && players.at(i)->getVelocity().x > 0)
-			{
-				normal += glm::vec3(-1, 0, 0);
-			}
-			if (dir.y < -min_dist.y && players.at(i)->getVelocity().y < 0)
-			{
-				normal += glm::vec3(0, 1, 0);
-			}
-			if (dir.y > min_dist.y && players.at(i)->getVelocity().y > 0)
-			{
-				normal += glm::vec3(0, -1, 0);
-			}
-			if (dir.z < -min_dist.z && players.at(i)->getVelocity().z < 0)
-			{
-				normal += glm::vec3(0, 0, 1);
-			}
-			if (dir.z > min_dist.z && players.at(i)->getVelocity().z > 0)
-			{
-				normal += glm::vec3(0, 0, -1);
-			}
-			players.at(i)->getVelocity() -= normal * glm::dot(players.at(i)->GetVelocity(), normal);
+
+		glm::vec3 dir = players.at(i)->GetBoundingBox().center - wall.center;
+		float center_dist = glm::dot(dir, dir);
+		glm::vec3 min_dist = wall.halfDimension - players.at(i)->GetBoundingBox().halfDimension;
+		glm::vec3 normal(0);
+		if (dir.x < -min_dist.x && players.at(i)->getVelocity().x < 0)
+		{
+			normal += glm::vec3(1, 0, 0);
+		}
+		else if (dir.x > min_dist.x && players.at(i)->getVelocity().x > 0)
+		{
+			normal += glm::vec3(-1, 0, 0);
+		}
+		if (dir.y < -min_dist.y && players.at(i)->getVelocity().y < 0)
+		{
+			normal += glm::vec3(0, 1, 0);
+		}
+		if (dir.y > min_dist.y && players.at(i)->getVelocity().y > 0)
+		{
+			normal += glm::vec3(0, -1, 0);
+		}
+		if (dir.z < -min_dist.z && players.at(i)->getVelocity().z < 0)
+		{
+			normal += glm::vec3(0, 0, 1);
+		}
+		if (dir.z > min_dist.z && players.at(i)->getVelocity().z > 0)
+		{
+			normal += glm::vec3(0, 0, -1);
+		}
+		players.at(i)->getVelocity() -= normal * glm::dot(players.at(i)->GetVelocity(), normal);
 		//}
 		//checks if a projectile hits a player and if so adds the momentum of the projectile too the player
 		for (size_t j = 0; j < players.at(i)->GetProjectiles().size(); j++)
@@ -112,49 +112,55 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 			if (players.at(i)->GetProjectiles().at(j)->GetBoundingBox().containsAABB(players.at(1 - i)->GetBoundingBox()))
 			{
 				players.at(1 - i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(-0.10f));
-				players.at(1 - i)->HandleCollision(GLPlayer::HIT, deltaTime,players.at(i)->GetProjectiles().at(j)->GetForward() * 30.0f);
+				players.at(1 - i)->HandleCollision(GLPlayer::HIT, deltaTime, players.at(i)->GetProjectiles().at(j)->GetForward() * 30.0f);
 				players.at(i)->GetProjectiles().at(j)->Inactivate();
 			}
 		}
 
 		for (unsigned int j = 0; j < this->NPCs.size(); j++) {
- 			distance = players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos();
+			distance = players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos();
 			distSqrd = glm::dot(distance, distance);
 			if (distSqrd < 60)
 			{
+
+				AABB NpcSeenSpace(NPCs.at(j)->GetTransform().GetPos() + (NPCs.at(j)->GetForward() *10.f), glm::vec3(10, 10, 10));
 				
-				AABB NpcSeenSpace(NPCs.at(j)->GetTransform().GetPos() +(NPCs.at(j)->GetForward() *10.f), glm::vec3(10, 10, 10));
+				
 				//check if player collides with a fish if so it will eat a part of it and gets score
 				if (NPCs.at(j)->GetBoundingBox().containsAABB(players.at(i)->GetBoundingBox()))
-				{ //
-					if (players.at(i)->GetTransform().GetScale().x + 0.5f >= NPCs.at(j)->GetTransform().GetScale().x)
+				{ 
+					if (players.at(i)->GetTransform().GetScale().x + 30.0f >= NPCs.at(j)->GetTransform().GetScale().x)
 					{
-						if (NPCs.at(j)->GetCurrentState() != NPC_INACTIVE && NPCs.at(j)->GetCurrentState() != NPC_BEINGEATEN)
+						if (NPCs.at(j)->GetCurrentState() != NPC_INACTIVE /*&& NPCs.at(j)->GetCurrentState() != NPC_BEINGEATEN*/)
 						{
-							NPCs.at(j)->gettingEaten(deltaTime, 1, players.at(i)->GetTransform());
-								players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(roundf(NPCs.at(j)->GetTransform().GetScale().x * 100) / 100));
-								if (NPCs.at(j)->GetIsPowerUp() == true)
-								{
-									PowerUpHandler->RemovePowerUpFish(NPCs.at(j), j);
-									players.at(i)->SetRandomPowerUp();
-								}
-								else
-								{
-									PowerUpHandler->RemoveAvailableFish(j);
-								}
+							
+							NPCs.at(j)->gettingEaten( 1.0f, glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos()) * 100.0f);
+							players.at(i)->HandleCollision(GLPlayer::HIT, deltaTime, (glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos())) * 100.0f);
+							//players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(roundf(NPCs.at(j)->GetTransform().GetScale().x * 100) / 100));
+							if (NPCs.at(j)->GetIsPowerUp() == true)
+							{
+								PowerUpHandler->RemovePowerUpFish(NPCs.at(j), j);
+								players.at(i)->SetRandomPowerUp();
 							}
-				}
+							else
+							{
+								PowerUpHandler->RemoveAvailableFish(j);
+							}
+						}
+						else if (NpcSeenSpace.containsAABB(players.at(i)->GetBoundingBox()))
+						{
+							NPCs.at(j)->initiateFleeingState(players.at(i)->GetForward());
+						}
 					}
 					else // if you collide with bigger fish
 					{
 						players.at(i)->HandleCollision(GLPlayer::HIT, deltaTime, (glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos())) * 100.0f);
 					}
-					
+
+
+
+					//if the player is seen it will init fleeing behavior of npc
 				
-				//if the player is seen it will init fleeing behavior of npc
-				else if (NpcSeenSpace.containsAABB(players.at(i)->GetBoundingBox()))
-				{
-					NPCs.at(j)->initiateFleeingState(players.at(i)->GetForward());
 				}
 			}
 		}

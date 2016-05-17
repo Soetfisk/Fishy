@@ -39,8 +39,9 @@ protected:
 	const int updateFrames = 3;
 	int timeSinceUpdate; 
 	float fishSize=1.0f;
-	float SizeLoss;
+	float targetScale;
 	float FishSpeedMultiplier;
+	glm::vec3 HitMomentum;
 	float timeUntilRespawn, BitenCoolDown;
 	void RespawnCountdown(float deltaTime);
 
@@ -62,7 +63,7 @@ public:
 	~GLNPC();
 	virtual void NPCUpdate(float deltaTime) = 0;
 	virtual void NPCDraw(GLShader& shader) = 0;
-	virtual void gettingEaten(float deltaTime, float BiteSize, GLTransform playerTransform)=0;
+	virtual void gettingEaten(float BiteSize, glm::vec3 PushVector) =0;
 	virtual void NPCKill() = 0;
 	virtual void initiateFleeingState(glm::vec3 playerForwardVector) = 0;
 

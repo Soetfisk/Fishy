@@ -79,7 +79,7 @@ void GLNPC_GoldFish::NPCDraw(GLShader & shader)
 	}
 }
 
-void GLNPC_GoldFish::gettingEaten(float deltaTime, float BiteSize, GLTransform playerTransform)
+void GLNPC_GoldFish::gettingEaten(float BiteSize, glm::vec3 PushVector)
 {
 	if (this->currentState != NPC_INACTIVE)
 	{
