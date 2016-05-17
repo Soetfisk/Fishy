@@ -42,8 +42,10 @@ protected:
 	void RespawnCountdown(float deltaTime);
 
 	bool isPowerUp = false;
+	
 
 	const int DEADZONEX = 124, DEADZONEY = 48, DEADZONEZ = 84;
+	
 public:
 
 	int GetCurrentState();
@@ -67,7 +69,7 @@ public:
 	void UpdateParticles(float &deltaTime);
 	void DrawParticles(GLShader* shader);
 	void AddEmitter(ParticleEmitter* emitter);
-	
+	bool hasEmitter();
 
 	
 };
