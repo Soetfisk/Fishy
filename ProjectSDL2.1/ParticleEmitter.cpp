@@ -417,3 +417,19 @@ ParticleEmitter::~ParticleEmitter()
 
 
 }
+
+void ParticleEmitter::clean() {
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, this->pe_particleBuffer);
+	ParticleStruct* tempParticlesz = (struct ParticleStruct *) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, nrActiveParticles* sizeof(ParticleStruct), GL_MAP_READ_BIT | GL_MAP_WRITE_BIT);
+
+	for (int i = 0; i < nrActiveParticles; i++) {
+		tempParticlesz[i].customVariables.w = 0;
+	}
+
+	nrActiveParticles = 0;
+	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+
+
+
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+}
