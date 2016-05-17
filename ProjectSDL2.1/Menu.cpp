@@ -109,10 +109,39 @@ void Menu::Draw()
 
 void Menu::HandleEvenet(SDL_Event * e)
 {
-	if (e->type == SDL_KEYDOWN)
+	if (e->type == SDL_CONTROLLERAXISMOTION)
 	{
-		if (currentMState == SHOW_CONTROLS)
-			currentMState = MENU;
+		switch (e->caxis.axis)
+		{
+		case SDL_CONTROLLER_AXIS_LEFTY:
+			if (e->caxis.value > 10000)
+				HandleUp();
+			else if (e->caxis.value < -10000)
+				HandleDown();
+			break;
+		default:
+			break;
+		}
+	}
+	else if (e->type == SDL_CONTROLLERBUTTONDOWN)
+	{
+		switch (e->cbutton.button)
+		{
+		case SDL_CONTROLLER_BUTTON_DPAD_UP:
+			HandleUp();
+			break;
+		case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
+			HandleDown();
+			break;
+		case SDL_CONTROLLER_BUTTON_A:
+			HandleSpace();
+			break;
+		default:
+			break;
+		}
+	}
+	else if (e->type == SDL_KEYDOWN)
+	{
 		switch (e->key.keysym.scancode)
 		{
 		case SDL_SCANCODE_UP:
@@ -170,15 +199,23 @@ void Menu::InitMenuTextureInfo()
 	textScale[START_GAME] = 1.0f;
 	textColor[START_GAME] = glm::vec3(0, 1, 0);
 	textPos[START_GAME][0] = (float)(window::HALF_WIDTH - (gui->GetTextLenght(text[START_GAME], textScale[START_GAME]) * 0.5));
-	tempY += gui->GetTextHeight(text[TITLE], textScale[TITLE]) + extraOffset;
+	tempY += gui->GetTextHeight(text[START_GAME], textScale[START_GAME]) + extraOffset;
 	textPos[START_GAME][1] = window::HEIGHT - tempY;
+
+	// Rematch
+	text[REMATCH] = "Rematch";
+	textScale[REMATCH] = 1.0f;
+	textColor[REMATCH] = glm::vec3(0, 1, 0);
+	textPos[REMATCH][0] = (float)(window::HALF_WIDTH - (gui->GetTextLenght(text[REMATCH], textScale[REMATCH]) * 0.5));
+	tempY += gui->GetTextHeight(text[REMATCH], textScale[REMATCH]) + extraOffset;
+	textPos[REMATCH][1] = window::HEIGHT - tempY;
 
 	// Controls
 	text[CONTROLS] = "Controls";
 	textScale[CONTROLS] = 1.0f;
 	textColor[CONTROLS] = glm::vec3(0, 1, 0);
 	textPos[CONTROLS][0] = (float)(window::HALF_WIDTH - (gui->GetTextLenght(text[CONTROLS], textScale[CONTROLS]) * 0.5));
-	tempY += gui->GetTextHeight(text[TITLE], textScale[TITLE]) + extraOffset;
+	tempY += gui->GetTextHeight(text[CONTROLS], textScale[CONTROLS]) + extraOffset;
 	textPos[CONTROLS][1] = window::HEIGHT - tempY;
 
 	// Exit
@@ -186,7 +223,7 @@ void Menu::InitMenuTextureInfo()
 	textScale[EXIT] = 1.0f;
 	textColor[EXIT] = glm::vec3(0, 1, 0);
 	textPos[EXIT][0] = (float)(window::HALF_WIDTH - (gui->GetTextLenght(text[EXIT], textScale[EXIT]) * 0.5));
-	tempY += gui->GetTextHeight(text[TITLE], textScale[TITLE]) + extraOffset;
+	tempY += gui->GetTextHeight(text[EXIT], textScale[EXIT]) + extraOffset;
 	textPos[EXIT][1] = window::HEIGHT - tempY;
 
 	// Selected
@@ -209,11 +246,17 @@ void Menu::HandleUp()
 
 		selectedBttn = EXIT;
 		break;
-	case CONTROLS:
+	case REMATCH:
 		textScale[selectedBttn] = 1.0f;
 		textPos[selectedBttn][0] = (float)(window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5);
 
 		selectedBttn = START_GAME;
+		break;
+	case CONTROLS:
+		textScale[selectedBttn] = 1.0f;
+		textPos[selectedBttn][0] = (float)(window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5);
+
+		selectedBttn = REMATCH;
 		break;
 	case EXIT:
 		textScale[selectedBttn] = 1.0f;
@@ -222,7 +265,7 @@ void Menu::HandleUp()
 		selectedBttn = CONTROLS;
 		break;
 	default:
-		std::cout << "MENUSTATE ERROR FOR SELECTEDBTTN!\n";
+		std::cout << "MENUSTATE ERROR FOR SELECTEDBTTN IN HandleUp()!\n";
 		break;
 	}
 
@@ -234,6 +277,12 @@ void Menu::HandleDown()
 	switch (selectedBttn)
 	{
 	case START_GAME:
+		textScale[selectedBttn] = 1.0f;
+		textPos[selectedBttn][0] = (float)(window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5);
+
+		selectedBttn = REMATCH;
+		break;
+	case REMATCH:
 		textScale[selectedBttn] = 1.0f;
 		textPos[selectedBttn][0] = (float)(window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5);
 
@@ -252,7 +301,7 @@ void Menu::HandleDown()
 		selectedBttn = START_GAME;
 		break;
 	default:
-		std::cout << "MENUSTATE ERROR FOR SELECTEDBTTN!\n";
+		std::cout << "MENUSTATE ERROR FOR SELECTEDBTTN IN HandleDown()!\n";
 		break;
 	}
 
@@ -264,17 +313,22 @@ void Menu::HandleSpace()
 	switch (selectedBttn)
 	{
 	case START_GAME:
+		*gameState = GLOBAL_GameState::RESET_ROUNDS;
+		break;
+	case REMATCH:
 		*gameState = GLOBAL_GameState::GAME;
 		break;
 	case CONTROLS:
-		currentMState = SHOW_CONTROLS;
-		//*gameState = GLOBAL_GameState::CONTROLS;
+		if (currentMState == MENU)
+			currentMState = SHOW_CONTROLS;
+		else
+			currentMState = MENU;
 		break;
 	case EXIT:
 		*gameState = GLOBAL_GameState::EXIT;
 		break;
 	default:
-		std::cout << "MENUSTATE ERROR FOR SELECTEDBTTN!\n";
+		std::cout << "MENUSTATE ERROR FOR SELECTEDBTTN IN HandleSpace()!\n";
 		break;
 	}
 }

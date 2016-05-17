@@ -622,7 +622,7 @@ void GLPlayer::PowerUpCoolDown()
 		this->powerUpTimer += this->deltaTime;
 
 
-		if (this->powerUpTimer >= POWERUP_DURATION)
+		if (this->powerUpTimer >= this->currentDuration)
 		{
 			int k = 0;
 			this->currentPowerUp = PowerUps::POWER_NEUTRAL;
@@ -705,6 +705,12 @@ void GLPlayer::HandleDash(float & deltaTime)
 
 void GLPlayer::HandlePowerUps()
 {
+	if (this->currentPowerUp == GLPlayer::POWER_HIGH)
+		this->currentDuration = this->HIGH_DURATION;
+	else
+		this->currentDuration = this->POWERUP_DURATION;
+
+
 	if (this->currentPowerUp == GLPlayer::POWER_BUBBLESHOTGUN)
 		this->m_projectileHandler->ChangeStateTo(ProjectilePowerUpState::SHOTGUN);
 	else if (this->currentPowerUp == GLPlayer::POWER_BUBBLEBIG)

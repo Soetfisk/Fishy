@@ -29,6 +29,7 @@ private:
 	{
 		TITLE,
 		START_GAME,
+		REMATCH,
 		CONTROLS,
 		EXIT,
 		SELECTED,

@@ -434,6 +434,8 @@ Scene::~Scene() {
 
 void Scene::Update(float& deltaTime) {
 
+	//guih->Player1Won();
+
 	if (debug)
 		printf("\n\n##UPDATE DEBUG##");
 
@@ -745,6 +747,11 @@ void Scene::ResetScene()
 	this->castleHandler->Reset();
 	this->korallHandler->Reset();
 	this->korallHandler2->Reset();
+}
+
+void Scene::ResetRounds()
+{
+	guih->ResetRounds();
 }
 
 void Scene::HandleEvenet(SDL_Event* e) {

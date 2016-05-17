@@ -23,7 +23,8 @@ public:
 	void Update(float dt);
 	void Draw();
 	void OptimizedDraw();
-	void Reset();							// Reset everything
+	void Reset();							// Reset everything except rounds
+	void ResetRounds();
 
 	void Tie();
 
