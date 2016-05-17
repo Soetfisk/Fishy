@@ -100,12 +100,13 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 					{
 						if (NPCs.at(j)->GetTransform().GetScale().x >= 2)
 						{
+							
 							NPCs.at(j)->SetBeingEatenState(players.at(i));
 							players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(NPCs.at(j)->GetFishSize()));
 						}
 						else
 						{
-							NPCs.at(j)->gettingEaten(deltaTime, players.at(i)->GetTransform());
+							NPCs.at(j)->SetBeingEatenState(players.at(i));
 							players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(roundf(NPCs.at(j)->GetTransform().GetScale().x * 100) / 100));
 							if (NPCs.at(j)->GetIsPowerUp() == true)
 							{

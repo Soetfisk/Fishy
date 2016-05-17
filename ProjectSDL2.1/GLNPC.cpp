@@ -23,8 +23,11 @@ void GLNPC::SetCurrentState(unsigned int state)
 
 void GLNPC::SetBeingEatenState(GLPlayer * InteractingPlayer)
 {
-	this->InteractingPlayer = InteractingPlayer;
-	currentState = NPC_BEINGEATEN;
+	if (currentState != NPC_INACTIVE)
+	{
+		this->InteractingPlayer = InteractingPlayer;
+		currentState = NPC_BEINGEATEN;
+	}
 }
 
 void GLNPC::makePowerUp(FSHData::material* powerMaterial)

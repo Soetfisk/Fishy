@@ -58,6 +58,7 @@ void GLNPC_BlueTang::NPCUpdate(float deltaTime)
 		{
 			if(this->InteractingPlayer!=nullptr)
 			{
+				//printf("%d\n", InteractingPlayer->GetTransform().GetPos());
 				this->transform->m_pos = InteractingPlayer->GetTransform().GetPos();
 			}
 			
