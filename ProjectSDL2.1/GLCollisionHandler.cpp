@@ -12,7 +12,10 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 	glm::vec3 distance;
 	float distSqrd;
 	//AABB for aquarium walls
-	AABB wall(glm::vec3(0), glm::vec3(123, 48, 83));
+	AABB wall(glm::vec3(0), glm::vec3(125, 50, 85));
+
+
+
 	for (size_t i = 0; i < players.size(); i++)
 	{
 		distance = players.at(i)->GetTransform().GetPos() - players.at(1 - i)->GetTransform().GetPos();
@@ -70,12 +73,12 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 			}
 		}
 		//checks if the player is out of bounds and if so pushes the player back in
-		if (!players.at(i)->GetBoundingBox().containsAABB(wall))
-		{
+		//if (!players.at(i)->GetBoundingBox().containsAABB(wall))
+		//{
 			
 			glm::vec3 dir = players.at(i)->GetBoundingBox().center - wall.center;
 			float center_dist = glm::dot(dir, dir);
-			glm::vec3 min_dist = players.at(i)->GetBoundingBox().halfDimension + wall.halfDimension;
+			glm::vec3 min_dist =  wall.halfDimension - players.at(i)->GetBoundingBox().halfDimension;
 			glm::vec3 normal(0);
 			if (dir.x < -min_dist.x && players.at(i)->getVelocity().x < 0)
 			{
@@ -102,7 +105,7 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 				normal += glm::vec3(0, 0, -1);
 			}
 			players.at(i)->getVelocity() -= normal * glm::dot(players.at(i)->GetVelocity(), normal);
-		}
+		//}
 		//checks if a projectile hits a player and if so adds the momentum of the projectile too the player
 		for (size_t j = 0; j < players.at(i)->GetProjectiles().size(); j++)
 		{
