@@ -124,7 +124,7 @@ void GLPlayer::HandleCollision(PlayerStates state, float deltaTime, glm::vec3 mo
 			totalPoints += (int)(100 * momentum.x);
 			currentPoints += (int)(100 * momentum.x);
 		}
-		if (momentum.x < 0 && (totalPoints + 100 * momentum.x) >= 0)
+		if (momentum.x < 0 && (totalPoints + (100 * momentum.x)) >= 0)
 		{
 			size += momentum.x;
 			totalPoints += (int)(100 * momentum.x);

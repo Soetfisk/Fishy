@@ -8,7 +8,15 @@
 class GLCollisionHandler
 {
 public:
-	GLCollisionHandler() {};
+	GLCollisionHandler() {
+		AABB wall(glm::vec3(0), glm::vec3(125, 50, 85));
+		walls[TOP] =	AABB(glm::vec3(0, 55, 0), glm::vec3(125, 5, 85));
+		walls[BOTTOM] = AABB(glm::vec3(0, -55, 0), glm::vec3(125, 5, 85));
+		walls[LEFT] =	AABB(glm::vec3(0, 0, -90), glm::vec3(125, 50, 5));
+		walls[RIGHT] =	AABB(glm::vec3(0, 0, 90), glm::vec3(125, 50, 5));
+		walls[FRONT] =	AABB(glm::vec3(130, 0, 0), glm::vec3(5, 50, 85));
+		walls[BOTTOM] =	AABB(glm::vec3(-130, 0, 0), glm::vec3(5, 50, 85));
+	};
 	~GLCollisionHandler();
 
 	void CheckCollisions(float deltaTime);
@@ -30,6 +38,19 @@ public:
 
 	void AddParticleHandlerReference(ParticleHandler* pHandlerRef);
 private:
+	enum
+	{
+		TOP,
+		BOTTOM,
+		LEFT,
+		RIGHT,
+		FRONT,
+		BACK,
+
+		NUM_WALLS
+	};
+
+	AABB walls[NUM_WALLS];
 	std::vector<GLPlayer*> players;
 	std::vector<GLNPC*> NPCs;
 	std::vector<GLModel*> models;
