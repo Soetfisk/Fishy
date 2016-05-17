@@ -565,11 +565,11 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	CalcVelocity(deltaTime);
 	HandleDash(deltaTime);
 
-	if (this->GetTransform().GetScale().x < size-1)
+	if (this->GetTransform().GetScale().x < size-0.5)
 	{
 		this->transform->SetScale(this->transform->GetScale() + (deltaTime / 4));
 	}
-	else if (this->GetTransform().GetScale().x > size+1)
+	else if (this->GetTransform().GetScale().x > size+0.5)
 	{
 		this->transform->SetScale(-this->transform->GetScale() + (deltaTime / 4));
 	}
