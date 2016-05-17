@@ -12,11 +12,13 @@ ParticleHandler::ParticleHandler(GLShader* renderShader, FishBox *FSH_LoaderRefe
 	this->textures[EmitterType::GOLDSTREAM] = this->FSH_LoaderReference->loadTexure("./res/Star.png");
 	this->textures[EmitterType::PLAYERFOLLOW] = this->FSH_LoaderReference->loadTexure("./res/BubbleTest.png");
 	this->textures[EmitterType::PROJECTILE] = this->FSH_LoaderReference->loadTexure("./res/BubbleTest.png");
+	this->textures[EmitterType::BLOOD] = this->FSH_LoaderReference->loadTexure("./res/BloosSplat.png");
 	//textureIDS[EmitterType::GOLDSTREAM] = getTexture(this->FSH_LoaderReference->loadTexure("./res/Star.png"));
 	this->textureIDS[EmitterType::STATICSTREAM] = getTexture(this->textures[EmitterType::STATICSTREAM]);
 	this->textureIDS[EmitterType::GOLDSTREAM] = getTexture(this->textures[EmitterType::GOLDSTREAM]);
 	this->textureIDS[EmitterType::PLAYERFOLLOW] = getTexture(this->textures[EmitterType::PLAYERFOLLOW]);
 	this->textureIDS[EmitterType::PROJECTILE] = getTexture(this->textures[EmitterType::PROJECTILE]);
+	this->textureIDS[EmitterType::BLOOD] = getTexture(this->textures[EmitterType::BLOOD]);
 
 	FSH_LoaderReference->clean();
 	for (int i = 0; i < EmitterType::NREMITERTYPE; i++) {
@@ -69,6 +71,16 @@ void ParticleHandler::UpdateParticles(const float& deltaTime) {
 
 	for (int i = 0; i < this->emiters.size(); i++) {
 		this->emiters.at(i)->UpdateEmitter(deltaTime);
+
+
+		//For BLood
+		if (this->emiters.at(i)->isTemporary()) {
+			if (this->emiters.at(i)->isDead()) {
+				delete this->emiters.at(i);
+				this->emiters.erase(this->emiters.begin() + i);
+			}
+			
+		}
 	}
 }
 
