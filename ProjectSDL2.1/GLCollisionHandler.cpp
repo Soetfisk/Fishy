@@ -149,11 +149,9 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 							}
 						}
 					}
-					else
+					else // if you collide with bigger fish
 					{
 						players.at(i)->HandleCollision(GLPlayer::HIT, deltaTime, (glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos())) * 100.0f);
-						std::cout << "BIGGER FIIIIIIIISH";
-						int k = 0;
 					}
 					
 				
