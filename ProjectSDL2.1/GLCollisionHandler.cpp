@@ -129,14 +129,19 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 				//check if player collides with a fish if so it will eat a part of it and gets score
 				if (NPCs.at(j)->GetBoundingBox().containsAABB(players.at(i)->GetBoundingBox()))
 				{ 
-					if (players.at(i)->GetTransform().GetScale().x + 30.0f >= NPCs.at(j)->GetTransform().GetScale().x)
+					if (players.at(i)->GetTransform().GetScale().x + 2.0f >= NPCs.at(j)->GetTransform().GetScale().x)
 					{
 						if (NPCs.at(j)->GetCurrentState() != NPC_INACTIVE /*&& NPCs.at(j)->GetCurrentState() != NPC_BEINGEATEN*/)
 						{
 							
-							NPCs.at(j)->gettingEaten( 1.0f, glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos()) * 100.0f);
-							players.at(i)->HandleCollision(GLPlayer::HIT, deltaTime, (glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos())) * 100.0f);
-							//players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(roundf(NPCs.at(j)->GetTransform().GetScale().x * 100) / 100));
+							bool result = NPCs.at(j)->gettingEaten( players.at(i)->GetTransform().GetScale().x/2, -glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos())*0.7f);
+							players.at(i)->HandleCollision(GLPlayer::HIT, deltaTime, (glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos())) * 2.0f);
+							
+							if (result==true)
+							{
+								players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(roundf(NPCs.at(j)->GetTransform().GetScale().x * 100) / 100));
+							}
+							players.at(i)->HandleCollision(GLPlayer::HIT, deltaTime, (glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos())) * 2.0f);
 							if (NPCs.at(j)->GetIsPowerUp() == true)
 							{
 								PowerUpHandler->RemovePowerUpFish(NPCs.at(j), j);

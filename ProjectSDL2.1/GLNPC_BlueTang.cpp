@@ -1,7 +1,6 @@
 #include "GLNPC_BlueTang.h"
 
 
-
 GLNPC_BlueTang::GLNPC_BlueTang(FishBox * FSH_Loader, unsigned int modelID) : GLNPC(FSH_Loader, modelID)
 {
 	this->currentState = NPC_MOVE;
@@ -59,6 +58,7 @@ void GLNPC_BlueTang::NPCUpdate(float deltaTime)
 
 
 			this->transform->m_pos += HitMomentum;
+			HitMomentum = HitMomentum * 0.98f;
 			float CurrentScale = GetTransform().GetScale().y;
 			if (CurrentScale > targetScale)
 			{
@@ -87,7 +87,7 @@ void GLNPC_BlueTang::NPCDraw(GLShader & shader)
 	}
 }
 
-void GLNPC_BlueTang::gettingEaten(float BiteSize, glm::vec3 PushVector)
+bool GLNPC_BlueTang::gettingEaten(float BiteSize, glm::vec3 PushVector)
 {
 
 	if (this->currentState != NPC_INACTIVE && BitenCoolDown<=0)
@@ -97,6 +97,16 @@ void GLNPC_BlueTang::gettingEaten(float BiteSize, glm::vec3 PushVector)
 		targetScale = this->GetTransform().GetScale().y - BiteSize;
 		this->currentState = NPC_BEINGEATEN;
 		BitenCoolDown = 2.0f;
+
+		
+		if (targetScale < 0.5f)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }
 
