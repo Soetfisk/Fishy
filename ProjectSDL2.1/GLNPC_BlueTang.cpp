@@ -9,6 +9,8 @@ GLNPC_BlueTang::GLNPC_BlueTang(FishBox * FSH_Loader, unsigned int modelID) : GLN
 	glm::vec3 scale = glm::vec3(RNG::range(1.1f,3.0f));
 	transform->SetScale(scale);
 
+	this->FishSpeedMultiplier = 1.5;
+
 	this->TimeUntilChange = RNG::range(0.2f, 3.0f);
 	this->forwardSpeed = FishSpeedMultiplier * RNG::range(0.0f, 3.3f);
 	this->rotationChange = glm::vec3(0, RNG::range(-1.0f, 1.0f), 0);
@@ -79,10 +81,7 @@ void GLNPC_BlueTang::gettingEaten(float deltaTime, GLTransform playerTransform)
 {
 	if (this->currentState != NPC_INACTIVE)
 	{
-		
-		this->transform->SetPos(playerTransform.GetPos());
 		this->currentState = NPC_BEINGEATEN;
-
 	}
 }
 
@@ -211,6 +210,25 @@ void GLNPC_BlueTang::ResetFish()
 		delete npc_emitter;
 		this->npc_emitter = nullptr;
 	}*/
+}
+	void GLNPC_BlueTang::ResetFish(float size)
+	{
+		this->currentState = NPC_MOVE;
+		transform->SetPos(glm::vec3(RNG::range(-DEADZONEX, DEADZONEX), RNG::range(-DEADZONEY, DEADZONEY), RNG::range(-DEADZONEZ, DEADZONEZ)));
+		glm::vec3 scale = glm::vec3(RNG::range(1.1f+size, 3.0f + size));
+		transform->SetScale(scale);
 
+		FishSpeedMultiplier = size;
+		this->TimeUntilChange = RNG::range(0.2f, 3.0f);
+		this->forwardSpeed = FishSpeedMultiplier * RNG::range(0.0f, 3.3f);
+		this->rotationChange = glm::vec3(0, RNG::range(-1.0f, 1.0f), 0);
+		this->isPowerUp = false;
+		this->meshes.at(0)->SetMaterial(originalMaterial);
+
+		/*if (this->npc_emitter != nullptr)
+		{
+		delete npc_emitter;
+		this->npc_emitter = nullptr;
+		}*/
 
 }

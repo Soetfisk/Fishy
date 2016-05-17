@@ -43,7 +43,13 @@ void GameMain::HandleUpdateDraw()
 	case GLOBAL_GameState::GAME:
 		this->scene->Update(this->deltaTime);
 		this->scene->DrawScene();
-
+		break;
+	case GLOBAL_GameState::RESET_ROUNDS:
+		//this->scene->ResetScene();
+		this->scene->ResetRounds();
+		this->menu->Draw();
+		this->gameState = GLOBAL_GameState::GAME;
+		this->menu->Draw();
 		break;
 	case GLOBAL_GameState::MENU:
 		this->menu->Update(this->deltaTime);
@@ -55,7 +61,7 @@ void GameMain::HandleUpdateDraw()
 		this->gameOn = false;
 		break;
 	default:
-		std::cout << "GAMESTATE ERROR!\n";
+		std::cout << "GAMESTATE ERROR IN HandleUpdateDraw()!\n";
 		break;
 	}
 }
@@ -67,6 +73,8 @@ void GameMain::HandleEvents()
 	case GLOBAL_GameState::GAME:
 		this->scene->HandleEvenet(&e);
 		break;
+	case GLOBAL_GameState::RESET_ROUNDS:
+		break;
 	case GLOBAL_GameState::MENU:
 		this->menu->HandleEvenet(&e);
 		break;
@@ -76,7 +84,7 @@ void GameMain::HandleEvents()
 		this->gameOn = false;
 		break;
 	default:
-		std::cout << "GAMESTATE ERROR!\n";
+		std::cout << "GAMESTATE ERROR IN HandleEvents()!\n";
 		break;
 	}
 }

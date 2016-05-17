@@ -92,6 +92,7 @@ private:
 		DASH_SOUND,
 		MOVE_SOUND,
 		EAT_SOUND,
+		HIGH_SOUND,
 
 		NUM_SOUND
 	};
@@ -108,6 +109,8 @@ private:
 	const float MAX_ANGLE = 75;
 	const int	MAX_INPUT = (int)glm::pow(2, 15);
 	const int POWERUP_DURATION = 15; // how long the powerup lasts
+	const int HIGH_DURATION = 15; // how long the powerup lasts
+	int currentDuration = POWERUP_DURATION;
 
 	float size = 1;
 	float lastHorizontal = 0;

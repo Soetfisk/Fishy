@@ -38,8 +38,8 @@ protected:
 	ParticleEmitter *npc_emitter;
 	ParticleEmitter *npc_blood_emitter;
 	const int updateFrames = 3;
-	int timeSinceUpdate;
-	float fishSize = 1.0f;
+	int timeSinceUpdate; 
+	float fishSize=1.0f;
 	float FishSpeedMultiplier;
 	float timeUntilRespawn;
 	void RespawnCountdown(float deltaTime);
