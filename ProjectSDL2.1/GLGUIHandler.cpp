@@ -377,6 +377,20 @@ void GLGUIHandler::Reset()
 	textPos[LOSER][1] = window::HALF_HEIGHT - 20;
 }
 
+void GLGUIHandler::ResetRounds()
+{
+	// Player1 wins
+	score[P1WINS] = 0;
+	textEnd[P1WINS] = " wins";
+	printText[P1WINS] = std::to_string(score[P1WINS]) + textEnd[P1WINS];
+
+	// Player2 wins
+	score[P2WINS] = 0;
+	textEnd[P2WINS] = " wins";
+	printText[P2WINS] = std::to_string(score[P2WINS]) + textEnd[P2WINS];
+
+}
+
 void GLGUIHandler::Tie()
 {
 	currentState = OVER;

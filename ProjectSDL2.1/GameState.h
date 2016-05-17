@@ -2,6 +2,7 @@
 
 enum GLOBAL_GameState {
 	GAME,
+	RESET_ROUNDS,
 	MENU,
 	CONTROLS,
 	EXIT
