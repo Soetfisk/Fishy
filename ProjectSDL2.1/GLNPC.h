@@ -36,16 +36,24 @@ protected:
 	float animationFactors[NUM_ANIMATION];
 
 	ParticleEmitter *npc_emitter;
+	ParticleEmitter *npc_blood_emitter;
 	const int updateFrames = 3;
 	int timeSinceUpdate;
+	float fishSize = 1.0f;
+	float FishSpeedMultiplier;
 	float timeUntilRespawn;
 	void RespawnCountdown(float deltaTime);
 
 	bool isPowerUp = false;
-	
+
 
 	const int DEADZONEX = 124, DEADZONEY = 48, DEADZONEZ = 84;
-	
+	const float bloodTime = 3.f;
+	const float bloodTimeCurrent;
+	bool isBleeding;
+
+	void enableBlood();
+
 public:
 
 	int GetCurrentState();
@@ -62,6 +70,7 @@ public:
 	virtual void initiateFleeingState(glm::vec3 playerForwardVector) = 0;
 
 	virtual void ResetFish() = 0;
+	virtual void ResetFish(float scale) = 0;
 
 	float * GetBlendWeights() { return blendWeights; }
 	unsigned int GetBlendShapeCount() { return NUM_ANIMATION; }
@@ -71,5 +80,5 @@ public:
 	void AddEmitter(ParticleEmitter* emitter);
 	bool hasEmitter();
 
-	
+
 };
