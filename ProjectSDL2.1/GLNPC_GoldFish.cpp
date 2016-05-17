@@ -82,6 +82,7 @@ void GLNPC_GoldFish::gettingEaten(float deltaTime, GLTransform playerTransform)
 	{
 		this->transform->SetPos(playerTransform.GetPos());
 		this->currentState = NPC_BEINGEATEN;
+
 	}
 }
 
