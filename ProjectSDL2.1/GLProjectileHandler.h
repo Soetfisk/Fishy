@@ -58,4 +58,6 @@ private:
 	void ShotgunShoot(glm::vec3 forward, glm::vec3 pos, glm::vec3 rot, glm::vec3 velocity, glm::vec3 right, glm::vec3 up);
 
 	ParticleHandler *particleHandlerReference;
+
+	void addEmitterToProjectile(GLProjectile* projectile, glm::vec3 pos);
 };

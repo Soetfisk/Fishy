@@ -67,19 +67,16 @@ void GLGUIHandler::Draw()
 {
 	glViewport(0, 0, window::WIDTH, window::HEIGHT);
 	glEnable(GL_BLEND);
+	//gui->RenderAtlasTexture(*shader);
 	switch (currentState)
 	{
 	case ACTIVE:
 		for (int i = 0; i < NUM_TEXTS - 2; i++)
-		{
 			gui->RenderText(*shader, printText[i], textPos[i][0], textPos[i][1], textScale[i], textColor[i]);
-		}
 		break;
 	case OVER:
 		for (int i = 0; i < NUM_TEXTS; i++)
-		{
 			gui->RenderText(*shader, printText[i], textPos[i][0], textPos[i][1], textScale[i], textColor[i]);
-		}
 		break;
 	}
 	glDisable(GL_BLEND);
@@ -93,15 +90,11 @@ void GLGUIHandler::OptimizedDraw()
 	{
 	case ACTIVE:
 		for (int i = 0; i < NUM_TEXTS - 2; i++)
-		{
-			gui->OptimizedRenderText(*shader, printText[i], textPos[i][0], textPos[i][1], textScale[i], textColor[i]);
-		}
+			gui->RenderText(*shader, printText[i], textPos[i][0], textPos[i][1], textScale[i], textColor[i]);
 		break;
 	case OVER:
 		for (int i = 0; i < NUM_TEXTS; i++)
-		{
-			gui->OptimizedRenderText(*shader, printText[i], textPos[i][0], textPos[i][1], textScale[i], textColor[i]);
-		}
+			gui->RenderText(*shader, printText[i], textPos[i][0], textPos[i][1], textScale[i], textColor[i]);
 		break;
 	}
 	glDisable(GL_BLEND);
@@ -158,6 +151,13 @@ void GLGUIHandler::Player1Won()
 	currentState = OVER;
 	textPos[WINNER][1] += window::QUARTER_HEIGHT;
 	textPos[LOSER][1] -= window::QUARTER_HEIGHT;
+
+	score[P1WINS]++;
+	if (score[P1WINS] == 1)
+		textEnd[P1WINS] = " win";
+	else
+		textEnd[P1WINS] = " wins";
+	printText[P1WINS] = std::to_string(score[P1WINS]) + textEnd[P1WINS];
 }
 
 void GLGUIHandler::Player1SetPowerUp(PlayerPowerUpText powerUp)
@@ -219,12 +219,20 @@ void GLGUIHandler::Player2Won()
 	currentState = OVER;
 	textPos[WINNER][1] -= window::QUARTER_HEIGHT;
 	textPos[LOSER][1] += window::QUARTER_HEIGHT;
+
+	score[P2WINS]++;
+	if (score[P2WINS] == 1)
+		textEnd[P2WINS] = " win";
+	else
+		textEnd[P2WINS] = " wins";
+	printText[P2WINS] = std::to_string(score[P2WINS]) + textEnd[P2WINS];
 }
 
 void GLGUIHandler::Player2SetPowerUp(PlayerPowerUpText powerUp)
 {
 	textEnd[P2POWERUP] = powerUpStringMap[powerUp];
 	printText[P2POWERUP] = textStart[P2POWERUP] + textEnd[P2POWERUP];
+	textPos[P2POWERUP][0] = window::WIDTH - gui->GetTextLenght(printText[P2POWERUP], textScale[P2POWERUP]);
 }
 
 void GLGUIHandler::ResetTime()
@@ -284,6 +292,24 @@ void GLGUIHandler::InitTextureInfo()
 	textEnd[TIME] = " sec";
 	printText[TIME] = "";
 
+	// Player1 wins
+	score[P1WINS] = 0;
+	textScale[P1WINS] = 0.8f;
+	textColor[P1WINS] = glm::vec3(0, 1, 0);
+	textEnd[P1WINS] = " wins";
+	printText[P1WINS] = std::to_string(score[P1WINS]) + textEnd[P1WINS];
+	textPos[P1WINS][0] = ROUND_WIN_X_OFFSET;
+	textPos[P1WINS][1] = window::HALF_HEIGHT + ROUND_WIN_Y_OFFSET;
+
+	// Player2 wins
+	score[P2WINS] = 0;
+	textScale[P2WINS] = 0.8f;
+	textColor[P2WINS] = glm::vec3(0, 1, 0);
+	textEnd[P2WINS] = " wins";
+	printText[P2WINS] = std::to_string(score[P2WINS]) + textEnd[P2WINS];
+	textPos[P2WINS][0] = ROUND_WIN_X_OFFSET;
+	textPos[P2WINS][1] = window::HALF_HEIGHT - gui->GetTextHeight(printText[P2WINS], textScale[P2WINS]) - ROUND_WIN_Y_OFFSET;
+
 	// Winner
 	printText[WINNER] = "Won!";
 	textScale[WINNER] = 2;
@@ -317,14 +343,14 @@ void GLGUIHandler::InitTextureInfo()
 	textPos[P1POWERUP][1] = textPos[PLAYER1][1] - gui->GetTextHeight(printText[P1POWERUP], textScale[P1POWERUP]) - POWER_UP_OFFSET;
 
 	// PLAYER2 POWER UP
-	textPos[P2POWERUP][0] = textPos[PLAYER2][0];
-	textPos[P2POWERUP][1] = textPos[PLAYER2][1] + gui->GetTextHeight(printText[PLAYER2], textScale[PLAYER2]) + POWER_UP_OFFSET;
 	textScale[P2POWERUP] = 0.5f;
 	textColor[P2POWERUP] = glm::vec3(0, 1, 0);
 	textStart[P2POWERUP] = "Power up: ";
 	p2CurrentPowerUp = PlayerPowerUpText::NOTHING;
 	textEnd[P2POWERUP] = "nothing";
 	printText[P2POWERUP] = textStart[P2POWERUP] + textEnd[P2POWERUP];
+	textPos[P2POWERUP][0] = window::WIDTH - gui->GetTextLenght(printText[P2POWERUP], textScale[P2POWERUP]);
+	textPos[P2POWERUP][1] = textPos[PLAYER2][1] + gui->GetTextHeight(printText[PLAYER2], textScale[PLAYER2]) + POWER_UP_OFFSET;
 }
 
 void GLGUIHandler::Reset()

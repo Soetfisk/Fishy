@@ -34,20 +34,15 @@ void main()
 	float finalWeights[10];
 
 	//if other weights add up to one, use neutral target
-	for(int i = 0; i < (BlendShapeCount); i++)
-	{
-		neutral_w -= Weights[i];
-	}
-	clamp(neutral_w, 0.0, 1.0);
-
 	//get a sum of weights
 	for(int i = 0; i < (BlendShapeCount); i++)
 	{
+		neutral_w -= Weights[i];
 		sum_w += Weights[i];
 	}
+	clamp(neutral_w, 0.0, 1.0);
 	sum_w += neutral_w;
 
-	
 	//work out factors for each target and use them for the final pos
 	finalPose += position * (neutral_w/sum_w);
 	for(int i = 0; i < (BlendShapeCount); i++)

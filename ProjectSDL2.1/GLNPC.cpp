@@ -1,5 +1,16 @@
 #include "GLNPC.h"
 
+void GLNPC::RespawnCountdown(float deltaTime)
+{
+	timeUntilRespawn -= deltaTime;
+	if (timeUntilRespawn < 0)
+	{
+		timeUntilRespawn = 10.0f;
+		fishSize += 1.0f;
+		this->ResetFish(fishSize);
+	}
+}
+
 int GLNPC::GetCurrentState()
 {
 	return currentState;
@@ -10,21 +21,17 @@ void GLNPC::SetCurrentState()
 	this->currentState = NPC_STANDSTILL;
 }
 
-void GLNPC::makePowerUp()
+void GLNPC::makePowerUp(FSHData::material* powerMaterial)
 {
-	/*this->meshes.at(0)->GetMaterial()->diffuse[0] = 1.0f;
-	this->meshes.at(0)->GetMaterial()->diffuse[1] = 0.0f;
-	this->meshes.at(0)->GetMaterial()->diffuse[2] = 0.0f;
+	this->meshes.at(0)->SetMaterial(powerMaterial);
 	
-	this->meshes.at(0)->GetMaterial()->spec[0] = 1.0f;
-	this->meshes.at(0)->GetMaterial()->spec[1] = 1.0f;
-	this->meshes.at(0)->GetMaterial()->spec[2] = 1.0f;*/
 	isPowerUp = true;
 	
 }
 
 GLNPC::GLNPC(FishBox * FSH_Loader, unsigned int modelID) : GLModel(FSH_Loader,modelID)
 {
+	originalMaterial = this->meshes[0]->GetMaterial();
 	this->blendWeights = new float[NUM_ANIMATION];
 	for (int i = 0; i < NUM_ANIMATION; i++)
 	{
@@ -33,6 +40,7 @@ GLNPC::GLNPC(FishBox * FSH_Loader, unsigned int modelID) : GLModel(FSH_Loader,mo
 	}
 	this->npc_emitter = nullptr;
 	this->timeSinceUpdate = 0;
+	this->timeUntilRespawn = 10.0f;
 }
 
 void GLNPC::UpdateParticles(float &deltaTime) {

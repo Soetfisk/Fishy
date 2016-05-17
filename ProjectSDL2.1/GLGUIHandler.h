@@ -56,6 +56,8 @@ private:
 		PLAYER2,
 		TIME,
 		FPS,
+		P1WINS,
+		P2WINS,
 		P1POWERUP,
 		P2POWERUP,
 		WINNER,
@@ -70,6 +72,8 @@ private:
 	};
 
 	const float POWER_UP_OFFSET = 5.0f;
+	const float ROUND_WIN_X_OFFSET = 5.0f;
+	const float ROUND_WIN_Y_OFFSET = 5.0f;
 
 	GUI* gui;
 	glm::mat4 projection;

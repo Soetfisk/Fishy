@@ -1,7 +1,6 @@
 #include "GLModel.h"
 
 
-
 GLModel::GLModel()
 {
 
@@ -55,7 +54,7 @@ GLModel::GLModel(FishBox* FSH_Loader, unsigned int modelID)
 								FSH_Loader->VertexData(modelID, i),
 								FSH_Loader->IndexData(modelID, i),
 								FSH_Loader->meshMaterial(modelID, i),
-								FSH_Loader->meshTexture(modelID, i),
+								FSH_Loader->meshTextureID(modelID, i),
 								FSH_Loader->meshBlendShapes(modelID, i)
 								)
 							);
@@ -66,12 +65,12 @@ GLModel::GLModel(FishBox* FSH_Loader, unsigned int modelID)
 								FSH_Loader->VertexData(modelID, i),
 								FSH_Loader->IndexData(modelID, i),
 								FSH_Loader->meshMaterial(modelID, i),
-								FSH_Loader->meshTexture(modelID, i)
+								FSH_Loader->meshTextureID(modelID, i)
 								)
 							);
 	}
 
-	FSHData::material * test = FSH_Loader->meshMaterial(modelID, 0);
+
 	this->UpdateModel();
 }
 
@@ -88,7 +87,6 @@ GLModel::~GLModel()
 
 void GLModel::Draw(GLShader& shader)
 {
-
 	for (size_t i = 0; i < meshes.size(); i++)
 	{
 		glUniform3fv(shader.GetUnifromLocation("diffuse"), 1, glm::value_ptr(glm::vec3(meshes[i]->GetMaterial()->diffuse[0], meshes[i]->GetMaterial()->diffuse[1], meshes[i]->GetMaterial()->diffuse[2])));

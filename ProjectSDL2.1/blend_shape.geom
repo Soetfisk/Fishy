@@ -1,6 +1,6 @@
 #version 430
 layout(triangles) in;
-layout(triangle_strip, max_vertices = 6) out;
+layout(triangle_strip, max_vertices =3) out;
 
 in vec2 geom_uv[];
 in vec3 geom_normal[];
@@ -16,8 +16,8 @@ void main()
 {
 	vec3 vt = normalize(geom_ViewPos[0] - geom_worldpos[0]);
 
-//	if(dot(vt, geom_normal[0]) >= -0.0)
-//	{
+	//if(dot(vt, geom_normal[0]) >= -0.0)
+	//{
 		for(int i = 0; i < 3; i++)
 		{
 			gl_Position = gl_in[i].gl_Position;
@@ -28,5 +28,5 @@ void main()
 			EmitVertex();
 		}
 		EndPrimitive();
-//	}
+	//}
 }

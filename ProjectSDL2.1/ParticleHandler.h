@@ -10,6 +10,9 @@ private:
 	GLuint transformationLocation;
 	FishBox *FSH_LoaderReference;
 	FSHData::texture** textures;
+	GLuint textureIDS[EmitterType::NREMITERTYPE];
+
+	GLuint getTexture(FSHData::texture* texture);
 public:
 	ParticleHandler(GLShader* renderShader, FishBox *FSH_LoaderReference);
 	~ParticleHandler();
@@ -19,6 +22,8 @@ public:
 	void AddEmiter(EmitterType type, glm::vec4 position);
 
 	ParticleEmitter *CreateEmitter(EmitterType type , glm::vec4 position);
+
+	
 };
 
 #endif

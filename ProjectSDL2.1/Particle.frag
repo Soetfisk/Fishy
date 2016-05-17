@@ -28,6 +28,6 @@ void main(){
 	color2 = vec4(geom_pos, 1);
 	color3 = vec4(0,1,0,1);
 	color5 = vec4((tempColor.rgb)/5, 1);
-	color6 = vec4(0,0,0, 16);
+	color6 = vec4(0,0,0, 0);
 
 }

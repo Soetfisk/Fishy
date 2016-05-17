@@ -574,9 +574,6 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	this->m_camera.Update(this->GetTransform(), deltaTime);
 
 	this->m_projectileHandler->Update(deltaTime);
-
-
-	
 }
 
 void GLPlayer::PlayerShoot()
@@ -747,6 +744,7 @@ void GLPlayer::PlayerEating(float deltaTime)
 
 void GLPlayer::addParticleHandleRefernce(ParticleHandler* pHandlerReference) {
 	this->particleHandlerReference = pHandlerReference;
+	this->m_projectileHandler->addParticleHandlerReference(pHandlerReference);
 
 	this->player_PartcileEmitter = this->particleHandlerReference->CreateEmitter(EmitterType::PLAYERFOLLOW, glm::vec4(this->GetTransform().GetPos(),1));
 	this->player_PartcileEmitter->updateDirection(glm::vec4(this->forward, 0));
@@ -755,6 +753,9 @@ void GLPlayer::addParticleHandleRefernce(ParticleHandler* pHandlerReference) {
 void GLPlayer::DrawParticles(GLShader* shader) {
 	if(this->player_PartcileEmitter != nullptr)
 		this->player_PartcileEmitter->Draw(shader);
+
+	//Draw Projectiles
+	this->m_projectileHandler->drawParticles(shader);
 	
 }
 
@@ -777,6 +778,8 @@ void GLPlayer::UpdateParticles(float &deltaTime) {
 		this->player_PartcileEmitter->UpdateEmitter(deltaTime);
 		//this->m_projectileHandler->updateParticles(deltaTime);
 	}
+
+	this->m_projectileHandler->updateParticles(deltaTime);
 
 	
 }

@@ -30,13 +30,19 @@ public:
 	};
 
 protected:
+	FSHData::material* originalMaterial;
 	unsigned int currentState;
 	float * blendWeights;
 	float animationFactors[NUM_ANIMATION];
 
 	ParticleEmitter *npc_emitter;
 	const int updateFrames = 3;
-	int timeSinceUpdate;
+	int timeSinceUpdate; 
+	float fishSize=1.0f;
+	float FishSpeedMultiplier;
+	float timeUntilRespawn;
+	void RespawnCountdown(float deltaTime);
+
 	bool isPowerUp = false;
 
 	const int DEADZONEX = 124, DEADZONEY = 48, DEADZONEZ = 84;
@@ -45,7 +51,7 @@ public:
 	int GetCurrentState();
 	void SetCurrentState();
 	bool& GetIsPowerUp() { return isPowerUp; };
-	void makePowerUp();
+	void makePowerUp(FSHData::material* powerMaterial);
 
 	GLNPC(FishBox* FSH_Loader, unsigned int modelID);
 	~GLNPC();
@@ -56,6 +62,7 @@ public:
 	virtual void initiateFleeingState(glm::vec3 playerForwardVector) = 0;
 
 	virtual void ResetFish() = 0;
+	virtual void ResetFish(float scale) = 0;
 
 	float * GetBlendWeights() { return blendWeights; }
 	unsigned int GetBlendShapeCount() { return NUM_ANIMATION; }
@@ -63,6 +70,7 @@ public:
 	void UpdateParticles(float &deltaTime);
 	void DrawParticles(GLShader* shader);
 	void AddEmitter(ParticleEmitter* emitter);
+	
 
 	
 };
