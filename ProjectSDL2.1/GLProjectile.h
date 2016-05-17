@@ -43,6 +43,7 @@ private:
 	const float MIN_PROJECTILE_SPEED = 30;
 	const float MIN_SPEED = 0.5f;
 
+	float checkForOutOfBoundsValue;
 	int maxActiveTime, MaxActiveTimeUnaltered;				// The max distance the projecitle is allowed to travel
 	float timeActive;				// Keeping track of how long the projectile has traveled 
 	float speed;					// The speed the bullet travels at
@@ -52,6 +53,8 @@ private:
 	glm::vec3 forwardVel;
 	ProjectileStates currentState;	// The current state
 	ParticleEmitter* projectileEmitter;
+
+	void CheckIfOutOfBounds();
 };
 
 /*
