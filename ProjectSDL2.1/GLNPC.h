@@ -49,10 +49,10 @@ protected:
 
 	const int DEADZONEX = 124, DEADZONEY = 48, DEADZONEZ = 84;
 	const float bloodTime = 3.f;
-	const float bloodTimeCurrent;
+	float bloodTimeCurrent;
 	bool isBleeding;
 
-	void enableBlood();
+	
 
 public:
 
@@ -79,6 +79,7 @@ public:
 	void DrawParticles(GLShader* shader);
 	void AddEmitter(ParticleEmitter* emitter);
 	bool hasEmitter();
+	void enableBlood();
 
 
 };

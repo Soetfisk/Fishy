@@ -44,23 +44,41 @@ GLNPC::GLNPC(FishBox * FSH_Loader, unsigned int modelID) : GLModel(FSH_Loader,mo
 }
 
 void GLNPC::UpdateParticles(float &deltaTime) {
-	if (this->npc_emitter != nullptr) {
-		this->timeSinceUpdate++;
-		if (this->timeSinceUpdate >= this->updateFrames) {
-		
+	this->timeSinceUpdate++;
+	if(this->isBleeding)
+		this->bloodTimeCurrent += deltaTime;
+
+	if (this->timeSinceUpdate >= this->updateFrames) {
+
+		if (this->npc_emitter != nullptr) {
 			this->npc_emitter->updateEmitterData(glm::vec4(this->transform->GetPos(), 1),
 				glm::vec4(this->forward, 0), glm::vec4(this->GetRight(), 0), glm::vec4(this->GetUp(), 0), this->transform->GetScale().z);
-			//this->player_PartcileEmitter->updateDirection(glm::vec4(this->forward, 0));
-			//this->player_PartcileEmitter->updatePosition(glm::vec4(this->transform->GetPos(), 1));
-			//this->player_PartcileEmitter->updateSpawnRate(2/speed);
-			this->npc_emitter->UpdateEmitter(deltaTime);
+
+			
+		}
+
+		if (this->npc_blood_emitter != nullptr) {
+			if (this->isBleeding) {
+				this->npc_blood_emitter->updatePosition(glm::vec4(this->transform->GetPos(), 1));
+				this->npc_blood_emitter->UpdateEmitter(deltaTime);
+
+				if (this->bloodTimeCurrent >= this->bloodTime) {
+					this->isBleeding = false;
+					this->bloodTimeCurrent = 0;
+				}
+			}
 		}
 	}
+	
 }
 
 void GLNPC::DrawParticles(GLShader* shader) {
 	if (this->npc_emitter != nullptr) {
 		this->npc_emitter->Draw(shader);
+	}
+
+	if (this->npc_blood_emitter != nullptr) {
+		this->npc_blood_emitter->Draw(shader);
 	}
 }
 
@@ -93,4 +111,10 @@ GLNPC::~GLNPC() {
 
 bool GLNPC::hasEmitter() {
 	return this->npc_emitter != nullptr;
+}
+
+void GLNPC::enableBlood() {
+	this->isBleeding = true;
+	this->bloodTimeCurrent = 0.f;
+
 }
