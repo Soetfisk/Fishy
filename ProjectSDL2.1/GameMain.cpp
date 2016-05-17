@@ -47,6 +47,7 @@ void GameMain::HandleUpdateDraw()
 	case GLOBAL_GameState::RESET_ROUNDS:
 		//this->scene->ResetScene();
 		this->scene->ResetRounds();
+		this->menu->Draw();
 		this->gameState = GLOBAL_GameState::GAME;
 		this->menu->Draw();
 		break;
