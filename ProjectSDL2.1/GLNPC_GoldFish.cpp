@@ -14,6 +14,7 @@ GLNPC_GoldFish::GLNPC_GoldFish(FishBox * FSH_Loader, unsigned int modelID) : GLN
 	this->TimeUntilChange = RNG::range(0.2f, 3.0f);
 	this->forwardSpeed = RNG::range(0.0f, 3.3f); 
 	this->rotationChange = glm::vec3(0, RNG::range(-1.0f, 1.0f), 0);
+
 }
 
 void GLNPC_GoldFish::NPCUpdate(float deltaTime)
@@ -78,13 +79,17 @@ void GLNPC_GoldFish::NPCDraw(GLShader & shader)
 	}
 }
 
-void GLNPC_GoldFish::gettingEaten(float deltaTime, GLTransform playerTransform)
+void GLNPC_GoldFish::gettingEaten(float deltaTime, float BiteSize, GLTransform playerTransform)
 {
 	if (this->currentState != NPC_INACTIVE)
 	{
 		this->currentState = NPC_BEINGEATEN;
+		//DO stuff here
+
 	}
 }
+
+
 
 void GLNPC_GoldFish::NPCKill()
 {

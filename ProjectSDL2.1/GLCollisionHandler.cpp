@@ -127,14 +127,7 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 					
 					if (NPCs.at(j)->GetCurrentState()!=NPC_INACTIVE && NPCs.at(j)->GetCurrentState() != NPC_BEINGEATEN )
 					{
-						if (NPCs.at(j)->GetTransform().GetScale().x >= 2)
-						{
-							NPCs.at(j)->GetTransform().SetScale(NPCs.at(j)->GetTransform().GetScale() - 1.0f);
-							players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(1));
-						}
-						else
-						{
-							NPCs.at(j)->gettingEaten(deltaTime, players.at(i)->GetTransform());
+							NPCs.at(j)->gettingEaten(deltaTime, 1, players.at(i)->GetTransform());
 							players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(roundf(NPCs.at(j)->GetTransform().GetScale().x * 100) / 100));
 							if (NPCs.at(j)->GetIsPowerUp() == true)
 							{
@@ -146,7 +139,6 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 								PowerUpHandler->RemoveAvailableFish(j);
 							}
 						}
-					}
 				}
 				//if the player is seen it will init fleeing behavior of npc
 				else if (NpcSeenSpace.containsAABB(players.at(i)->GetBoundingBox()))

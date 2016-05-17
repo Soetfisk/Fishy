@@ -41,6 +41,7 @@ GLNPC::GLNPC(FishBox * FSH_Loader, unsigned int modelID) : GLModel(FSH_Loader,mo
 	this->npc_emitter = nullptr;
 	this->timeSinceUpdate = 0;
 	this->timeUntilRespawn = 10.0f;
+	this->BitenCoolDown = 0.0f;
 }
 
 void GLNPC::UpdateParticles(float &deltaTime) {

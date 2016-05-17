@@ -56,10 +56,19 @@ void GLNPC_BlueTang::NPCUpdate(float deltaTime)
 		}
 		else if (currentState == NPC_BEINGEATEN)
 		{
-			glm::vec3 reduce = this->transform->GetScale() - deltaTime / 2;
-			this->transform->SetScale(reduce);
+			//glm::vec3 reduce = this->transform->GetScale() - deltaTime / 2;
+			//this->transform->SetScale(reduce);
+			float CurrentScale = GetTransform().GetScale().y;
+			float targetScale = GetTransform().GetScale().y - SizeLoss;
+			
+			GetTransform().SetScale(glm::vec3(targetScale,targetScale,targetScale));
+
+			this->SizeLoss = 0;
+			BitenCoolDown -= 0;
+
 			if (GetTransform().GetScale().y < 0.2)
 			{
+
 				NPCKill();
 			} 
 		}
@@ -77,10 +86,11 @@ void GLNPC_BlueTang::NPCDraw(GLShader & shader)
 	}
 }
 
-void GLNPC_BlueTang::gettingEaten(float deltaTime, GLTransform playerTransform)
+void GLNPC_BlueTang::gettingEaten(float deltaTime, float BiteSize , GLTransform playerTransform)
 {
-	if (this->currentState != NPC_INACTIVE)
+	if (this->currentState != NPC_INACTIVE && BitenCoolDown<0)
 	{
+		SizeLoss = BiteSize;
 		this->currentState = NPC_BEINGEATEN;
 	}
 }
