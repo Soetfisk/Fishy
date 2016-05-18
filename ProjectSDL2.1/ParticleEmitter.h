@@ -58,7 +58,8 @@ private:
 	bool emiterMulitbleSpawner;
 	float emiterNrToSpawnSimutan;
 	float emiterScale;
-
+	bool temporaryEmitter;
+	float emiterMaxTime;
 
 	void updateParticles(const float& deltaTime);
 	void updateCompute(const float &deltaTime);
@@ -81,7 +82,7 @@ private:
 	void instantiateGoldStream();
 	void instantiatePlayerFollow();
 	void instantiateProjectileFollow();
-	bool player1;
+	void instantiateBlood();
 	void changeDirection(glm::vec4 dir);
 
 	Particle particle;
@@ -102,6 +103,7 @@ public:
 	void updateEmitterData(glm::vec4& pos, glm::vec4& dir, glm::vec4& right, glm::vec4& up, float scale);
 	
 	void clean();
+	bool isDead();
 };
 
 #endif

@@ -124,33 +124,44 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 			{
 
 				AABB NpcSeenSpace(NPCs.at(j)->GetTransform().GetPos() + (NPCs.at(j)->GetForward() *10.f), glm::vec3(10, 10, 10));
-				
-				
+
+
 				//check if player collides with a fish if so it will eat a part of it and gets score
 				if (NPCs.at(j)->GetBoundingBox().containsAABB(players.at(i)->GetBoundingBox()))
-				{ 
+				{
 					if (players.at(i)->GetTransform().GetScale().x + 0.5f >= NPCs.at(j)->GetTransform().GetScale().x)
 					{
 						if (NPCs.at(j)->GetCurrentState() != NPC_INACTIVE /*&& NPCs.at(j)->GetCurrentState() != NPC_BEINGEATEN*/)
 						{
-							
-							bool result = NPCs.at(j)->gettingEaten( players.at(i)->GetTransform().GetScale().x/2, -glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos())*0.7f);
+
+							if (!NPCs.at(j)->hasBloodEmitter())
+								NPCs.at(j)->addBloodEmitter(pHandlerRef->CreateEmitter(EmitterType::BLOOD, glm::vec4(NPCs.at(i)->GetTransform().GetPos(), 1)));
+
+							NPCs.at(j)->enableBlood();
+
+							bool isKill = false;
+							bool result = NPCs.at(j)->gettingEaten(isKill, players.at(i)->GetTransform().GetScale().x / 4, -glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos())*0.7f);
 							players.at(i)->HandleCollision(GLPlayer::HIT, deltaTime, (glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos())) * 2.0f);
-							
-							if (result==true)
+
+							if (result == true)
 							{
 								players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(roundf(NPCs.at(j)->GetTransform().GetScale().x * 100) / 100));
+								if (isKill == true)
+								{
+									if (NPCs.at(j)->GetIsPowerUp() == true)
+									{
+
+										PowerUpHandler->RemovePowerUpFish(NPCs.at(j), j);
+										players.at(i)->SetRandomPowerUp();
+									}
+									else
+									{
+										PowerUpHandler->RemoveAvailableFish(j);
+									}
+								}
 							}
-							players.at(i)->HandleCollision(GLPlayer::HIT, deltaTime, (glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos())) * 2.0f);
-							if (NPCs.at(j)->GetIsPowerUp() == true)
-							{
-								PowerUpHandler->RemovePowerUpFish(NPCs.at(j), j);
-								players.at(i)->SetRandomPowerUp();
-							}
-							else
-							{
-								PowerUpHandler->RemoveAvailableFish(j);
-							}
+							players.at(i)->HandleCollision(GLPlayer::HIT, deltaTime, (glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos())) * 10.0f);
+
 						}
 						else if (NpcSeenSpace.containsAABB(players.at(i)->GetBoundingBox()))
 						{
@@ -164,13 +175,18 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 
 
 
+
 					//if the player is seen it will init fleeing behavior of npc
-				
+
 				}
 			}
 		}
 	}
 }
+
+
+//Getting eaten
+
 
 void GLCollisionHandler::AddPlayer(GLPlayer * player)
 {
@@ -194,7 +210,7 @@ void GLCollisionHandler::RemovePlayer(GLPlayer * player)
 			this->players.erase(players.begin() + i);
 		}
 	}
-	
+
 }
 
 void GLCollisionHandler::AddNPC(GLNPC * npc)
@@ -257,6 +273,7 @@ void GLCollisionHandler::resetPowerUpHandler()
 }
 
 void GLCollisionHandler::AddParticleHandlerReference(ParticleHandler* pHandlerRef) {
+	this->pHandlerRef = pHandlerRef;
 	this->PowerUpHandler->addParticleHandlerReference(pHandlerRef);
 	this->PowerUpHandler->AsssignStartPowerupFishes();
 }

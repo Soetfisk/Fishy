@@ -19,7 +19,7 @@ public:
 	GLNPC_BlueTang(FishBox* FSH_Loader, unsigned int modelID);
 	void NPCUpdate(float deltaTime);
 	void NPCDraw(GLShader& shader);
-	bool gettingEaten(float BiteSize, glm::vec3 PushVector);
+	bool gettingEaten(bool& isKill ,float BiteSize, glm::vec3 PushVector);
 	void NPCKill();
 	void initiateFleeingState(glm::vec3 playerForwardVector);
 	void checkboarderCollision();

@@ -36,6 +36,7 @@ protected:
 	float animationFactors[NUM_ANIMATION];
 
 	ParticleEmitter *npc_emitter;
+	ParticleEmitter *npc_blood_emitter;
 	const int updateFrames = 3;
 	int timeSinceUpdate; 
 	float fishSize=1.0f;
@@ -51,7 +52,12 @@ protected:
 	
 
 	const int DEADZONEX = 124, DEADZONEY = 48, DEADZONEZ = 84;
+	const float bloodTime = 3.f;
+	float bloodTimeCurrent;
+	bool isBleeding;
+
 	
+
 public:
 
 	int GetCurrentState();
@@ -63,7 +69,7 @@ public:
 	~GLNPC();
 	virtual void NPCUpdate(float deltaTime) = 0;
 	virtual void NPCDraw(GLShader& shader) = 0;
-	virtual bool gettingEaten(float BiteSize, glm::vec3 PushVector) =0;
+	virtual bool gettingEaten(bool& isKill, float BiteSize, glm::vec3 PushVector) =0;
 	virtual void NPCKill() = 0;
 	virtual void initiateFleeingState(glm::vec3 playerForwardVector) = 0;
 
@@ -77,6 +83,10 @@ public:
 	void DrawParticles(GLShader* shader);
 	void AddEmitter(ParticleEmitter* emitter);
 	bool hasEmitter();
+	void enableBlood();
+	void addBloodEmitter(ParticleEmitter* emitter);
+	bool hasBloodEmitter();
+	bool npcIsBleeding();
 
-	
+
 };
