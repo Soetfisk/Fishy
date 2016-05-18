@@ -133,24 +133,29 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 					{
 						if (NPCs.at(j)->GetCurrentState() != NPC_INACTIVE /*&& NPCs.at(j)->GetCurrentState() != NPC_BEINGEATEN*/)
 						{
-							
-							bool result = NPCs.at(j)->gettingEaten( players.at(i)->GetTransform().GetScale().x/2, -glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos())*0.7f);
+							bool isKill=false;
+							bool result = NPCs.at(j)->gettingEaten(isKill, players.at(i)->GetTransform().GetScale().x/4, -glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos())*0.7f);
 							players.at(i)->HandleCollision(GLPlayer::HIT, deltaTime, (glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos())) * 2.0f);
 							
 							if (result==true)
 							{
 								players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(roundf(NPCs.at(j)->GetTransform().GetScale().x * 100) / 100));
+								if (isKill==true)
+								{
+									if (NPCs.at(j)->GetIsPowerUp() == true)
+									{
+				
+										PowerUpHandler->RemovePowerUpFish(NPCs.at(j), j);
+										players.at(i)->SetRandomPowerUp();
+									}
+									else
+									{
+										PowerUpHandler->RemoveAvailableFish(j);
+									}
+								}
 							}
-							players.at(i)->HandleCollision(GLPlayer::HIT, deltaTime, (glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos())) * 2.0f);
-							if (NPCs.at(j)->GetIsPowerUp() == true)
-							{
-								PowerUpHandler->RemovePowerUpFish(NPCs.at(j), j);
-								players.at(i)->SetRandomPowerUp();
-							}
-							else
-							{
-								PowerUpHandler->RemoveAvailableFish(j);
-							}
+							players.at(i)->HandleCollision(GLPlayer::HIT, deltaTime, (glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos())) * 10.0f);
+							
 						}
 						else if (NpcSeenSpace.containsAABB(players.at(i)->GetBoundingBox()))
 						{

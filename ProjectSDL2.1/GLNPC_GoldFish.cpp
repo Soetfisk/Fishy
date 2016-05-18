@@ -59,14 +59,14 @@ void GLNPC_GoldFish::NPCUpdate(float deltaTime)
 		else if (currentState == NPC_BEINGEATEN)
 		{
 			this->transform->m_pos += HitMomentum;
-			HitMomentum = HitMomentum * 0.98f;
+			HitMomentum = HitMomentum * 0.95f;
 			float CurrentScale = GetTransform().GetScale().y;
 			if (CurrentScale > targetScale)
 			{
-				float ScaleLossFactor = 1.0f * deltaTime * 2;
+				float ScaleLossFactor = 1.0f * deltaTime * 4;
 				GetTransform().SetScale(glm::vec3(CurrentScale - ScaleLossFactor, CurrentScale - ScaleLossFactor, CurrentScale - ScaleLossFactor));
 				BitenCoolDown -= deltaTime;
-				if (GetTransform().GetScale().y < 0.5)
+				if (GetTransform().GetScale().y < 0.5f)
 				{
 					NPCKill();
 				}
@@ -87,26 +87,35 @@ void GLNPC_GoldFish::NPCDraw(GLShader & shader)
 	}
 }
 
-bool GLNPC_GoldFish::gettingEaten(float BiteSize, glm::vec3 PushVector)
+bool GLNPC_GoldFish::gettingEaten(bool& isKill, float BiteSize, glm::vec3 PushVector)
 {
 	if (this->currentState != NPC_INACTIVE && BitenCoolDown <= 0)
 	{
 		this->HitMomentum = PushVector;
-		printf("BITE\n");
 		targetScale = this->GetTransform().GetScale().y - BiteSize;
 		this->currentState = NPC_BEINGEATEN;
 		BitenCoolDown = 2.0f;
 
-		
+
 		if (targetScale < 0.5f)
 		{
-		return true;
+			isKill = true;
+
 		}
 		else
 		{
-		return false;
+			isKill = false;
 		}
+
+
+		return true;
+
 	}
+	else
+	{
+		return false;
+	}
+
 }
 
 
@@ -239,11 +248,7 @@ void GLNPC_GoldFish::ResetFish()
 	this->isPowerUp = false;
 	this->meshes.at(0)->SetMaterial(originalMaterial);
 
-	/*if (this->npc_emitter != nullptr)
-	{
-		delete npc_emitter;
-		this->npc_emitter=nullptr;
-	}*/
+	this->BitenCoolDown = 0;
 }
 
 void GLNPC_GoldFish::ResetFish(float size)
@@ -259,6 +264,8 @@ void GLNPC_GoldFish::ResetFish(float size)
 	this->rotationChange = glm::vec3(0, RNG::range(-1.0f, 1.0f), 0);
 	this->isPowerUp = false;
 	this->meshes.at(0)->SetMaterial(originalMaterial);
+
+	this->BitenCoolDown = 0;
 }
 
 

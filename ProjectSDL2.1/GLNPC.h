@@ -63,7 +63,7 @@ public:
 	~GLNPC();
 	virtual void NPCUpdate(float deltaTime) = 0;
 	virtual void NPCDraw(GLShader& shader) = 0;
-	virtual bool gettingEaten(float BiteSize, glm::vec3 PushVector) =0;
+	virtual bool gettingEaten(bool& isKill, float BiteSize, glm::vec3 PushVector) =0;
 	virtual void NPCKill() = 0;
 	virtual void initiateFleeingState(glm::vec3 playerForwardVector) = 0;
 
