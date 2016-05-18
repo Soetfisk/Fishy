@@ -36,6 +36,7 @@ protected:
 	float animationFactors[NUM_ANIMATION];
 
 	ParticleEmitter *npc_emitter;
+	ParticleEmitter *npc_blood_emitter;
 	const int updateFrames = 3;
 	int timeSinceUpdate; 
 	float fishSize=1.0f;
@@ -51,7 +52,12 @@ protected:
 	
 
 	const int DEADZONEX = 124, DEADZONEY = 48, DEADZONEZ = 84;
+	const float bloodTime = 3.f;
+	float bloodTimeCurrent;
+	bool isBleeding;
+
 	
+
 public:
 
 	int GetCurrentState();
@@ -77,6 +83,10 @@ public:
 	void DrawParticles(GLShader* shader);
 	void AddEmitter(ParticleEmitter* emitter);
 	bool hasEmitter();
+	void enableBlood();
+	void addBloodEmitter(ParticleEmitter* emitter);
+	bool hasBloodEmitter();
+	bool npcIsBleeding();
 
-	
+
 };
