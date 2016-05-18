@@ -7,6 +7,7 @@ GLGUIHandler::GLGUIHandler()
 
 	this->shader = new GLShader("text");
 	deleteShader = true;
+
 	this->nrFramesThisSecond = 0;
 	InitTextureInfo();
 }
@@ -19,6 +20,7 @@ GLGUIHandler::GLGUIHandler(GLShader* shader, GUI* textToScreen)
 	this->shader = shader;
 	deleteShader = false;
 
+	this->nrFramesThisSecond = 0;
 	InitTextureInfo();
 }
 
@@ -261,9 +263,9 @@ void GLGUIHandler::InitTextureInfo()
 
 	// Player1
 	score[PLAYER1] = 0;
-	textPos[PLAYER1][0] = 0;
-	textPos[PLAYER1][1] = window::HEIGHT - 40;
-	textScale[PLAYER1] = 1;
+	textPos[PLAYER1][0] = 0.0f;
+	textPos[PLAYER1][1] = window::HEIGHT - 40.0f;
+	textScale[PLAYER1] = 1.0f;
 	textColor[PLAYER1] = glm::vec3(0, 1, 0);
 	textStart[PLAYER1] = "Fish1 ";
 	textEnd[PLAYER1] = " food";
@@ -271,9 +273,9 @@ void GLGUIHandler::InitTextureInfo()
 
 	// Player2
 	score[PLAYER2] = 0;
-	textPos[PLAYER2][0] = 0;
-	textPos[PLAYER2][1] = 0;
-	textScale[PLAYER2] = 1;
+	textPos[PLAYER2][0] = 0.0f;
+	textPos[PLAYER2][1] = 0.0f;
+	textScale[PLAYER2] = 1.0f;
 	textColor[PLAYER2] = glm::vec3(0, 1, 0);
 	textStart[PLAYER2] = "Fish2 ";
 	textEnd[PLAYER2] = " food";
@@ -283,14 +285,14 @@ void GLGUIHandler::InitTextureInfo()
 
 	// Time
 	time = 0;
-	newSec = 0;
-	textPos[TIME][0] = window::HALF_WIDTH;
-	textPos[TIME][1] = window::HALF_HEIGHT - 20;
-	textScale[TIME] = 1;
+	newSec = 0.0f;
+	textScale[TIME] = 1.0f;
 	textColor[TIME] = glm::vec3(0, 1, 0);;
 	textStart[TIME] = "Time: ";
 	textEnd[TIME] = " sec";
-	printText[TIME] = "";
+	printText[TIME] = textStart[TIME] + std::to_string(time) + textEnd[TIME];
+	textPos[TIME][0] = window::HALF_WIDTH - (gui->GetTextLenght(printText[TIME], textScale[TIME]) * 0.5f);
+	textPos[TIME][1] = window::HALF_HEIGHT - (gui->GetTextHeight(printText[TIME], textScale[TIME]) * 0.5f);
 
 	// Player1 wins
 	score[P1WINS] = 0;
@@ -312,16 +314,16 @@ void GLGUIHandler::InitTextureInfo()
 
 	// Winner
 	printText[WINNER] = "Won!";
-	textScale[WINNER] = 2;
+	textScale[WINNER] = 2.0f;
 	textPos[WINNER][0] = (float)(window::HALF_WIDTH - (gui->GetTextLenght(printText[WINNER], textScale[WINNER]) * 0.5));
-	textPos[WINNER][1] = window::HALF_HEIGHT - 20;
+	textPos[WINNER][1] = window::HALF_HEIGHT - 20.0f;
 	textColor[WINNER] = glm::vec3(0, 1, 0);
 
 	// Loser
 	printText[LOSER] = "Lost!";
-	textScale[LOSER] = 2;
+	textScale[LOSER] = 2.0f;
 	textPos[LOSER][0] = (float)(window::HALF_WIDTH - (gui->GetTextLenght(printText[LOSER], textScale[LOSER]) * 0.5));
-	textPos[LOSER][1] = window::HALF_HEIGHT - 20;
+	textPos[LOSER][1] = window::HALF_HEIGHT - 20.0f;
 	textColor[LOSER] = glm::vec3(0, 1, 0);
 
 	// FPS
@@ -402,4 +404,20 @@ void GLGUIHandler::Tie()
 	printText[LOSER] = "Tie!";
 	textPos[LOSER][0] = (float)(window::HALF_WIDTH - (gui->GetTextLenght(printText[LOSER], textScale[LOSER]) * 0.5));
 	textPos[LOSER][1] += window::QUARTER_HEIGHT;
+}
+
+void GLGUIHandler::Pause()
+{
+	textScale[TIME] = 2.0f;
+	printText[TIME] = "Paused";
+	textPos[TIME][0] = window::HALF_WIDTH - (gui->GetTextLenght(printText[TIME], textScale[TIME]) * 0.5);
+	textPos[TIME][1] = window::HALF_HEIGHT - (gui->GetTextHeight(printText[TIME], textScale[TIME]) * 0.5f);
+}
+
+void GLGUIHandler::Unpause()
+{
+	textScale[TIME] = 1.0f;
+	printText[TIME] = textStart[TIME] + std::to_string(time) + textEnd[TIME];
+	textPos[TIME][0] = window::HALF_WIDTH - (gui->GetTextLenght(printText[TIME], textScale[TIME]) * 0.5f);
+	textPos[TIME][1] = window::HALF_HEIGHT - (gui->GetTextHeight(printText[TIME], textScale[TIME]) * 0.5f);
 }

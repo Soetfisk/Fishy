@@ -99,12 +99,13 @@ private:
 	bool isMoving = false;
 	const int	DEADZONE = 10000;
 	float		MOVEMENT_FRICTION = 2.0f;
-	const int	MAX_SPEED = 200;	
+	const float VELOCITY_MULTIPLIER = 5.0f;
+	const int	MAX_SPEED = 500;	
 	const float MIN_SPEED = 0.1f;
-	int			MAX_DASHSPEED = 800;				
+	int			MAX_DASHSPEED = 1000;				
 	float		DASH_DURATION = 0.5f;			// Dash duration in sec
 	float		DASH_COOLDOWN = 3.0f;			// Dash cooldown in sec
-	float		DASH_SCALE = 6.0f;				// 
+	float		DASH_SCALE = 10.0f;				// 
 	const float MOVE_CAM_DISTANCE = 5.0f;		// (MOVE_CAM_DISTANCE * deltaTime) == Distnace camera is moved each update during and after dash
 	const float MAX_ANGLE = 75;
 	const int	MAX_INPUT = (int)glm::pow(2, 15);

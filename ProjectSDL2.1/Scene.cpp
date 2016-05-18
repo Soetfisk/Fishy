@@ -800,6 +800,10 @@ void Scene::HandleEvenet(SDL_Event* e) {
 		case SDL_CONTROLLER_BUTTON_B:
 			players.at(e->cbutton.which)->Update(GLPlayer::PLAYER_DASH, glm::vec3(0));
 			break;
+		case SDL_CONTROLLER_BUTTON_START:
+			*gameState = GLOBAL_GameState::PAUSE;
+			guih->Pause();
+			break;
 		default:
 			break;
 		}
@@ -916,5 +920,27 @@ void Scene::HandleEvenet(SDL_Event* e) {
 	if (keyState[SDL_SCANCODE_LSHIFT])
 	{
 		players.at(1)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, 0, (glm::pow(2, 15))));
+	}
+}
+
+void Scene::HandleEventPause(SDL_Event * e)
+{
+	if (e->type == SDL_CONTROLLERDEVICEADDED)
+	{
+		players.at(e->cdevice.which)->Update(GLPlayer::JOY_ADDED, glm::vec3((float)e->cdevice.which));
+	}
+	else if (e->type == SDL_CONTROLLERDEVICEREMOVED)
+	{
+		players.at(e->cdevice.which)->Update(GLPlayer::JOY_REMOVED, glm::vec3((float)e->cdevice.which));
+	}
+	else if (e->type == SDL_CONTROLLERBUTTONDOWN)
+	{
+		switch (e->cbutton.button)
+		{
+		case SDL_CONTROLLER_BUTTON_START:
+			*gameState = GLOBAL_GameState::GAME;
+			guih->Unpause();
+			break;
+		}
 	}
 }

@@ -49,13 +49,15 @@ void GameMain::HandleUpdateDraw()
 		this->scene->ResetRounds();
 		this->menu->Draw();
 		this->gameState = GLOBAL_GameState::GAME;
-		this->menu->Draw();
 		break;
 	case GLOBAL_GameState::MENU:
 		this->menu->Update(this->deltaTime);
 		this->menu->Draw();
 		break;
 	case GLOBAL_GameState::CONTROLS:
+		break;
+	case GLOBAL_GameState::PAUSE:
+		this->scene->DrawScene();
 		break;
 	case GLOBAL_GameState::EXIT:
 		this->gameOn = false;
@@ -79,6 +81,9 @@ void GameMain::HandleEvents()
 		this->menu->HandleEvenet(&e);
 		break;
 	case GLOBAL_GameState::CONTROLS:
+		break;
+	case GLOBAL_GameState::PAUSE:
+		this->scene->HandleEventPause(&e);
 		break;
 	case GLOBAL_GameState::EXIT:
 		this->gameOn = false;
