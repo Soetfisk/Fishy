@@ -317,7 +317,7 @@ void GLPlayer::resetHeadAnimation(float deltaTime, float speedFactor, int axis) 
 
 void GLPlayer::moveAnimation(float deltaTime, float speedFactor)
 {
-	float speed = abs(deltaTime * speedFactor), y;
+	float speed = abs(deltaTime * (speedFactor/2)), y;
 
 	animationFactors[ASIX] += speed;
 
