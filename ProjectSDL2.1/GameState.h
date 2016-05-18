@@ -5,5 +5,6 @@ enum GLOBAL_GameState {
 	RESET_ROUNDS,
 	MENU,
 	CONTROLS,
+	PAUSE,
 	EXIT
 };

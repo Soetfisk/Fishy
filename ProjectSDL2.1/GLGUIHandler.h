@@ -86,7 +86,7 @@ private:
 	GLfloat textScale[NUM_TEXTS];			// Text scale
 	glm::vec3 textColor[NUM_TEXTS];			// Text color
 	std::string textStart[NUM_TEXTS - 2];	// String that is in the start of the text
-	std::string textEnd[NUM_TEXTS - 3];		// String that is in the end of the text
+	std::string textEnd[NUM_TEXTS - 2];		// String that is in the end of the text
 	std::string printText[NUM_TEXTS];		// The print text
 	int time;								// Current time
 	float newSec;							// Keep track on when it is a new sec

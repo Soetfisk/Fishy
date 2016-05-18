@@ -158,6 +158,7 @@ public:
 	~Scene();
 
 	void HandleEvenet(SDL_Event* e);
+	void HandleEventPause(SDL_Event* e);
 
 	void Update(float& deltaTime);
 	void LoadScene();
