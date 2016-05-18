@@ -10,7 +10,6 @@ class GLModel
 {
 public:
 	GLModel();
-	GLModel(FishBox* FSH_Loader, char* filePath);
 	GLModel(FishBox* FSH_Loader, unsigned int modelID);
 	~GLModel();
 

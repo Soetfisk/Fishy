@@ -16,7 +16,6 @@ class GLProjectile : public GLModel
 public:
 	GLProjectile();
 	GLProjectile(int maxDist);
-	GLProjectile(FishBox* FSH_Loader, char* filePath, int projectileActiveTime, float projectileSpeed);
 	GLProjectile(FishBox* FSH_Loader, unsigned int modelID, int projectileActiveTime, float projectileSpeed, float projectileStrength = 10.0f, float projectileSize = 1.0f);
 	virtual ~GLProjectile();
 	

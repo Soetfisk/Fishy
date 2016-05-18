@@ -7,15 +7,6 @@ class GLMeshBS : public GLMesh
 public:
 	GLMeshBS
 		(
-		FSHData::mesh * meshData,
-		FSHData::vertexData * vertices,
-		unsigned int * indices,
-		FSHData::material* material,
-		FSHData::texture * texture, 
-		FSHData::blendShape ** blendShapes
-		);
-	GLMeshBS
-		(
 			FSHData::mesh * meshData,
 			FSHData::vertexData * vertices,
 			unsigned int * indices,

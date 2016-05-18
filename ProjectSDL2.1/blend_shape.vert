@@ -19,18 +19,9 @@ uniform float Weights[10];
 
 void main()
 {
-	//vec3 deltaPosition;
-	//vec3 finalPose = position;
-	//for(int i = 0; i < (BlendShapeCount); i++)
-	//{
-	//	//finalPose= mix(finalPose, blendShape[i], Weights[i] );
-	//	deltaPosition = blendShape[i] - (position * (1.0f-Weights[i]));
-	//	finalPose += Weights[i] * position * deltaPosition;
-	//}
-	
-	vec3 finalPose/* = vec3(0.0f,0.0f,0.0f)*/;
+	vec3 finalPose = vec3(0.0f,0.0f,0.0f);
 	float neutral_w = 1.0;
-	float sum_w = 0;
+	float sum_w = 0.0;
 	float finalWeights[10];
 
 	//if other weights add up to one, use neutral target
@@ -44,13 +35,14 @@ void main()
 	sum_w += neutral_w;
 
 	//work out factors for each target and use them for the final pos
-	finalPose += position * (neutral_w/sum_w);
+	finalPose += (position * (neutral_w/sum_w));
 	for(int i = 0; i < (BlendShapeCount); i++)
 	{
-		finalPose += blendShape[i] * (Weights[i]/sum_w);
+		finalPose += (blendShape[i] * (Weights[i]/sum_w));
 	}
 
-	gl_Position = ProjectionMatrix * ViewMatrix * TransformMatrix * vec4(finalPose, 1);
+
+	gl_Position = (ProjectionMatrix * ViewMatrix * TransformMatrix) * vec4(finalPose, 1.0);
 
 	geom_uv = texCoord;
 	geom_normal = normalize(mat3(TransformMatrix) * normal);
