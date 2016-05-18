@@ -41,7 +41,9 @@ private:
 		smoothRock,
 		castle,
 		orangeKorall,
-		rosaKorall
+		rosaKorall,
+		spaceShip,
+		shipTurret
 	};
 	int SCREEN_WIDTH = window::WIDTH;
 	int SCREEN_HEIGHT = window::HEIGHT / 2;

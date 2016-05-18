@@ -213,6 +213,9 @@ void Scene::LoadModels()
 	FSH_Loader.LoadScene("Models/castle.FSH"); //castle
 	FSH_Loader.LoadScene("Models/orangekorall.FSH"); //rosaKorall
 	FSH_Loader.LoadScene("Models/rosakorall.FSH"); //orangeKorall
+	FSH_Loader.LoadScene("Models/spaceShip.FSH"); //spaceShip
+	FSH_Loader.LoadScene("Models/shipTurret.FSH"); //shipTurret
+
 
 	for (int i = 0; i < 2; i++) {
 		this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));
@@ -228,6 +231,11 @@ void Scene::LoadModels()
 	}
 
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Aquarium));
+	this->staticMeshes.push_back(new GLModel(&FSH_Loader, spaceShip));
+	this->staticMeshes.push_back(new GLModel(&FSH_Loader, shipTurret));
+	
+	this->staticMeshes.at(1)->GetTransform().SetPos(glm::vec3(3, 3, 3));
+	this->staticMeshes.at(2)->GetTransform().SetPos(glm::vec3(100, 0, 60));
 	//this->staticMeshes.push_back(new GLModel(&FSH_Loader, SeaWeedTall));
 	//staticMeshes.at(0)->GetTransform().SetPos(glm::vec3(3, 3, 3));
 	//staticMeshes.at(0)->GetTransform().SetScale(glm::vec3(1, -1, 1));
@@ -235,7 +243,7 @@ void Scene::LoadModels()
 	//this->staticMeshes.push_back(new GLModel(&FSH_Loader, castle));
 	//this->staticMeshes.at(1)->GetTransform().SetScale(glm::vec3(2));
 	//this->staticMeshes.at(1)->SetBoundingBox(glm::vec3(0), glm::vec3(1.25));
-	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
+	//this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
 
 
 	this->collisionHandler.AddNPC(NPCs);
