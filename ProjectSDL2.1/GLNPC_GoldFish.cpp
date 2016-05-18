@@ -58,6 +58,7 @@ void GLNPC_GoldFish::NPCUpdate(float deltaTime)
 		}
 		else if (currentState == NPC_BEINGEATEN)
 		{
+			
 			this->transform->m_pos += HitMomentum;
 			HitMomentum = HitMomentum * 0.95f;
 			float CurrentScale = GetTransform().GetScale().y;
@@ -91,6 +92,7 @@ bool GLNPC_GoldFish::gettingEaten(bool& isKill, float BiteSize, glm::vec3 PushVe
 {
 	if (this->currentState != NPC_INACTIVE && BitenCoolDown <= 0)
 	{
+		std::cout << "BEEING EATEN!" << std::endl;
 		this->HitMomentum = PushVector;
 		targetScale = this->GetTransform().GetScale().y - BiteSize;
 		this->currentState = NPC_BEINGEATEN;
