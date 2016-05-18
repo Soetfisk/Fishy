@@ -31,7 +31,6 @@ void ParticleEmitter::instantiateVariables() {
 
 	this->emiterCheckDeadTDelay = 1.0f;
 	this->emiterCheckDeadTCurrent = 0;
-	this->temporaryEmitter = false;
 
 	switch (this->type)
 	{
@@ -55,13 +54,12 @@ void ParticleEmitter::instantiateVariables() {
 }
 
 void ParticleEmitter::instantiateBlood() {
-	this->nrMaxParticles = 5;
-	this->emiterSpawnTDelay = 100;
+	this->nrMaxParticles = 50;
+	this->emiterSpawnTDelay = .5f;
 	this->emiterSpawnTCurrent = emiterSpawnTDelay;
 	this->emiterNrToSpawnSimutan = 5;
 	this->emiterSpawnTDelayStandard = emiterSpawnTDelay;
-	this->emiterMulitbleSpawner = true;
-	this->temporaryEmitter = true;
+	this->emiterMulitbleSpawner = false;
 
 	this->particle.p_pos = this->positionEmitter;
 	this->particle.p_lifeTime = 2;
@@ -166,8 +164,12 @@ void ParticleEmitter::updateParticles(const float& deltaTime) {
 			for (int i = 0; i < this->emiterNrToSpawnSimutan; i++) {
 				this->spawnParticle();
 				this->nrActiveParticles++;
+			}	
+			//for (int i = 0; i < this->emiterNrToSpawnSimutan; i++) {
+			//	this->spawnParticle();
+			//	this->nrActiveParticles++;
 
-			}
+			//}
 			break;
 		default:
 			this->spawnParticle();
@@ -213,10 +215,6 @@ void ParticleEmitter::spawnParticle() {
 
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
-}
-
-bool ParticleEmitter::isTemporary() {
-	return this->temporaryEmitter;
 }
 
 bool ParticleEmitter::isDead() {
@@ -329,6 +327,7 @@ Particle ParticleEmitter::generateParticleData() {
 		data.y = RNG::range(0.f, -.4f);
 		data.z = RNG::range(-.4f, .4f);
 
+		returnData.p_pos = this->positionEmitter;
 		returnData.p_acc = glm::vec4(returnData.p_acc.x + data.x, returnData.p_acc.y + data.y, returnData.p_acc.z + data.z, 0);
 		returnData.p_vel = glm::vec4(returnData.p_vel.x + data.x, returnData.p_vel.y + data.y, returnData.p_vel.z + data.z, 0);
 		returnData.p_scale = RNG::range(returnData.p_scale, returnData.p_scale*1.4f);

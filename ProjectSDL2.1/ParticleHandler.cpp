@@ -73,14 +73,14 @@ void ParticleHandler::UpdateParticles(const float& deltaTime) {
 		this->emiters.at(i)->UpdateEmitter(deltaTime);
 
 
-		//For BLood
-		if (this->emiters.at(i)->isTemporary()) {
-			if (this->emiters.at(i)->isDead()) {
-				delete this->emiters.at(i);
-				this->emiters.erase(this->emiters.begin() + i);
-			}
-			
-		}
+		////For BLood
+		//if (this->emiters.at(i)->isTemporary()) {
+		//	if (this->emiters.at(i)->isDead()) {
+		//		delete this->emiters.at(i);
+		//		this->emiters.erase(this->emiters.begin() + i);
+		//	}
+		//	
+		//}
 	}
 }
 

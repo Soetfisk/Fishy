@@ -80,6 +80,9 @@ public:
 	void AddEmitter(ParticleEmitter* emitter);
 	bool hasEmitter();
 	void enableBlood();
+	void addBloodEmitter(ParticleEmitter* emitter);
+	bool hasBloodEmitter();
+	bool npcIsBleeding();
 
 
 };

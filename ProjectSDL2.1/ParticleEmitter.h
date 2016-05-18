@@ -103,7 +103,6 @@ public:
 	void updateEmitterData(glm::vec4& pos, glm::vec4& dir, glm::vec4& right, glm::vec4& up, float scale);
 	
 	void clean();
-	bool isTemporary();
 	bool isDead();
 };
 

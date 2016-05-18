@@ -55,5 +55,6 @@ private:
 	std::vector<GLNPC*> NPCs;
 	std::vector<GLModel*> models;
 	NpcPowerUpHandler* PowerUpHandler;
+	ParticleHandler* pHandlerRef;
 };
 

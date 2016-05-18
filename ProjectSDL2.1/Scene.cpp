@@ -469,7 +469,7 @@ void Scene::Update(float& deltaTime) {
 	for (size_t i = 0; i < this->NPCs.size(); i++) {
 		this->NPCs.at(i)->NPCUpdate(deltaTime);
 		this->NPCs.at(i)->UpdateModel();
-		if (this->NPCs.at(i)->GetIsPowerUp()) {
+		if ((this->NPCs.at(i)->GetIsPowerUp() || this->NPCs.at(i)->npcIsBleeding())  && this->NPCs.at(i)->GetCurrentState() != NPC_INACTIVE) {
 			this->NPCs.at(i)->UpdateParticles(this->deltaTime);
 		}	
 	}
@@ -684,8 +684,9 @@ void Scene::DrawParticles(GLCamera& playerCamera) {
 	for (size_t i = 0; i < NPCs.size(); i++)
 	{
 
-		if (this->NPCs.at(i)->GetIsPowerUp())
+		if ((this->NPCs.at(i)->GetIsPowerUp() || this->NPCs.at(i)->npcIsBleeding()) && this->NPCs.at(i)->GetCurrentState() != NPC_INACTIVE)
 			NPCs.at(i)->DrawParticles(shaders[PARTICLE]);
+
 	}
 
 	this->particleHandler->DrawParticles(shaders[PARTICLE]);

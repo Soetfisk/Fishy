@@ -39,6 +39,8 @@ GLNPC::GLNPC(FishBox * FSH_Loader, unsigned int modelID) : GLModel(FSH_Loader,mo
 		animationFactors[i] = 0.0f;
 	}
 	this->npc_emitter = nullptr;
+	this->npc_blood_emitter = nullptr;
+	this->isBleeding = false;
 	this->timeSinceUpdate = 0;
 	this->timeUntilRespawn = 10.0f;
 }
@@ -48,19 +50,23 @@ void GLNPC::UpdateParticles(float &deltaTime) {
 	if(this->isBleeding)
 		this->bloodTimeCurrent += deltaTime;
 
+	if (this->npc_emitter != nullptr) 
+		this->npc_emitter->UpdateEmitter(deltaTime);
+
+	if (this->npc_blood_emitter != nullptr && isBleeding) 
+		this->npc_blood_emitter->UpdateEmitter(deltaTime);
+
+
 	if (this->timeSinceUpdate >= this->updateFrames) {
 
 		if (this->npc_emitter != nullptr) {
 			this->npc_emitter->updateEmitterData(glm::vec4(this->transform->GetPos(), 1),
 				glm::vec4(this->forward, 0), glm::vec4(this->GetRight(), 0), glm::vec4(this->GetUp(), 0), this->transform->GetScale().z);
-
-			
 		}
 
 		if (this->npc_blood_emitter != nullptr) {
 			if (this->isBleeding) {
 				this->npc_blood_emitter->updatePosition(glm::vec4(this->transform->GetPos(), 1));
-				this->npc_blood_emitter->UpdateEmitter(deltaTime);
 
 				if (this->bloodTimeCurrent >= this->bloodTime) {
 					this->isBleeding = false;
@@ -77,7 +83,7 @@ void GLNPC::DrawParticles(GLShader* shader) {
 		this->npc_emitter->Draw(shader);
 	}
 
-	if (this->npc_blood_emitter != nullptr) {
+	if (this->npc_blood_emitter != nullptr && this->isBleeding) {
 		this->npc_blood_emitter->Draw(shader);
 	}
 }
@@ -107,6 +113,9 @@ GLNPC::~GLNPC() {
 	delete blendWeights;
 	if (this->npc_emitter != nullptr)
 		delete npc_emitter;
+	if (this->npc_blood_emitter != nullptr) {
+		delete this->npc_blood_emitter;
+	}
 }
 
 bool GLNPC::hasEmitter() {
@@ -117,4 +126,19 @@ void GLNPC::enableBlood() {
 	this->isBleeding = true;
 	this->bloodTimeCurrent = 0.f;
 
+}
+
+void GLNPC::addBloodEmitter(ParticleEmitter* emitter) {
+	this->npc_blood_emitter = emitter;
+
+	this->npc_blood_emitter->updateEmitterData(glm::vec4(this->transform->GetPos(), 1),
+		glm::vec4(this->forward, 0), glm::vec4(this->GetRight(), 0), glm::vec4(this->GetUp(), 0), this->transform->GetScale().z);
+}
+
+bool GLNPC::hasBloodEmitter() {
+	return this->npc_blood_emitter != nullptr;
+}
+
+bool GLNPC::npcIsBleeding() {
+	return this->isBleeding;
 }

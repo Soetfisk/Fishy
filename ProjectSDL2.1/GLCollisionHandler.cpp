@@ -120,17 +120,29 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 		for (unsigned int j = 0; j < this->NPCs.size(); j++) {
  			distance = players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos();
 			distSqrd = glm::dot(distance, distance);
+
+			
+
 			if (distSqrd < 60)
 			{
 				
-				AABB NpcSeenSpace(NPCs.at(j)->GetTransform().GetPos() +(NPCs.at(j)->GetForward() *10.f), glm::vec3(10, 10, 10));
+				AABB NpcSeenSpace(NPCs.at(j)->GetTransform().GetPos() + (NPCs.at(j)->GetForward() *10.f), glm::vec3(10, 10, 10));
 				//check if player collides with a fish if so it will eat a part of it and gets score
-				if (NPCs.at(j)->GetBoundingBox().containsAABB(players.at(i)->GetBoundingBox()))
-				{ //
-					if (players.at(i)->GetTransform().GetScale().x + 0.5f >= NPCs.at(j)->GetTransform().GetScale().x)
-					{
-						if (NPCs.at(j)->GetCurrentState() != NPC_INACTIVE && NPCs.at(j)->GetCurrentState() != NPC_BEINGEATEN)
+				if (NPCs.at(j)->GetCurrentState() != NPC_INACTIVE && NPCs.at(j)->GetCurrentState() != NPC_BEINGEATEN)
+				{
+					
+					if (NPCs.at(j)->GetBoundingBox().containsAABB(players.at(i)->GetBoundingBox()))
+					{ //
+						std::cout << "Inside" << std::endl;
+						if (players.at(i)->GetTransform().GetScale().x + 0.5f >= NPCs.at(j)->GetTransform().GetScale().x)
 						{
+							
+							//Getting eaten
+							if (!NPCs.at(j)->hasBloodEmitter()) {
+								NPCs.at(j)->addBloodEmitter(pHandlerRef->CreateEmitter(EmitterType::BLOOD, glm::vec4(NPCs.at(i)->GetTransform().GetPos(), 1)));
+							}
+							NPCs.at(j)->enableBlood();
+
 							if (NPCs.at(j)->GetTransform().GetScale().x >= 2)
 							{
 								NPCs.at(j)->GetTransform().SetScale(NPCs.at(j)->GetTransform().GetScale() - 1.0f);
@@ -151,13 +163,14 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 								}
 							}
 						}
+						else
+						{
+							players.at(i)->HandleCollision(GLPlayer::HIT, deltaTime, (glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos())) * 100.0f);
+							std::cout << "BIGGER FIIIIIIIISH";
+							int k = 0;
+						}
 					}
-					else
-					{
-						players.at(i)->HandleCollision(GLPlayer::HIT, deltaTime, (glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos())) * 100.0f);
-						std::cout << "BIGGER FIIIIIIIISH";
-						int k = 0;
-					}
+					
 					
 				
 				}
@@ -256,6 +269,7 @@ void GLCollisionHandler::resetPowerUpHandler()
 }
 
 void GLCollisionHandler::AddParticleHandlerReference(ParticleHandler* pHandlerRef) {
+	this->pHandlerRef = pHandlerRef;
 	this->PowerUpHandler->addParticleHandlerReference(pHandlerRef);
 	this->PowerUpHandler->AsssignStartPowerupFishes();
 }
