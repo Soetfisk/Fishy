@@ -129,7 +129,7 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 				//check if player collides with a fish if so it will eat a part of it and gets score
 				if (NPCs.at(j)->GetBoundingBox().containsAABB(players.at(i)->GetBoundingBox()))
 				{ 
-					if (players.at(i)->GetTransform().GetScale().x + 2.0f >= NPCs.at(j)->GetTransform().GetScale().x)
+					if (players.at(i)->GetTransform().GetScale().x + 0.5f >= NPCs.at(j)->GetTransform().GetScale().x)
 					{
 						if (NPCs.at(j)->GetCurrentState() != NPC_INACTIVE /*&& NPCs.at(j)->GetCurrentState() != NPC_BEINGEATEN*/)
 						{
