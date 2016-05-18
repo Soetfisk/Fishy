@@ -22,11 +22,12 @@ public:
 
 	void Update(float dt);
 	void Draw();
-	void OptimizedDraw();
+	void OptimizedDraw();					// Not working
 	void Reset();							// Reset everything except rounds
 	void ResetRounds();
-
 	void Tie();
+	void Pause();
+	void Unpause();
 
 	// Player1
 	void AddScorePlayer1(int addVal);		// Adds addVal score for player1 

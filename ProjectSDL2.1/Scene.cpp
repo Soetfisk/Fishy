@@ -802,6 +802,7 @@ void Scene::HandleEvenet(SDL_Event* e) {
 			break;
 		case SDL_CONTROLLER_BUTTON_START:
 			*gameState = GLOBAL_GameState::PAUSE;
+			guih->Pause();
 			break;
 		default:
 			break;
@@ -938,6 +939,7 @@ void Scene::HandleEventPause(SDL_Event * e)
 		{
 		case SDL_CONTROLLER_BUTTON_START:
 			*gameState = GLOBAL_GameState::GAME;
+			guih->Unpause();
 			break;
 		}
 	}
