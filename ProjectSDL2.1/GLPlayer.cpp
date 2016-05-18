@@ -663,10 +663,11 @@ void GLPlayer::CalcVelocity(float& deltaTime)
 	}
 	if (glm::dot(m_velocity, m_velocity) < MAX_SPEED)
 	{
-		m_velocity += forward * (float)(lastForward / (MAX_INPUT));
+		m_velocity += forward * (float)(lastForward / (MAX_INPUT)) * VELOCITY_MULTIPLIER;
 		m_velocity += this->GetUp() * (float)(lastUp / (MAX_INPUT));
 		m_velocity += this->GetRight() * (float)(lastSide / (MAX_INPUT));
 	}
+
 	m_velocity.x = (glm::abs(m_velocity.x) < MIN_SPEED) ? 0.0f : m_velocity.x;
 	m_velocity.y = (glm::abs(m_velocity.y) < MIN_SPEED) ? 0.0f : m_velocity.y;
 	m_velocity.z = (glm::abs(m_velocity.z) < MIN_SPEED) ? 0.0f : m_velocity.z;
