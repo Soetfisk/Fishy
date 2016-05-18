@@ -7,7 +7,7 @@ GLNPC_GoldFish::GLNPC_GoldFish(FishBox * FSH_Loader, unsigned int modelID) : GLN
 	this->currentState = NPC_MOVE;
 	transform->SetPos(glm::vec3(RNG::range(-DEADZONEX, DEADZONEX), RNG::range(-DEADZONEY, DEADZONEY), RNG::range(-DEADZONEZ, DEADZONEZ)));
 
-	this->FishSpeedMultiplier = 1.0f;
+	this->FishSpeedMultiplier = originalFishSpeedMultiplier;
 
 	glm::vec3 scale = glm::vec3(RNG::range(1.0f, 1.5f));
 	transform->SetScale(scale);
@@ -60,7 +60,7 @@ void GLNPC_GoldFish::NPCUpdate(float deltaTime)
 		{
 			
 			this->transform->m_pos += HitMomentum;
-			HitMomentum = HitMomentum * 0.95f;
+			HitMomentum = HitMomentum * 0.98f;
 			float CurrentScale = GetTransform().GetScale().y;
 			if (CurrentScale > targetScale)
 			{
@@ -73,6 +73,10 @@ void GLNPC_GoldFish::NPCUpdate(float deltaTime)
 				}
 			}
 			BitenCoolDown -= deltaTime;
+			if (BitenCoolDown < 0)
+			{
+				currentState = NPC_MOVE;
+			}
 		}
 		checkboarderCollision();
 		moveAnimation(deltaTime, 1 * forwardSpeed);
@@ -92,7 +96,6 @@ bool GLNPC_GoldFish::gettingEaten(bool& isKill, float BiteSize, glm::vec3 PushVe
 {
 	if (this->currentState != NPC_INACTIVE && BitenCoolDown <= 0)
 	{
-		std::cout << "BEEING EATEN!" << std::endl;
 		this->HitMomentum = PushVector;
 		targetScale = this->GetTransform().GetScale().y - BiteSize;
 		this->currentState = NPC_BEINGEATEN;
@@ -241,8 +244,6 @@ void GLNPC_GoldFish::ResetFish()
 	FishSpeedMultiplier = 1.0f;
 	fishSize = 1.0f;
 
-	FishSpeedMultiplier = 1.0f;
-	fishSize = 1.0f;
 	this->TimeUntilChange = RNG::range(0.2f, 3.0f);
 	this->forwardSpeed = RNG::range(0.0f, 3.3f);
 	this->rotationChange = glm::vec3(0, RNG::range(-1.0f, 1.0f), 0);

@@ -6,7 +6,7 @@ class GLNPC_GoldFish : public GLNPC
 {
 private:
 
-	
+	float originalFishSpeedMultiplier = 2;
 	float fleeingTimer, TimeUntilChange, scaleChange, forwardSpeed;
 	glm::vec3 rotationChange;
 

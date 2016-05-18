@@ -7,7 +7,7 @@ class GLNPC_BlueTang : public GLNPC
 {
 private:
 
-	
+	float originalFishSpeedMultiplier = 3;
 	float fleeingTimer, TimeUntilChange, forwardSpeed;
 	glm::vec3 rotationChange;
 	

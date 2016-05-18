@@ -99,7 +99,7 @@ private:
 	bool isMoving = false;
 	const int	DEADZONE = 10000;
 	float		MOVEMENT_FRICTION = 2.0f;
-	const float VELOCITY_MULTIPLIER = 5.0f;
+	const float VELOCITY_MULTIPLIER = 2.0f;
 	const int	MAX_SPEED = 500;	
 	const float MIN_SPEED = 0.1f;
 	int			MAX_DASHSPEED = 1000;				
