@@ -118,71 +118,74 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 		}
 
 		for (unsigned int j = 0; j < this->NPCs.size(); j++) {
- 			distance = players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos();
+			distance = players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos();
 			distSqrd = glm::dot(distance, distance);
-
-			
-
 			if (distSqrd < 60)
 			{
-				
+
 				AABB NpcSeenSpace(NPCs.at(j)->GetTransform().GetPos() + (NPCs.at(j)->GetForward() *10.f), glm::vec3(10, 10, 10));
+
+
 				//check if player collides with a fish if so it will eat a part of it and gets score
-				if (NPCs.at(j)->GetCurrentState() != NPC_INACTIVE && NPCs.at(j)->GetCurrentState() != NPC_BEINGEATEN)
+				if (NPCs.at(j)->GetBoundingBox().containsAABB(players.at(i)->GetBoundingBox()))
 				{
-					
-					if (NPCs.at(j)->GetBoundingBox().containsAABB(players.at(i)->GetBoundingBox()))
-					{ //
-						std::cout << "Inside" << std::endl;
-						if (players.at(i)->GetTransform().GetScale().x + 0.5f >= NPCs.at(j)->GetTransform().GetScale().x)
+					if (players.at(i)->GetTransform().GetScale().x + 0.5f >= NPCs.at(j)->GetTransform().GetScale().x)
+					{
+						if (NPCs.at(j)->GetCurrentState() != NPC_INACTIVE /*&& NPCs.at(j)->GetCurrentState() != NPC_BEINGEATEN*/)
 						{
-							
-							//Getting eaten
+
 							if (!NPCs.at(j)->hasBloodEmitter()) {
 								NPCs.at(j)->addBloodEmitter(pHandlerRef->CreateEmitter(EmitterType::BLOOD, glm::vec4(NPCs.at(i)->GetTransform().GetPos(), 1)));
 							}
 							NPCs.at(j)->enableBlood();
 
-							if (NPCs.at(j)->GetTransform().GetScale().x >= 2)
+							bool isKill = false;
+							bool result = NPCs.at(j)->gettingEaten(isKill, players.at(i)->GetTransform().GetScale().x / 4, -glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos())*0.7f);
+							players.at(i)->HandleCollision(GLPlayer::HIT, deltaTime, (glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos())) * 2.0f);
+
+							if (result == true)
 							{
-								NPCs.at(j)->GetTransform().SetScale(NPCs.at(j)->GetTransform().GetScale() - 1.0f);
-								players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(1));
-							}
-							else
-							{
-								NPCs.at(j)->gettingEaten(deltaTime, players.at(i)->GetTransform());
 								players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(roundf(NPCs.at(j)->GetTransform().GetScale().x * 100) / 100));
-								if (NPCs.at(j)->GetIsPowerUp() == true)
+								if (isKill == true)
 								{
-									PowerUpHandler->RemovePowerUpFish(NPCs.at(j), j);
-									players.at(i)->SetRandomPowerUp();
-								}
-								else
-								{
-									PowerUpHandler->RemoveAvailableFish(j);
+									if (NPCs.at(j)->GetIsPowerUp() == true)
+									{
+
+										PowerUpHandler->RemovePowerUpFish(NPCs.at(j), j);
+										players.at(i)->SetRandomPowerUp();
+									}
+									else
+									{
+										PowerUpHandler->RemoveAvailableFish(j);
+									}
 								}
 							}
+							players.at(i)->HandleCollision(GLPlayer::HIT, deltaTime, (glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos())) * 10.0f);
+
 						}
-						else
+						else if (NpcSeenSpace.containsAABB(players.at(i)->GetBoundingBox()))
 						{
-							players.at(i)->HandleCollision(GLPlayer::HIT, deltaTime, (glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos())) * 100.0f);
-							std::cout << "BIGGER FIIIIIIIISH";
-							int k = 0;
+							NPCs.at(j)->initiateFleeingState(players.at(i)->GetForward());
 						}
 					}
-					
-					
-				
-				}
-				//if the player is seen it will init fleeing behavior of npc
-				else if (NpcSeenSpace.containsAABB(players.at(i)->GetBoundingBox()))
-				{
-					NPCs.at(j)->initiateFleeingState(players.at(i)->GetForward());
+					else // if you collide with bigger fish
+					{
+						players.at(i)->HandleCollision(GLPlayer::HIT, deltaTime, (glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos())) * 100.0f);
+					}
+
+
+
+					//if the player is seen it will init fleeing behavior of npc
+
 				}
 			}
 		}
 	}
 }
+
+
+//Getting eaten
+
 
 void GLCollisionHandler::AddPlayer(GLPlayer * player)
 {
