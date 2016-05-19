@@ -25,7 +25,7 @@ public:
 	void LoadMesh();
 	void reset();
 	void SetScale(float min, float max);
-	void SetOffset(int x, int y);
+	void SetOffset(float x, float y);
 	void Reset();
 	std::vector<GLModel*>& GetModels();
 	void SetRotation(float X_Z);

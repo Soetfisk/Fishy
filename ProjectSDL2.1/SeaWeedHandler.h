@@ -13,11 +13,11 @@ public:
 
 private:
 	std::vector<SeaWeedLeafs*> specialStaticMeshes;
-	int amountOfPlants, modelID;
-	float  limitPosX, limitPosZ, PosY, leafsMin, leafsMax, scaleMin, scaleMax;
+	int amountOfPlants, modelID, leafsMin, leafsMax;
+	float  limitPosX, limitPosZ, PosY, scaleMin, scaleMax;
 	float randomRot = 0.8f;
-	int xMin, xMax, zMin, zMax;
-	int offsetX, offsetZ;
+	float xMin, xMax, zMin, zMax;
+	float offsetX, offsetZ;
 	FishBox* FSH_Loader;
 
 	bool isBlendShape = false;
@@ -33,12 +33,12 @@ public:
 	void LoadSeaWeed();
 	virtual ~SeaWeedHandler();
 	void Draw(GLShader* shader);
-	void SetZLimit(int min, int max);
-	void SetXLimit(int min, int max);
+	void SetZLimit(float min, float max);
+	void SetXLimit(float min, float max);
 	void SetLeafAmount(int min, int max);
 	void SetAmountOfPlants(int plants);
 	void SetScale(float min, float max);
-	void SetOffset(int x, int z);
+	void SetOffset(float x, float z);
 	void Reset();
 	std::vector<GLModel*> GetMeshes();
 	void SetRandomRotation(float radian);
