@@ -22,6 +22,8 @@ void Scene::Init()
 	shaders[LIGHTING] = new GLShader("lighting");
 	shaders[BLEND_SHAPE] = new GLShader("blend_shape", true);
 	shaders[PARTICLE] = new GLShader("Particle", true);
+	shaders[CEILING] = new GLShader("ceiling", true);
+
 
 	// init all the framebuffers
 	this->frameBuffer = new FrameBuffer();
@@ -522,6 +524,8 @@ void Scene::DrawScene() {
 		//Set viewport
 		glViewport(0, 0, window::WIDTH, window::HEIGHT / 2);
 
+		
+
 		shaders[BLEND_SHAPE]->Bind();
 		shaders[BLEND_SHAPE]->Update(players.at(i)->GetCamera());
 		this->frameBuffer->BindFrameBuffer();
@@ -551,11 +555,16 @@ void Scene::DrawScene() {
 		shaders[BLEND_SHAPE]->Uniform1fv("Weights", TallSeaWeedHandler->GetBlendWeights());
 		TallSeaWeedHandler->Draw(shaders[BLEND_SHAPE]);
 
+
+		shaders[CEILING]->Bind();
+		shaders[CEILING]->Update(players.at(i)->GetCamera());
+		this->seaWeedHandler->Draw(shaders[CEILING]);
+
 		shaders[MODELS]->Bind();
 		shaders[MODELS]->Update(players.at(i)->GetCamera());
 		debugger.setDebugTimer(debug);
 		debugger.printDebugTimer(debug, "bind models, get playercamera");
-		this->seaWeedHandler->Draw(shaders[MODELS]);
+		//this->seaWeedHandler->Draw(shaders[MODELS]);
 		this->stoneHandler->Draw(shaders[MODELS]);
 		this->stoneHandler2->Draw(shaders[MODELS]);
 		this->castleHandler->Draw(shaders[MODELS]);

@@ -11,5 +11,6 @@ enum ShaderType {
 	BORDER,
 	BLEND_SHAPE,
 	PARTICLE,
+	CEILING,
 	NUM_SHADERS
 };

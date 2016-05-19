@@ -275,6 +275,15 @@
     <None Include="draw.frag">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="ceiling.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="ceiling.geom">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="ceiling.frag">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header">
