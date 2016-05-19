@@ -111,9 +111,14 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 		{
 			if (players.at(i)->GetProjectiles().at(j)->GetBoundingBox().containsAABB(players.at(1 - i)->GetBoundingBox()))
 			{
-				players.at(1 - i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(-0.10f));
+
+				
+				float amountToLose = (10.f + ((float)players.at(1 - i)->GetTotalPoints()*.1f))/100;
+				players.at(1 - i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(-amountToLose));
+				players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(amountToLose));
 				players.at(1 - i)->HandleCollision(GLPlayer::HIT, deltaTime, players.at(i)->GetProjectiles().at(j)->GetForward() * 30.0f);
 				players.at(i)->GetProjectiles().at(j)->Inactivate();
+				
 			}
 		}
 
