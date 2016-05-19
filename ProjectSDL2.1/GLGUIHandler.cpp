@@ -242,7 +242,7 @@ void GLGUIHandler::ResetTime()
 	time = 0;
 	newSec = 0;
 	printText[TIME] = textStart[TIME] + std::to_string(time) + textEnd[TIME];
-	textPos[TIME][0] = window::HALF_WIDTH - (gui->GetTextLenght(printText[TIME], textScale[TIME]) * 0.5);
+	textPos[TIME][0] = (GLfloat)(window::HALF_WIDTH - (gui->GetTextLenght(printText[TIME], textScale[TIME]) * 0.5));
 }
 
 int GLGUIHandler::GetTime()
@@ -410,14 +410,14 @@ void GLGUIHandler::Pause()
 {
 	textScale[TIME] = 2.0f;
 	printText[TIME] = "Paused";
-	textPos[TIME][0] = window::HALF_WIDTH - (gui->GetTextLenght(printText[TIME], textScale[TIME]) * 0.5);
-	textPos[TIME][1] = window::HALF_HEIGHT - (gui->GetTextHeight(printText[TIME], textScale[TIME]) * 0.5f);
+	textPos[TIME][0] = (GLfloat)(window::HALF_WIDTH - (gui->GetTextLenght(printText[TIME], textScale[TIME]) * 0.5));
+	textPos[TIME][1] = (GLfloat)(window::HALF_HEIGHT - (gui->GetTextHeight(printText[TIME], textScale[TIME]) * 0.5f));
 }
 
 void GLGUIHandler::Unpause()
 {
 	textScale[TIME] = 1.0f;
 	printText[TIME] = textStart[TIME] + std::to_string(time) + textEnd[TIME];
-	textPos[TIME][0] = window::HALF_WIDTH - (gui->GetTextLenght(printText[TIME], textScale[TIME]) * 0.5f);
-	textPos[TIME][1] = window::HALF_HEIGHT - (gui->GetTextHeight(printText[TIME], textScale[TIME]) * 0.5f);
+	textPos[TIME][0] = (GLfloat)(window::HALF_WIDTH - (gui->GetTextLenght(printText[TIME], textScale[TIME]) * 0.5f));
+	textPos[TIME][1] = (GLfloat)(window::HALF_HEIGHT - (gui->GetTextHeight(printText[TIME], textScale[TIME]) * 0.5f));
 }

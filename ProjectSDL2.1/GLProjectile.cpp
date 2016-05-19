@@ -110,7 +110,7 @@ void GLProjectile::SetVelocity(glm::vec3 velocity)
 
 void GLProjectile::Shoot(glm::vec3 startPos, glm::vec3 forward, glm::vec3 velocity, glm::vec3 rot)
 {
-	this->maxActiveTime = MaxActiveTimeUnaltered * (this->GetTransform().GetScale().x);
+	this->maxActiveTime = (int)(MaxActiveTimeUnaltered * (this->GetTransform().GetScale().x));
 	transform->m_pos = startPos;
 	transform->m_rot = rot;
 	timeActive = 0.0f;

@@ -33,7 +33,7 @@ GLMeshBS::GLMeshBS
 
 
 	int m_location = 3;
-	for (int i = 0; i < meshData->blendshapesCount; i++)
+	for (unsigned int i = 0; i < meshData->blendshapesCount; i++)
 	{
 		GLuint index = m_location + i;
 

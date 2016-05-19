@@ -348,7 +348,7 @@ void Menu::InitModels()
 	FSH_Loader.LoadScene("Models/BlueTang.FSH"); //BlueTang
 	FSH_Loader.LoadScene("Models/AquariumRedux.FSH"); //Aquarium
 
-	srand(time(0));
+	srand((unsigned int)time(0));
 	model = new GLModel(&FSH_Loader, rand() % 3);
 	aquarium = new GLModel(&FSH_Loader, Aquarium);
 	model->GetTransform().m_pos.z = 5;

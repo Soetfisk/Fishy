@@ -167,7 +167,7 @@ void Scene::Init()
 	particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
 	
 
-	for (int i = 0; i < players.size(); i++)
+	for (unsigned int i = 0; i < players.size(); i++)
 	{
 		players.at(i)->addParticleHandleRefernce(particleHandler);
 	}
@@ -179,8 +179,8 @@ void Scene::Init()
 	//}
 	for (int z = -85; z < 85; z+=60) {
 		for (int x = -125; x < 125; x+= 60) {
-			float xe = x + RNG::range(-25, 25);
-			float ze = z + RNG::range(-25, 25);
+			int xe = x + RNG::range(-25, 25);
+			int ze = z + RNG::range(-25, 25);
 			particleHandler->AddEmiter(EmitterType::STATICSTREAM, glm::vec4((xe>-125 && xe<125) ? xe : x, -50.f, (ze>-85 && ze<85) ? ze : z, 1));
 		}
 	}
@@ -442,7 +442,7 @@ void Scene::Update(float& deltaTime) {
 	debugger.setDebugTimer(debug);
 	if (Mix_PlayingMusic() == 0)
 	{
-		srand(time(0));
+		srand((unsigned int)time(0));
 		int num = rand() % NUM_MUSIC;
 		//Play the music
 		currentSong = num;
@@ -564,7 +564,7 @@ void Scene::DrawScene() {
 
 		debugger.setDebugTimer(debug);
 		debugger.printDebugTimer(debug, "seaweed handler");
-		for (int j = 0; j < this->players.size(); j++)
+		for (unsigned int j = 0; j < this->players.size(); j++)
 		{
 			players.at(j)->DrawProjectile(*shaders[MODELS]);
 		}

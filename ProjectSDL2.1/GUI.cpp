@@ -95,8 +95,8 @@ void GUI::InitTextureAtlas(std::string fontName)
 	// Set font size in width and height, 0 dynamiclly calculates the width/height based on the other, e.g. w = 0, h = 48
 	FT_Set_Pixel_Sizes(face, 0, (int)fontSize);
 
-	int w = 0;	// Atlas width
-	int h = 0;	// Atlas height
+	unsigned int w = 0;	// Atlas width
+	unsigned int h = 0;	// Atlas height
 
 	// Iterate through character 32 to 127 in the ASCII table
 	// Skipp first 32 ASCII characters because they are just control codes
@@ -135,12 +135,12 @@ void GUI::InitTextureAtlas(std::string fontName)
 		else
 		{	
 			// Save info about glyph
-			chInfo[c].ax = face->glyph->advance.x >> 6;
-			chInfo[c].ay = face->glyph->advance.y >> 6;
-			chInfo[c].bw = face->glyph->bitmap.width;
-			chInfo[c].bh = face->glyph->bitmap.rows;
-			chInfo[c].bl = face->glyph->bitmap_left;
-			chInfo[c].bt = face->glyph->bitmap_top;
+			chInfo[c].ax = (float)(face->glyph->advance.x >> 6);
+			chInfo[c].ay = (float)(face->glyph->advance.y >> 6);
+			chInfo[c].bw = (float)(face->glyph->bitmap.width);
+			chInfo[c].bh = (float)(face->glyph->bitmap.rows);
+			chInfo[c].bl = (float)(face->glyph->bitmap_left);
+			chInfo[c].bt = (float)(face->glyph->bitmap_top);
 			chInfo[c].tx = (float) x / atlasWidth;
 
 			glTexSubImage2D(GL_TEXTURE_2D, 
