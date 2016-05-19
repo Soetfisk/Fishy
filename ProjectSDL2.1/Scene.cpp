@@ -782,10 +782,14 @@ void Scene::HandleEvenet(SDL_Event* e) {
 			players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, e->caxis.value, 0));
 			break;
 		case SDL_CONTROLLER_AXIS_TRIGGERRIGHT:
-			players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, 0, e->caxis.value));
+			if (e->caxis.value == 0)
+				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, 0, 1));
+			else
+				players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, 0, e->caxis.value));
 			break;
 		case SDL_CONTROLLER_AXIS_TRIGGERLEFT:
-			players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, 0, -e->caxis.value));
+			if (e->caxis.value != 0)
+				players.at(e->cbutton.which)->Update(GLPlayer::PLAYER_DASH, glm::vec3(0));
 			break;
 		default:
 			break;
@@ -795,17 +799,29 @@ void Scene::HandleEvenet(SDL_Event* e) {
 	{
 		switch (e->cbutton.button)
 		{
-		case SDL_CONTROLLER_BUTTON_A:
+		case SDL_CONTROLLER_BUTTON_LEFTSHOULDER:
 			players.at(e->cbutton.which)->Update(GLPlayer::PLAYER_SHOOT, glm::vec3(0));
 			break;
 		case SDL_CONTROLLER_BUTTON_B:
 			players.at(e->cbutton.which)->Update(GLPlayer::PLAYER_DASH, glm::vec3(0));
+			break;
+		case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:
+			players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, 0, -16384));
 			break;
 		case SDL_CONTROLLER_BUTTON_START:
 			*gameState = GLOBAL_GameState::PAUSE;
 			guih->Pause();
 			break;
 		default:
+			break;
+		}
+	}
+	else if (e->type == SDL_CONTROLLERBUTTONUP)
+	{
+		switch (e->cbutton.button)
+		{
+		case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:
+			players.at(e->caxis.which)->Update(GLPlayer::PLAYER_MOVE_LEFT, glm::vec3(0, 0, 1));
 			break;
 		}
 	}
