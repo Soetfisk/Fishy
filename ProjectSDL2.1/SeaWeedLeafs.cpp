@@ -56,8 +56,8 @@ void SeaWeedLeafs::Draw(GLShader & shader)
 
 void SeaWeedLeafs::LoadMesh()
 {
-	int randScale;
-	for (size_t i = 0; i < this->leafsAmount; i++)
+	float randScale;
+	for (int i = 0; i < this->leafsAmount; i++)
 	{
 
 		randScale = RNG::range(this->scaleMin, this->scaleMax);
@@ -89,7 +89,7 @@ void SeaWeedLeafs::SetScale(float min, float max)
 	this->scaleMax = max;
 }
 
-void SeaWeedLeafs::SetOffset(int x, int y)
+void SeaWeedLeafs::SetOffset(float x, float y)
 {
 	this->offsetX = x;
 	this->offsetZ = y;
@@ -97,8 +97,8 @@ void SeaWeedLeafs::SetOffset(int x, int y)
 
 void SeaWeedLeafs::Reset()
 {
-	int randScale;
-	for (size_t i = 0; i < this->leafsAmount; i++)
+	float randScale;
+	for (int i = 0; i < this->leafsAmount; i++)
 	{
 		randScale = RNG::range(this->scaleMin, this->scaleMax);
 

@@ -89,7 +89,7 @@ private:
 
 	void Reset();
 public:
-	ParticleEmitter(EmitterType type, glm::vec4 position, GLfloat textureID);
+	ParticleEmitter(EmitterType type, glm::vec4 position, GLuint textureID);
 	~ParticleEmitter();
 	void UpdateEmitter(const float& deltaTime);
 	void Draw(GLShader* shader);

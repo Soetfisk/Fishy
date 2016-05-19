@@ -44,7 +44,7 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 			}
 		}
 
-		for (int j = 0; j < models.size(); j++)
+		for (unsigned int j = 0; j < models.size(); j++)
 		{
 			distance = players.at(i)->GetTransform().GetPos() - this->models.at(j)->GetTransform().GetPos();
 			distSqrd = glm::dot(distance, distance);

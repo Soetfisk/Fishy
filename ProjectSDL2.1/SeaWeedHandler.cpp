@@ -45,7 +45,7 @@ void SeaWeedHandler::LoadSeaWeed()
 {
 	int leafs;
 	// Init the leafs
-	for (size_t i = 0; i < amountOfPlants; i++)
+	for (int i = 0; i < amountOfPlants; i++)
 	{
 		this->limitPosX = RNG::range(this->xMin, this->xMax);
 		this->limitPosZ = RNG::range(this->zMin, this->zMax);
@@ -88,13 +88,13 @@ void SeaWeedHandler::Draw(GLShader * shader)
 	}
 }
 
-void SeaWeedHandler::SetZLimit(int min, int max)
+void SeaWeedHandler::SetZLimit(float min, float max)
 {
 	this->zMin = min;
 	this->zMax = max;
 }
 
-void SeaWeedHandler::SetXLimit(int min, int max)
+void SeaWeedHandler::SetXLimit(float min, float max)
 {
 	this->xMin = min;
 	this->xMax = max;
@@ -117,7 +117,7 @@ void SeaWeedHandler::SetScale(float min, float max)
 	this->scaleMin = min;
 }
 
-void SeaWeedHandler::SetOffset(int x, int z)
+void SeaWeedHandler::SetOffset(float x, float z)
 {
 	this->offsetX = x;
 	this->offsetZ = z;
@@ -125,7 +125,7 @@ void SeaWeedHandler::SetOffset(int x, int z)
 
 void SeaWeedHandler::Reset()
 {
-	for (size_t i = 0; i < this->amountOfPlants; i++)
+	for (int i = 0; i < this->amountOfPlants; i++)
 	{
 		this->specialStaticMeshes.at(i)->Reset();
 	}
@@ -157,7 +157,7 @@ std::vector<GLModel*> SeaWeedHandler::GetMeshes()
 {
 	std::vector<GLModel*> finalModels;
 
-	for (int i = 0; i < this->specialStaticMeshes.size(); i++)
+	for (size_t i = 0; i < this->specialStaticMeshes.size(); i++)
 	{
 		finalModels.insert(finalModels.end(), this->specialStaticMeshes.at(i)->GetModels().begin(), this->specialStaticMeshes.at(i)->GetModels().end());
 	}
