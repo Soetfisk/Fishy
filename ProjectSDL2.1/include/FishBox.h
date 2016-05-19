@@ -172,7 +172,6 @@ private:
 
 	void LoadMeshes();
 	void LoadMaterials();
-	void LoadTextures();
 	FSHScene(void);
 public:
 	void setTextureIDs(std::vector<GLuint> textureIDs);
@@ -181,7 +180,6 @@ public:
 	unsigned int GetMeshCount();
 	std::vector<FSHMesh*> GetMeshList();
 	std::vector<material*> GetMaterialList();
-	std::vector<texture*> GetTexureList();
 	std::vector<std::string> GetTexureNameList();
 	std::vector<GLuint> GetTextureIDs();
 	void Release();
@@ -230,7 +228,6 @@ public: //functions
 	unsigned int * IndexData(unsigned int model, unsigned int mesh);
 	unsigned int ModelMeshCount(unsigned int model);
 	FSHData::material * meshMaterial(unsigned int model, unsigned int mesh);
-	FSHData::texture* meshTexture(unsigned int model, unsigned int mesh);
 	GLuint meshTextureID(unsigned int model, unsigned int mesh);
 	FSHData::blendShape** meshBlendShapes(unsigned int model, unsigned int mesh);
 
