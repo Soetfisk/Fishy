@@ -126,7 +126,8 @@ void GLPlayer::HandleCollision(PlayerStates state, float deltaTime, glm::vec3 mo
 		}
 		if (momentum.x < 0 && (totalPoints + (100 * momentum.x)) >= 0)
 		{
-			size += momentum.x;
+			if(size+= momentum.x>1)
+				size += momentum.x;
 			totalPoints += (int)(100 * momentum.x);
 			currentPoints += (int)(100 * momentum.x);
 		}
@@ -565,13 +566,21 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 	CalcVelocity(deltaTime);
 	HandleDash(deltaTime);
 
+	//size = 5
+	//getScale = 6
+
+	//if (this->GetTransform().GetScale().x < 0) {
+	//	int k = 0;
+	//}
+
 	if (this->GetTransform().GetScale().x < size-0.5)
 	{
 		this->transform->SetScale(this->transform->GetScale() + (deltaTime /8));
 	}
 	else if (this->GetTransform().GetScale().x > size+0.5)
 	{
-		this->transform->SetScale(-this->transform->GetScale() + (deltaTime / 8));
+
+		this->transform->SetScale(this->transform->GetScale() - (deltaTime / 8));
 	}
 
 	//camera update
