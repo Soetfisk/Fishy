@@ -45,7 +45,7 @@ void SeaWeedHandler::LoadSeaWeed()
 {
 	int leafs;
 	// Init the leafs
-	for (size_t i = 0; i < amountOfPlants; i++)
+	for (int i = 0; i < amountOfPlants; i++)
 	{
 		this->limitPosX = RNG::range(this->xMin, this->xMax);
 		this->limitPosZ = RNG::range(this->zMin, this->zMax);

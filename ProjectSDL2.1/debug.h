@@ -14,7 +14,7 @@ public:
 	{
 		if (debug)
 		{
-			this->currentDTime = SDL_GetTicks();
+			this->currentDTime = (float)SDL_GetTicks();
 			this->dTime = (currentDTime - prevDTime) / 1000.0f;
 			this->prevDTime = currentDTime;
 			this->combinedDtime += dTime;

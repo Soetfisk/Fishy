@@ -47,7 +47,7 @@ GLuint ParticleHandler::getTexture(FSHData::texture* texture) {
 
 
 ParticleHandler::~ParticleHandler(){
-	for (int i = 0; i < this->emiters.size(); i++) {
+	for (unsigned int i = 0; i < this->emiters.size(); i++) {
 		delete emiters.at(i);
 	}
 	//FSH_LoaderReference->clean();
@@ -61,7 +61,7 @@ ParticleHandler::~ParticleHandler(){
 void ParticleHandler::DrawParticles(GLShader* shader/*, GLCamera& camera*/) {
 	//shader->Bind();
 	//shader->Update(camera);
-	for (int i = 0; i < this->emiters.size(); i++) {
+	for (unsigned int i = 0; i < this->emiters.size(); i++) {
 		
 		this->emiters.at(i)->Draw(shader);
 	}
@@ -69,7 +69,7 @@ void ParticleHandler::DrawParticles(GLShader* shader/*, GLCamera& camera*/) {
 
 void ParticleHandler::UpdateParticles(const float& deltaTime) {
 
-	for (int i = 0; i < this->emiters.size(); i++) {
+	for (unsigned int i = 0; i < this->emiters.size(); i++) {
 		this->emiters.at(i)->UpdateEmitter(deltaTime);
 
 

@@ -2,7 +2,7 @@
 #include "RNG.h"
 #include "glm\ext.hpp"
 
-ParticleEmitter::ParticleEmitter(EmitterType type, glm::vec4 position, GLfloat textureID){//FSHData::texture* texture) {
+ParticleEmitter::ParticleEmitter(EmitterType type, glm::vec4 position, GLuint textureID){//FSHData::texture* texture) {
 	this->type = type;
 	this->positionEmitter = position;
 	this->texture = texture;
@@ -95,7 +95,7 @@ void ParticleEmitter::instantiatePlayerFollow() {
 	this->particle.p_pos = this->positionEmitter;
 	this->particle.p_lifeTime = 2;
 	this->particle.p_acc = glm::vec4(0, 0, 0, 0);
-	this->particle.p_scale = .05;
+	this->particle.p_scale = .05f;
 	this->particle.p_speed = 1;
 	this->particle.p_vel = glm::vec4(0, 0, 0, 0);
 }
@@ -235,7 +235,7 @@ void ParticleEmitter::updateDirection(glm::vec4 dir) {
 void ParticleEmitter::updateSpawnRate(float rate) {
 	this->emiterSpawnTDelay = rate;
 	if (this->emiterMulitbleSpawner) {
-		this->emiterNrToSpawnSimutan = .35 / rate;
+		this->emiterNrToSpawnSimutan = .35f / rate;
 	}
 }
 
@@ -262,8 +262,6 @@ Particle ParticleEmitter::generateParticleData() {
 	Particle returnData;
 	returnData = this->particle;
 	glm::vec4 data;
-	float testRight;
-	float testUp;
 	switch (this->type)
 	{
 	case EmitterType::STATICSTREAM:

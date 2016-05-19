@@ -50,7 +50,7 @@ NpcPowerUpHandler::NpcPowerUpHandler(std::vector<GLNPC*> NPCList)
 
 	this->powerUpMaterial->diffuse[0] = 1;
 	this->powerUpMaterial->diffuse[1] = 1;
-	this->powerUpMaterial->diffuse[2] = 0.4;
+	this->powerUpMaterial->diffuse[2] = 0.4f;
 
 	this->powerUpMaterial->ambient[0] = 0.7f;
 	this->powerUpMaterial->ambient[1] = 0.3f;
