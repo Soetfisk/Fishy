@@ -18,8 +18,8 @@ public:
 	SDL_Window* GetWindow();
 private:
 
-	int WIDTH = 800;
-	int HEIGHT = 480;
+	int WIDTH = 1024;
+	int HEIGHT = 768;
 
 	int m_Width;
 	int m_Height;
