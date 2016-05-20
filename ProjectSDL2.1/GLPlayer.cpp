@@ -192,6 +192,8 @@ void GLPlayer::ResetPlayer()
 
 	this->size = 1.0f;
 	this->transform->SetScale(glm::vec3(1));
+
+	this->m_camera.Reset(*this->transform);
 }
 
 int GLPlayer::GetPoints()
@@ -620,7 +622,6 @@ void GLPlayer::PlayerDash()
 		isDashing = true;
 		dashCurrentDuration = 0.0f;
 		dashCooldownCounter = 0.0f;
-		lastForward = 32768.0f;
 	}
 }
 
