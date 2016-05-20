@@ -32,6 +32,7 @@ GLProjectile::GLProjectile(FishBox* FSH_Loader, unsigned int modelID, int projec
 	timeActive = 0.0f;
 	this->speed = projectileSpeed*2;
 	strength = projectileStrength;
+
 	transform->m_scale = glm::vec3(projectileSize);
 	velocity = glm::vec3();
 	forward = glm::vec3();
@@ -116,6 +117,8 @@ void GLProjectile::Shoot(glm::vec3 startPos, glm::vec3 forward, glm::vec3 veloci
 	timeActive = 0.0f;
 	this->forward = forward;
 	this->velocity = velocity;
+	this->currentStrength = this->transform->m_scale.x * strength;
+
 
 	float temp  = glm::length(velocity) * 0.2f;
 	forwardVel = forward * speed;

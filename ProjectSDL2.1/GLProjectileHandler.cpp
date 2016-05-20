@@ -13,7 +13,7 @@ GLProjectileHandler::GLProjectileHandler(FishBox* FSH_Loader, unsigned int model
 	this->modelID = modelID;
 	this->projectileActiveTime = projectileActiveTime;
 	this->projectileSpeed = projectileSpeed;
-	this->projectileStrength = 10.0f;
+	this->projectileStrength = 30.0f;
 	this->projectileSize = 1.0f;
 	standardProjectileSize = 1.0f;
 	this->cooldownDuration = cooldown;

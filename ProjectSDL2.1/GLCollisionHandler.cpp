@@ -116,7 +116,7 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 				float amountToLose = (10.f + ((float)players.at(1 - i)->GetTotalPoints()*.1f))/100;
 				players.at(1 - i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(-amountToLose));
 				players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(amountToLose));
-				players.at(1 - i)->HandleCollision(GLPlayer::HIT, deltaTime, players.at(i)->GetProjectiles().at(j)->GetForward() * 30.0f);
+				players.at(1 - i)->HandleCollision(GLPlayer::HIT, deltaTime, players.at(i)->GetProjectiles().at(j)->GetForward() * players.at(i)->GetProjectiles().at(j)->GetCurrentStrength());
 				players.at(i)->GetProjectiles().at(j)->Inactivate();
 				
 			}

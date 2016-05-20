@@ -32,6 +32,7 @@ public:
 	void Activate();					// Activates the projectile 
 	void Inactivate();					// Deactivates the projectile
 	bool IsActive();					// Returns true if the projectile is active
+	float GetCurrentStrength() { return currentStrength; };
 
 	void addParticleEmitter(ParticleEmitter* emitter);
 	void updateParticleEmitter(float& deltaTime);
@@ -47,6 +48,7 @@ private:
 	float timeActive;				// Keeping track of how long the projectile has traveled 
 	float speed;					// The speed the bullet travels at
 	float strength;
+	float currentStrength;
 	glm::vec3 velocity;
 	glm::vec3 forward;				// The direction the projectile will travel
 	glm::vec3 forwardVel;
