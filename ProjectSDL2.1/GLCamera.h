@@ -19,6 +19,7 @@ public:
 	void SetInput(float x, float y);
 	void AddDistance(float dist);
 	void DecreaseDistance(float dist);
+	void Reset(GLTransform transform);
 	
 private:
 	

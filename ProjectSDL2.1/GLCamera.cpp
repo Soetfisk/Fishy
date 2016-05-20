@@ -131,3 +131,11 @@ void GLCamera::DecreaseDistance(float dist)
 {
 	distanceToPlayer -= dist;
 }
+
+void GLCamera::Reset(GLTransform transform)
+{
+	distanceToPlayer = 5.f;
+	float horizDist = CalcHorizontalDist(transform);
+	float verticDist = CalcVerticalDist(transform);
+	CalcCameraPos(horizDist, verticDist, transform);
+}

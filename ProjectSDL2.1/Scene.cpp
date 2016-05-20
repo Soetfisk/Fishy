@@ -435,7 +435,7 @@ Scene::~Scene() {
 void Scene::Update(float& deltaTime) {
 
 	//guih->Player1Won();
-
+	
 	if (debug)
 		printf("\n\n##UPDATE DEBUG##");
 
