@@ -235,7 +235,7 @@ void Scene::LoadModels()
 	//this->staticMeshes.push_back(new GLModel(&FSH_Loader, castle));
 	//this->staticMeshes.at(1)->GetTransform().SetScale(glm::vec3(2));
 	//this->staticMeshes.at(1)->SetBoundingBox(glm::vec3(0), glm::vec3(1.25));
-	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
+	//this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
 
 
 	this->collisionHandler.AddNPC(NPCs);

@@ -14,7 +14,6 @@ void NpcPowerUpHandler::AsssignStartPowerupFishes() {
 	if(amountOfPowerUpFishes > NPCs.size())
 	{
 		amountOfPowerUpFishes = NPCs.size();
-		
 	}
 	for (size_t i = 0; i < amountOfPowerUpFishes; i++)
 	{
@@ -72,11 +71,8 @@ void NpcPowerUpHandler::RemovePowerUpFish(GLNPC* RemoveThisFish, unsigned int Fi
 			PowerNPCs.erase(PowerNPCs.begin() + i);
 			MakePowerUpFish();
 			break;
-			
 		}
-		
 	}
-
 }
 
 void NpcPowerUpHandler::RemoveAvailableFish(unsigned int Fishindex)
@@ -104,7 +100,6 @@ void NpcPowerUpHandler::MovePowerUpToAnotherFish(GLNPC* RemoveThisFish, unsigned
 			MakePowerUpFish();
 			break;
 		}
-
 	}
 }
 
