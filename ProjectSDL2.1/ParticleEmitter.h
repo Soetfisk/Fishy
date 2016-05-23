@@ -88,6 +88,7 @@ private:
 	Particle particle;
 
 	void Reset();
+	
 public:
 	ParticleEmitter(EmitterType type, glm::vec4 position, GLuint textureID);
 	~ParticleEmitter();
@@ -104,6 +105,9 @@ public:
 	
 	void clean();
 	bool isDead();
+	int getNrActiveParticles();
+	void disableSpawn();
+	void enableSpawn();
 };
 
 #endif
