@@ -35,6 +35,7 @@ private:
 		BlueTang,
 		Bubble,
 		Aquarium,
+		AquariumCeiling,
 		SeaWeedLeaf,
 		SeaWeedTall,
 		roughRock,
