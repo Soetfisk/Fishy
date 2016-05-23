@@ -2,6 +2,7 @@
 
 enum ShaderType {
 	MODELS,
+	TEXTURE_WAVY,
 	//PARTICLES,
 	//BLUR,
 	PASS,

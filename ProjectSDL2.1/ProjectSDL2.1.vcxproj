@@ -105,6 +105,9 @@
     <None Include="pass.vert" />
     <None Include="post.frag" />
     <None Include="post.vert" />
+    <None Include="roof.frag" />
+    <None Include="roof.geom" />
+    <None Include="roof.vert" />
     <None Include="test.frag" />
     <None Include="test.geom" />
     <None Include="test.vert" />

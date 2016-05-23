@@ -15,6 +15,7 @@ void Scene::Init()
 
 	// load the shaders
 	shaders[MODELS] = new GLShader("test", true);
+	shaders[TEXTURE_WAVY] = new GLShader("roof", true);
 	shaders[PASS] = new GLShader("pass");
 	shaders[TEXT] = new GLShader("text");
 	shaders[WAVY] = new GLShader("wavy");
@@ -571,10 +572,12 @@ void Scene::DrawScene() {
 		}
 		debugger.setDebugTimer(debug);
 		debugger.printDebugTimer(debug, "projectiles");
-		
+
+		shaders[TEXTURE_WAVY]->Bind();
+		shaders[TEXTURE_WAVY]->Update(players.at(i)->GetCamera());
 		for (size_t i = 0; i < staticMeshes.size(); i++)
 		{
-			staticMeshes.at(i)->Draw(*shaders[MODELS]);
+			staticMeshes.at(i)->Draw(*shaders[TEXTURE_WAVY]);
 		}
 		debugger.setDebugTimer(debug);
 		debugger.printDebugTimer(debug, "static meshes");

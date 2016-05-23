@@ -275,6 +275,15 @@
     <None Include="draw.frag">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="roof.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="roof.geom">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="roof.vert">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header">
