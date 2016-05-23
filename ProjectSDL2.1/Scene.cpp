@@ -207,6 +207,7 @@ void Scene::LoadModels()
 	FSH_Loader.LoadScene("Models/bluetangblend.FSH"); //BlueTang
 	FSH_Loader.LoadScene("Models/Bubble2.FSH"); //Bubble
 	FSH_Loader.LoadScene("Models/AquariumRedux.FSH"); //Aquarium
+	FSH_Loader.LoadScene("Models/ceiling.FSH"); //AquariumCeiling
 	FSH_Loader.LoadScene("Models/weed2.FSH"); //SeaWeedLeaf
 	FSH_Loader.LoadScene("Models/seaweed1Blend.FSH");//SeaWeedTall
 	FSH_Loader.LoadScene("Models/roughRock.FSH"); //roughRock
@@ -229,6 +230,7 @@ void Scene::LoadModels()
 	}
 
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Aquarium));
+	this->staticMeshes.push_back(new GLModel(&FSH_Loader, AquariumCeiling));
 	//this->staticMeshes.push_back(new GLModel(&FSH_Loader, SeaWeedTall));
 	//staticMeshes.at(0)->GetTransform().SetPos(glm::vec3(3, 3, 3));
 	//staticMeshes.at(0)->GetTransform().SetScale(glm::vec3(1, -1, 1));
