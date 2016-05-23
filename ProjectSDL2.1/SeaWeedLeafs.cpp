@@ -54,6 +54,18 @@ void SeaWeedLeafs::Draw(GLShader & shader)
 	}
 }
 
+void SeaWeedLeafs::Draw(GLShader & shader, GLFrustum & frustrum)
+{
+	for (size_t i = 0; i < Leafs.size(); i++)
+	{
+		int result = frustrum.AABBIsInFrustum(Leafs.at(i)->GetBoundingBox().center, Leafs.at(i)->GetBoundingBox().halfDimension);
+		if (result == 0 || result == 1)
+		{
+			Leafs.at(i)->Draw(shader);
+		}
+	}
+}
+
 void SeaWeedLeafs::LoadMesh()
 {
 	float randScale;
@@ -67,7 +79,7 @@ void SeaWeedLeafs::LoadMesh()
 		Leafs.at(i)->GetTransform().SetRot(randomRotationVector);
 		Leafs.at(i)->GetTransform().SetScale(glm::vec3(randScale));
 		Leafs.at(i)->GetTransform().SetPos(glm::vec3(posX + this->GetRandOffsetX(), posY, posZ + this->getRandOffsetZ()));
-		Leafs.at(i)->SetBoundingBox(glm::vec3(0), glm::vec3(1.25));
+		Leafs.at(i)->SetBoundingBox(boundingBox.center, boundingBox.halfDimension);
 		Leafs.at(i)->UpdateModel();
 	}
 }
@@ -95,6 +107,14 @@ void SeaWeedLeafs::SetOffset(float x, float y)
 	this->offsetZ = y;
 }
 
+void SeaWeedLeafs::SetBoundingBox(glm::vec3& center, glm::vec3& extents)
+{
+	AABB b;
+	b.center = center;
+	b.halfDimension = extents;
+	this->boundingBox = b;
+}
+
 void SeaWeedLeafs::Reset()
 {
 	float randScale;
@@ -106,7 +126,7 @@ void SeaWeedLeafs::Reset()
 		Leafs.at(i)->GetTransform().SetRot(randomRotationVector);
 		Leafs.at(i)->GetTransform().SetScale(glm::vec3(randScale));
 		Leafs.at(i)->GetTransform().SetPos(glm::vec3(posX + this->GetRandOffsetX(), posY, posZ + this->getRandOffsetZ()));
-		Leafs.at(i)->SetBoundingBox(glm::vec3(0), glm::vec3(1.25));
+		Leafs.at(i)->SetBoundingBox(boundingBox.center,boundingBox.halfDimension);
 		Leafs.at(i)->UpdateModel();
 	}
 }

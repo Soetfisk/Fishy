@@ -103,6 +103,7 @@ void Scene::Init()
 	this->seaWeedHandler->SetAmountOfPlants(9);
 	this->seaWeedHandler->SetScale(3, 6);
 	this->seaWeedHandler->SetOffset(0, 0);
+	this->seaWeedHandler->SetBoundingBox(glm::vec3(0, 2.5, 0), glm::vec3(3, 2.5, 3));
 	this->seaWeedHandler->LoadSeaWeed();
 
 	this->TallSeaWeedHandler = new SeaWeedHandler(&FSH_Loader, SeaWeedTall);
@@ -114,6 +115,7 @@ void Scene::Init()
 	this->TallSeaWeedHandler->SetScale(2.0f, 5.0f);
 	this->TallSeaWeedHandler->SetOffset(4,10 );
 	this->TallSeaWeedHandler->SetRandomRotation(0);
+	this->TallSeaWeedHandler->SetBoundingBox(glm::vec3(0,10,0), glm::vec3(4, 10, 4));
 	this->TallSeaWeedHandler->LoadSeaWeed();
 
 	this->stoneHandler = new SeaWeedHandler(&FSH_Loader, roughRock);
@@ -123,6 +125,7 @@ void Scene::Init()
 	this->stoneHandler->SetAmountOfPlants(10);
 	this->stoneHandler->SetScale(2, 6);
 	this->stoneHandler->SetOffset(40, 40);
+	this->stoneHandler->SetBoundingBox(glm::vec3(0), glm::vec3(1.25));
 	this->stoneHandler->LoadSeaWeed();
 
 	this->stoneHandler2 = new SeaWeedHandler(&FSH_Loader, smoothRock);
@@ -133,9 +136,11 @@ void Scene::Init()
 	this->stoneHandler2->SetScale(1, 5);
 	this->stoneHandler2->SetOffset(30, 30);
 	this->stoneHandler2->SetRandomRotation(0.3f);
+	this->stoneHandler2->SetBoundingBox(glm::vec3(0, 0, 0), glm::vec3(2, 2.5, 2));
 	this->stoneHandler2->LoadSeaWeed();
 
 	this->collisionHandler.AddModel(this->stoneHandler->GetMeshes());
+
 	this->castleHandler = new SeaWeedHandler(&FSH_Loader, castle);
 	this->castleHandler->SetXLimit(-90, 90);
 	this->castleHandler->SetZLimit(-50, 50);
@@ -144,6 +149,7 @@ void Scene::Init()
 	this->castleHandler->SetScale(3, 5);
 	this->castleHandler->SetOffset(70, 50);
 	this->castleHandler->SetRandomRotation(0.05f);
+	this->castleHandler->SetBoundingBox(glm::vec3(0, 2, 0), glm::vec3(6, 4, 6));
 	this->castleHandler->LoadSeaWeed();
 
 	this->korallHandler = new SeaWeedHandler(&FSH_Loader, rosaKorall);
@@ -153,6 +159,7 @@ void Scene::Init()
 	this->korallHandler->SetAmountOfPlants(9);
 	this->korallHandler->SetScale(3, 6);
 	this->korallHandler->SetOffset(0, 0);
+	this->korallHandler->SetBoundingBox(glm::vec3(0, 2, 0), glm::vec3(6, 4, 6));
 	this->korallHandler->LoadSeaWeed();
 
 	this->korallHandler2 = new SeaWeedHandler(&FSH_Loader, orangeKorall);
@@ -162,6 +169,7 @@ void Scene::Init()
 	this->korallHandler2->SetAmountOfPlants(9);
 	this->korallHandler2->SetScale(3, 6);
 	this->korallHandler2->SetOffset(0, 0);
+	this->korallHandler2->SetBoundingBox(glm::vec3(0, 2, 0), glm::vec3(6, 4, 6));
 	this->korallHandler2->LoadSeaWeed();
 
 	particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
@@ -228,8 +236,9 @@ void Scene::LoadModels()
 	}
 
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Aquarium));
-	//this->staticMeshes.push_back(new GLModel(&FSH_Loader, SeaWeedTall));
-	//staticMeshes.at(0)->GetTransform().SetPos(glm::vec3(3, 3, 3));
+	//this->staticMeshes.push_back(new GLModel(&FSH_Loader, rosaKorall));
+	//staticMeshes.at(1)->GetTransform().SetPos(glm::vec3(0, 0, 0));
+	//staticMeshes.at(1)->SetBoundingBox(glm::vec3(0,2,0), glm::vec3(6, 4, 6));
 	//staticMeshes.at(0)->GetTransform().SetScale(glm::vec3(1, -1, 1));
 	
 	//this->staticMeshes.push_back(new GLModel(&FSH_Loader, castle));
@@ -481,10 +490,10 @@ void Scene::Update(float& deltaTime) {
 	for (size_t i = 0; i < this->players.size(); i++) {
 		this->players.at(i)->Update(this->deltaTime);
 		this->players.at(i)->UpdateParticles(this->deltaTime);
-		//if (this->players.at(i)->GetBoundingBox().containsAABB(staticMeshes.at(1)->GetBoundingBox()))
-		//{
-		//	std::cout << "HIT" << std::endl;
-		//}
+		/*if (this->players.at(i)->GetBoundingBox().containsAABB(staticMeshes.at(1)->GetBoundingBox()))
+		{
+			std::cout << "HIT" << std::endl;
+		}*/
 	}
 	debugger.setDebugTimer(debug);
 	debugger.printDebugTimer(debug, "players");
@@ -530,9 +539,12 @@ void Scene::DrawScene() {
 
 		for (size_t j = 0; j < this->players.size(); j++)
 		{
-			shaders[BLEND_SHAPE]->Uniform1ui("BlendShapeCount", (GLuint)players.at(j)->GetBlendShapeCount());
-			shaders[BLEND_SHAPE]->Uniform1fv("Weights", players.at(j)->GetBlendWeights());
-			players.at(j)->TestDraw(*shaders[BLEND_SHAPE]);
+			if (players.at(i)->IsInFrustrum(players.at(j)->GetBoundingBox()))
+			{
+				shaders[BLEND_SHAPE]->Uniform1ui("BlendShapeCount", (GLuint)players.at(j)->GetBlendShapeCount());
+				shaders[BLEND_SHAPE]->Uniform1fv("Weights", players.at(j)->GetBlendWeights());
+				players.at(j)->TestDraw(*shaders[BLEND_SHAPE]);
+			}
 		}
 
 		debugger.setDebugTimer(debug);
@@ -540,27 +552,30 @@ void Scene::DrawScene() {
 		
 		for (size_t j = 0; j < NPCs.size(); j++)
 		{
-			shaders[BLEND_SHAPE]->Uniform1ui("BlendShapeCount", (GLuint)NPCs.at(j)->GetBlendShapeCount());
-			shaders[BLEND_SHAPE]->Uniform1fv("Weights", NPCs.at(j)->GetBlendWeights());
-			NPCs.at(j)->NPCDraw(*shaders[BLEND_SHAPE]);
+			if (players.at(i)->IsInFrustrum(NPCs.at(j)->GetBoundingBox()))
+			{
+				shaders[BLEND_SHAPE]->Uniform1ui("BlendShapeCount", (GLuint)NPCs.at(j)->GetBlendShapeCount());
+				shaders[BLEND_SHAPE]->Uniform1fv("Weights", NPCs.at(j)->GetBlendWeights());
+				NPCs.at(j)->NPCDraw(*shaders[BLEND_SHAPE]);
+			}
 		}
 		debugger.setDebugTimer(debug);
 		debugger.printDebugTimer(debug, "npc's");
 
 		shaders[BLEND_SHAPE]->Uniform1ui("BlendShapeCount", (GLuint)TallSeaWeedHandler->GetBlendShapeCount());
 		shaders[BLEND_SHAPE]->Uniform1fv("Weights", TallSeaWeedHandler->GetBlendWeights());
-		TallSeaWeedHandler->Draw(shaders[BLEND_SHAPE]);
+		TallSeaWeedHandler->DrawWithFrustrum(shaders[BLEND_SHAPE], players.at(i)->GetFrustrum());
 
 		shaders[MODELS]->Bind();
 		shaders[MODELS]->Update(players.at(i)->GetCamera());
 		debugger.setDebugTimer(debug);
 		debugger.printDebugTimer(debug, "bind models, get playercamera");
-		this->seaWeedHandler->Draw(shaders[MODELS]);
-		this->stoneHandler->Draw(shaders[MODELS]);
-		this->stoneHandler2->Draw(shaders[MODELS]);
-		this->castleHandler->Draw(shaders[MODELS]);
-		this->korallHandler->Draw(shaders[MODELS]);
-		this->korallHandler2->Draw(shaders[MODELS]);
+		this->seaWeedHandler->DrawWithFrustrum(shaders[MODELS],players.at(i)->GetFrustrum());
+		this->stoneHandler->DrawWithFrustrum(shaders[MODELS], players.at(i)->GetFrustrum());
+		this->stoneHandler2->DrawWithFrustrum(shaders[MODELS], players.at(i)->GetFrustrum());
+		this->castleHandler->DrawWithFrustrum(shaders[MODELS], players.at(i)->GetFrustrum());
+		this->korallHandler->DrawWithFrustrum(shaders[MODELS], players.at(i)->GetFrustrum());
+		this->korallHandler2->DrawWithFrustrum(shaders[MODELS], players.at(i)->GetFrustrum());
 
 		debugger.setDebugTimer(debug);
 		debugger.printDebugTimer(debug, "seaweed handler");
@@ -573,7 +588,10 @@ void Scene::DrawScene() {
 		
 		for (size_t i = 0; i < staticMeshes.size(); i++)
 		{
-			staticMeshes.at(i)->Draw(*shaders[MODELS]);
+			if (players.at(i)->IsInFrustrum(staticMeshes.at(i)->GetBoundingBox()))
+			{
+				staticMeshes.at(i)->Draw(*shaders[MODELS]);
+			}
 		}
 		debugger.setDebugTimer(debug);
 		debugger.printDebugTimer(debug, "static meshes");
