@@ -189,7 +189,7 @@ void ParticleEmitter::updateParticles(const float& deltaTime) {
 void ParticleEmitter::spawnParticle() {
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, this->pe_particleBuffer);
-	GLint bufMask = GL_MAP_WRITE_BIT; // the invalidate makes a big difference when re-writing
+	GLint bufMask = GL_MAP_WRITE_BIT | GL_MAP_UNSYNCHRONIZED_BIT |GL_MAP_INVALIDATE_RANGE_BIT; // the invalidate makes a big difference when re-writing
 	struct ParticleStruct* tempParticles;
 
 	tempParticles = (struct ParticleStruct *) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, nrActiveParticles * sizeof(ParticleStruct), sizeof(ParticleStruct), bufMask);
@@ -348,24 +348,33 @@ Particle ParticleEmitter::generateParticleData() {
 void ParticleEmitter::checkDeadParticles() {
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, this->pe_particleBuffer);
+	//ParticleStruct* tempParticlesz = (struct ParticleStruct *) glMapBuffer(GL_SHADER_STORAGE_BUFFER, GL_MAP_READ_BIT | GL_MAP_WRITE_BIT | GL_MAP_FLUSH_EXPLICIT_BIT);
+
+	//glBindBuffer(GL_SHADER_STORAGE_BUFFER, this->pe_particleBuffer);
 
 	//glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT);	
-	ParticleStruct* tempParticlesz = (struct ParticleStruct *) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, nrActiveParticles* sizeof(ParticleStruct), GL_MAP_READ_BIT | GL_MAP_WRITE_BIT);
+	//ParticleStruct* tempParticlesz = (struct ParticleStruct *) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, nrActiveParticles* sizeof(ParticleStruct), GL_MAP_READ_BIT);
+
+	//ParticleStruct* temp = tempParticlesz;
+	ParticleStruct* tempParticlesz  = (ParticleStruct*)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, nrActiveParticles* sizeof(ParticleStruct), GL_MAP_READ_BIT );
 
 	ParticleStruct* temp = tempParticlesz;
-	for (int i = 0; i < nrActiveParticles; i++) {
+
+
+	if (temp != nullptr) {
+		for (int i = 0; i < nrActiveParticles; i++) {
 
 
 
-		if (temp[i].customVariables.y <= 0) {
-			//std::cout << "KILL AT: " << i << std::endl;
-			killParticleAtIndex(i, tempParticlesz);
+			if (temp[i].customVariables.y <= 0) {
+				//std::cout << "KILL AT: " << i << std::endl;
+				//killParticleAtIndex(i, tempParticlesz);
+			}
 		}
 	}
 
-	if (glUnmapBuffer(GL_SHADER_STORAGE_BUFFER) == GL_FALSE) {
-		int k = 0;
-	}
+
+	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 
 }
