@@ -129,6 +129,7 @@ private:
 	glm::vec3 fogColor;
 	// Player
 	GLPlayer::PowerUps currentPowerUp;
+	float currentSize = 1.0f;
 	// Timer
 	float endTimer; // when we end game
 	float endScore; // reach this amount of points and game end

@@ -76,6 +76,7 @@ public:
 	float * GetBlendWeights() { return blendWeights; }
 	unsigned int GetBlendShapeCount() { return NUM_ANIMATION; }
 	glm::vec3& getVelocity() { return m_velocity; }
+	float GetSize() { return this->size; };
 
 
 	void addParticleHandleRefernce(ParticleHandler* pHandlerReference);

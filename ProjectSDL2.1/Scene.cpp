@@ -252,6 +252,7 @@ void Scene::LoadModels(char * folder)
 void Scene::UpdatePlayerPowerUp(int player)
 {
 	this->currentPowerUp = this->players.at(player)->GetPowerUp();
+	this->currentSize = this->players.at(player)->GetSize();
 	// fix gui powerup text
 	if (player == 0)
 	{
@@ -307,7 +308,7 @@ void Scene::HandlePlayerPowerUp()
 		this->wavyLength = 0.5f; // how long the waves are. Lower = longer waves. standard = 1
 		this->fogColor = glm::vec3(0.3, 0.7, 0.3);
 		this->fogStart = 1.0f;
-		this->fogEnd = 35.0f;
+		this->fogEnd = 35.0f + (this->currentSize * 8);
 	}
 	else
 	{
