@@ -21,9 +21,6 @@ uniform float offset;
 
 void main()
 {
-	vec3 lightPos = vec3(1,200000,3);
-	vec3 V = normalize(frag_ViewPos - frag_worldpos); // pos to camera
-	vec3 L = normalize(lightPos - frag_worldpos); // pos to light
 	
 	float dist = gl_FragCoord.z / gl_FragCoord.w; // distance
 
@@ -38,8 +35,8 @@ void main()
 
 	color = tempColor;
 
-	color2 = vec4(frag_worldpos, 1);
+	color2 = vec4(vec3(0,0,0), 1);
 	color3 = vec4(frag_normal, 1);
 	color5 = vec4(vec3(0.4,0.4,0.4), 1);
-	color6 = vec4(specular, shininess);
+	//color6 = vec4(specular, shininess);
 }
