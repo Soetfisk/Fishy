@@ -308,7 +308,7 @@ void Scene::HandlePlayerPowerUp()
 		this->wavyLength = 0.5f; // how long the waves are. Lower = longer waves. standard = 1
 		this->fogColor = glm::vec3(0.3, 0.7, 0.3);
 		this->fogStart = 1.0f;
-		this->fogEnd = 35.0f + (this->currentSize * 8);
+		this->fogEnd = 45.0f + (this->currentSize * 4);
 	}
 	else
 	{
