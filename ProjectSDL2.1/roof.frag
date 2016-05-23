@@ -17,6 +17,7 @@ uniform vec3 diffuse;
 uniform vec3 ambient;
 uniform vec3 specular;
 uniform float shininess;
+uniform float offset;
 
 void main()
 {
@@ -27,9 +28,12 @@ void main()
 	float dist = gl_FragCoord.z / gl_FragCoord.w; // distance
 
 	color4 = vec4(dist,0,0,1);
+	vec2 uv = frag_uv;
 
-	vec4 tempColor  = vec4(diffuse, 1) * texture2D(diffuseTexture, frag_uv);
-	tempColor = vec4(1,0,0,1);
+	uv.x += (sin(uv.y * 4 * 2 * 3.1315 + offset) / (300 * 0.5));
+
+	vec4 tempColor  = vec4(diffuse, 1) * texture2D(diffuseTexture, uv);
+	//tempColor = vec4(sin(offset),0,0,0);
 
 	color = tempColor;
 

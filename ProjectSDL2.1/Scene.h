@@ -99,6 +99,8 @@ private:
 	FrameBuffer* frameBuffer5;
 	GLProjectile* testProj;
 	float count[2] = { 0,0 };
+	float roofCount[2] = { 0.0f, 0.0f };
+	float roofWavy = 0.8f;
 	FilterComputeShader* filterComputeShader;
 	float deltaTime;
 	float dTime;

@@ -518,6 +518,7 @@ void Scene::DrawScene() {
 
 		this->UpdatePlayerPowerUp(i);
 		this->HandlePlayerPowerUp();
+		this->count[i] += this->wavyAmount * this->deltaTime;
 		this->players.at(i)->UpdateModel();
 		debugger.setDebugTimer(debug);
 		debugger.printDebugTimer(debug, "playerpowerup");
@@ -573,12 +574,14 @@ void Scene::DrawScene() {
 		debugger.setDebugTimer(debug);
 		debugger.printDebugTimer(debug, "projectiles");
 
-		shaders[TEXTURE_WAVY]->Bind();
-		shaders[TEXTURE_WAVY]->Update(players.at(i)->GetCamera());
-		for (size_t i = 0; i < staticMeshes.size(); i++)
-		{
-			staticMeshes.at(i)->Draw(*shaders[TEXTURE_WAVY]);
-		}
+		this->roofCount[i] += this->roofWavy + this->deltaTime;
+		//shaders[TEXTURE_WAVY]->Bind();
+		//shaders[TEXTURE_WAVY]->Update(players.at(i)->GetCamera());
+		//shaders[TEXTURE_WAVY]->Uniform1f("offset", count[i]);
+		//for (size_t i = 0; i < staticMeshes.size(); i++)
+		//{
+		//	staticMeshes.at(i)->Draw(*shaders[TEXTURE_WAVY]);
+		//}
 		debugger.setDebugTimer(debug);
 		debugger.printDebugTimer(debug, "static meshes");
 
@@ -650,7 +653,6 @@ void Scene::DrawScene() {
 		this->RenderQuad();
 		this->frameBuffer4->UnbindFrameBuffer();
 
-		this->count[i] += this->wavyAmount * this->deltaTime;
 		this->frameBuffer5->BindFrameBuffer();
 		shaders[WAVY]->Bind();
 		shaders[WAVY]->Uniform1f("offset", count[i]);
