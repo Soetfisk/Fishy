@@ -94,6 +94,9 @@
     <ClCompile Include="SeaWeedLeafs.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="GLFrustum.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AABB.h">
@@ -201,6 +204,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="debug.h" />
+    <ClInclude Include="GLFrustum.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="blueFilter.glsl">
