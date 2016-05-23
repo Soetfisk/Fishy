@@ -105,8 +105,8 @@ void GLProjectileHandler::Update(float& dt)
 
 void GLProjectileHandler::Draw(GLShader& shader)
 {
-	for (size_t i = 0; i < projectiles.size(); i++)
-		projectiles.at(i)->TestDraw(shader);
+	for each (GLProjectile * projectilei in projectiles)
+		projectilei->TestDraw(shader);
 }
 
 std::vector<GLProjectile*>& GLProjectileHandler::GetProjectiles()

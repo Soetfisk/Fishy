@@ -53,13 +53,16 @@ GLModel::~GLModel()
 
 void GLModel::Draw(GLShader& shader)
 {
-	for (size_t i = 0; i < meshes.size(); i++)
+	for each (GLMesh * meshi in meshes)
 	{
-		glUniform3fv(shader.GetUnifromLocation("diffuse"), 1, glm::value_ptr(glm::vec3(meshes[i]->GetMaterial()->diffuse[0], meshes[i]->GetMaterial()->diffuse[1], meshes[i]->GetMaterial()->diffuse[2])));
-		glUniform3fv(shader.GetUnifromLocation("ambient"), 1, glm::value_ptr(glm::vec3(meshes[i]->GetMaterial()->ambient[0], meshes[i]->GetMaterial()->ambient[1], meshes[i]->GetMaterial()->ambient[2])));
-		glUniform3fv(shader.GetUnifromLocation("specular"), 1, glm::value_ptr(glm::vec3(meshes[i]->GetMaterial()->spec[0], meshes[i]->GetMaterial()->spec[1], meshes[i]->GetMaterial()->spec[2])));
-		glUniform1f(shader.GetUnifromLocation("shininess"), meshes[i]->GetMaterial()->shinyness);
-		meshes[i]->Draw(shader, *transform);
+		material * m = meshi->GetMaterial();
+
+		glUniform3fv(shader.GetUnifromLocation("diffuse"), 1, m->diffuse);
+		glUniform3fv(shader.GetUnifromLocation("ambient"), 1, m->ambient);
+		glUniform3fv(shader.GetUnifromLocation("specular"), 1, m->spec);
+		glUniform1f(shader.GetUnifromLocation("shininess"), m->shinyness);
+
+		meshi->Draw(shader, *transform);
 	}
 }
 
@@ -67,9 +70,9 @@ void GLModel::UpdateModel()
 {
 	transform->UpdateModel();
 
-	for (size_t i = 0; i < meshes.size(); i++)
+	for each (GLMesh * meshi in meshes)
 	{
-		meshes[i]->GetTransform().UpdateModel();
+		meshi->GetTransform().UpdateModel();
 	}
 	//transform->m_pos += glm::vec3(0, 0.001 , 0);
 	//transform->m_rot += glm::vec3(0.001, 0.001, 0);

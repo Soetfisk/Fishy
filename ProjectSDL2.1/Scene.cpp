@@ -448,6 +448,7 @@ void Scene::Update(float& deltaTime) {
 
 	//guih->Player1Won();
 	
+
 	if (debug)
 		printf("\n\n##UPDATE DEBUG##");
 
@@ -478,21 +479,29 @@ void Scene::Update(float& deltaTime) {
 	debugger.printDebugTimer(debug, "score");
 
 	this->particleHandler->UpdateParticles(deltaTime);
-	for (size_t i = 0; i < this->NPCs.size(); i++) {
-		this->NPCs.at(i)->NPCUpdate(deltaTime);
-		this->NPCs.at(i)->UpdateModel();
+	for each (GLNPC * NPCi in NPCs)
+	{
+		NPCi->NPCUpdate(deltaTime);
+		NPCi->UpdateModel();
 		//if ((this->NPCs.at(i)->GetIsPowerUp() || this->NPCs.at(i)->npcIsBleeding())) {
-			this->NPCs.at(i)->UpdateParticles(this->deltaTime);
+			NPCi->UpdateParticles(this->deltaTime);
 		//}	
 	}
 	TallSeaWeedHandler->Update(deltaTime);//OskarAddsSeaWeedUpdate
 	debugger.setDebugTimer(debug);
 	debugger.printDebugTimer(debug, "Npc");
 		
+	int pc = 0;
+	for each(GLPlayer * player in players)
+	{
+		
+		player->Update(this->deltaTime);
+		player->UpdateParticles(this->deltaTime);
 
-	for (size_t i = 0; i < this->players.size(); i++) {
-		this->players.at(i)->Update(this->deltaTime);
-		this->players.at(i)->UpdateParticles(this->deltaTime);
+		this->UpdatePlayerPowerUp(pc);
+		pc++;
+		this->HandlePlayerPowerUp();
+		player->UpdateModel();
 		/*if (this->players.at(i)->GetBoundingBox().containsAABB(staticMeshes.at(1)->GetBoundingBox()))
 		{
 			std::cout << "HIT" << std::endl;
@@ -516,110 +525,92 @@ void Scene::DrawScene() {
 
 	debugger.setDebugTimer(debug);
 	debugger.printDebugTimer(debug, "between draw and update");
+	
+
 
 	guih->Draw();
+	
 	debugger.setDebugTimer(debug);
 	debugger.printDebugTimer(debug, "gui");
 
-	for (size_t i = 0; i < this->players.size(); i++) {
-		// handle player powerup
-		if (debug)
-			printf("\n\n#SCREEN: %d:", i);
+	int wc = 0; //waveeffectcounter
 
-		this->UpdatePlayerPowerUp(i);
-		this->HandlePlayerPowerUp();
-		this->count[i] += this->wavyAmount * this->deltaTime;
-		this->players.at(i)->UpdateModel();
-		debugger.setDebugTimer(debug);
-		debugger.printDebugTimer(debug, "playerpowerup");
-		//Set viewport
+	for each(GLPlayer * player in players)
+	{
+		GLFrustum frustrum = player->GetFrustrum();
+		GLCamera frameCam = player->GetCamera();
+
+		this->count[wc] += this->wavyAmount * this->deltaTime;
+
 		glViewport(0, 0, window::WIDTH, window::HEIGHT / 2);
 
 		shaders[BLEND_SHAPE]->Bind();
-		shaders[BLEND_SHAPE]->Update(players.at(i)->GetCamera());
-		this->frameBuffer->BindFrameBuffer();
-		debugger.setDebugTimer(debug);
-		debugger.printDebugTimer(debug, "bind blendshape, get playercamera, bind framebuffer");
+		shaders[BLEND_SHAPE]->Update(frameCam);
 
-		for (size_t j = 0; j < this->players.size(); j++)
+		this->frameBuffer->BindFrameBuffer(); //~240 fps
+
+		for each(GLPlayer * playeri in players)
 		{
-			if (players.at(i)->IsInFrustrum(players.at(j)->GetBoundingBox()))
-			{
-				shaders[BLEND_SHAPE]->Uniform1ui("BlendShapeCount", (GLuint)players.at(j)->GetBlendShapeCount());
-				shaders[BLEND_SHAPE]->Uniform1fv("Weights", players.at(j)->GetBlendWeights());
-				players.at(j)->TestDraw(*shaders[BLEND_SHAPE]);
-			}
+			shaders[BLEND_SHAPE]->Uniform1ui("BlendShapeCount", (GLuint)playeri->GetBlendShapeCount());
+			shaders[BLEND_SHAPE]->Uniform1fv("Weights", playeri->GetBlendWeights());
+			playeri->TestDraw(*shaders[BLEND_SHAPE]);
 		}
 
-		debugger.setDebugTimer(debug);
-		debugger.printDebugTimer(debug, "player");
-		
-		for (size_t j = 0; j < NPCs.size(); j++)
+		//BAD NPC, VERY BAD performance that is ~70
+		for each (GLNPC * NPCi in NPCs)
 		{
-			if (players.at(i)->IsInFrustrum(NPCs.at(j)->GetBoundingBox()))
+			if (player->IsInFrustrum(NPCi->GetBoundingBox()))
 			{
-				shaders[BLEND_SHAPE]->Uniform1ui("BlendShapeCount", (GLuint)NPCs.at(j)->GetBlendShapeCount());
-				shaders[BLEND_SHAPE]->Uniform1fv("Weights", NPCs.at(j)->GetBlendWeights());
-				NPCs.at(j)->NPCDraw(*shaders[BLEND_SHAPE]);
+				shaders[BLEND_SHAPE]->Uniform1ui("BlendShapeCount", (GLuint)NPCi->GetBlendShapeCount());
+				shaders[BLEND_SHAPE]->Uniform1fv("Weights", NPCi->GetBlendWeights());
+				NPCi->NPCDraw(*shaders[BLEND_SHAPE]);
 			}
 		}
-		debugger.setDebugTimer(debug);
-		debugger.printDebugTimer(debug, "npc's");
 
 		shaders[BLEND_SHAPE]->Uniform1ui("BlendShapeCount", (GLuint)TallSeaWeedHandler->GetBlendShapeCount());
 		shaders[BLEND_SHAPE]->Uniform1fv("Weights", TallSeaWeedHandler->GetBlendWeights());
-		TallSeaWeedHandler->DrawWithFrustrum(shaders[BLEND_SHAPE], players.at(i)->GetFrustrum());
+		TallSeaWeedHandler->DrawWithFrustrum(shaders[BLEND_SHAPE], frustrum); //~160
 
 		shaders[MODELS]->Bind();
-		shaders[MODELS]->Update(players.at(i)->GetCamera());
-		debugger.setDebugTimer(debug);
-		debugger.printDebugTimer(debug, "bind models, get playercamera");
-		this->seaWeedHandler->DrawWithFrustrum(shaders[MODELS],players.at(i)->GetFrustrum());
-		this->stoneHandler->DrawWithFrustrum(shaders[MODELS], players.at(i)->GetFrustrum());
-		this->stoneHandler2->DrawWithFrustrum(shaders[MODELS], players.at(i)->GetFrustrum());
-		this->castleHandler->DrawWithFrustrum(shaders[MODELS], players.at(i)->GetFrustrum());
-		this->korallHandler->DrawWithFrustrum(shaders[MODELS], players.at(i)->GetFrustrum());
-		this->korallHandler2->DrawWithFrustrum(shaders[MODELS], players.at(i)->GetFrustrum());
+		shaders[MODELS]->Update(frameCam);
 
-		debugger.setDebugTimer(debug);
-		debugger.printDebugTimer(debug, "seaweed handler");
-		for (unsigned int j = 0; j < this->players.size(); j++)
+		this->seaWeedHandler->DrawWithFrustrum(shaders[MODELS], frustrum); //~120
+		this->stoneHandler->DrawWithFrustrum(shaders[MODELS], frustrum); //~85
+		this->stoneHandler2->DrawWithFrustrum(shaders[MODELS], frustrum); //~70
+		this->castleHandler->DrawWithFrustrum(shaders[MODELS], frustrum); //~70
+		this->korallHandler->DrawWithFrustrum(shaders[MODELS], frustrum); //~65
+		this->korallHandler2->DrawWithFrustrum(shaders[MODELS], frustrum); //~55
+
+		for each(GLPlayer * playeri in players) //~45
 		{
-			players.at(j)->DrawProjectile(*shaders[MODELS]);
+			playeri->DrawProjectile(*shaders[MODELS]);
 		}
-		debugger.setDebugTimer(debug);
-		debugger.printDebugTimer(debug, "projectiles");
-		staticMeshes.at(0)->Draw(*shaders[MODELS]); // aquarium no roof
 
-		this->roofCount[i] += this->roofWavy * this->deltaTime;
-		shaders[TEXTURE_WAVY]->Bind();
-		shaders[TEXTURE_WAVY]->Update(players.at(i)->GetCamera());
-		shaders[TEXTURE_WAVY]->Uniform1f("offset", roofCount[i]);
-		staticMeshes.at(1)->Draw(*shaders[TEXTURE_WAVY]); // roof
-	
-		debugger.setDebugTimer(debug);
-		debugger.printDebugTimer(debug, "static meshes");
+		for each(GLModel * statici in staticMeshes)
+		{
+			statici->Draw(*shaders[MODELS]);
+		}
 
-		//Drawing All Particles
-		this->DrawParticles(players.at(i)->GetCamera());
-		debugger.setDebugTimer(debug);
-		debugger.printDebugTimer(debug, "Particles");
+		this->DrawParticles(frameCam);
+
 
 		this->frameBuffer->UnbindFrameBuffer();
 		this->frameBuffer2->BindFrameBuffer();
 		shaders[LIGHTING]->Bind();
 
-		debugger.setDebugTimer(debug);
-		debugger.printDebugTimer(debug, "bind lighting, framebuffer 2");
-		for (size_t i = 0; i < pointLights.size(); i++)
+		int pl = 0;
+		for each (PointLight pointlight in pointLights)
 		{
-			glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(i) + "].ambient"), 1, glm::value_ptr(pointLights.at(i).ambient));
-			glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(i) + "].diffuse"), 1, glm::value_ptr(pointLights.at(i).diffuse));
-			glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(i) + "].position"), 1, glm::value_ptr(pointLights.at(i).position));
-			glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(i) + "].specular"), 1, glm::value_ptr(pointLights.at(i).specular));
-			glUniform1f(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(i) + "].constant"), pointLights.at(i).constant);
-			glUniform1f(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(i) + "].linear"), pointLights.at(i).linear);
-			glUniform1f(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + std::to_string(i) + "].quadratic"), pointLights.at(i).quadratic);
+			std::string i = std::to_string(pl);
+			glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + i + "].ambient"), 1, glm::value_ptr(pointlight.ambient));
+			glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + i + "].diffuse"), 1, glm::value_ptr(pointlight.diffuse));
+			glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + i + "].position"), 1, glm::value_ptr(pointlight.position));
+			glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + i + "].specular"), 1, glm::value_ptr(pointlight.specular));
+			glUniform1f(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + i + "].constant"), pointlight.constant);
+			glUniform1f(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + i + "].linear"), pointlight.linear);
+			glUniform1f(shaders[LIGHTING]->GetUnifromLocation("pointLights[" + i + "].quadratic"), pointlight.quadratic);
+
+			pl++;
 		}
 
 		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.dir"), 1, glm::value_ptr(dirLight.dir));
@@ -627,7 +618,7 @@ void Scene::DrawScene() {
 		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.diffuse"), 1, glm::value_ptr(dirLight.diffuse));
 		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("dirLight.specular"), 1, glm::value_ptr(dirLight.specular));
 
-		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("ViewPos"), 1, glm::value_ptr(players.at(i)->GetCamera().Position()));
+		glUniform3fv(shaders[LIGHTING]->GetUnifromLocation("ViewPos"), 1, glm::value_ptr(frameCam.Position()));
 
 		shaders[LIGHTING]->Uniform1f("fogStartFloat", this->fogStart);
 		shaders[LIGHTING]->Uniform1f("fogEndFloat", this->fogEnd);
@@ -639,12 +630,7 @@ void Scene::DrawScene() {
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("ambientTexture"), 4);
 		this->frameBuffer->BindTexturesToProgram(shaders[LIGHTING]->GetUnifromLocation("specularTexture"), 5);
 
-		debugger.setDebugTimer(debug);
-		debugger.printDebugTimer(debug, "lighting");
-
 		this->RenderQuad();
-		debugger.setDebugTimer(debug);
-		debugger.printDebugTimer(debug, "renderQuad");
 
 		this->frameBuffer2->UnbindFrameBuffer();
 
@@ -670,7 +656,7 @@ void Scene::DrawScene() {
 
 		this->frameBuffer5->BindFrameBuffer();
 		shaders[WAVY]->Bind();
-		shaders[WAVY]->Uniform1f("offset", count[i]);
+		shaders[WAVY]->Uniform1f("offset", count[wc]);
 		shaders[WAVY]->Uniform1f("waveLength", this->wavyLength);
 		this->frameBuffer4->BindTexturesToProgram(shaders[WAVY]->GetUnifromLocation("texture"), 0);
 		this->RenderQuad();
@@ -679,15 +665,16 @@ void Scene::DrawScene() {
 
 		shaders[PASS]->Bind();
 		this->frameBuffer5->BindTexturesToProgram(shaders[PASS]->GetUnifromLocation("texture"), 0);
-		glViewport(0, (GLint)(window::HEIGHT - (window::HEIGHT *(.5*(i + 1)))), (GLint)window::WIDTH, (GLint)(window::HEIGHT / 2));
+		glViewport(0, (GLint)(window::HEIGHT - (window::HEIGHT *(.5*(wc + 1)))), (GLint)window::WIDTH, (GLint)(window::HEIGHT / 2));
 		this->RenderQuad();
 
 		debugger.setDebugTimer(debug);
 		debugger.printDebugTimer(debug, "all the way to framebuffer5");
+
+		wc++;
+
 	}
 
-	debugger.setDebugTimer(debug);
-	debugger.printDebugTimer(debug, "end screen loop");
 
 	//PrintAndResetCombinedDTimer(debug);
 }
@@ -698,16 +685,14 @@ void Scene::DrawParticles(GLCamera& playerCamera) {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	shaders[PARTICLE]->Bind();
 	shaders[PARTICLE]->Update(playerCamera);
-	for (size_t j = 0; j < this->players.size(); j++)
+	for each(GLPlayer * playeri in players)
 	{
-		players.at(j)->DrawParticles(shaders[PARTICLE]);
+		playeri->DrawParticles(shaders[PARTICLE]);
 	}
-	for (size_t i = 0; i < NPCs.size(); i++)
+	for each(GLNPC * NPCi in NPCs)
 	{
-		NPCs.at(i)->DrawParticles(shaders[PARTICLE]);
+		NPCi->DrawParticles(shaders[PARTICLE]);
 		//if ((this->NPCs.at(i)->GetIsPowerUp() || this->NPCs.at(i)->npcIsBleeding()))
-			
-
 	}
 
 	this->particleHandler->DrawParticles(shaders[PARTICLE]);

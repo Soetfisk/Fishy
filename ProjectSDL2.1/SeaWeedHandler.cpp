@@ -83,17 +83,17 @@ SeaWeedHandler::~SeaWeedHandler()
 
 void SeaWeedHandler::Draw(GLShader * shader)
 {
-	for (size_t i = 0; i < specialStaticMeshes.size(); i++)
+	for each (SeaWeedLeafs * leaf in specialStaticMeshes)
 	{
-		specialStaticMeshes.at(i)->Draw(*shader);
+		leaf->Draw(*shader);
 	}
 }
 
 void SeaWeedHandler::DrawWithFrustrum(GLShader * shader, GLFrustum& frustrum)
 {
-	for (size_t i = 0; i < specialStaticMeshes.size(); i++)
+	for each (SeaWeedLeafs * leaf in specialStaticMeshes)
 	{
-		specialStaticMeshes.at(i)->Draw(*shader, frustrum);
+		leaf->Draw(*shader, frustrum);
 	}
 }
 

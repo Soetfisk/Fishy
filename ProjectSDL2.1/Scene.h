@@ -109,6 +109,7 @@ private:
 	int prevDTime;
 	int currentDTime;
 	GLCollisionHandler collisionHandler;
+	GLuint lastTexture;
 
 	GUI* guiTest;
 	glm::mat4 projection;

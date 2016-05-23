@@ -61,16 +61,18 @@ ParticleHandler::~ParticleHandler(){
 void ParticleHandler::DrawParticles(GLShader* shader/*, GLCamera& camera*/) {
 	//shader->Bind();
 	//shader->Update(camera);
-	for (unsigned int i = 0; i < this->emiters.size(); i++) {
+	for each(ParticleEmitter * emitteri in emiters)
+	{
 		
-		this->emiters.at(i)->Draw(shader);
+		emitteri->Draw(shader);
 	}
 }
 
 void ParticleHandler::UpdateParticles(const float& deltaTime) {
 
-	for (unsigned int i = 0; i < this->emiters.size(); i++) {
-		this->emiters.at(i)->UpdateEmitter(deltaTime);
+	for each(ParticleEmitter * emitteri in emiters)
+	{
+		emitteri->UpdateEmitter(deltaTime);
 
 
 		////For BLood

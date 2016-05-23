@@ -15,7 +15,7 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 	AABB wall(glm::vec3(0), glm::vec3(125, 50, 85));
 
 
-
+	//for each (GLPlayer * player in players)
 	for (size_t i = 0; i < players.size(); i++)
 	{
 		distance = players.at(i)->GetTransform().GetPos() - players.at(1 - i)->GetTransform().GetPos();
@@ -122,60 +122,62 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 			}
 		}
 
-		for (unsigned int j = 0; j < this->NPCs.size(); j++) {
-			distance = players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos();
+		int npcindex = 0;
+		for each (GLNPC * NPCi in NPCs)
+		{
+			distance = players.at(i)->GetTransform().GetPos() - NPCi->GetTransform().GetPos();
 			distSqrd = glm::dot(distance, distance);
 			if (distSqrd < 60)
 			{
 
-				AABB NpcSeenSpace(NPCs.at(j)->GetTransform().GetPos() + (NPCs.at(j)->GetForward() *10.f), glm::vec3(10, 10, 10));
+				AABB NpcSeenSpace(NPCi->GetTransform().GetPos() + (NPCi->GetForward() *10.f), glm::vec3(10, 10, 10));
 
 
 				//check if player collides with a fish if so it will eat a part of it and gets score
-				if (NPCs.at(j)->GetBoundingBox().containsAABB(players.at(i)->GetBoundingBox()))
+				if (NPCi->GetBoundingBox().containsAABB(players.at(i)->GetBoundingBox()))
 				{
-					if (players.at(i)->GetTransform().GetScale().x + 0.5f >= NPCs.at(j)->GetTransform().GetScale().x)
+					if (players.at(i)->GetTransform().GetScale().x + 0.5f >= NPCi->GetTransform().GetScale().x)
 					{
-						if (NPCs.at(j)->GetCurrentState() != NPC_INACTIVE /*&& NPCs.at(j)->GetCurrentState() != NPC_BEINGEATEN*/)
+						if (NPCi->GetCurrentState() != NPC_INACTIVE /*&& NPCi->GetCurrentState() != NPC_BEINGEATEN*/)
 						{
 
-							if (!NPCs.at(j)->hasBloodEmitter())
-								NPCs.at(j)->addBloodEmitter(pHandlerRef->CreateEmitter(EmitterType::BLOOD, glm::vec4(NPCs.at(i)->GetTransform().GetPos(), 1)));
+							if (!NPCi->hasBloodEmitter())
+								NPCi->addBloodEmitter(pHandlerRef->CreateEmitter(EmitterType::BLOOD, glm::vec4(NPCs.at(i)->GetTransform().GetPos(), 1)));
 
-							NPCs.at(j)->enableBlood();
+							NPCi->enableBlood();
 
 							bool isKill = false;
-							bool result = NPCs.at(j)->gettingEaten(isKill, players.at(i)->GetTransform().GetScale().x / 4, -glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos())*0.7f);
-							players.at(i)->HandleCollision(GLPlayer::HIT, deltaTime, (glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos())) * 2.0f);
+							bool result = NPCi->gettingEaten(isKill, players.at(i)->GetTransform().GetScale().x / 4, -glm::normalize(players.at(i)->GetTransform().GetPos() - NPCi->GetTransform().GetPos())*0.7f);
+							players.at(i)->HandleCollision(GLPlayer::HIT, deltaTime, (glm::normalize(players.at(i)->GetTransform().GetPos() - NPCi->GetTransform().GetPos())) * 2.0f);
 
 							if (result == true)
 							{
-								players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(roundf(NPCs.at(j)->GetTransform().GetScale().x * 100) / 100));
+								players.at(i)->HandleCollision(GLPlayer::EATING, deltaTime, glm::vec3(roundf(NPCi->GetTransform().GetScale().x * 100) / 100));
 								if (isKill == true)
 								{
-									if (NPCs.at(j)->GetIsPowerUp() == true)
+									if (NPCi->GetIsPowerUp() == true)
 									{
 
-										PowerUpHandler->RemovePowerUpFish(NPCs.at(j), j);
+										PowerUpHandler->RemovePowerUpFish(NPCi, npcindex);
 										players.at(i)->SetRandomPowerUp();
 									}
 									else
 									{
-										PowerUpHandler->RemoveAvailableFish(j);
+										PowerUpHandler->RemoveAvailableFish(npcindex);
 									}
 								}
 							}
-							players.at(i)->HandleCollision(GLPlayer::HIT, deltaTime, (glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos())) * 10.0f);
+							players.at(i)->HandleCollision(GLPlayer::HIT, deltaTime, (glm::normalize(players.at(i)->GetTransform().GetPos() - NPCi->GetTransform().GetPos())) * 10.0f);
 
 						}
 						else if (NpcSeenSpace.containsAABB(players.at(i)->GetBoundingBox()))
 						{
-							NPCs.at(j)->initiateFleeingState(players.at(i)->GetForward());
+							NPCi->initiateFleeingState(players.at(i)->GetForward());
 						}
 					}
 					else // if you collide with bigger fish
 					{
-						players.at(i)->HandleCollision(GLPlayer::HIT, deltaTime, (glm::normalize(players.at(i)->GetTransform().GetPos() - NPCs.at(j)->GetTransform().GetPos())) * 100.0f);
+						players.at(i)->HandleCollision(GLPlayer::HIT, deltaTime, (glm::normalize(players.at(i)->GetTransform().GetPos() - NPCi->GetTransform().GetPos())) * 100.0f);
 					}
 
 
@@ -185,6 +187,7 @@ void GLCollisionHandler::CheckCollisions(float deltaTime)
 
 				}
 			}
+			npcindex++;
 		}
 	}
 }
