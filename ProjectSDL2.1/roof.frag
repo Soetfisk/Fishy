@@ -30,7 +30,8 @@ void main()
 	color4 = vec4(dist,0,0,1);
 	vec2 uv = frag_uv;
 
-	uv.x += (sin(uv.y * 4 * 2 * 3.1315 + offset) / (300 * 0.5));
+	uv.x += (sin(uv.x * 4 * 2 * 3.1315 + offset) / (300 * 0.1));
+	uv.y += (sin(uv.y * 4 * 2 * 3.1315 + offset) / (300 * 0.1));
 
 	vec4 tempColor  = vec4(diffuse, 1) * texture2D(diffuseTexture, uv);
 	//tempColor = vec4(sin(offset),0,0,0);
@@ -39,6 +40,6 @@ void main()
 
 	color2 = vec4(frag_worldpos, 1);
 	color3 = vec4(frag_normal, 1);
-	color5 = vec4(ambient, 1);
+	color5 = vec4(vec3(0.4,0.4,0.4), 1);
 	color6 = vec4(specular, shininess);
 }

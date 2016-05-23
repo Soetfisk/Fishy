@@ -101,7 +101,7 @@ private:
 	GLProjectile* testProj;
 	float count[2] = { 0,0 };
 	float roofCount[2] = { 0.0f, 0.0f };
-	float roofWavy = 0.8f;
+	float roofWavy = 0.3f; // how fast it waves
 	FilterComputeShader* filterComputeShader;
 	float deltaTime;
 	float dTime;

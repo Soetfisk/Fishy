@@ -575,15 +575,13 @@ void Scene::DrawScene() {
 		}
 		debugger.setDebugTimer(debug);
 		debugger.printDebugTimer(debug, "projectiles");
+		staticMeshes.at(0)->Draw(*shaders[MODELS]); // aquarium no roof
 
-		this->roofCount[i] += this->roofWavy + this->deltaTime;
-		//shaders[TEXTURE_WAVY]->Bind();
-		//shaders[TEXTURE_WAVY]->Update(players.at(i)->GetCamera());
-		//shaders[TEXTURE_WAVY]->Uniform1f("offset", count[i]);
-		//for (size_t i = 0; i < staticMeshes.size(); i++)
-		//{
-		//	staticMeshes.at(i)->Draw(*shaders[TEXTURE_WAVY]);
-		//}
+		this->roofCount[i] += this->roofWavy * this->deltaTime;
+		shaders[TEXTURE_WAVY]->Bind();
+		shaders[TEXTURE_WAVY]->Update(players.at(i)->GetCamera());
+		shaders[TEXTURE_WAVY]->Uniform1f("offset", roofCount[i]);
+		staticMeshes.at(1)->Draw(*shaders[TEXTURE_WAVY]); // roof
 		debugger.setDebugTimer(debug);
 		debugger.printDebugTimer(debug, "static meshes");
 
