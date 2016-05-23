@@ -1,5 +1,6 @@
 #pragma once
 #include "SeaWeedLeafs.h"
+#include "GLFrustum.h"
 class SeaWeedHandler
 {
 public:
@@ -19,6 +20,7 @@ private:
 	float xMin, xMax, zMin, zMax;
 	float offsetX, offsetZ;
 	FishBox* FSH_Loader;
+	AABB boundingBox;
 
 	bool isBlendShape = false;
 	float * blendWeights;
@@ -33,12 +35,14 @@ public:
 	void LoadSeaWeed();
 	virtual ~SeaWeedHandler();
 	void Draw(GLShader* shader);
+	void DrawWithFrustrum(GLShader* shader, GLFrustum& frustrum);
 	void SetZLimit(float min, float max);
 	void SetXLimit(float min, float max);
 	void SetLeafAmount(int min, int max);
 	void SetAmountOfPlants(int plants);
 	void SetScale(float min, float max);
 	void SetOffset(float x, float z);
+	void SetBoundingBox(glm::vec3& center, glm::vec3& extents);
 	void Reset();
 	std::vector<GLModel*> GetMeshes();
 	void SetRandomRotation(float radian);

@@ -5,6 +5,7 @@
 #include "GLProjectile.h"
 #include "GLProjectileHandler.h"
 #include "ParticleHandler.h"
+#include "GLFrustum.h"
 #define PI  3.141592
 
 class GLPlayer : public GLModel
@@ -82,6 +83,8 @@ public:
 	void addParticleHandleRefernce(ParticleHandler* pHandlerReference);
 	void DrawParticles(GLShader* shader);
 	void UpdateParticles(float &deltaTime);
+	bool IsInFrustrum(AABB box);
+	GLFrustum& GetFrustrum();
 
 private:
 	float speed;
@@ -150,6 +153,8 @@ private:
 
 	PowerUps currentPowerUp = POWER_NEUTRAL;
 
+	GLFrustum frustrum;
+
 	void AddController(int id);
 	void RemoveController(int id);
 	void PlayerMove(float lx, float ly, float z, float rx, float ry);
@@ -157,6 +162,8 @@ private:
 	void PlayerShoot();
 	void PlayerDash();
 	void PowerUpCoolDown();
+	
+	void RecalculateFrustrum();
 
 	void CalcVelocity(float& deltaTime);
 	void HandleDash(float& deltaTime);

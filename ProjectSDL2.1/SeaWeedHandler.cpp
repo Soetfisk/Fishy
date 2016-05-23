@@ -54,6 +54,7 @@ void SeaWeedHandler::LoadSeaWeed()
 		this->specialStaticMeshes.at(i)->SetScale(this->scaleMin, this->scaleMax);
 		this->specialStaticMeshes.at(i)->SetOffset(this->offsetX, this->offsetZ);
 		this->specialStaticMeshes.at(i)->SetRotation(this->randomRot);
+		this->specialStaticMeshes.at(i)->SetBoundingBox(boundingBox.center, boundingBox.halfDimension);
 		//if (SeaWeedLeafs* temp = dynamic_cast<SeaWeedLeafs*>(this->specialStaticMeshes.at(i))) // if we have a seaweed fix scale and offset
 		//{
 		//	temp->SetScale(this->scaleMin, this->scaleMax);
@@ -85,6 +86,14 @@ void SeaWeedHandler::Draw(GLShader * shader)
 	for (size_t i = 0; i < specialStaticMeshes.size(); i++)
 	{
 		specialStaticMeshes.at(i)->Draw(*shader);
+	}
+}
+
+void SeaWeedHandler::DrawWithFrustrum(GLShader * shader, GLFrustum& frustrum)
+{
+	for (size_t i = 0; i < specialStaticMeshes.size(); i++)
+	{
+		specialStaticMeshes.at(i)->Draw(*shader, frustrum);
 	}
 }
 
@@ -121,6 +130,14 @@ void SeaWeedHandler::SetOffset(float x, float z)
 {
 	this->offsetX = x;
 	this->offsetZ = z;
+}
+
+void SeaWeedHandler::SetBoundingBox(glm::vec3 & center, glm::vec3 & extents)
+{
+	AABB b;
+	b.center = center;
+	b.halfDimension = extents;
+	boundingBox = b;
 }
 
 void SeaWeedHandler::Reset()

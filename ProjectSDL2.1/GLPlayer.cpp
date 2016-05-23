@@ -34,6 +34,7 @@ GLPlayer::GLPlayer(FishBox * FSH_Loader, unsigned int modelID, unsigned int proj
 	this->m_camera;
 	this->m_projectileHandler = new GLProjectileHandler(FSH_Loader, projectileModelID, 1, 2, 20.0f);
 	this->m_velocity = glm::vec3(0);
+	this->RecalculateFrustrum();
 
 	this->dashCurrentDuration = 0.0f;
 	this->dashCooldownCounter = 0;
@@ -587,6 +588,7 @@ void GLPlayer::PlayerUpdate(float deltaTime)
 
 	//camera update
 	this->m_camera.Update(this->GetTransform(), deltaTime);
+	this->RecalculateFrustrum();
 
 	this->m_projectileHandler->Update(deltaTime);
 }
@@ -642,6 +644,11 @@ void GLPlayer::PowerUpCoolDown()
 	}
 }
 
+void GLPlayer::RecalculateFrustrum()
+{
+	this->frustrum.createPlanesFromMatrix(this->m_camera.GetViewProjectionMatrix());
+}
+
 void GLPlayer::CalcVelocity(float& deltaTime)
 {
 	glm::vec3 forward = this->GetForward();
@@ -650,6 +657,7 @@ void GLPlayer::CalcVelocity(float& deltaTime)
 		this->transform->m_pos += (m_velocity  * deltaTime);
 		glm::vec3 friction = (m_velocity * MOVEMENT_FRICTION);
 		m_velocity -= friction * deltaTime;
+		
 	}
 	if (isDashing)
 		{
@@ -803,4 +811,15 @@ void GLPlayer::UpdateParticles(float &deltaTime) {
 	this->m_projectileHandler->updateParticles(deltaTime);
 
 	
+}
+
+bool GLPlayer::IsInFrustrum(AABB box)
+{
+	int result = this->frustrum.AABBIsInFrustum(box.center, box.halfDimension);
+	return result == GLFrustum::INSIDE || result == GLFrustum::INTERSECT;
+}
+
+GLFrustum & GLPlayer::GetFrustrum()
+{
+	return this->frustrum;
 }

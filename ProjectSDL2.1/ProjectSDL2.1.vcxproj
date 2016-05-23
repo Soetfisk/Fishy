@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GLFrustum.cpp" />
     <ClCompile Include="GLMeshBS.cpp" />
     <ClCompile Include="GLNPC_BlueTang.cpp" />
     <ClCompile Include="FilterComputeShader.cpp" />
@@ -52,6 +53,7 @@
   <ItemGroup>
     <ClInclude Include="debug.h" />
     <ClInclude Include="EnumShaderType.h" />
+    <ClInclude Include="GLFrustum.h" />
     <ClInclude Include="GLMeshBS.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GLNPC_BlueTang.h" />

@@ -116,7 +116,7 @@ glm::vec3 GLModel::GetUp()
 AABB GLModel::GetBoundingBox()
 {
 	AABB aabb;
-	aabb.center = this->boundingBox.center = this->transform->GetPos();
+	aabb.center = this->boundingBox.center + this->transform->GetPos();
 	aabb.halfDimension = this->boundingBox.halfDimension * this->transform->GetScale().x;
 	return aabb;
 }
