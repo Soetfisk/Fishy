@@ -134,6 +134,8 @@ void GLNPC_GoldFish::NPCKill()
 		this->isPowerUp = false;
 		this->meshes[0]->SetMaterial(originalMaterial);
 	}
+
+	this->npc_blood_emitter->disableSpawn();
 }
 
 void GLNPC_GoldFish::initiateFleeingState(glm::vec3 playerForwardVector)
