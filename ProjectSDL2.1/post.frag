@@ -65,7 +65,7 @@ void main()
 {
 	
 	color = vec3(texture2D(texture, frag_uv));
-	if( isEdge(frag_uv) > 0)
+	if( isEdge(frag_uv) > 0 && frag_uv.y > 0.005)
 	{
 		color = borderColor;
 	}
