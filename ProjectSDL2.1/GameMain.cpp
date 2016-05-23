@@ -5,13 +5,16 @@ GameMain::GameMain()
 	this->prevTime = 0;
 	this->deltaTime = 0.0f;
 	this->currentTime = 0;
+
 	//window is a namespace in util that keeps the value of the width/height, in file GLUtil.h
 	this->window = new GLWindow(window::WIDTH, window::HEIGHT, "Survival of the fishest");
 	this->textToScreen = new GUI();
 	this->gameState = GLOBAL_GameState::MENU;
 	this->scene = new Scene(&this->gameState);
 	this->menu = new Menu(&this->gameState);
-	
+	//printf("%s", glGetString(GL_SHADING_LANGUAGE_VERSION));
+
+	//printf("%s", glGetString(GL_VERSION));
 
 	char *GL_version = (char *)glGetString(GL_VERSION);
 	char *GL_vendor = (char *)glGetString(GL_VENDOR);

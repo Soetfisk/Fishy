@@ -54,18 +54,18 @@ void ParticleEmitter::instantiateVariables() {
 }
 
 void ParticleEmitter::instantiateBlood() {
-	this->nrMaxParticles = 300;
+	this->nrMaxParticles = 50;
 	this->emiterSpawnTDelay = .5f;
 	this->emiterSpawnTCurrent = emiterSpawnTDelay;
-	this->emiterNrToSpawnSimutan = 50;
+	this->emiterNrToSpawnSimutan = 5;
 	this->emiterSpawnTDelayStandard = emiterSpawnTDelay;
 	this->emiterMulitbleSpawner = false;
 
 	this->particle.p_pos = this->positionEmitter;
 	this->particle.p_lifeTime = 2;
 	this->particle.p_acc = glm::vec4(0, 0, 0, 0);
-	this->particle.p_scale = 3.f;
-	this->particle.p_speed = 3.f;
+	this->particle.p_scale = 2.f;
+	this->particle.p_speed = 2.f;
 	this->particle.p_vel = glm::vec4(0, -1, 0, 0);
 	this->directionEmitter = glm::vec4(1, 0, 0, 1);
 }
@@ -86,7 +86,7 @@ void ParticleEmitter::instantiateProjectileFollow() {
 }
 
 void ParticleEmitter::instantiatePlayerFollow() {
-	this->nrMaxParticles = 300;
+	this->nrMaxParticles = 10000;
 	this->emiterSpawnTDelay = .5;
 	this->emiterSpawnTDelayStandard = emiterSpawnTDelay;
 	this->emiterNrToSpawnSimutan = 1;
@@ -321,23 +321,23 @@ Particle ParticleEmitter::generateParticleData() {
 
 		break;
 	case EmitterType::BLOOD:
-		//data.x = RNG::range(-0.4f, .4f);
-		//data.y = RNG::range(0.f, -.4f);
-		//data.z = RNG::range(-.4f, .4f);
-
-		//returnData.p_pos = this->positionEmitter;
-		//returnData.p_acc = glm::vec4(returnData.p_acc.x + data.x, returnData.p_acc.y + data.y, returnData.p_acc.z + data.z, 0);
-		//returnData.p_vel = glm::vec4(returnData.p_vel.x + data.x, returnData.p_vel.y + data.y, returnData.p_vel.z + data.z, 0);
-		//returnData.p_scale = RNG::range(returnData.p_scale, returnData.p_scale*1.4f);
-
-		data.x = RNG::range(-1.f, 1.f);
-		data.y = RNG::range(-1.f, 1.f);
-		data.z = RNG::range(-1.f, 1.f);
+		data.x = RNG::range(-0.4f, .4f);
+		data.y = RNG::range(0.f, -.4f);
+		data.z = RNG::range(-.4f, .4f);
 
 		returnData.p_pos = this->positionEmitter;
 		returnData.p_acc = glm::vec4(returnData.p_acc.x + data.x, returnData.p_acc.y + data.y, returnData.p_acc.z + data.z, 0);
 		returnData.p_vel = glm::vec4(returnData.p_vel.x + data.x, returnData.p_vel.y + data.y, returnData.p_vel.z + data.z, 0);
 		returnData.p_scale = RNG::range(returnData.p_scale, returnData.p_scale*1.4f);
+
+		//data.x = RNG::range(-1.f, 1.f);
+		//data.y = RNG::range(-1.f, 1.f);
+		//data.z = RNG::range(-1.f, 1.f);
+
+		//returnData.p_pos = this->positionEmitter;
+		//returnData.p_acc = glm::vec4(returnData.p_acc.x + data.x, returnData.p_acc.y + data.y, returnData.p_acc.z + data.z, 0);
+		//returnData.p_vel = glm::vec4(returnData.p_vel.x + data.x, returnData.p_vel.y + data.y, returnData.p_vel.z + data.z, 0);
+		//returnData.p_scale = RNG::range(returnData.p_scale, returnData.p_scale*1.4f);
 
 		break;
 	}
@@ -484,4 +484,16 @@ void ParticleEmitter::clean() {
 
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+}
+
+int ParticleEmitter::getNrActiveParticles() {
+	return this->nrActiveParticles;
+}
+
+void ParticleEmitter::disableSpawn() {
+	this->emiterSpawnTDelay = std::numeric_limits<float>::max();
+}
+void ParticleEmitter::enableSpawn() {
+	this->emiterSpawnTDelay = this->emiterSpawnTDelayStandard;
+	this->emiterSpawnTCurrent = this->emiterSpawnTDelay;
 }

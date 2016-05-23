@@ -72,6 +72,7 @@ void GLWindow::InitWindow(int width, int height, const std::string & title)
 	this->m_Width = width;
 	this->m_Height = height;
 
+
 	SDL_Init(SDL_INIT_EVERYTHING);
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);

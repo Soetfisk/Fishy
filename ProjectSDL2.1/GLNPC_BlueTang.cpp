@@ -129,8 +129,10 @@ void GLNPC_BlueTang::NPCKill()
 	if (this->isPowerUp == true)
 	{
 		this->isPowerUp = false;
-		;//printf("i wanna be the very fish, that no one ever was");
+		this->meshes[0]->SetMaterial(originalMaterial);
+		//printf("i wanna be the very fish, that no one ever was");
 	}
+	this->npc_blood_emitter->disableSpawn();
 }
 
 void GLNPC_BlueTang::initiateFleeingState(glm::vec3 playerForwardVector)
@@ -244,27 +246,28 @@ void GLNPC_BlueTang::ResetFish()
 	this->isPowerUp = false;
 	this->meshes.at(0)->SetMaterial(originalMaterial);
 	this->BitenCoolDown = 0;
-
+	this->isBleeding = false;
 	/*if (this->npc_emitter != nullptr)
 	{
 		delete npc_emitter;
 		this->npc_emitter = nullptr;
 	}*/
 }
-	void GLNPC_BlueTang::ResetFish(float size)
-	{
-		this->currentState = NPC_MOVE;
-		transform->SetPos(glm::vec3(RNG::range(-DEADZONEX, DEADZONEX), RNG::range(-DEADZONEY, DEADZONEY), RNG::range(-DEADZONEZ, DEADZONEZ)));
-		glm::vec3 scale = glm::vec3(RNG::range(1.1f+size, 3.0f + size));
-		transform->SetScale(scale);
+void GLNPC_BlueTang::ResetFish(float size)
+{
+	this->currentState = NPC_MOVE;
+	transform->SetPos(glm::vec3(RNG::range(-DEADZONEX, DEADZONEX), RNG::range(-DEADZONEY, DEADZONEY), RNG::range(-DEADZONEZ, DEADZONEZ)));
+	glm::vec3 scale = glm::vec3(RNG::range(1.1f + size, 3.0f + size));
+	transform->SetScale(scale);
 
-		FishSpeedMultiplier = originalFishSpeedMultiplier +  size;
-		this->TimeUntilChange = RNG::range(0.2f, 3.0f);
-		this->forwardSpeed = FishSpeedMultiplier * RNG::range(0.0f, 3.3f);
-		this->rotationChange = glm::vec3(0, RNG::range(-1.0f, 1.0f), 0);
-		this->isPowerUp = false;
-		this->meshes.at(0)->SetMaterial(originalMaterial);
+	FishSpeedMultiplier = originalFishSpeedMultiplier + size;
+	this->TimeUntilChange = RNG::range(0.2f, 3.0f);
+	this->forwardSpeed = FishSpeedMultiplier * RNG::range(0.0f, 3.3f);
+	this->rotationChange = glm::vec3(0, RNG::range(-1.0f, 1.0f), 0);
+	this->isPowerUp = false;
+	this->meshes.at(0)->SetMaterial(originalMaterial);
 
-		this->BitenCoolDown = 0;
+	this->BitenCoolDown = 0;
 
+	this->isBleeding = false;
 }
