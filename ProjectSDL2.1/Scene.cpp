@@ -498,9 +498,6 @@ void Scene::Update(float& deltaTime) {
 		player->Update(this->deltaTime);
 		player->UpdateParticles(this->deltaTime);
 
-		this->UpdatePlayerPowerUp(pc);
-		pc++;
-		this->HandlePlayerPowerUp();
 		player->UpdateModel();
 		/*if (this->players.at(i)->GetBoundingBox().containsAABB(staticMeshes.at(1)->GetBoundingBox()))
 		{
@@ -537,6 +534,8 @@ void Scene::DrawScene() {
 
 	for each(GLPlayer * player in players)
 	{
+		this->UpdatePlayerPowerUp(wc); // need to be in draw cus silly programming
+		this->HandlePlayerPowerUp();
 		GLFrustum frustrum = player->GetFrustrum();
 		GLCamera frameCam = player->GetCamera();
 
