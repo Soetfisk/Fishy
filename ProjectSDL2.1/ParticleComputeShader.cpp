@@ -17,7 +17,9 @@ ParticleComputeShader::~ParticleComputeShader()
 void ParticleComputeShader::Initialize(EmitterType type, int nrMaxParticles, GLuint &ParticleSSBO) {
 	glGenBuffers(1, &ParticleSSBO);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ParticleSSBO);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, nrMaxParticles*sizeof(ParticleStruct), NULL, GL_STATIC_DRAW);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, nrMaxParticles*sizeof(ParticleStruct), NULL, GL_DYNAMIC_DRAW );
+
+
 
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 
@@ -35,7 +37,7 @@ void ParticleComputeShader::Initialize(EmitterType type, int nrMaxParticles, GLu
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 	compute_program = glCreateProgram();
 
-	compute_shader = CreateShader(LoadShader("ParticleTestShader.glsl"), GL_COMPUTE_SHADER);
+	compute_shader = CreateShader(LoadShader("./res/Shaders/ParticleTestShader.glsl"), GL_COMPUTE_SHADER);
 
 	glAttachShader(compute_program, compute_shader);
 
