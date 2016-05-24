@@ -42,7 +42,8 @@ private:
 		smoothRock,
 		castle,
 		orangeKorall,
-		rosaKorall
+		rosaKorall,
+		CameraAndLightTest
 	};
 	int SCREEN_WIDTH = window::WIDTH;
 	int SCREEN_HEIGHT = window::HEIGHT / 2;
@@ -101,7 +102,7 @@ private:
 	GLProjectile* testProj;
 	float count[2] = { 0,0 };
 	float roofCount[2] = { 0.0f, 0.0f };
-	float roofWavy = 0.3f; // how fast it waves
+	float roofWavy = 1.3f; // how fast it waves
 	FilterComputeShader* filterComputeShader;
 	float deltaTime;
 	float dTime;

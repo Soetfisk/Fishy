@@ -223,6 +223,11 @@ void Scene::LoadModels()
 	FSH_Loader.LoadScene("Models/castle.FSH"); //castle
 	FSH_Loader.LoadScene("Models/orangekorall.FSH"); //rosaKorall
 	FSH_Loader.LoadScene("Models/rosakorall.FSH"); //orangeKorall
+	FSH_Loader.LoadScene("CameraScene.FSH"); //CameraAndLightTest
+
+	GLModel CameraTest(&FSH_Loader, CameraAndLightTest);
+	//FSH_Loader.CameraData(CameraAndLightTest,0);
+	//int hello= FSH_Loader.CameraData(CameraAndLightTest);
 
 	for (int i = 0; i < 2; i++) {
 		this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));

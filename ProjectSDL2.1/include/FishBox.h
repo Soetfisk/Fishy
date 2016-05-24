@@ -139,6 +139,7 @@ public: //functiuons
 	~FSHMesh(void);
 
 	mesh * GetMeshData();
+	
 	unsigned int * GetIndices();
 	vertexData * GetVertices();
 	unsigned int getVertexCount();
@@ -165,6 +166,9 @@ private:
 	std::vector<texture*> textures;
 	std::vector<std::string> textureNames;
 	std::vector<GLuint> textureIDs;
+
+	std::vector<camera*> cameras;
+	std::vector<directionalLight*> directionalLights;
 	char*SCENE_ID;
 
 
@@ -172,16 +176,20 @@ private:
 
 	void LoadMeshes();
 	void LoadMaterials();
+	void LoadCameras();
+	void LoadDirectionalLights();
 	FSHScene(void);
 public:
 	void setTextureIDs(std::vector<GLuint> textureIDs);
 	void setTextureList(std::vector<texture*> textures, std::vector<std::string> textureNames);
 	FSHScene(char * filePath);
 	unsigned int GetMeshCount();
+	unsigned int GetCameraCount();
 	std::vector<FSHMesh*> GetMeshList();
 	std::vector<material*> GetMaterialList();
 	std::vector<std::string> GetTexureNameList();
 	std::vector<GLuint> GetTextureIDs();
+	std::vector<camera*> GetCameraList();
 	void Release();
 };
 
@@ -230,6 +238,9 @@ public: //functions
 	FSHData::material * meshMaterial(unsigned int model, unsigned int mesh);
 	GLuint meshTextureID(unsigned int model, unsigned int mesh);
 	FSHData::blendShape** meshBlendShapes(unsigned int model, unsigned int mesh);
+
+	FSHData::camera* CameraData(unsigned int model, unsigned int camera);
+	void pikachufuck() {printf("pikachu"); };
 
 	//extra functions
 	texture * loadTexure(char* filepath);
