@@ -37,7 +37,7 @@ void ParticleComputeShader::Initialize(EmitterType type, int nrMaxParticles, GLu
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 	compute_program = glCreateProgram();
 
-	compute_shader = CreateShader(LoadShader("ParticleTestShader.glsl"), GL_COMPUTE_SHADER);
+	compute_shader = CreateShader(LoadShader("./res/Shaders/ParticleTestShader.glsl"), GL_COMPUTE_SHADER);
 
 	glAttachShader(compute_program, compute_shader);
 

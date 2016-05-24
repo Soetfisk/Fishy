@@ -347,7 +347,7 @@ Particle ParticleEmitter::generateParticleData() {
 
 void ParticleEmitter::checkDeadParticles() {
 
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, this->pe_particleBuffer);
+	//glBindBuffer(GL_SHADER_STORAGE_BUFFER, this->pe_particleBuffer);
 	//ParticleStruct* tempParticlesz = (struct ParticleStruct *) glMapBuffer(GL_SHADER_STORAGE_BUFFER, GL_MAP_READ_BIT | GL_MAP_WRITE_BIT | GL_MAP_FLUSH_EXPLICIT_BIT);
 
 	//glBindBuffer(GL_SHADER_STORAGE_BUFFER, this->pe_particleBuffer);
@@ -356,26 +356,26 @@ void ParticleEmitter::checkDeadParticles() {
 	//ParticleStruct* tempParticlesz = (struct ParticleStruct *) glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, nrActiveParticles* sizeof(ParticleStruct), GL_MAP_READ_BIT);
 
 	//ParticleStruct* temp = tempParticlesz;
-	ParticleStruct* tempParticlesz  = (ParticleStruct*)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, nrActiveParticles* sizeof(ParticleStruct), GL_MAP_READ_BIT );
+	//ParticleStruct* tempParticlesz  = (ParticleStruct*)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, nrActiveParticles* sizeof(ParticleStruct), GL_MAP_READ_BIT );
 
-	ParticleStruct* temp = tempParticlesz;
-
-
-	if (temp != nullptr) {
-		for (int i = 0; i < nrActiveParticles; i++) {
+	//ParticleStruct* temp = tempParticlesz;
 
 
-
-			if (temp[i].customVariables.y <= 0) {
-				//std::cout << "KILL AT: " << i << std::endl;
-				//killParticleAtIndex(i, tempParticlesz);
-			}
-		}
-	}
+	//if (temp != nullptr) {
+	//	for (int i = 0; i < nrActiveParticles; i++) {
 
 
-	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+
+	//		if (temp[i].customVariables.y <= 0) {
+	//			//std::cout << "KILL AT: " << i << std::endl;
+	//			//killParticleAtIndex(i, tempParticlesz);
+	//		}
+	//	}
+	//}
+
+
+	//glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+	//glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 
 }
 

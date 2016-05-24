@@ -9,16 +9,16 @@ GLShader::GLShader(const std::string& fileName, const bool& geometry)
 	{
 		nrOfShaders = 3;
 		//m_shaders = new GLuint[nrOfShaders];
-		m_shaders[0] = CreateShader(LoadShader(fileName + ".vert"), GL_VERTEX_SHADER);
-		m_shaders[1] = CreateShader(LoadShader(fileName + ".frag"), GL_FRAGMENT_SHADER); 
-		m_shaders[2] = CreateShader(LoadShader(fileName + ".geom"), GL_GEOMETRY_SHADER);
+		m_shaders[0] = CreateShader(LoadShader("./res/Shaders/" + fileName + ".vert"), GL_VERTEX_SHADER);
+		m_shaders[1] = CreateShader(LoadShader("./res/Shaders/" + fileName + ".frag"), GL_FRAGMENT_SHADER);
+		m_shaders[2] = CreateShader(LoadShader("./res/Shaders/" + fileName + ".geom"), GL_GEOMETRY_SHADER);
 	}
 	else
 	{
 		nrOfShaders = 2;
 		//m_shaders = new GLuint[nrOfShaders];
-		m_shaders[0] = CreateShader(LoadShader(fileName + ".vert"), GL_VERTEX_SHADER);
-		m_shaders[1] = CreateShader(LoadShader(fileName + ".frag"), GL_FRAGMENT_SHADER);
+		m_shaders[0] = CreateShader(LoadShader("./res/Shaders/" + fileName + ".vert"), GL_VERTEX_SHADER);
+		m_shaders[1] = CreateShader(LoadShader("./res/Shaders/" + fileName + ".frag"), GL_FRAGMENT_SHADER);
 	}		
 
 	for (int i = 0; i < nrOfShaders; i++)
