@@ -256,6 +256,11 @@ void Menu::HandleUp()
 		textScale[selectedBttn] = 1.0f;
 		textPos[selectedBttn][0] = (float)(window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5);
 
+		if (currentMState == MENU)
+			currentMState = SHOW_CONTROLS;
+		else
+			currentMState = MENU;
+
 		selectedBttn = REMATCH;
 		break;
 	case EXIT:
@@ -291,6 +296,11 @@ void Menu::HandleDown()
 	case CONTROLS:
 		textScale[selectedBttn] = 1.0f;
 		textPos[selectedBttn][0] = (float)(window::HALF_WIDTH - gui->GetTextLenght(text[selectedBttn], textScale[selectedBttn]) * 0.5);
+
+		if (currentMState == MENU)
+			currentMState = SHOW_CONTROLS;
+		else
+			currentMState = MENU;
 
 		selectedBttn = EXIT;
 		break;
