@@ -150,7 +150,7 @@ void Scene::Init()
 	this->castleHandler->SetScale(3, 5);
 	this->castleHandler->SetOffset(70, 50);
 	this->castleHandler->SetRandomRotation(0.05f);
-	this->castleHandler->SetBoundingBox(glm::vec3(0, 2, 0), glm::vec3(6, 4, 6));
+	this->castleHandler->SetBoundingBox(glm::vec3(0, 4, 0), glm::vec3(6, 8, 6));
 	this->castleHandler->LoadSeaWeed();
 
 	this->korallHandler = new SeaWeedHandler(&FSH_Loader, rosaKorall);
@@ -160,7 +160,7 @@ void Scene::Init()
 	this->korallHandler->SetAmountOfPlants(9);
 	this->korallHandler->SetScale(3, 6);
 	this->korallHandler->SetOffset(0, 0);
-	this->korallHandler->SetBoundingBox(glm::vec3(0, 2, 0), glm::vec3(6, 4, 6));
+	this->korallHandler->SetBoundingBox(glm::vec3(0, 4, 0), glm::vec3(6, 4, 6));
 	this->korallHandler->LoadSeaWeed();
 
 	this->korallHandler2 = new SeaWeedHandler(&FSH_Loader, orangeKorall);
@@ -170,7 +170,7 @@ void Scene::Init()
 	this->korallHandler2->SetAmountOfPlants(9);
 	this->korallHandler2->SetScale(3, 6);
 	this->korallHandler2->SetOffset(0, 0);
-	this->korallHandler2->SetBoundingBox(glm::vec3(0, 2, 0), glm::vec3(6, 4, 6));
+	this->korallHandler2->SetBoundingBox(glm::vec3(0, 4, 0), glm::vec3(6, 8, 6));
 	this->korallHandler2->LoadSeaWeed();
 
 	particleHandler = new ParticleHandler(shaders[PARTICLE], &this->FSH_Loader);
