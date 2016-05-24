@@ -116,7 +116,7 @@ void Scene::Init()
 	this->TallSeaWeedHandler->SetScale(2.0f, 5.0f);
 	this->TallSeaWeedHandler->SetOffset(4,10 );
 	this->TallSeaWeedHandler->SetRandomRotation(0);
-	this->TallSeaWeedHandler->SetBoundingBox(glm::vec3(0,10,0), glm::vec3(4, 10, 4));
+	this->TallSeaWeedHandler->SetBoundingBox(glm::vec3(0,20,0), glm::vec3(4, 20, 4));
 	this->TallSeaWeedHandler->LoadSeaWeed();
 
 	this->stoneHandler = new SeaWeedHandler(&FSH_Loader, roughRock);
