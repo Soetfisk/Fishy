@@ -586,10 +586,13 @@ void Scene::DrawScene() {
 			playeri->DrawProjectile(*shaders[MODELS]);
 		}
 
-		for each(GLModel * statici in staticMeshes)
-		{
-			statici->Draw(*shaders[MODELS]);
-		}
+		staticMeshes.at(0)->Draw(*shaders[MODELS]); // aquarium no roof
+
+		this->roofCount[wc] += this->roofWavy * this->deltaTime;
+		shaders[TEXTURE_WAVY]->Bind();
+		shaders[TEXTURE_WAVY]->Update(players.at(wc)->GetCamera());
+		shaders[TEXTURE_WAVY]->Uniform1f("offset", roofCount[wc]);
+		staticMeshes.at(1)->Draw(*shaders[TEXTURE_WAVY]); // roof
 
 		this->DrawParticles(frameCam);
 
