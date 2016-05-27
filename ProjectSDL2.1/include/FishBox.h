@@ -83,7 +83,7 @@ namespace FSHData
 	struct directionalLight
 	{
 		float intensity;
-		float lightColor;
+		double lightColor[3];
 		float direction[3];
 	};
 	struct pointLight
@@ -103,9 +103,12 @@ namespace FSHData
 	struct camera
 	{
 		float pos[3];
-		float rotation[3];
+		float roll;
 		float target[3];
 		float upVec[3];
+		float farPlane;
+		float nearPlane;
+		float pixelRatio;
 	};
 	struct texture
 	{
@@ -139,6 +142,7 @@ public: //functiuons
 	~FSHMesh(void);
 
 	mesh * GetMeshData();
+	
 	unsigned int * GetIndices();
 	vertexData * GetVertices();
 	unsigned int getVertexCount();
@@ -165,6 +169,9 @@ private:
 	std::vector<texture*> textures;
 	std::vector<std::string> textureNames;
 	std::vector<GLuint> textureIDs;
+
+	std::vector<camera*> cameras;
+	std::vector<directionalLight*> directionalLights;
 	char*SCENE_ID;
 
 
@@ -172,16 +179,22 @@ private:
 
 	void LoadMeshes();
 	void LoadMaterials();
+	void LoadCameras();
+	void LoadDirectionalLights();
 	FSHScene(void);
 public:
 	void setTextureIDs(std::vector<GLuint> textureIDs);
 	void setTextureList(std::vector<texture*> textures, std::vector<std::string> textureNames);
 	FSHScene(char * filePath);
 	unsigned int GetMeshCount();
+	unsigned int GetCameraCount();
+	unsigned int GetDirectionalLightCount();
 	std::vector<FSHMesh*> GetMeshList();
 	std::vector<material*> GetMaterialList();
 	std::vector<std::string> GetTexureNameList();
 	std::vector<GLuint> GetTextureIDs();
+	std::vector<camera*> GetCameraList();
+	std::vector<directionalLight*> GetDirectionalLightList();
 	void Release();
 };
 
@@ -230,6 +243,10 @@ public: //functions
 	FSHData::material * meshMaterial(unsigned int model, unsigned int mesh);
 	GLuint meshTextureID(unsigned int model, unsigned int mesh);
 	FSHData::blendShape** meshBlendShapes(unsigned int model, unsigned int mesh);
+
+	FSHData::camera* CameraData(unsigned int model, unsigned int camera);
+	FSHData::directionalLight* DirectionalLightLData(unsigned int model, unsigned int DirectionalLight);
+	
 
 	//extra functions
 	texture * loadTexure(char* filepath);

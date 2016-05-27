@@ -223,7 +223,7 @@ void Scene::LoadModels()
 	FSH_Loader.LoadScene("Models/castle.FSH"); //castle
 	FSH_Loader.LoadScene("Models/orangekorall.FSH"); //rosaKorall
 	FSH_Loader.LoadScene("Models/rosakorall.FSH"); //orangeKorall
-
+	FSH_Loader.LoadScene("Models/CameraScene.FSH");//cameraScene
 	for (int i = 0; i < 2; i++) {
 		this->players.push_back(new GLPlayer(&FSH_Loader, PlayerFish, Bubble));
 		this->players.at(i)->SetBoundingBox(glm::vec3(0), glm::vec3(1));
@@ -237,8 +237,13 @@ void Scene::LoadModels()
 		this->NPCs.at(NPCs.size()-1)->SetBoundingBox(glm::vec3(0), glm::vec3(1.25));
 	}
 
+	//this->staticMeshes.push_back(new GLModel(&FSH_Loader, AquariumCeiling));
+	
+	//this->staticMeshes.push_back(new GLModel(&FSH_Loader, cameraScene));
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, Aquarium));
 	this->staticMeshes.push_back(new GLModel(&FSH_Loader, AquariumCeiling));
+
+	
 	//staticMeshes.at(1)->GetTransform().SetPos(glm::vec3(0, 0, 0));
 	//staticMeshes.at(1)->SetBoundingBox(glm::vec3(0,2,0), glm::vec3(6, 4, 6));
 	//staticMeshes.at(0)->GetTransform().SetScale(glm::vec3(1, -1, 1));
@@ -248,7 +253,25 @@ void Scene::LoadModels()
 	//this->staticMeshes.at(1)->SetBoundingBox(glm::vec3(0), glm::vec3(1.25));
 	//this->staticMeshes.push_back(new GLModel(&FSH_Loader, Bubble));
 
+	/*FSHData::camera* camera = FSH_Loader.CameraData(cameraScene, 0);
+	
+	
+	printf("intensity: %f",FSH_Loader.DirectionalLightLData(cameraScene, 0)->intensity);
+	
+	for (size_t i = 0; i < 3; i++)
+	{
+		printf("\n: color %f", FSH_Loader.DirectionalLightLData(cameraScene, 0)->lightColor[i]);
+	}
+	
+	for (size_t i = 0; i < 3; i++)
+	{
+		printf("\n: direction %f", FSH_Loader.DirectionalLightLData(cameraScene, 0)->direction[i]);
+	}
+	
+	printf("\n: intensity %f", FSH_Loader.DirectionalLightLData(cameraScene, 0)->intensity);
+*/
 
+	
 	this->collisionHandler.AddNPC(NPCs);
 	this->collisionHandler.AddPlayer(players);
 	//this->collisionHandler.AddModel(models);
@@ -378,7 +401,7 @@ void Scene::AddScore()
 
 Scene::Scene(GLOBAL_GameState* gameState) {
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
-	Mix_VolumeMusic(20);
+	Mix_VolumeMusic(0);
 	music[COMBAT_BACKGROUND_MUSIC] = Mix_LoadMUS("./res/Sounds/background.wav");
 	music[ATTACK_BACKGROUND_MUSIC] = Mix_LoadMUS("./res/Sounds/attack.wav");
 	music[ARCADE_BACKGROUND_MUSIC] = Mix_LoadMUS("./res/Sounds/arcade.wav");
@@ -591,7 +614,7 @@ void Scene::DrawScene() {
 		shaders[TEXTURE_WAVY]->Bind();
 		shaders[TEXTURE_WAVY]->Update(players.at(wc)->GetCamera());
 		shaders[TEXTURE_WAVY]->Uniform1f("offset", roofCount[wc]);
-		staticMeshes.at(1)->Draw(*shaders[TEXTURE_WAVY]); // roof
+ 		staticMeshes.at(1)->Draw(*shaders[TEXTURE_WAVY]); // roof
 
 		this->DrawParticles(frameCam);
 

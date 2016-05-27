@@ -42,7 +42,8 @@ private:
 		smoothRock,
 		castle,
 		orangeKorall,
-		rosaKorall
+		rosaKorall,
+		cameraScene
 	};
 	int SCREEN_WIDTH = window::WIDTH;
 	int SCREEN_HEIGHT = window::HEIGHT / 2;
